@@ -403,7 +403,8 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .rd-type{color:var(--muted);font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.03em}
 .rd-q{font-size:21px;line-height:1.6}
 .rd-tf{display:flex;gap:10px;flex-wrap:wrap}
-.rd-opt{border:2px solid var(--line);background:var(--surface);border-radius:12px;padding:8px 18px;font-weight:700;font-size:15px}
+.rd-opt{border:2px solid var(--line);background:var(--surface);border-radius:12px;padding:6px 24px;font-size:24px;min-width:72px}
+.rd-mc .ex-copt{align-items:center;gap:10px;padding:10px 14px}.rd-mc .ex-copt b{font-size:26px}.rd-mc .ex-copt .han{font-size:24px}
 .rd-mc{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media (max-width:560px){.rd-mc{grid-template-columns:minmax(0,1fr)}.rd-paper{padding:14px}.rd-text p{font-size:21px}}
 .rd-blank{display:inline-block;min-width:3em;border-bottom:2px solid var(--accent);text-align:center;color:var(--accent);padding:0 4px}
@@ -421,8 +422,8 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .ra-lab{font-weight:600;font-size:14px;display:block;margin-bottom:5px}
 .ra-prev{max-height:330px;overflow:auto;padding:12px 14px}.ra-prev p{margin:0 0 8px;font-size:20px;line-height:2}
 .ra-ed details summary{cursor:pointer;font-weight:600;color:var(--accent)}
-.ra-vt .inp{padding:7px 8px;font-size:15px;min-width:70px}.ra-vt{min-width:820px}
-.ra-pyc{display:flex;gap:4px}
+.ra-vt .inp{padding:7px 8px;font-size:15px;min-width:70px}table.ra-vt{min-width:940px}
+.ra-pyc{display:flex;gap:4px}.ra-rowbtn{display:flex;gap:4px}
 .btn.sm{padding:5px 9px;font-size:13px}
 .ra-q{display:grid;gap:10px;border:1.5px solid var(--line);border-radius:12px;padding:12px;background:var(--surface);margin-bottom:10px}
 .ra-q-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
@@ -3196,7 +3197,7 @@ $("#welTeacher").onclick=()=>Teacher.open();
    { id, level, lesson, title, text, trans, pyManual, vocab:[{h,p,pos,vi,ex}],
      questions:[{type:"tf",q,ans:true|false,why} | {type:"mc",q,opts:[…],ans:0,why} | {type:"fill",q:"…___…",ans:"từ",why}],
      fillExtra:"từ thừa, cách nhau bằng dấu phẩy", updated } */
-const TF_LABEL = ["Sai", "Đúng"];
+const TF_LABEL = ["错 (Sai)", "对 (Đúng)"];
 const QTYPE = { tf: "Phán đoán đúng / sai", mc: "Chọn đáp án đúng", fill: "Điền từ thích hợp" };
 function pyArr(s){ try{ return window.pinyinPro ? pinyinPro.pinyin(s, { type: "array" }) : []; }catch(e){ return []; } }
 function pyLine(s){ try{ return window.pinyinPro ? pinyinPro.pinyin(s) : ""; }catch(e){ return ""; } }
@@ -3206,7 +3207,7 @@ function rubyHTML(text){
   return chars.map((c, i) => /[一-鿿]/.test(c) && ok ? `<ruby>${esc(c)}<rt>${esc(arr[i])}</rt></ruby>` : esc(c)).join("");
 }
 const Reading = {
-  list: rawGet("ww_readings", []), loading: null, les: null, cur: null, st: null, showPy: true, showTr: false,
+  list: rawGet("ww_readings", []), loading: null, les: null, cur: null, st: null, showPy: false, showTr: false,
   forLesson(lv, n){ return this.list.filter(r => r.level === lv && +r.lesson === +n).sort((a, b) => (a.order || 0) - (b.order || 0) || String(a.title).localeCompare(String(b.title))); },
   async fetch(){
     if(!Auth.on()) return this.list;
@@ -3254,7 +3255,7 @@ const Reading = {
     const qHTML = r.questions.map((q, i) => {
       qn++; const mark = sub ? (sc.wrong.includes(i) ? `<span class="ex-mark no">✗</span>` : `<span class="ex-mark ok">✓</span>`) : "";
       let body = "";
-      if(q.type === "tf") body = `<div class="han rd-q">${esc(q.q)}</div><div class="rd-tf">${[1, 0].map(v => `<button class="ex-opt rd-opt ${optCls(i, v, q.ans ? 1 : 0)}" data-i="${i}" data-v="${v}" ${sub ? "disabled" : ""}>${v ? "✓ Đúng" : "✗ Sai"}</button>`).join("")}</div>`;
+      if(q.type === "tf") body = `<div class="han rd-q">${esc(q.q)}</div><div class="rd-tf">${[1, 0].map(v => `<button class="ex-opt rd-opt ${optCls(i, v, q.ans ? 1 : 0)}" data-i="${i}" data-v="${v}" ${sub ? "disabled" : ""}><span class="han">${v ? "对" : "错"}</span></button>`).join("")}</div>`;
       else if(q.type === "mc") body = `<div class="han rd-q">${esc(q.q)}</div><div class="ex-choice rd-mc">${q.opts.map((o, k) => `<button class="ex-opt ex-copt ${optCls(i, k, q.ans)}" data-i="${i}" data-v="${k}" ${sub ? "disabled" : ""}><b>${"ABCD"[k]}</b> <span class="han">${esc(o)}</span></button>`).join("")}</div>`;
       else body = `<div class="han rd-q">${esc(q.q).replace(/_{2,}|（\s*）|\(\s*\)/, `<span class="rd-blank">${st.ans[i] ? esc(st.ans[i]) : "　　"}</span>`)}</div>
         <div class="rd-bank">${bank.map(w => `<button class="ex-opt rd-chip han ${optCls(i, w, q.ans)}" data-i="${i}" data-v="${esc(w)}" ${sub ? "disabled" : ""}>${esc(w)}</button>`).join("")}</div>`;
@@ -3322,7 +3323,7 @@ const RdAdmin = {
   renderEditor(){
     const d = this.draft, B = $("#tBody");
     const posOpts = v => Object.entries(POS).map(([k, l]) => `<option value="${k}" ${v === k ? "selected" : ""}>${l}</option>`).join("");
-    const qEd = (q, i) => `<div class="ra-q" data-qi="${i}"><div class="ra-q-top"><b>Câu ${i + 1} · ${QTYPE[q.type]}</b><span class="t-acts"><button type="button" class="btn sm" data-qup="${i}" ${i ? "" : "disabled"}>↑</button><button type="button" class="btn sm" data-qdel="${i}">Xoá</button></span></div>
+    const qEd = (q, i) => `<div class="ra-q" data-qi="${i}"><div class="ra-q-top"><b>Câu ${i + 1} · ${QTYPE[q.type]}</b><span class="t-acts"><button type="button" class="btn sm" data-qup="${i}" ${i ? "" : "disabled"} title="Chuyển lên">↑</button><button type="button" class="btn sm" data-qup="${i + 1}" ${i < d.questions.length - 1 ? "" : "disabled"} title="Chuyển xuống">↓</button><button type="button" class="btn sm" data-qdel="${i}">Xoá</button></span></div>
       ${q.type === "fill" ? `<label>Câu có chỗ trống (gõ ___ ở vị trí cần điền)<input class="inp han" data-f="q" value="${esc(q.q)}" placeholder="VD: 弟弟没起床，还在___呢。"></label>
         <label>Từ đúng<input class="inp han" data-f="ans" value="${esc(q.ans)}" placeholder="VD: 睡觉"></label>`
       : `<label>${q.type === "tf" ? "Câu phán đoán" : "Câu hỏi"}<input class="inp han" data-f="q" value="${esc(q.q)}"></label>`}
@@ -3342,7 +3343,7 @@ const RdAdmin = {
       <h3>Từ vựng bổ sung</h3>
       <div class="tbl-wrap"><table class="syl ra-vt"><thead><tr><th>STT</th><th>Chữ Hán</th><th>Phiên âm</th><th>Từ loại</th><th>Nghĩa</th><th>Ví dụ</th><th></th></tr></thead><tbody>
         ${d.vocab.map((v, k) => `<tr data-vi="${k}"><td>${k + 1}</td><td><input class="inp han" data-v="h" value="${esc(v.h)}"></td><td><div class="ra-pyc"><input class="inp" data-v="p" value="${esc(v.p)}"><button type="button" class="btn sm" data-autopy="${k}" title="Tự điền phiên âm">拼</button></div></td>
-          <td><select class="inp" data-v="pos">${posOpts(v.pos)}</select></td><td><input class="inp" data-v="vi" value="${esc(v.vi)}"></td><td><input class="inp han" data-v="ex" value="${esc(v.ex || "")}"></td><td><button type="button" class="btn sm" data-vdel="${k}">Xoá</button></td></tr>`).join("")}
+          <td><select class="inp" data-v="pos">${posOpts(v.pos)}</select></td><td><input class="inp" data-v="vi" value="${esc(v.vi)}"></td><td><input class="inp han" data-v="ex" value="${esc(v.ex || "")}"></td><td><span class="ra-rowbtn"><button type="button" class="btn sm" data-vup="${k}" ${k ? "" : "disabled"} title="Chuyển lên">↑</button><button type="button" class="btn sm" data-vup="${k + 1}" ${k < d.vocab.length - 1 ? "" : "disabled"} title="Chuyển xuống">↓</button><button type="button" class="btn sm" data-vdel="${k}">Xoá</button></span></td></tr>`).join("")}
       </tbody></table></div>
       <button type="button" class="btn" id="raAddV">＋ Thêm từ</button>
 
@@ -3362,8 +3363,8 @@ const RdAdmin = {
     const [lv, n] = $("#raLes").value.split("|"); d.level = lv; d.lesson = +n;
     d.title = $("#raTitle").value.trim(); d.text = $("#raText").value; d.pyManual = $("#raPy").value; d.trans = $("#raTr").value;
     const ex = $("#raExtra"); if(ex) d.fillExtra = ex.value;
-    f.querySelectorAll("tr[data-vi]").forEach(tr => { const v = d.vocab[+tr.dataset.vi]; tr.querySelectorAll("[data-v]").forEach(i => v[i.dataset.v] = i.value.trim()); });
-    f.querySelectorAll(".ra-q").forEach(box => { const q = d.questions[+box.dataset.qi];
+    f.querySelectorAll("tr[data-vi]").forEach(tr => { const v = d.vocab[+tr.dataset.vi]; if(!v) return; tr.querySelectorAll("[data-v]").forEach(i => v[i.dataset.v] = i.value.trim()); });
+    f.querySelectorAll(".ra-q").forEach(box => { const q = d.questions[+box.dataset.qi]; if(!q) return;
       box.querySelectorAll("[data-f]").forEach(i => {
         if(i.dataset.f === "opt") q.opts[+i.dataset.k] = i.value.trim();
         else if(i.dataset.f === "ans"){ if(i.type === "radio"){ if(i.checked) q.ans = q.type === "tf" ? i.value === "1" : +i.value; } else q.ans = i.value.trim(); }
@@ -3373,7 +3374,7 @@ const RdAdmin = {
     const f = $("#raForm"), d = this.draft;
     f.oninput = e => { this.sync(); if(e.target.id === "raText") this.preview(); };
     f.onchange = () => this.sync();
-    const re = () => { this.sync(); this.renderEditor(); };
+    const re = () => this.renderEditor(); /* các nút đã sync trước khi thay đổi mảng */
     $("#raAddV").onclick = () => { this.sync(); d.vocab.push({ h: "", p: "", pos: "dt", vi: "", ex: "" }); this.renderEditor(); const rows = f.ownerDocument.querySelectorAll("tr[data-vi] input[data-v=h]"); rows[rows.length - 1].focus(); };
     f.querySelectorAll("[data-vdel]").forEach(b => b.onclick = () => { this.sync(); d.vocab.splice(+b.dataset.vdel, 1); re(); });
     f.querySelectorAll("[data-autopy]").forEach(b => b.onclick = () => { this.sync(); const v = d.vocab[+b.dataset.autopy]; v.p = pyLine(v.h); re(); });
@@ -3381,6 +3382,7 @@ const RdAdmin = {
       d.questions.push(t === "tf" ? { type: "tf", q: "", ans: true, why: "" } : t === "mc" ? { type: "mc", q: "", opts: ["", "", "", ""], ans: 0, why: "" } : { type: "fill", q: "", ans: "", why: "" }); re();
       const qs = document.querySelectorAll(".ra-q"); qs[qs.length - 1].scrollIntoView({ block: "center" }); });
     f.querySelectorAll("[data-qdel]").forEach(b => b.onclick = () => { this.sync(); d.questions.splice(+b.dataset.qdel, 1); re(); });
+    f.querySelectorAll("[data-vup]").forEach(b => b.onclick = () => { this.sync(); const i = +b.dataset.vup; [d.vocab[i - 1], d.vocab[i]] = [d.vocab[i], d.vocab[i - 1]]; re(); });
     f.querySelectorAll("[data-qup]").forEach(b => b.onclick = () => { this.sync(); const i = +b.dataset.qup; [d.questions[i - 1], d.questions[i]] = [d.questions[i], d.questions[i - 1]]; re(); });
     $("#raCancel").onclick = () => { this.draft = null; this.render(); };
     const del = $("#raDel"); if(del) del.onclick = async () => {
