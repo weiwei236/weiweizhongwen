@@ -379,7 +379,8 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .ex-wrong a{color:var(--accent)}
 .ex-why{margin-top:4px;background:var(--surface-2);border-radius:8px;padding:8px 10px;font-size:14.5px}
 /* bài đọc */
-.rd{display:grid;gap:16px}
+.rd{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+.rd>*{min-width:0}
 .rd-head h3{margin:0}.rd-head p{margin:4px 0 0}
 .rd-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
 .rd-card{display:grid;gap:6px;text-align:left;border:2px solid var(--line);background:var(--surface);border-radius:14px;padding:14px;cursor:pointer;transition:transform .15s,border-color .15s,box-shadow .15s}
@@ -387,7 +388,7 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .rd-card-t{font-size:22px;color:var(--ink)}.rd-card small{color:var(--muted)}
 .rd-badge{justify-self:start;font-size:12.5px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--surface-2);color:var(--muted)}
 .rd-badge.ok{background:color-mix(in srgb,var(--good) 15%,transparent);color:var(--good)}.rd-badge.mid{background:#FFF3D6;color:var(--warn)}
-.rd-paper{background:#FFFDF6;border:1px solid #EADFC2;border-radius:14px;padding:18px 22px;box-shadow:var(--shadow)}
+.rd-paper{min-width:0;overflow-wrap:anywhere;word-break:break-word;background:#FFFDF6;border:1px solid #EADFC2;border-radius:14px;padding:18px 22px;box-shadow:var(--shadow)}
 .rd-title{text-align:center;margin:0 0 10px;font-size:26px}
 .rd-text p{margin:0 0 10px;font-size:24px;line-height:2.1;text-indent:2em}
 .rd-text ruby{ruby-align:center}.rd-text rt,.rd-title rt,.ra-prev rt{font-family:var(--f-body);font-size:12px;color:var(--accent);letter-spacing:0}
@@ -3265,7 +3266,7 @@ const Reading = {
         <div class="grp"><button class="btn" id="rdPy" aria-pressed="${this.showPy}">${this.showPy ? "Ẩn" : "Hiện"} phiên âm</button>${r.trans ? `<button class="btn" id="rdTr" aria-pressed="${this.showTr}">${this.showTr ? "Ẩn" : "Hiện"} bản dịch</button>` : ""}<button class="btn" id="rdSay">${ICON.sound}Nghe bài</button></div></div>
       <article class="rd-paper">
         <h2 class="han rd-title">${this.showPy && !r.pyManual ? rubyHTML(r.title) : esc(r.title)}</h2>
-        <div class="rd-text han ${this.showPy ? "" : "hide-py"}">${paras.map((p, k) => `<p>${r.pyManual ? esc(p) : rubyHTML(p)}</p>${r.pyManual && this.showPy && manual[k] ? `<p class="rd-pyline">${esc(manual[k])}</p>` : ""}`).join("")}</div>
+        <div class="rd-text han ${this.showPy ? "" : "hide-py"}">${paras.map((p, k) => `<p>${r.pyManual || !this.showPy ? esc(p) : rubyHTML(p)}</p>${r.pyManual && this.showPy && manual[k] ? `<p class="rd-pyline">${esc(manual[k])}</p>` : ""}`).join("")}</div>
         ${r.trans && this.showTr ? `<div class="rd-trans"><b>Bản dịch</b>${String(r.trans).split(/\n+/).map(x => `<p>${esc(x)}</p>`).join("")}</div>` : ""}
       </article>
       ${r.vocab.length ? `<section class="rd-sec"><h3>Từ vựng bổ sung</h3><div class="tbl-wrap"><table class="syl rd-vocab"><thead><tr><th>STT</th><th>Chữ Hán</th><th>Phiên âm</th><th>Từ loại</th><th>Nghĩa</th><th>Ví dụ</th></tr></thead><tbody>
