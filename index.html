@@ -456,6 +456,12 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .fm-side{display:grid;gap:12px;position:sticky;top:12px}
 @media (max-width:900px){.fm-side{position:static}}
 .fm-tabs{width:100%}.fm-tabs button{flex:1}
+.fm-view{justify-self:start;background:rgba(255,255,255,.85)}
+.fm-field.ranch{background-color:#B6DD8F;border-color:#9C7A4E}
+.fm-note{background:#FFF6DA;border:1.5px solid #F2C14E;border-radius:10px;padding:8px 12px;font-size:14px;color:#5A3E0C}
+.fm-grp{display:block;color:var(--muted);font-size:11.5px;font-weight:500}
+.fm-feeds i{display:inline-block;width:11px;height:11px;border-radius:50%;background:#EADFC8;border:1.5px solid #C9A86A}
+.fm-feeds i.on{background:#E9B949;border-color:#B98552}
 .fm-cats{justify-self:start}
 .fm-h{margin:4px 0 0;font-size:14px;color:var(--muted)}
 .fm-shop{display:grid;gap:8px}
@@ -2421,7 +2427,7 @@ const Teacher = {
       case "speak": return `${d.item}: ${d.total} điểm`;
       case "exam": return `${d.right}/${d.total} câu đúng`;
       case "coins": return `+${d.amount} xu · ${d.reason} (${d.pct}%)`;
-      case "harvest": return `${CROPS[d.crop] ? CROPS[d.crop].vi : d.crop}${d.special ? " (đặc biệt)" : ""}`;
+      case "harvest": return `${farmItem(d.crop).vi}${d.special ? " (đặc biệt)" : ""}`;
       case "login": return d.first ? "Đăng nhập lần đầu" : "Đăng nhập";
       default: return this.ln(e.lesson);
     }
@@ -2449,9 +2455,14 @@ const CROPS = {
   strawberry:{cat:"qua", vi:"Dâu tây",     zh:"草莓",   py:"cǎoméi",     price:5, sell:9 },
   tomato:   { cat:"qua", vi:"Cà chua",     zh:"西红柿", py:"xīhóngshì",  price:5, sell:9 },
   apple:    { cat:"qua", vi:"Táo",         zh:"苹果",   py:"píngguǒ",    price:8, sell:12 },
-  watermelon:{cat:"qua", vi:"Dưa hấu",     zh:"西瓜",   py:"xīguā",      price:12, sell:16 }
+  watermelon:{cat:"qua", vi:"Dưa hấu",     zh:"西瓜",   py:"xīguā",      price:12, sell:16 },
+  blueberry:{ cat:"qua", vi:"Việt quất",   zh:"蓝莓",   py:"lánméi",     price:7, sell:11 },
+  banana:   { cat:"qua", vi:"Chuối",       zh:"香蕉",   py:"xiāngjiāo",  price:6, sell:10 },
+  durian:   { cat:"qua", vi:"Sầu riêng",   zh:"榴莲",   py:"liúlián",    price:14, sell:18 },
+  tangerine:{ cat:"qua", vi:"Quýt",        zh:"橘子",   py:"júzi",       price:6, sell:10 },
+  grape:    { cat:"qua", vi:"Nho",         zh:"葡萄",   py:"pútao",      price:9, sell:13 }
 };
-const CAT_LABEL = { hoa:"Hoa", cu:"Củ", qua:"Quả" };
+const CAT_LABEL = { hoa:"Hoa", cu:"Củ", qua:"Quả", vatnuoi:"Vật nuôi" };
 const FARM_SHOP = { water:{ vi:"Nước tưới", price:1, pack:[1,1], pack5:[5,4] }, fert:{ vi:"Phân bón", price:3 } };
 const PLOT_MAX = 9, PLOT_START = 4, plotPrice = n => 15 + (n - PLOT_START) * 10;
 
@@ -2476,6 +2487,16 @@ function cropRipe(id){
       return LEAF(50,66,-40)+LEAF(50,66,220)+LEAF(50,62,-90,1,"#6BBF62")+b(38,82)+b(60,80)+b(50,74); }
     case "tomato": return `<path d="M64,84 L64,26" stroke="#B98552" stroke-width="3"/><path d="M50,84 L50,34 M50,50 L62,44 M50,62 L38,56" stroke="#4E9A47" stroke-width="3" fill="none"/>`+LEAF(50,44,200)+LEAF(50,70,-20)+[[60,48,8],[40,58,8],[54,64,7]].map(([x,y,r])=>`<circle cx="${x}" cy="${y}" r="${r}" fill="#E5482F" stroke="#B8321D" stroke-width="1"/><path d="M${x-3},${y-r+1} l3,2 l3,-2" stroke="#3E8A3C" stroke-width="1.8" fill="none"/>`).join("");
     case "apple": return `<path d="M50,84 L50,56" stroke="#7A4E2D" stroke-width="5" stroke-linecap="round"/><circle cx="50" cy="40" r="24" fill="#5DB35A" stroke="#3E8A3C" stroke-width="1.2"/><circle cx="38" cy="34" r="12" fill="#6BBF62"/>`+[[40,40],[58,34],[52,50],[64,48],[44,26]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="4.6" fill="#E0343E" stroke="#A8232C" stroke-width=".8"/>`).join("");
+    case "blueberry": { const b=(x,y)=>`<circle cx="${x}" cy="${y}" r="5" fill="#4A5FB8" stroke="#2F3F86" stroke-width="1"/><path d="M${x-1.6},${y-3.4} l1.6,1.2 1.6,-1.2" stroke="#2F3F86" stroke-width="1" fill="none"/><circle cx="${x-1.6}" cy="${y+1}" r="1.2" fill="#fff" opacity=".35"/>`;
+      return `<path d="M50,84 L50,52 M50,66 L36,54 M50,60 L64,48" stroke="#7A4E2D" stroke-width="3" stroke-linecap="round" fill="none"/>`+LEAF(36,54,-150,.9)+LEAF(64,48,-20,.9)+LEAF(50,52,-80,.8,"#6BBF62")+[[38,62],[44,66],[34,68],[60,56],[66,60],[56,62],[50,46]].map(([x,y])=>b(x,y)).join(""); }
+    case "banana": { const ban=(r)=>`<g transform="rotate(${r},50,58)"><path d="M50,58 C44,64 42,76 48,86 C49,88 52,88 52,86 C48,78 50,68 54,60Z" fill="#F6D04D" stroke="#C9A12A" stroke-width="1.1"/><path d="M47,86 l1,3" stroke="#6B4A2A" stroke-width="2" stroke-linecap="round"/></g>`;
+      return `<path d="M50,86 L50,40" stroke="#8DB45A" stroke-width="6" stroke-linecap="round"/><path d="M50,42 q-30,-4 -36,-26 q22,4 36,24Z M50,40 q28,-8 34,-30 q-22,8 -34,28Z" fill="#6BBF62" stroke="#3E8A3C" stroke-width="1"/>`+`<g transform="translate(0,-8)">`+[-40,-20,0,20].map(ban).join("")+`<circle cx="50" cy="58" r="3.5" fill="#8DB45A"/></g>`; }
+    case "durian": return `<path d="M50,84 L50,62" stroke="#7A4E2D" stroke-width="3"/>`+LEAF(50,72,-30)+LEAF(50,72,210)+
+      `<ellipse cx="50" cy="44" rx="20" ry="22" fill="#9BB54A" stroke="#6B8530" stroke-width="1.3"/>`+Array.from({length:22},(_,i)=>{ const a=i*137.5*Math.PI/180, r=5+((i*7)%14); const x=50+Math.cos(a)*r*1.1, y=44+Math.sin(a)*r*1.2; return `<path d="M${(x-2.5).toFixed(1)},${(y+2).toFixed(1)} L${x.toFixed(1)},${(y-3).toFixed(1)} L${(x+2.5).toFixed(1)},${(y+2).toFixed(1)}Z" fill="#7E9A36"/>`; }).join("")+`<path d="M50,22 l0,-6" stroke="#6B4A2A" stroke-width="3" stroke-linecap="round"/>`;
+    case "tangerine": return `<path d="M50,84 L50,58" stroke="#7A4E2D" stroke-width="5" stroke-linecap="round"/><circle cx="50" cy="42" r="23" fill="#4FA35A" stroke="#3E8A3C" stroke-width="1.2"/><circle cx="40" cy="36" r="11" fill="#5DB35A"/>`+[[40,42],[58,36],[52,52],[64,48],[46,28]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="5.4" fill="#F39A2B" stroke="#C9721A" stroke-width=".9"/><circle cx="${x-1.6}" cy="${y-1.6}" r="1.4" fill="#FFD08A" opacity=".8"/>`).join("");
+    case "grape": { const g=(x,y)=>`<circle cx="${x}" cy="${y}" r="5" fill="#8C4FB0" stroke="#5E2E80" stroke-width="1"/><circle cx="${x-1.5}" cy="${y-1.5}" r="1.3" fill="#fff" opacity=".35"/>`;
+      return `<path d="M18,30 Q50,18 82,30" stroke="#8B5E3C" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M50,84 L50,28" stroke="#8B5E3C" stroke-width="3"/>`+LEAF(30,28,-160,1)+LEAF(70,28,-20,1)+
+      `<path d="M50,30 q2,4 0,8" stroke="#6B8E3A" stroke-width="2" fill="none"/>`+[[44,42],[56,42],[50,40],[40,50],[50,50],[60,50],[44,58],[56,58],[50,66]].map(([x,y])=>g(x,y)).join(""); }
     case "watermelon": return `<path d="M20,70 q10,-14 22,-6 q8,-14 20,-4" stroke="#4E9A47" stroke-width="2.5" fill="none"/>`+LEAF(26,66,-30)+`<circle cx="54" cy="70" r="18" fill="#3E9A45" stroke="#2C6E31" stroke-width="1.2"/><path d="M42,58 q-4,12 0,24 M50,53 q-4,17 0,34 M58,53 q4,17 0,34 M66,58 q4,12 0,24" stroke="#245A28" stroke-width="2.5" fill="none"/><ellipse cx="48" cy="62" rx="5" ry="3" fill="#fff" opacity=".25"/>`;
   }
   return "";
@@ -2491,17 +2512,111 @@ function cropArt(id, stage, fert){
   const glow = fert && stage === 3 ? `<circle cx="50" cy="50" r="40" fill="#F7E07A" opacity=".28"/>` : "";
   return `<svg viewBox="0 0 100 100" aria-hidden="true">${glow}${SOIL}${g}${spark}</svg>`;
 }
+/* ---------- CHĂN NUÔI 牧场 ----------
+   Mua con giống → cho ăn 3 lần → vật nuôi lớn.
+   Vật nuôi có sản phẩm (羊毛, 牛奶, 鸡蛋, 鸭蛋, 鸟蛋): thu sản phẩm rồi nuôi tiếp vòng mới.
+   Vật nuôi không có sản phẩm (猪, 鱼, 虾): lớn rồi thì xuất chuồng, cất vào kho để bán.
+   Kinh tế giữ lãi thấp: mỗi vòng tốn 3 thức ăn (3 xu), sản phẩm bán 4–5 xu. */
+const ANIMAL_GROUP = { giasuc:["家畜","Gia súc"], giacam:["家禽","Gia cầm"], thucung:["宠物","Thú cưng"], thuysan:["水产","Thủy sản"] };
+const ANIMALS = {
+  pig:    { grp:"giasuc", vi:"Heo (lợn)", zh:"猪", py:"zhū",  price:8,  sell:12 },
+  sheep:  { grp:"giasuc", vi:"Cừu",       zh:"羊", py:"yáng", price:12, prod:"wool" },
+  cow:    { grp:"giasuc", vi:"Bò",        zh:"牛", py:"niú",  price:15, prod:"milk" },
+  chicken:{ grp:"giacam", vi:"Gà",        zh:"鸡", py:"jī",   price:8,  prod:"egg" },
+  duck:   { grp:"giacam", vi:"Vịt",       zh:"鸭", py:"yā",   price:8,  prod:"duckegg" },
+  bird:   { grp:"thucung",vi:"Chim",      zh:"鸟", py:"niǎo", price:10, prod:"birdegg" },
+  fish:   { grp:"thuysan",vi:"Cá",        zh:"鱼", py:"yú",   price:5,  sell:9, water:true },
+  shrimp: { grp:"thuysan",vi:"Tôm",       zh:"虾", py:"xiā",  price:6,  sell:10, water:true }
+};
+const PRODUCTS = {
+  wool:    { vi:"Lông cừu",   zh:"羊毛", py:"yángmáo", sell:5, from:"sheep" },
+  milk:    { vi:"Sữa bò",     zh:"牛奶", py:"niúnǎi",  sell:5, from:"cow" },
+  egg:     { vi:"Trứng gà",   zh:"鸡蛋", py:"jīdàn",   sell:4, from:"chicken" },
+  duckegg: { vi:"Trứng vịt",  zh:"鸭蛋", py:"yādàn",   sell:4, from:"duck" },
+  birdegg: { vi:"Trứng chim", zh:"鸟蛋", py:"niǎodàn", sell:4, from:"bird" }
+};
+const FEED = { vi:"Thức ăn", zh:"饲料", py:"sìliào" };
+const PEN_MAX = 6, PEN_START = 2, penPrice = n => 15 + (n - PEN_START) * 10;
+function farmItem(id){ return CROPS[id] || PRODUCTS[id] || ANIMALS[id] || { vi:id, zh:"", py:"", sell:0 }; }
+function itemArt(id){ return CROPS[id] ? cropArt(id, 3) : PRODUCTS[id] ? `<svg viewBox="0 0 100 100" aria-hidden="true">${productDraw(id, 50, 55, 1.6)}</svg>` : animalArt(id, 3, false); }
+
+/* ---------- hình vẽ vật nuôi (nhìn chính diện, phong cách chibi) ---------- */
+const EYES = (y=50,dx=7,cx=50) => `<circle cx="${cx-dx}" cy="${y}" r="2.6" fill="#2B2220"/><circle cx="${cx+dx}" cy="${y}" r="2.6" fill="#2B2220"/><circle cx="${cx-dx+0.9}" cy="${y-0.9}" r=".9" fill="#fff"/><circle cx="${cx+dx+0.9}" cy="${y-0.9}" r=".9" fill="#fff"/>`;
+const CHEEK = (y=56,dx=12,cx=50) => `<ellipse cx="${cx-dx}" cy="${y}" rx="3.6" ry="2.2" fill="#F48E8E" opacity=".55"/><ellipse cx="${cx+dx}" cy="${y}" rx="3.6" ry="2.2" fill="#F48E8E" opacity=".55"/>`;
+const OL = 'stroke="#5A4036" stroke-opacity=".55" stroke-width="1.3"';
+function animalDraw(id){
+  switch(id){
+    case "pig": return `<ellipse cx="50" cy="70" rx="25" ry="15" fill="#F6B2C2" ${OL}/><rect x="33" y="78" width="7" height="8" rx="3" fill="#EE9CB0"/><rect x="60" y="78" width="7" height="8" rx="3" fill="#EE9CB0"/>
+      <path d="M33,38 L30,24 L44,32Z M67,38 L70,24 L56,32Z" fill="#EE9CB0" ${OL}/><circle cx="50" cy="50" r="19" fill="#F8C1CE" ${OL}/>${EYES(45,8)}
+      <ellipse cx="50" cy="56" rx="8" ry="5.5" fill="#EE94AA" ${OL}/><ellipse cx="47" cy="56" rx="1.4" ry="2" fill="#B35A72"/><ellipse cx="53" cy="56" rx="1.4" ry="2" fill="#B35A72"/>${CHEEK(54,14)}`;
+    case "sheep": { let w=""; [[30,62,10],[42,56,11],[58,56,11],[70,62,10],[36,74,10],[50,76,11],[64,74,10],[50,62,12]].forEach(([x,y,r])=>w+=`<circle cx="${x}" cy="${y}" r="${r}" fill="#F7F4EC" ${OL}/>`);
+      return w+`<rect x="38" y="80" width="6" height="7" rx="2.5" fill="#4A3B35"/><rect x="56" y="80" width="6" height="7" rx="2.5" fill="#4A3B35"/>
+      <ellipse cx="34" cy="44" rx="8" ry="4" transform="rotate(-25,34,44)" fill="#4A3B35"/><ellipse cx="66" cy="44" rx="8" ry="4" transform="rotate(25,66,44)" fill="#4A3B35"/>
+      <ellipse cx="50" cy="48" rx="14" ry="15" fill="#5E4A40" ${OL}/>${[[42,34,6],[50,31,7],[58,34,6]].map(([x,y,r])=>`<circle cx="${x}" cy="${y}" r="${r}" fill="#F7F4EC" ${OL}/>`).join("")}
+      <circle cx="44" cy="47" r="2.4" fill="#fff"/><circle cx="56" cy="47" r="2.4" fill="#fff"/><circle cx="44.6" cy="47.4" r="1.4" fill="#1E1714"/><circle cx="56.6" cy="47.4" r="1.4" fill="#1E1714"/><path d="M47,56 q3,2 6,0" stroke="#F7F4EC" stroke-width="1.4" fill="none" stroke-linecap="round"/>`; }
+    case "cow": return `<ellipse cx="50" cy="71" rx="25" ry="15" fill="#FBFAF6" ${OL}/><path d="M30,66 q8,-6 14,2 q-4,10 -12,8Z M60,74 q6,-8 14,-2 q-2,8 -10,8Z" fill="#3A3330"/>
+      <rect x="34" y="79" width="7" height="8" rx="2.5" fill="#3A3330"/><rect x="59" y="79" width="7" height="8" rx="2.5" fill="#3A3330"/>
+      <path d="M36,34 q-6,-8 -2,-14 q2,8 8,10Z M64,34 q6,-8 2,-14 q-2,8 -8,10Z" fill="#E9D3A0" ${OL}/><ellipse cx="28" cy="44" rx="8" ry="4" transform="rotate(-20,28,44)" fill="#FBFAF6" ${OL}/><ellipse cx="72" cy="44" rx="8" ry="4" transform="rotate(20,72,44)" fill="#FBFAF6" ${OL}/>
+      <ellipse cx="50" cy="48" rx="17" ry="17" fill="#FBFAF6" ${OL}/><path d="M38,36 q6,-4 10,2 q-4,6 -10,4Z" fill="#3A3330"/>${EYES(45,7)}
+      <ellipse cx="50" cy="58" rx="12" ry="7" fill="#F5B6B6" ${OL}/><ellipse cx="46" cy="58" rx="1.6" ry="2" fill="#B86A6A"/><ellipse cx="54" cy="58" rx="1.6" ry="2" fill="#B86A6A"/>`;
+    case "chicken": return `<path d="M44,84 l-3,4 M44,84 l0,5 M56,84 l3,4 M56,84 l0,5" stroke="#E8A13A" stroke-width="2" stroke-linecap="round"/><path d="M41,76 L41,84 M59,76 L59,84" stroke="#E8A13A" stroke-width="2.5"/>
+      <path d="M72,58 q12,-6 10,-18 q-8,6 -14,10Z" fill="#F7F4EC" ${OL}/><ellipse cx="50" cy="62" rx="22" ry="20" fill="#FBFAF6" ${OL}/><path d="M30,62 q-4,8 6,14 q2,-8 -6,-14Z M70,62 q4,8 -6,14 q-2,-8 6,-14Z" fill="#EDE8DD"/>
+      <path d="M42,44 q2,-8 6,-4 q2,-8 6,-2 q4,-6 6,2 q-6,6 -18,4Z" fill="#E5482F" ${OL}/>${EYES(52,7)}<path d="M46,57 L54,57 L50,63Z" fill="#F2A33A" ${OL}/><path d="M48,63 q2,6 4,0" fill="#E5482F"/>${CHEEK(58,13)}`;
+    case "duck": return `<path d="M38,84 q4,4 8,0 M54,84 q4,4 8,0" stroke="#F2A33A" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M42,78 L42,84 M58,78 L58,84" stroke="#F2A33A" stroke-width="2.5"/>
+      <ellipse cx="50" cy="66" rx="24" ry="17" fill="#FBFAF6" ${OL}/><path d="M72,62 q10,-2 8,-10 q-6,4 -10,4Z" fill="#FBFAF6" ${OL}/>
+      <circle cx="50" cy="44" r="15" fill="#FBFAF6" ${OL}/>${EYES(42,6)}<ellipse cx="50" cy="51" rx="9" ry="4" fill="#F2A33A" ${OL}/><path d="M42,51 q8,2 16,0" stroke="#C97A1E" stroke-width="1"/>${CHEEK(48,11)}`;
+    case "bird": return `<path d="M14,80 Q50,74 86,82" stroke="#8B5E3C" stroke-width="4" fill="none" stroke-linecap="round"/>${LEAF(76,80,-30,.8)}
+      <path d="M44,78 l-2,4 M56,78 l2,4" stroke="#E8A13A" stroke-width="2" stroke-linecap="round"/><path d="M66,66 q14,4 16,-6 q-8,0 -14,-2Z" fill="#3E7CC2" ${OL}/>
+      <ellipse cx="50" cy="60" rx="18" ry="19" fill="#5B9BE0" ${OL}/><ellipse cx="50" cy="66" rx="11" ry="10" fill="#E8F2FB"/><path d="M34,60 q-6,8 4,14 q4,-6 -4,-14Z" fill="#3E7CC2"/>
+      <path d="M46,40 q4,-8 8,0" fill="#3E7CC2"/>${EYES(55,6)}<path d="M47,60 L53,60 L50,65Z" fill="#F2A33A" ${OL}/>${CHEEK(60,11)}`;
+    case "fish": return `<path d="M24,56 L10,44 L12,58 L10,70Z" fill="#F08A2C" ${OL}/><ellipse cx="48" cy="58" rx="28" ry="17" fill="#F7A23A" ${OL}/>
+      <path d="M40,42 q8,-10 18,-2 Z" fill="#F08A2C" ${OL}/><path d="M42,58 q4,-6 0,-12 M48,62 q4,-8 0,-16" stroke="#E07A1E" stroke-width="1.5" fill="none"/>
+      <circle cx="64" cy="54" r="5" fill="#fff"/><circle cx="65" cy="54" r="3" fill="#2B2220"/><circle cx="66" cy="53" r="1" fill="#fff"/><path d="M70,63 q3,2 5,0" stroke="#B85A12" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <circle cx="80" cy="44" r="2.4" fill="none" stroke="#fff" stroke-opacity=".8" stroke-width="1.2"/><circle cx="84" cy="36" r="1.6" fill="none" stroke="#fff" stroke-opacity=".8" stroke-width="1.2"/>`;
+    case "shrimp": { let seg=""; [[64,44,11],[58,56,11],[48,64,10],[37,66,9],[28,62,8]].forEach(([x,y,r])=>seg+=`<circle cx="${x}" cy="${y}" r="${r}" fill="#F48A6B" ${OL}/>`);
+      return `<path d="M72,40 Q86,20 94,24 M70,38 Q80,16 88,14" stroke="#E0623F" stroke-width="1.6" fill="none"/>`+seg+`<path d="M24,60 L12,52 L14,64 L12,74 L24,66Z" fill="#E0623F" ${OL}/>
+      <path d="M54,60 l-2,8 M46,66 l-2,8 M38,68 l-1,7" stroke="#E0623F" stroke-width="2" stroke-linecap="round"/><circle cx="68" cy="40" r="3" fill="#2B2220"/><circle cx="69" cy="39" r="1" fill="#fff"/>
+      <path d="M58,50 q-4,8 -14,10" stroke="#FBC3B0" stroke-width="2" fill="none" stroke-linecap="round"/>`; }
+  }
+  return "";
+}
+function productDraw(id, cx, cy, s=1){
+  const g = inner => `<g transform="translate(${cx},${cy}) scale(${s})">${inner}</g>`;
+  switch(id){
+    case "wool": return g(`<circle r="13" fill="#F7F4EC" stroke="#C9C3B2" stroke-width="1.4"/><path d="M-11,-5 q11,-6 22,2 M-12,2 q12,-6 24,3 M-9,8 q10,-4 18,1" stroke="#D8D2C2" stroke-width="1.6" fill="none"/><path d="M10,8 q8,6 4,12" stroke="#C9C3B2" stroke-width="1.6" fill="none"/>`);
+    case "milk": return g(`<path d="M-7,-14 L7,-14 L7,-9 L10,-4 L10,15 Q10,17 8,17 L-8,17 Q-10,17 -10,15 L-10,-4 L-7,-9Z" fill="#FFFFFF" stroke="#9FB7C9" stroke-width="1.4"/><rect x="-7" y="-18" width="14" height="5" rx="1.5" fill="#4FA3E3"/><rect x="-10" y="2" width="20" height="8" fill="#DCEEFB"/><text x="0" y="8.5" text-anchor="middle" font-size="6.5" font-weight="700" fill="#2E6FA8" style="font-family:var(--f-han)">牛奶</text>`);
+    case "egg": return g(`<ellipse rx="10" ry="13" fill="#F6E3C8" stroke="#D8B88E" stroke-width="1.4"/><ellipse cx="-3" cy="-5" rx="3" ry="4" fill="#fff" opacity=".6"/>`);
+    case "duckegg": return g(`<ellipse rx="10.5" ry="13.5" fill="#DDEFE9" stroke="#A9CFC3" stroke-width="1.4"/><ellipse cx="-3" cy="-5" rx="3" ry="4" fill="#fff" opacity=".6"/>`);
+    case "birdegg": return g(`<ellipse rx="7" ry="9" fill="#BFE0F2" stroke="#8DBBD6" stroke-width="1.3"/><circle cx="-2" cy="-2" r="1.2" fill="#5E8FB0"/><circle cx="3" cy="2" r="1" fill="#5E8FB0"/><circle cx="-1" cy="5" r=".9" fill="#5E8FB0"/>`);
+  }
+  return "";
+}
+const GRASS = `<ellipse cx="50" cy="87" rx="44" ry="9" fill="#7FC36A"/><path d="M14,86 l2,-6 2,6 M80,86 l2,-6 2,6 M30,90 l2,-5 2,5" stroke="#5DA74C" stroke-width="1.5" fill="none"/>`;
+const POND = `<ellipse cx="50" cy="62" rx="46" ry="34" fill="#9FD6F2"/><ellipse cx="50" cy="62" rx="40" ry="28" fill="#B8E2F7"/><path d="M20,78 q6,-3 12,0 M66,46 q6,-3 12,0" stroke="#fff" stroke-opacity=".7" stroke-width="1.6" fill="none"/>`;
+function animalArt(id, stage, ready){
+  const a = ANIMALS[id]; if(!a) return "";
+  const s = [0.55, 0.7, 0.85, 1][Math.max(0, Math.min(stage, 3))];
+  const bubble = ready && a.prod ? `<circle cx="82" cy="20" r="15" fill="#fff" stroke="#F2C14E" stroke-width="2"/>${productDraw(a.prod, 82, 20, .8)}` : "";
+  return `<svg viewBox="0 0 100 100" aria-hidden="true">${a.water ? POND : GRASS}<g transform="translate(50,86) scale(${s}) translate(-50,-86)">${animalDraw(id)}</g>${bubble}</svg>`;
+}
+
 const DROP = on => `<svg viewBox="0 0 12 16" class="drop ${on?"on":""}" aria-hidden="true"><path d="M6,1 C6,1 1,7 1,10.5 A5,5 0 0,0 11,10.5 C11,7 6,1 6,1Z"/></svg>`;
 const ICON_SPROUT = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21v-9"/><path d="M12 12c0-4-3-6-7-6 0 4 3 6 7 6z"/><path d="M12 10c0-3 2-5 6-5 0 3-2 5-6 5z"/><path d="M5 21h14"/></svg>`;
 
 /* ---------- dữ liệu & xu ---------- */
 const Farm = {
-  st: null, tab: "shop", cat: "hoa", openPlot: null,
+  st: null, tab: "shop", cat: "hoa", openPlot: null, view: "field", openPen: null,
   key(){ const p = Profile.get(); if(!p) return null; if(!p.sid){ p.sid = Track.uid(); Profile.set(p); } return "ww_farm_" + p.sid; },
   load(){
     const k = this.key(); if(!k) return null;
     let st = store.get(k, null);
     if(!st){ st = { coins: 10, earned: 0, plotCount: PLOT_START, plots: [], bag: { seeds: { sunflower: 1, carrot: 1 }, water: 3, fert: 0 }, barn: {}, dex: {}, harvested: 0, speakDay: {} , welcome: true }; }
+    /* chăn nuôi: thêm cho người chơi cũ và mới, tặng 1 gà con + 3 thức ăn một lần */
+    st.pens = st.pens || []; st.penCount = st.penCount || PEN_START; st.bag.animals = st.bag.animals || {};
+    if(st.bag.feed == null) st.bag.feed = 0;
+    if(!st.ranchGift){ st.ranchGift = true; st.bag.animals.chicken = (st.bag.animals.chicken || 0) + 1; st.bag.feed += 3; st.ranchNew = true; }
+    st.dexA = st.dexA || {};
+    for(let i = 0; i < st.penCount; i++) if(st.pens[i] === undefined) st.pens[i] = null;
     st.plots.length = Math.max(st.plots.length, st.plotCount);
     for(let i = 0; i < st.plotCount; i++) if(st.plots[i] === undefined) st.plots[i] = null;
     this.st = st; return st;
@@ -2532,9 +2647,14 @@ const Farm = {
         <div class="fm-acts"><span class="fm-coins" aria-label="Số xu">${coinSVG()}<b id="fmCoins">${st.coins}</b> xu</span><button class="btn" id="fmBack">${ICON.left}Về trang học</button></div></div>
       ${st.welcome ? `<div class="fm-welcome">${ICON_SPROUT}<div><b>Chào mừng đến trang trại!</b> Bạn được tặng 10 xu, 3 lần nước tưới, 1 hạt hướng dương và 1 hạt cà rốt. Bấm “Gieo hạt” trên ô đất để bắt đầu. Mỗi cây cần tưới 3 lần mới chín. Làm bài tập để kiếm thêm xu: đúng 100% được 10 xu, 80–99% được 8 xu, 60–79% được 6 xu, dưới 60% được 1 xu. Mỗi bài chỉ tính xu ở lần làm đầu tiên, nên hãy làm thật cẩn thận nhé!</div><button class="btn" id="fmWelOk">Đã hiểu</button></div>` : ""}
       <div class="fm-layout">
-        <section class="fm-field" aria-label="Ô đất">
-          <div class="fm-bagline"><span>${DROP(true)} Nước: <b>${st.bag.water}</b></span><span class="fert-ic">✦ Phân bón: <b>${st.bag.fert}</b></span><span>Hạt giống: <b>${owned}</b></span></div>
-          <div class="fm-plots">${Array.from({ length: PLOT_MAX }, (_, i) => this.plotCard(i)).join("")}</div>
+        <section class="fm-field ${this.view === "ranch" ? "ranch" : ""}" aria-label="${this.view === "ranch" ? "Chuồng trại" : "Ô đất"}">
+          <div class="seg fm-view" role="tablist" aria-label="Khu vực">${[["field", "Ruộng vườn"], ["ranch", "Chuồng trại"]].map(([k, l]) => `<button role="tab" data-v="${k}" aria-pressed="${this.view === k}">${l}</button>`).join("")}</div>
+          ${this.view === "ranch" ? `
+          ${st.ranchNew ? `<div class="fm-note">Khu chuồng trại mới mở! Bạn được tặng 1 gà con 小鸡 và 3 phần thức ăn 饲料. Thả gà vào chuồng, cho ăn 3 lần để gà đẻ trứng 鸡蛋.</div>` : ""}
+          <div class="fm-bagline"><span>Thức ăn 饲料: <b>${st.bag.feed}</b></span><span>Con giống: <b>${Object.values(st.bag.animals).reduce((a, b) => a + b, 0)}</b></span></div>
+          <div class="fm-plots">${Array.from({ length: PEN_MAX }, (_, i) => this.penCard(i)).join("")}</div>`
+          : `<div class="fm-bagline"><span>${DROP(true)} Nước: <b>${st.bag.water}</b></span><span class="fert-ic">✦ Phân bón: <b>${st.bag.fert}</b></span><span>Hạt giống: <b>${owned}</b></span></div>
+          <div class="fm-plots">${Array.from({ length: PLOT_MAX }, (_, i) => this.plotCard(i)).join("")}</div>`}
         </section>
         <aside class="fm-side panel">
           <div class="seg fm-tabs" role="tablist">${[["shop", "Cửa hàng"], ["barn", "Kho"], ["dex", "Bộ sưu tập"]].map(([k, l]) => `<button role="tab" data-t="${k}" aria-pressed="${this.tab === k}">${l}</button>`).join("")}</div>
@@ -2569,27 +2689,69 @@ const Farm = {
         : `<button class="btn fm-water" data-act="water" data-i="${i}" ${st.bag.water ? "" : "disabled"}>${DROP(true)}Tưới</button>${pl.fert ? "" : `<button class="btn" data-act="fert" data-i="${i}" ${st.bag.fert ? "" : "disabled"}>✦ Bón phân</button>`}`}</div>
     </div>`;
   },
+  shopAnimals(){
+    const st = this.st;
+    return Object.entries(ANIMAL_GROUP).map(([g, [zh, vi]]) => `<h4 class="fm-h"><span class="han">${zh}</span> · ${vi}</h4><div class="fm-shop">${Object.entries(ANIMALS).filter(([, a]) => a.grp === g).map(([id, a]) => { const pr = a.prod ? PRODUCTS[a.prod] : null;
+      return `<div class="fm-item"><div class="fm-ico">${animalArt(id, 3)}</div><div class="fm-info"><b>${esc(a.vi)} con</b><span class="han">${a.zh}</span> <small class="py">${a.py}</small>
+        <small>${pr ? `Cho: <span class="han">${pr.zh}</span> ${pr.py} (${pr.vi.toLowerCase()}) · bán ${pr.sell} xu/lần` : `Lớn rồi bán: ${a.sell} xu`}${st.bag.animals[id] ? ` · đang có ${st.bag.animals[id]}` : ""}</small></div>
+        <button class="btn fm-buy" data-act="buyanimal" data-c="${id}">${coinSVG()}${a.price}</button></div>`; }).join("")}</div>`).join("") + `
+      <h4 class="fm-h">Đồ dùng</h4><div class="fm-shop">
+        <div class="fm-item"><div class="fm-ico">${productDraw ? `<svg viewBox="0 0 40 40"><path d="M8,16 L32,16 L29,34 L11,34Z" fill="#E9C27A" stroke="#B98552" stroke-width="1.4"/><circle cx="16" cy="13" r="3" fill="#F2D49A"/><circle cx="22" cy="11" r="3" fill="#E9C27A"/><circle cx="27" cy="14" r="3" fill="#F2D49A"/></svg>` : ""}</div><div class="fm-info"><b>Thức ăn ×1</b><span class="han">${FEED.zh}</span> <small class="py">${FEED.py}</small><small>Mỗi vật nuôi cần 3 lần cho ăn · đang có ${st.bag.feed}</small></div><button class="btn fm-buy" data-act="buyfeed" data-n="1">${coinSVG()}1</button></div>
+        <div class="fm-item"><div class="fm-ico"><svg viewBox="0 0 40 40"><path d="M6,14 L34,14 L30,36 L10,36Z" fill="#E9C27A" stroke="#B98552" stroke-width="1.4"/><text x="20" y="30" text-anchor="middle" font-size="9" font-weight="700" fill="#7A4E2D">×5</text></svg></div><div class="fm-info"><b>Bao thức ăn ×5</b><small>Tiết kiệm 1 xu</small></div><button class="btn fm-buy" data-act="buyfeed" data-n="5">${coinSVG()}4</button></div>
+      </div>`;
+  },
+  penCard(i){
+    const st = this.st;
+    if(i >= st.penCount){
+      if(i === st.penCount) return `<div class="fm-plot locked"><div class="fm-lock">${ICON_SPROUT}<span>Chuồng mới</span><button class="btn" data-act="buypen">${coinSVG()}${penPrice(st.penCount)} xu</button></div></div>`;
+      return `<div class="fm-plot locked dim"><div class="fm-lock"><span>Đang khoá</span></div></div>`;
+    }
+    const pn = st.pens[i];
+    if(!pn){
+      const own = Object.entries(st.bag.animals).filter(([, n]) => n > 0);
+      return `<div class="fm-plot empty" data-i="${i}">
+        <div class="fm-art"><svg viewBox="0 0 100 100" aria-hidden="true">${GRASS}<path d="M14,84 L14,62 M86,84 L86,62 M14,66 L86,66 M14,76 L86,76" stroke="#B98552" stroke-width="3" stroke-linecap="round"/></svg></div>
+        <div class="fm-name">Chuồng trống</div>
+        ${this.openPen === i ? `<div class="fm-pick">${own.length ? own.map(([id, n]) => `<button class="fm-seed" data-act="release" data-i="${i}" data-c="${id}" title="${ANIMALS[id].vi}">${animalArt(id, 3)}<span>${ANIMALS[id].vi} <span class="han">${ANIMALS[id].zh}</span><small>×${n}</small></span></button>`).join("") : `<p class="muted">Chưa có con giống. Mua ở Cửa hàng → Vật nuôi nhé.</p>`}<button class="linkbtn" data-act="closepen">Đóng</button></div>`
+          : `<button class="btn primary fm-main" data-act="pickpen" data-i="${i}">Thả vật nuôi</button>`}
+      </div>`;
+    }
+    const a = ANIMALS[pn.a], grown = pn.f >= 3, pr = a.prod ? PRODUCTS[a.prod] : null;
+    return `<div class="fm-plot ${grown ? "ripe" : ""}" data-i="${i}">
+      <div class="fm-art">${animalArt(pn.a, pn.cyc ? 3 : Math.min(pn.f, 3), grown)}</div>
+      <div class="fm-name">${esc(a.vi)} <span class="han">${a.zh}</span><small class="fm-grp">${ANIMAL_GROUP[a.grp][0]} · ${ANIMAL_GROUP[a.grp][1]}</small></div>
+      <div class="fm-drops fm-feeds" aria-label="Đã cho ăn ${pn.f}/3 lần">${[0, 1, 2].map(k => `<i class="${k < pn.f ? "on" : ""}"></i>`).join("")}<small>${grown ? (pr ? `Có ${pr.vi.toLowerCase()}!` : "Đã lớn!") : `Cho ăn ${pn.f}/3`}</small></div>
+      <div class="fm-btns">${grown ? (pr ? `<button class="btn primary fm-main" data-act="collect" data-i="${i}">Thu <span class="han">${pr.zh}</span></button>` : `<button class="btn primary fm-main" data-act="ship" data-i="${i}">Thu hoạch</button>`)
+        : `<button class="btn" data-act="feed" data-i="${i}" ${st.bag.feed ? "" : "disabled"}>Cho ăn</button>`}</div>
+    </div>`;
+  },
   side(){
     const st = this.st;
     if(this.tab === "shop") return `
       <div class="seg fm-cats" role="group">${Object.entries(CAT_LABEL).map(([k, l]) => `<button data-cat="${k}" aria-pressed="${this.cat === k}">${l}</button>`).join("")}</div>
-      <div class="fm-shop">${Object.entries(CROPS).filter(([, c]) => c.cat === this.cat).map(([id, c]) => `<div class="fm-item">
+      ${this.cat === "vatnuoi" ? this.shopAnimals() : `<div class="fm-shop">${Object.entries(CROPS).filter(([, c]) => c.cat === this.cat).map(([id, c]) => `<div class="fm-item">
         <div class="fm-ico">${cropArt(id, 3)}</div><div class="fm-info"><b>Hạt ${esc(c.vi)}</b><span class="han">${c.zh}</span> <small class="py">${c.py}</small><small>Bán khi chín: ${c.sell} xu${st.bag.seeds[id] ? ` · trong túi: ${st.bag.seeds[id]}` : ""}</small></div>
-        <button class="btn fm-buy" data-act="buyseed" data-c="${id}">${coinSVG()}${c.price}</button></div>`).join("")}</div>
-      <h4 class="fm-h">Đồ dùng</h4>
+        <button class="btn fm-buy" data-act="buyseed" data-c="${id}">${coinSVG()}${c.price}</button></div>`).join("")}</div>`}
+      ${this.cat === "vatnuoi" ? "" : `<h4 class="fm-h">Đồ dùng</h4>
       <div class="fm-shop">
         <div class="fm-item"><div class="fm-ico">${DROP(true)}</div><div class="fm-info"><b>Nước tưới ×1</b><small>Mỗi cây cần 3 lần tưới · đang có ${st.bag.water}</small></div><button class="btn fm-buy" data-act="buywater" data-n="1">${coinSVG()}1</button></div>
         <div class="fm-item"><div class="fm-ico">${DROP(true)}${DROP(true)}</div><div class="fm-info"><b>Gói nước ×5</b><small>Tiết kiệm 1 xu</small></div><button class="btn fm-buy" data-act="buywater" data-n="5">${coinSVG()}4</button></div>
         <div class="fm-item"><div class="fm-ico fert-big">✦</div><div class="fm-info"><b>Phân bón</b><small>Cây thành loại đặc biệt ★, bán thêm ${SPECIAL_BONUS} xu · đang có ${st.bag.fert}</small></div><button class="btn fm-buy" data-act="buyfert">${coinSVG()}3</button></div>
-      </div>`;
+      </div>`}`;
     if(this.tab === "barn"){
       const items = Object.entries(st.barn).filter(([, v]) => v.n + v.s > 0);
-      return items.length ? `<p class="muted">Bán nông sản để lấy lại xu mua hạt giống. Giá bán chỉ lãi ít, muốn nhiều xu hãy chăm làm bài tập nhé!</p><div class="fm-shop">${items.map(([id, v]) => { const c = CROPS[id]; return `<div class="fm-item"><div class="fm-ico">${cropArt(id, 3)}</div><div class="fm-info"><b>${esc(c.vi)}</b><span class="han">${c.zh}</span><small>Thường ×${v.n}${v.s ? ` · Đặc biệt ×${v.s}` : ""}</small></div>
+      return items.length ? `<p class="muted">Bán nông sản để lấy lại xu mua hạt giống. Giá bán chỉ lãi ít, muốn nhiều xu hãy chăm làm bài tập nhé!</p><div class="fm-shop">${items.map(([id, v]) => { const c = farmItem(id); return `<div class="fm-item"><div class="fm-ico">${itemArt(id)}</div><div class="fm-info"><b>${esc(c.vi)}</b><span class="han">${c.zh}</span><small>Thường ×${v.n}${v.s ? ` · Đặc biệt ×${v.s}` : ""}</small></div>
         <div class="fm-sell">${v.n ? `<button class="btn" data-act="sell" data-c="${id}" data-k="n">Bán ${coinSVG()}${c.sell}</button>` : ""}${v.s ? `<button class="btn primary" data-act="sell" data-c="${id}" data-k="s">Bán ★ ${coinSVG()}${c.sell + SPECIAL_BONUS}</button>` : ""}</div></div>`; }).join("")}</div>`
-        : `<p class="muted">Kho đang trống. Thu hoạch cây chín để cất vào kho.</p>`;
+        : `<p class="muted">Kho đang trống. Thu hoạch cây chín hoặc sản phẩm từ vật nuôi để cất vào kho.</p>`;
     }
-    const got = Object.keys(st.dex).length, all = Object.keys(CROPS).length;
-    return `<p class="muted">Đã thu hoạch <b>${got}/${all}</b> loại · tổng ${st.harvested} lần. Mỗi loại kèm tên tiếng Trung để bạn học thêm từ mới!</p>
+    const got = Object.keys(st.dex).filter(k => CROPS[k]).length, all = Object.keys(CROPS).length;
+    const aKeys = [...Object.keys(ANIMALS), ...Object.keys(PRODUCTS)], aGot = aKeys.filter(k => st.dexA[k]).length;
+    const card = (id, c, ok, art) => ok ? `<div class="fm-card got">${art}<b class="han">${c.zh}</b><small class="py">${c.py}</small><small>${esc(c.vi)}</small></div>`
+      : `<div class="fm-card"><div class="fm-q">?</div><b class="han">${c.zh}</b><small>${esc(c.vi)}</small></div>`;
+    return `<p class="muted">Mỗi loại kèm tên tiếng Trung để bạn học thêm từ mới!</p>
+      <h4 class="fm-h">Vật nuôi & sản phẩm · <b>${aGot}/${aKeys.length}</b></h4>
+      <div class="fm-dex">${aKeys.map(id => card(id, farmItem(id), st.dexA[id], itemArt(id))).join("")}</div>
+      <h4 class="fm-h">Cây trồng · <b>${got}/${all}</b> loại · thu hoạch ${st.harvested} lần</h4>
       <div class="fm-dex">${Object.entries(CROPS).map(([id, c]) => st.dex[id] ? `<div class="fm-card got" title="Đã thu hoạch ${st.dex[id]} lần">${cropArt(id, 3)}<b class="han">${c.zh}</b><small class="py">${c.py}</small><small>${esc(c.vi)}</small></div>`
         : `<div class="fm-card"><div class="fm-q">?</div><b class="han">${c.zh}</b><small>${esc(c.vi)}</small></div>`).join("")}</div>`;
   },
@@ -2597,6 +2759,7 @@ const Farm = {
     $("#fmBack").onclick = () => enterApp();
     const ok = $("#fmWelOk"); if(ok) ok.onclick = () => { this.st.welcome = false; this.save(); this.render(); };
     document.querySelectorAll(".fm-tabs button").forEach(b => b.onclick = () => { this.tab = b.dataset.t; this.render(); });
+    document.querySelectorAll(".fm-view button").forEach(b => b.onclick = () => { this.view = b.dataset.v; this.openPlot = this.openPen = null; if(this.view === "ranch"){ this.tab = "shop"; this.cat = "vatnuoi"; } else if(this.cat === "vatnuoi") this.cat = "hoa"; this.render(); });
     document.querySelectorAll(".fm-cats button").forEach(b => b.onclick = () => { this.cat = b.dataset.cat; $("#fmSide").innerHTML = this.side(); this.bind(); });
     $("#fmBody").onclick = e => { const b = e.target.closest("[data-act]"); if(!b || b.disabled) return; this.act(b.dataset.act, b.dataset); };
   },
@@ -2616,7 +2779,26 @@ const Farm = {
       case "buywater": { const n = +d.n, cost = n === 5 ? 4 : 1; if(!this.spend(cost)) return; st.bag.water += n; toast(`Đã mua ${n} lần nước tưới`); break; }
       case "buyfert": if(!this.spend(3)) return; st.bag.fert++; toast("Đã mua 1 phân bón"); break;
       case "buyplot": { if(st.plotCount >= PLOT_MAX) return; if(!this.spend(plotPrice(st.plotCount))) return; st.plots[st.plotCount] = null; st.plotCount++; toast("Đã mở thêm 1 ô đất!"); break; }
-      case "sell": { const c = CROPS[d.c], b = st.barn[d.c]; if(!b || !b[d.k]) return; b[d.k]--; const g = d.k === "s" ? c.sell + SPECIAL_BONUS : c.sell; st.coins += g; toast(`${coinSVG()} <b>+${g} xu</b> · đã bán ${esc(c.vi)}`); break; }
+      case "pickpen": this.openPen = i; st.ranchNew = false; break;
+      case "closepen": this.openPen = null; break;
+      case "release": if((st.bag.animals[d.c] || 0) < 1) return; st.bag.animals[d.c]--; st.pens[i] = { a: d.c, f: 0, cyc: 0, t: Date.now() }; this.openPen = null; st.ranchNew = false;
+        toast(`Đã thả ${ANIMALS[d.c].vi} <span class="han">${ANIMALS[d.c].zh}</span> vào chuồng. Nhớ cho ăn 3 lần nhé!`); break;
+      case "feed": { const pn = st.pens[i]; if(!pn || pn.f >= 3 || st.bag.feed < 1) return; st.bag.feed--; pn.f++;
+        if(pn.f >= 3){ const a = ANIMALS[pn.a]; toast(a.prod ? `${a.vi} đã có ${PRODUCTS[a.prod].vi.toLowerCase()} <span class="han">${PRODUCTS[a.prod].zh}</span>!` : `${a.vi} <span class="han">${a.zh}</span> đã lớn! Bấm “Thu hoạch”.`); } break; }
+      case "collect": { const pn = st.pens[i]; if(!pn || pn.f < 3) return; const a = ANIMALS[pn.a], pid = a.prod, pr = PRODUCTS[pid];
+        const b = st.barn[pid] || (st.barn[pid] = { n: 0, s: 0 }); b.n++; pn.f = 0; pn.cyc++;
+        const first = !st.dexA[pid]; st.dexA[pid] = (st.dexA[pid] || 0) + 1; st.dexA[pn.a] = (st.dexA[pn.a] || 0) + 1;
+        Track.log("harvest", { crop: pid, special: false, harvested: ++st.harvested });
+        toast(`Thu được ${esc(pr.vi)} <span class="han">${pr.zh}</span> (${pr.py})${first ? " · mục mới trong bộ sưu tập!" : ""}`); break; }
+      case "ship": { const pn = st.pens[i]; if(!pn || pn.f < 3) return; const a = ANIMALS[pn.a];
+        const b = st.barn[pn.a] || (st.barn[pn.a] = { n: 0, s: 0 }); b.n++; st.pens[i] = null;
+        const first = !st.dexA[pn.a]; st.dexA[pn.a] = (st.dexA[pn.a] || 0) + 1;
+        Track.log("harvest", { crop: pn.a, special: false, harvested: ++st.harvested });
+        toast(`Thu hoạch ${esc(a.vi)} <span class="han">${a.zh}</span> (${a.py})${first ? " · mục mới trong bộ sưu tập!" : ""}`); break; }
+      case "buyanimal": { const a = ANIMALS[d.c]; if(!this.spend(a.price)) return; st.bag.animals[d.c] = (st.bag.animals[d.c] || 0) + 1; toast(`Đã mua ${a.vi} con <span class="han">${a.zh}</span>. Vào “Chuồng trại” để thả nuôi.`); break; }
+      case "buyfeed": { const n = +d.n, cost = n === 5 ? 4 : 1; if(!this.spend(cost)) return; st.bag.feed += n; toast(`Đã mua ${n} phần thức ăn <span class="han">饲料</span>`); break; }
+      case "buypen": { if(st.penCount >= PEN_MAX) return; if(!this.spend(penPrice(st.penCount))) return; st.pens[st.penCount] = null; st.penCount++; toast("Đã mở thêm 1 chuồng!"); break; }
+      case "sell": { const c = farmItem(d.c), b = st.barn[d.c]; if(!b || !b[d.k]) return; b[d.k]--; const g = d.k === "s" ? c.sell + SPECIAL_BONUS : c.sell; st.coins += g; toast(`${coinSVG()} <b>+${g} xu</b> · đã bán ${esc(c.vi)}`); break; }
     }
     this.save(); refreshCoinBadge(); this.render();
   }
