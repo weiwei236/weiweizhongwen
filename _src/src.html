@@ -422,7 +422,13 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .ra-prev{max-height:330px;overflow:auto;padding:12px 14px}.ra-prev p{margin:0 0 8px;font-size:20px;line-height:2}
 .ra-ed details summary{cursor:pointer;font-weight:600;color:var(--accent)}
 .ra-vt .inp{padding:7px 8px;font-size:15px;min-width:70px}table.ra-vt{min-width:940px}
-.ra-pyc{display:flex;gap:4px}.ra-rowbtn{display:flex;gap:4px}
+.ra-pyc{display:flex;gap:4px}
+.rd-audio{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--leaf-soft);border-radius:12px;padding:8px 14px;font-weight:600;color:var(--accent)}
+.rd-audio span svg{width:18px;height:18px;vertical-align:-3px;margin-right:6px}.rd-audio audio{flex:1;min-width:220px;max-width:100%;height:40px}
+.ra-audio{display:grid;gap:8px}.ra-audio p{margin:0}
+.ra-au-cur{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.ra-au-cur audio{height:40px;max-width:100%}.ra-au-name{font-size:14px;color:var(--muted);word-break:break-all}
+.ra-au-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.ra-au-row .inp{flex:1;min-width:200px}
+.ra-ed label.ra-au-up{display:inline-flex;font-weight:600;cursor:pointer}.ra-rowbtn{display:flex;gap:4px}
 .btn.sm{padding:5px 9px;font-size:13px}
 .ra-q{display:grid;gap:10px;border:1.5px solid var(--line);border-radius:12px;padding:12px;background:var(--surface);margin-bottom:10px}
 .ra-q-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
@@ -3202,6 +3208,18 @@ function rubyHTML(text){
   const chars = [...text], arr = pyArr(text), ok = arr.length === chars.length;
   return chars.map((c, i) => /[一-鿿]/.test(c) && ok ? `<ruby>${esc(c)}<rt>${esc(arr[i])}</rt></ruby>` : esc(c)).join("");
 }
+/* File nghe của bài đọc: tải lên Google Drive của giáo viên (qua Apps Script) hoặc dán link mp3 / link Google Drive */
+function driveId(u){ const m = /drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:[^#]*&)?id=)([\w-]{20,})/.exec(u || "") || /docs\.google\.com\/uc\?(?:[^#]*&)?id=([\w-]{20,})/.exec(u || ""); return m ? m[1] : ""; }
+function audioSrc(a){ return a && a.id ? `https://drive.google.com/uc?export=download&id=${encodeURIComponent(a.id)}` : (a && a.url) || ""; }
+/* nếu trình duyệt không phát trực tiếp được từ Drive thì xin máy chủ gửi dữ liệu file về rồi phát */
+function audioFallback(el, a){
+  el.onerror = async () => {
+    if(!a.id || el.dataset.fb || !Auth.on()) return; el.dataset.fb = 1;
+    const r = await Auth.call("audio", { id: a.id }, 90000); if(!r.ok || !r.data) return;
+    const bin = atob(r.data), u8 = new Uint8Array(bin.length); for(let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+    el.src = URL.createObjectURL(new Blob([u8], { type: r.mime || "audio/mpeg" }));
+  };
+}
 const Reading = {
   list: rawGet("ww_readings", []), loading: null, les: null, cur: null, st: null, showPy: false, showTr: false,
   forLesson(lv, n){ return this.list.filter(r => r.level === lv && +r.lesson === +n).sort((a, b) => (a.order || 0) - (b.order || 0) || String(a.title).localeCompare(String(b.title))); },
@@ -3243,6 +3261,7 @@ const Reading = {
   bank(r){ const w = r.questions.filter(q => q.type === "fill").map(q => q.ans).concat(String(r.fillExtra || "").split(/[,，、]/).map(x => x.trim()).filter(Boolean));
     return [...new Set(w)].sort((a, b) => a.localeCompare(b, "zh")); },
   renderOne(){
+    const oldAu = $("#rdAudio");
     const W = $("#work"), r = this.cur, st = this.st, sub = st.submitted, paras = String(r.text || "").split(/\n+/).map(x => x.trim()).filter(Boolean);
     const manual = String(r.pyManual || "").split(/\n+/).map(x => x.trim());
     const bank = this.bank(r), sc = sub ? this.score(r, st) : null;
@@ -3260,7 +3279,8 @@ const Reading = {
     }).join("");
     W.innerHTML = `<div class="rd rd-one">
       <div class="toolbar"><button class="btn" id="rdBack">${ICON.left}Danh sách bài đọc</button>
-        <div class="grp"><button class="btn" id="rdPy" aria-pressed="${this.showPy}">${this.showPy ? "Ẩn" : "Hiện"} phiên âm</button>${r.trans ? `<button class="btn" id="rdTr" aria-pressed="${this.showTr}">${this.showTr ? "Ẩn" : "Hiện"} bản dịch</button>` : ""}<button class="btn" id="rdSay">${ICON.sound}Nghe bài</button></div></div>
+        <div class="grp"><button class="btn" id="rdPy" aria-pressed="${this.showPy}">${this.showPy ? "Ẩn" : "Hiện"} phiên âm</button>${r.trans ? `<button class="btn" id="rdTr" aria-pressed="${this.showTr}">${this.showTr ? "Ẩn" : "Hiện"} bản dịch</button>` : ""}${r.audio ? "" : `<button class="btn" id="rdSay">${ICON.sound}Nghe bài</button>`}</div></div>
+      ${r.audio ? `<div class="rd-audio"><span>${ICON.sound}Nghe bài</span><span id="rdAudioSlot"></span></div>` : ""}
       <article class="rd-paper">
         <h2 class="han rd-title">${this.showPy && !r.pyManual ? rubyHTML(r.title) : esc(r.title)}</h2>
         <div class="rd-text han ${this.showPy ? "" : "hide-py"}">${paras.map((p, k) => `<p>${r.pyManual || !this.showPy ? esc(p) : rubyHTML(p)}</p>${r.pyManual && this.showPy && manual[k] ? `<p class="rd-pyline">${esc(manual[k])}</p>` : ""}`).join("")}</div>
@@ -3277,7 +3297,11 @@ const Reading = {
     $("#rdBack").onclick = () => { this.cur = null; this.render(); };
     $("#rdPy").onclick = () => { this.showPy = !this.showPy; this.renderOne(); };
     const tr = $("#rdTr"); if(tr) tr.onclick = () => { this.showTr = !this.showTr; this.renderOne(); };
-    $("#rdSay").onclick = () => speak(paras.join("。"));
+    const say = $("#rdSay"); if(say) say.onclick = () => speak(paras.join("。"));
+    const slot = $("#rdAudioSlot");
+    if(slot){ /* giữ nguyên trình phát cũ khi bật/tắt phiên âm để không bị dừng giữa chừng */
+      if(oldAu && oldAu.dataset.rid === r.id) slot.replaceWith(oldAu);
+      else { const au = document.createElement("audio"); au.id = "rdAudio"; au.controls = true; au.preload = "metadata"; au.dataset.rid = r.id; audioFallback(au, r.audio); au.src = audioSrc(r.audio); slot.replaceWith(au); } }
     W.querySelectorAll("[data-say]").forEach(b => b.onclick = () => speak(b.dataset.say));
     W.querySelectorAll(".rd-qbox .ex-opt").forEach(b => b.onclick = () => {
       if(st.submitted) return; const i = +b.dataset.i, q = r.questions[i];
@@ -3336,6 +3360,16 @@ const RdAdmin = {
         <label>Mỗi dòng là phiên âm của một đoạn tương ứng. Có nội dung ở đây thì trang hiện dòng phiên âm này thay cho phiên âm tự động.<textarea class="inp" id="raPy" rows="3">${esc(d.pyManual)}</textarea></label></details>
       <label>Bản dịch tiếng Việt (tuỳ chọn – học viên bấm “Hiện bản dịch” mới thấy)<textarea class="inp" id="raTr" rows="3">${esc(d.trans)}</textarea></label>
 
+      <h3>File nghe (tuỳ chọn)</h3>
+      <div class="ra-audio">
+        ${d.audio ? `<div class="ra-au-cur"><audio controls preload="metadata" id="raAuPrev"></audio><span class="ra-au-name">${esc(d.audio.name || d.audio.url || "File nghe")}</span><button type="button" class="btn sm bad" id="raAuDel">Bỏ file nghe</button></div>
+          <p class="muted">Học viên sẽ nghe file này thay cho giọng đọc tự động.</p>`
+        : `<p class="muted">Chưa có file nghe, học viên sẽ nghe giọng đọc tự động. Bạn có thể tải file lên hoặc dán link.</p>`}
+        <div class="ra-au-row"><label class="btn ra-au-up">⬆ Tải file nghe lên (mp3, m4a, wav… tối đa 15 MB)<input type="file" id="raAuFile" accept="audio/*,.mp3,.m4a,.wav,.ogg,.aac" hidden></label>
+          <span class="muted">hoặc</span><input class="inp" id="raAuLink" placeholder="Dán link file mp3 hoặc link Google Drive"><button type="button" class="btn" id="raAuLinkOk">Dùng link</button></div>
+        <p class="muted" id="raAuMsg" hidden></p>
+      </div>
+
       <h3>Từ vựng bổ sung</h3>
       <div class="tbl-wrap"><table class="syl ra-vt"><thead><tr><th>STT</th><th>Chữ Hán</th><th>Phiên âm</th><th>Từ loại</th><th>Nghĩa</th><th>Ví dụ</th><th></th></tr></thead><tbody>
         ${d.vocab.map((v, k) => `<tr data-vi="${k}"><td>${k + 1}</td><td><input class="inp han" data-v="h" value="${esc(v.h)}"></td><td><div class="ra-pyc"><input class="inp" data-v="p" value="${esc(v.p)}"><button type="button" class="btn sm" data-autopy="${k}" title="Tự điền phiên âm">拼</button></div></td>
@@ -3380,6 +3414,22 @@ const RdAdmin = {
     f.querySelectorAll("[data-qdel]").forEach(b => b.onclick = () => { this.sync(); d.questions.splice(+b.dataset.qdel, 1); re(); });
     f.querySelectorAll("[data-vup]").forEach(b => b.onclick = () => { this.sync(); const i = +b.dataset.vup; [d.vocab[i - 1], d.vocab[i]] = [d.vocab[i], d.vocab[i - 1]]; re(); });
     f.querySelectorAll("[data-qup]").forEach(b => b.onclick = () => { this.sync(); const i = +b.dataset.qup; [d.questions[i - 1], d.questions[i]] = [d.questions[i], d.questions[i - 1]]; re(); });
+    const prev = $("#raAuPrev"); if(prev){ audioFallback(prev, d.audio); prev.src = audioSrc(d.audio); }
+    const auMsg = t => { const m = $("#raAuMsg"); m.textContent = t; m.hidden = !t; };
+    const ad = $("#raAuDel"); if(ad) ad.onclick = () => { this.sync(); delete d.audio; re(); };
+    $("#raAuLinkOk").onclick = () => { this.sync(); const u = $("#raAuLink").value.trim();
+      if(!/^https?:\/\//.test(u)) return auMsg("Link phải bắt đầu bằng http:// hoặc https://");
+      const id = driveId(u); d.audio = id ? { id, url: u, name: "Link Google Drive" } : { url: u, name: u.split("/").pop().split("?")[0] || u }; re(); };
+    $("#raAuFile").onchange = async e => {
+      const file = e.target.files[0]; if(!file) return; this.sync();
+      if(file.size > 15 * 1024 * 1024) return auMsg("File lớn hơn 15 MB. Hãy nén nhỏ lại (ví dụ mp3 128 kbps) rồi thử lại.");
+      auMsg(`Đang tải “${file.name}” lên Google Drive… (đừng đóng trang)`);
+      const data = await new Promise(res => { const fr = new FileReader(); fr.onload = () => res(String(fr.result).split(",")[1]); fr.onerror = () => res(""); fr.readAsDataURL(file); });
+      if(!data) return auMsg("Không đọc được file này.");
+      const r = await Auth.call("uploadAudio", { key: Teacher.key, name: file.name, mime: file.type || "audio/mpeg", data }, 180000);
+      if(!r.ok) return auMsg(r.error === "unknown_action" ? "Máy chủ chưa có chức năng tải file nghe – hãy cập nhật mã Apps Script mới (Triển khai → Quản lý bản triển khai → Phiên bản mới)." : r.error === "unauthorized" ? "Phiên giáo viên hết hạn, hãy đăng nhập lại khu giáo viên." : r.error === "network" ? "Mạng chậm hoặc mất kết nối, hãy thử lại." : "Không tải lên được: " + r.error);
+      d.audio = { id: r.id, url: r.url, name: file.name }; re(); auMsg("Đã tải lên. Nhớ bấm “Lưu bài đọc” để lưu.");
+    };
     $("#raCancel").onclick = () => { this.draft = null; this.render(); };
     const del = $("#raDel"); if(del) del.onclick = async () => {
       if(!del.dataset.armed){ del.dataset.armed = 1; del.textContent = "Bấm lần nữa để xoá hẳn"; return; }

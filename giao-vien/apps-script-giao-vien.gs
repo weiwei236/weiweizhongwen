@@ -11,6 +11,9 @@
  *      - Người có quyền truy cập (Who has access): Bất kỳ ai (Anyone)
  *    Bấm Triển khai, cấp quyền, rồi sao chép "URL ứng dụng web" (kết thúc bằng /exec) gửi cho Claude.
  *
+ * File nghe của bài đọc được lưu trong thư mục Google Drive "Weiwei - File nghe bài đọc" (tự tạo).
+ * Lần đầu dùng: chọn hàm capQuyenDrive ở thanh trên cùng → bấm Chạy (Run) → cấp quyền truy cập Drive.
+ *
  * Khi sửa mã này về sau: Triển khai → Quản lý các bản triển khai → biểu tượng bút chì → Phiên bản: "Phiên bản mới" → Triển khai.
  * (Làm như vậy để giữ nguyên URL.)
  *
@@ -203,6 +206,24 @@ function doPost(e) {
       return json_({ ok: true });
     }
 
+    /* ---- File nghe bài đọc (Google Drive) ---- */
+    if (act === 'uploadAudio') {
+      if (!teacherOk_(b.key)) return json_({ ok: false, error: 'unauthorized' });
+      if (!b.data) return json_({ ok: false, error: 'missing' });
+      const blob = Utilities.newBlob(Utilities.base64Decode(b.data), str_(b.mime, 60) || 'audio/mpeg', str_(b.name, 120) || 'bai-doc.mp3');
+      const f = audioFolder_().createFile(blob);
+      try { f.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW); } catch (err) {}
+      return json_({ ok: true, id: f.getId(), url: f.getUrl() });
+    }
+    if (act === 'audio') {
+      try {
+        const f = DriveApp.getFileById(String(b.id || ''));
+        if (f.getParents().hasNext() && f.getParents().next().getName() !== AUDIO_FOLDER) return json_({ ok: false, error: 'forbidden' });
+        const bl = f.getBlob();
+        return json_({ ok: true, mime: bl.getContentType(), data: Utilities.base64Encode(bl.getBytes()) });
+      } catch (err) { return json_({ ok: false, error: 'not_found' }); }
+    }
+
     return json_({ ok: false, error: 'unknown_action' });
   } catch (err) {
     return json_({ ok: false, error: String(err) });
@@ -210,6 +231,14 @@ function doPost(e) {
     lock.releaseLock();
   }
 }
+
+const AUDIO_FOLDER = 'Weiwei - File nghe bài đọc';
+function audioFolder_() {
+  const it = DriveApp.getFoldersByName(AUDIO_FOLDER);
+  return it.hasNext() ? it.next() : DriveApp.createFolder(AUDIO_FOLDER);
+}
+/* Chạy hàm này 1 lần trong trình soạn Apps Script để cấp quyền Google Drive (lưu file nghe bài đọc) */
+function capQuyenDrive() { audioFolder_(); }
 
 /* Bản cũ của bảng giáo viên đọc qua GET – vẫn giữ để tương thích */
 function doGet(e) {
