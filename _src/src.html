@@ -218,6 +218,21 @@ table.syl td.han{font-size:24px}
 .wel h1{font-size:clamp(20px,4vw,26px);margin:0;text-wrap:balance}
 .wel-sub{color:var(--muted);margin:0;max-width:52ch}
 .wel-actions{display:grid;gap:8px;justify-items:center;margin-top:8px}
+.wel-btns{display:grid;gap:8px;justify-items:center}.wel-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.wel-acc{margin:0;color:var(--muted);font-size:14px}.wel-acc .linkbtn{font-size:14px}
+.auth{max-width:600px}.auth-tabs{width:100%}.auth-tabs button{flex:1;padding:9px}
+.auth-form{display:grid;gap:16px}.auth-form h2{margin:0;font-size:22px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px;align-items:start}
+.auth-form .field{align-content:start}
+@media (max-width:560px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.field small{font-size:12.5px}
+.pw-wrap{position:relative}.pw-wrap .inp{padding-right:60px}
+.pw-eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:var(--surface-2);border-radius:8px;padding:5px 10px;font-size:13px;font-weight:600;color:var(--muted)}
+.auth-hint{font-size:13.5px;margin:0}
+.auth-carry{display:flex;gap:8px;align-items:flex-start;font-size:14px;background:var(--leaf-soft);border-radius:10px;padding:10px 12px}
+.auth-carry input{margin-top:3px}
+.acc-ok{color:var(--good);font-weight:600}
+#lgPwBox legend small{font-weight:400}
 .btn.big{padding:12px 24px;font-size:16px;border-radius:12px}
 .linkbtn{border:0;background:none;color:var(--muted);text-decoration:underline;font-size:14px}
 .muted{color:var(--muted);margin:2px 0 0}
@@ -397,6 +412,10 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .t-mini{display:block;width:80px;height:5px;background:var(--surface-2);border-radius:999px;overflow:hidden;margin-top:5px}
 .t-mini b{display:block;height:100%;background:var(--accent)}
 .t-empty{padding:20px 4px}
+.t-guest{color:var(--warn)}.t-sub{font-size:12.5px;color:var(--muted)}
+.t-lessons{min-width:820px}.t-lessons tbody tr{cursor:default}.t-untouched td{opacity:.55}
+.t-reset{display:grid;gap:8px;background:var(--surface-2);border-radius:12px;padding:12px 14px}.t-reset h3{margin:0}.t-reset p{margin:0}
+.t-reset-row{display:flex;gap:8px;flex-wrap:wrap}.t-reset-row .inp{max-width:280px;padding:8px 12px;font-size:14px}
 .t-detail{display:grid;gap:14px;scroll-margin-top:12px}
 .t-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 @media (max-width:760px){.t-grid{grid-template-columns:minmax(0,1fr)}}
@@ -494,10 +513,53 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
     <h1 id="welTitle">Chào mừng bạn đến với 薇薇中文</h1>
     <p class="wel-sub" id="welSub">Hy vọng trang web sẽ như một người bạn đồng hành, giúp chúng ta vượt qua “chướng ngại” trên hành trình chinh phục tiếng Trung nhé!</p>
     <div class="wel-actions">
-      <button class="btn primary big" id="welGo">Bắt đầu</button>
-      <button class="linkbtn" id="welSwitch" hidden>Đăng nhập bằng tên khác</button>
+      <div class="wel-btns" id="welBtns"></div>
       <button class="teacher-link" id="welTeacher">Dành cho giáo viên</button>
     </div>
+  </div>
+</section>
+
+<section id="scrAuth" class="screen" hidden>
+  <div class="panel login auth">
+    <div class="seg auth-tabs" role="tablist" aria-label="Tài khoản">
+      <button role="tab" type="button" data-a="login" aria-pressed="true">Đăng nhập</button>
+      <button role="tab" type="button" data-a="register" aria-pressed="false">Đăng ký</button>
+    </div>
+
+    <form id="auLogin" novalidate class="auth-form">
+      <div><h2>Đăng nhập</h2><p class="muted">Dùng tài khoản đã đăng ký để học tiếp trên bất kỳ thiết bị nào.</p></div>
+      <div class="field"><label for="auId">Tên đăng nhập hoặc số điện thoại</label>
+        <input id="auId" class="inp" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="VD: thuha hoặc 0912345678"></div>
+      <div class="field"><label for="auPw">Mật khẩu</label>
+        <div class="pw-wrap"><input id="auPw" class="inp" type="password" autocomplete="current-password"><button type="button" class="pw-eye" data-for="auPw">Hiện</button></div></div>
+      <p class="err" id="auLoginErr" hidden></p>
+      <p class="muted auth-hint" id="auGuestWarn" hidden>Trên máy này đang có dữ liệu học thử. Sau khi đăng nhập, trang sẽ dùng dữ liệu của tài khoản.</p>
+      <div class="login-acts"><button class="btn" type="button" data-back>Quay lại</button><button class="btn primary big" type="submit" id="auLoginBtn">Đăng nhập</button></div>
+      <p class="muted auth-hint">Quên mật khẩu? Hãy nhắn giáo viên để được đặt lại.</p>
+    </form>
+
+    <form id="auReg" novalidate class="auth-form" hidden>
+      <div><h2>Đăng ký tài khoản</h2><p class="muted">Chỉ cần đăng ký một lần. Tiến độ học, nhân vật và trang trại sẽ được lưu theo tài khoản.</p></div>
+      <div class="field"><label for="rgName">Họ tên</label><input id="rgName" class="inp" autocomplete="name" maxlength="40" placeholder="VD: Nguyễn Thu Hà"></div>
+      <div class="grid2">
+        <div class="field"><label for="rgUser">Tên đăng nhập</label><input id="rgUser" class="inp" autocomplete="username" autocapitalize="off" spellcheck="false" maxlength="20" placeholder="VD: thuha">
+          <small class="muted">3–20 ký tự: chữ không dấu, số, dấu chấm hoặc gạch dưới.</small></div>
+        <div class="field"><label for="rgPhone">Số điện thoại</label><input id="rgPhone" class="inp" type="tel" inputmode="tel" autocomplete="tel" maxlength="14" placeholder="VD: 0912345678"></div>
+        <div class="field"><label for="rgPw">Mật khẩu</label>
+          <div class="pw-wrap"><input id="rgPw" class="inp" type="password" autocomplete="new-password"><button type="button" class="pw-eye" data-for="rgPw">Hiện</button></div>
+          <small class="muted">Ít nhất 6 ký tự.</small></div>
+        <div class="field"><label for="rgPw2">Nhập lại mật khẩu</label><input id="rgPw2" class="inp" type="password" autocomplete="new-password"></div>
+      </div>
+      <fieldset><legend>Lớp</legend>
+        <div class="choice">
+          <label><input type="radio" name="rgcls" value="hsk" id="rgHsk" checked><span><b>Lớp HSK</b><small>Luyện theo giáo trình HSK 3.0</small></span></label>
+          <label><input type="radio" name="rgcls" value="gt" id="rgGt"><span><b>Lớp Giao tiếp</b><small>Tiếng Trung giao tiếp hằng ngày</small></span></label>
+        </div></fieldset>
+      <fieldset><legend>Trình độ</legend><div class="chips" id="rgLevel"></div></fieldset>
+      <label class="auth-carry" id="rgCarryBox" hidden><input type="checkbox" id="rgCarry" checked> Mang theo tiến độ học thử đang có trên máy này (nhân vật, xu, trang trại, bài đã làm)</label>
+      <p class="err" id="auRegErr" hidden></p>
+      <div class="login-acts"><button class="btn" type="button" data-back>Quay lại</button><button class="btn primary big" type="submit" id="auRegBtn">Đăng ký</button></div>
+    </form>
   </div>
 </section>
 
@@ -513,6 +575,10 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
         <label><input type="radio" name="cls" value="gt" id="clsGt"><span><b>Lớp Giao tiếp</b><small>Tiếng Trung giao tiếp hằng ngày</small></span></label>
       </div></fieldset>
     <fieldset><legend>Trình độ</legend><div class="chips" id="lgLevel"></div></fieldset>
+    <fieldset id="lgPwBox" hidden><legend>Đổi mật khẩu <small class="muted">(không bắt buộc)</small></legend>
+      <div class="grid2"><div class="field"><label for="lgOld">Mật khẩu hiện tại</label><input id="lgOld" class="inp" type="password" autocomplete="current-password"></div>
+      <div class="field"><label for="lgNew">Mật khẩu mới</label><input id="lgNew" class="inp" type="password" autocomplete="new-password"></div></div>
+      <p class="err" id="lgPwErr" hidden></p></fieldset>
     <div class="login-acts"><button class="btn" type="button" id="lgBack">Quay lại</button><button class="btn primary big" type="submit">Tiếp tục</button></div>
   </form>
 </section>
@@ -761,7 +827,7 @@ const esc = s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt
 const shuffle = a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const store = {
   get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},
-  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){} if(typeof Sync!=="undefined") Sync.touch(k);}
 };
 /* LCS các chữ giống nhau giữa câu học viên gõ và đáp án; trả về chỉ số các chữ khớp trong a */
 function lcs(a,b){
@@ -2114,7 +2180,7 @@ function avatarSVG(c0,opt={}){
 const Profile={ get(){return store.get("ww_profile",null);}, set(p){store.set("ww_profile",p);}, clear(){try{localStorage.removeItem("ww_profile");}catch(e){}} };
 const GT_LEVELS=[["so","Sơ cấp"],["trung","Trung cấp"]];
 function levelLabel(p){ return p.cls==="gt"?"Lớp Giao tiếp · "+(p.level==="trung"?"Trung cấp":"Sơ cấp"):"Lớp HSK · "+(LEVELS[p.level]?LEVELS[p.level].name:"HSK 1"); }
-function showScreen(id){ ["scrWelcome","scrLogin","scrAvatar","scrTeacher","scrFarm","app"].forEach(x=>{ $("#"+x).hidden=x!==id; }); window.scrollTo(0,0); if(id!=="app") stopAnyRecording(); }
+function showScreen(id){ ["scrWelcome","scrAuth","scrLogin","scrAvatar","scrTeacher","scrFarm","app"].forEach(x=>{ $("#"+x).hidden=x!==id; }); window.scrollTo(0,0); if(id!=="app") stopAnyRecording(); }
 
 function openWelcome(){
   const p=Profile.get();
@@ -2124,24 +2190,28 @@ function openWelcome(){
     $("#welKicker").textContent="欢迎回来！";
     $("#welTitle").textContent="Chào mừng "+p.name+" quay lại!";
     $("#welSub").textContent=levelLabel(p)+". Hôm nay mình cùng ôn bài nhé.";
-    $("#welGo").textContent="Vào học";
   } else {
     stage.innerHTML=avatarSVG({gender:"f",hair:"buns",outfit:"aodai",shoes:"formal",expr:"laugh"},{label:"Bạn nữ"})+avatarSVG({gender:"m",hair:"side",outfit:"hoodie",expr:"wink",accBody:"book",skin:"light"},{label:"Bạn nam"});
     $("#welKicker").textContent="欢迎来到薇薇中文！";
     $("#welTitle").textContent="Chào mừng bạn đến với 薇薇中文";
     $("#welSub").textContent="Hy vọng trang web sẽ như một người bạn đồng hành, giúp chúng ta vượt qua “chướng ngại” trên hành trình chinh phục tiếng Trung nhé!";
-    $("#welGo").textContent= p?"Tiếp tục":"Bắt đầu";
   }
-  $("#welSwitch").hidden=!p;
+  const a=Auth.get(), api=Auth.on(), B=$("#welBtns");
+  if(api&&a&&p) B.innerHTML=`<button class="btn primary big" id="welGo">Vào học</button><p class="wel-acc">Đang đăng nhập: <b>${esc(p.username||a.u)}</b> · <button class="linkbtn" id="welOut">Đăng xuất</button></p>`;
+  else if(api) B.innerHTML=`<div class="wel-row"><button class="btn primary big" id="welLogin">Đăng nhập</button><button class="btn big" id="welReg">Đăng ký</button></div>
+    ${p?`<button class="linkbtn" id="welGo">Tiếp tục học thử với tên ${esc(p.name)}</button><p class="wel-acc">Học thử chỉ lưu trên máy này. Đăng ký để giữ tiến độ trên mọi thiết bị.</p>`:`<button class="linkbtn" id="welGuest">Học thử không cần tài khoản</button>`}`;
+  else B.innerHTML=`<button class="btn primary big" id="welGo">${p?(p.avatar?"Vào học":"Tiếp tục"):"Bắt đầu"}</button>${p?`<button class="linkbtn" id="welGuest">Đăng nhập bằng tên khác</button>`:""}`;
+  const on=(id,f)=>{ const b=$("#"+id); if(b) b.onclick=f; };
+  on("welGo",()=>{ const q=Profile.get(); if(q&&q.avatar) enterApp(); else if(q) openAvatar(); else openLogin(null); });
+  on("welLogin",()=>openAuth("login")); on("welReg",()=>openAuth("register"));
+  on("welGuest",()=>openLogin(null)); on("welOut",logoutAll);
   showScreen("scrWelcome");
 }
-$("#welGo").onclick=()=>{ const p=Profile.get(); if(p&&p.avatar) enterApp(); else if(p) openAvatar(); else openLogin(null); };
-$("#welSwitch").onclick=()=>openLogin(null);
 
-function renderLevelChips(cls,cur){
+function renderLevelChips(cls,cur,box="#lgLevel",name="lvl"){
   const opts=cls==="gt"?GT_LEVELS:Object.entries(LEVELS).map(([k,v])=>[k,v.name]);
   if(!opts.some(o=>o[0]===cur)) cur=opts[0][0];
-  $("#lgLevel").innerHTML=opts.map(([v,l])=>`<label><input type="radio" name="lvl" value="${v}" id="lvl_${v}" ${v===cur?"checked":""}><span>${l}</span></label>`).join("");
+  $(box).innerHTML=opts.map(([v,l])=>`<label><input type="radio" name="${name}" value="${v}" id="${name}_${v}" ${v===cur?"checked":""}><span>${l}</span></label>`).join("");
 }
 function openLogin(p){
   $("#lgName").value=p?p.name:"";
@@ -2149,19 +2219,26 @@ function openLogin(p){
   const cls=p?p.cls:"hsk"; $("#clsHsk").checked=cls==="hsk"; $("#clsGt").checked=cls==="gt";
   renderLevelChips(cls,p?p.level:"hsk1");
   $("#loginForm").dataset.edit=p?"1":"";
+  const acc=!!(p&&Auth.get()); $("#lgPwBox").hidden=!acc; $("#lgOld").value=$("#lgNew").value=""; $("#lgPwErr").hidden=true;
+  $("#loginForm h2").textContent=p?"Sửa thông tin":"Học thử"; $("#loginForm .muted").textContent=p?"Cập nhật họ tên, lớp và trình độ của bạn.":"Học thử không cần tài khoản. Tiến độ chỉ lưu trên máy này.";
   showScreen("scrLogin"); $("#lgName").focus();
 }
 document.querySelectorAll('input[name="cls"]').forEach(r=>r.onchange=()=>renderLevelChips(r.value,null));
 $("#lgBack").onclick=()=>{ const p=Profile.get(); if($("#loginForm").dataset.edit&&p&&p.avatar) enterApp(); else openWelcome(); };
-$("#loginForm").onsubmit=e=>{
+$("#loginForm").onsubmit=async e=>{
   e.preventDefault();
   const name=$("#lgName").value.trim().replace(/\s+/g," ");
   if(!name){ $("#lgNameErr").hidden=false; $("#lgName").focus(); return; }
   const cls=document.querySelector('input[name="cls"]:checked').value, level=document.querySelector('input[name="lvl"]:checked').value;
-  const old=Profile.get(), same=old&&old.name===name;
-  const p={name,cls,level,avatar:same?old.avatar:null,sid:same&&old.sid?old.sid:undefined};
+  const old=Profile.get(), acc=Auth.get(), same=old&&(old.name===name||acc);
+  if(acc&&$("#lgNew").value){
+    const r=await Auth.call("changepw",{u:acc.u,token:acc.token,old:$("#lgOld").value,password:$("#lgNew").value});
+    if(!r.ok){ const el=$("#lgPwErr"); el.textContent=AUTH_ERR[r.error]||("Có lỗi: "+r.error); el.hidden=false; return; }
+    toast("Đã đổi mật khẩu.");
+  }
+  const p=acc?{...old,name,cls,level}:{name,cls,level,avatar:same?old.avatar:null,sid:same&&old.sid?old.sid:undefined};
   Profile.set(p);
-  Track.log("login",{first:!same},"");
+  if(!acc) Track.log("login",{first:!same},"");
   if(cls==="hsk"){ S.level=level; store.set("ww_level",level); }
   if(p.avatar) enterApp(); else openAvatar();
 };
@@ -2209,13 +2286,14 @@ $("#avSave").onclick=()=>{ const p=Profile.get(); if(!p)return openLogin(null); 
 function renderHello(){
   const p=Profile.get(); if(!p) return; Farm.load();
   $("#hello").innerHTML=`<div class="me">${avatarSVG(p.avatar,{label:"Nhân vật của "+p.name})}</div>
-    <div><h2><span class="han">你好，</span>${esc(p.name)}！</h2><p>${esc(levelLabel(p))}</p>
+    <div><h2><span class="han">你好，</span>${esc(p.name)}！</h2><p>${esc(levelLabel(p))}${Auth.get()?` · <span class="acc-ok">Tài khoản ${esc(p.username||"")}</span>`:(Auth.on()?` · <button class="linkbtn" id="hiReg">Học thử – đăng ký để lưu tiến độ</button>`:"")}</p>
     ${p.cls==="gt"?`<p class="note">Nội dung lớp Giao tiếp đang được cập nhật. Trong lúc chờ, bạn có thể luyện HSK 1.</p>`:""}</div>
     <div class="acts"><button class="btn farm-btn" id="hiFarm">${ICON_SPROUT}Trang trại · ${coinSVG()}<b class="coin-count">${Farm.coins()}</b></button><button class="btn" id="hiAv">Đổi nhân vật</button><button class="btn" id="hiInfo">Sửa thông tin</button><button class="btn" id="hiOut">Đăng xuất</button></div>`;
   $("#hiFarm").onclick=()=>Farm.open();
+  const hr=$("#hiReg"); if(hr) hr.onclick=()=>openAuth("register");
   $("#hiAv").onclick=openAvatar;
   $("#hiInfo").onclick=()=>openLogin(Profile.get());
-  $("#hiOut").onclick=e=>{ const b=e.currentTarget; if(b.dataset.armed){ Profile.clear(); openWelcome(); } else { b.dataset.armed=1; b.textContent="Bấm lần nữa để đăng xuất"; b.classList.add("bad"); } };
+  $("#hiOut").onclick=e=>{ const b=e.currentTarget; if(b.dataset.armed){ logoutAll(); } else { b.dataset.armed=1; b.textContent="Bấm lần nữa để đăng xuất"; b.classList.add("bad"); } };
 }
 function enterApp(){
   const p=Profile.get(); if(!p||!p.avatar) return openWelcome();
@@ -2268,7 +2346,7 @@ setTimeout(() => Track.flush(), 3000);
 const TYPE_LABEL = { coins: "Nhận xu", harvest: "Thu hoạch", login: "Đăng nhập", session: "Vào học", flash: "Flashcard", quiz: "Kiểm tra từ vựng", trans: "Luyện dịch", speak: "Luyện phát âm", exam: "Bài tập HSK" };
 const TRANS_LABEL = { zhvi: "Trung → Việt", sort: "Sắp xếp", type: "Gõ chữ" };
 const Teacher = {
-  key: "", events: [], students: [], sel: null, filter: { cls: "all", q: "" }, loadedAt: null,
+  key: "", events: [], accounts: [], students: [], sel: null, filter: { cls: "all", q: "" }, loadedAt: null,
   open(){
     try{ this.key = sessionStorage.getItem("ww_tkey") || ""; }catch(e){ this.key = ""; }
     showScreen("scrTeacher");
@@ -2295,8 +2373,8 @@ const Teacher = {
     $("#tBody").innerHTML = `<div class="panel t-card"><p class="muted">Đang tải dữ liệu lớp học…</p></div>`;
     let res;
     try{
-      const r = await fetch(`${TEACHER_API}?key=${encodeURIComponent(this.key)}&_=${Date.now()}`, { redirect: "follow" });
-      res = await r.json();
+      res = await Auth.call("teacher", { key: this.key }, 45000);
+      if(!res.ok && res.error === "network") throw new Error("network");
     }catch(e){ return this.renderLogin("Không kết nối được Google Sheet. Kiểm tra mạng hoặc link Apps Script rồi thử lại."); }
     if(!res.ok){
       try{ sessionStorage.removeItem("ww_tkey"); }catch(e){}
@@ -2307,15 +2385,23 @@ const Teacher = {
     const seen = new Set();
     this.events = (res.events || []).filter(x => { if(!x.eid) return true; if(seen.has(x.eid)) return false; seen.add(x.eid); return true; })
       .sort((a, b) => new Date(a.t) - new Date(b.t));
+    this.accounts = res.accounts || [];
     this.loadedAt = new Date(); this.build(); this.render();
   },
   build(){
     const m = new Map();
+    const blank = (sid, o) => ({ sid, name: o.name, cls: o.cls, level: o.level, first: o.t, last: o.t, days: new Set(), logins: 0, flash: {}, quiz: [], trans: {}, speak: [], exam: [], events: [], coins: null, earned: 0, harvest: 0, acc: null });
+    for(const a of this.accounts){
+      const t = new Date(Math.max(a.created || 0, 1)).toISOString(), s = blank(a.username, { name: a.name, cls: a.cls, level: a.level, t });
+      s.acc = a; s.first = new Date(a.created || Date.now()).toISOString();
+      s.last = new Date(Math.max(a.lastLogin || 0, a.updatedAt || 0, a.created || 0)).toISOString(); m.set(a.username, s);
+    }
     for(const e of this.events){
       if(!e.sid) continue;
       let s = m.get(e.sid);
-      if(!s){ s = { sid: e.sid, name: e.name, cls: e.cls, level: e.level, first: e.t, last: e.t, days: new Set(), logins: 0, flash: {}, quiz: [], trans: {}, speak: [], exam: [], events: [], coins: null, earned: 0, harvest: 0 }; m.set(e.sid, s); }
-      s.name = e.name || s.name; s.cls = e.cls || s.cls; s.level = e.level || s.level; s.last = e.t; s.events.push(e);
+      if(!s){ s = blank(e.sid, e); m.set(e.sid, s); }
+      if(new Date(e.t) > new Date(s.last)) s.last = e.t;
+      if(!s.acc){ s.name = e.name || s.name; s.cls = e.cls || s.cls; s.level = e.level || s.level; } s.events.push(e);
       s.days.add(String(e.t).slice(0, 10));
       const d = e.data || {};
       if(e.type === "login" || e.type === "session") s.logins++;
@@ -2328,6 +2414,24 @@ const Teacher = {
       if(e.type === "harvest") s.harvest = Math.max(s.harvest + 1, d.harvested || 0);
     }
     this.students = [...m.values()].sort((a, b) => new Date(b.last) - new Date(a.last));
+  },
+  /* tiến độ từng bài: ưu tiên dữ liệu đồng bộ của tài khoản, bổ sung từ nhật ký hoạt động */
+  lessons(s){
+    const d = (s.acc && s.acc.data) || {}, rows = [];
+    for(const [lv, L] of Object.entries(LEVELS)) for(const [n, les] of Object.entries(L.lessons)){
+      const key = `${lv}-${n}`, ev = s.events.filter(e => e.lesson === key);
+      const known = d[`ww_known_${lv}_${n}`], flash = Array.isArray(known) ? known.length : (ev.filter(e => e.type === "flash").pop() || {}).data?.known;
+      const quiz = ev.filter(e => e.type === "quiz").map(e => Math.round(e.data.right / e.data.total * 100));
+      const tr = {}; ev.filter(e => e.type === "trans").forEach(e => { const b = tr[e.data.mode]; if(!b || e.data.right > b.right) tr[e.data.mode] = e.data; });
+      const first = d[`ww_speak_first_${lv}_${n}`] || {}, spN = Object.keys(first).length, spItems = les.vocab.length + les.sentences.length;
+      const spAvg = spN ? Math.round(Object.values(first).reduce((a, b) => a + b, 0) / spN) : null;
+      let exam = null; const ex = d[`ww_exam_${lv}_${n}`];
+      if(les.test && ex && ex.submitted){ const A = les.test.answers; let r = 0, g = 0; for(let i = 1; i <= A.length; i++){ if(A[i - 1] === "?") continue; g++; if(ex.ans[i] === A[i - 1]) r++; } exam = { right: r, total: g, tries: ev.filter(e => e.type === "exam").length || 1 }; }
+      else { const le = ev.filter(e => e.type === "exam").pop(); if(le) exam = { right: le.data.right, total: le.data.total, tries: ev.filter(e => e.type === "exam").length }; }
+      const touched = flash || quiz.length || Object.keys(tr).length || spN || ev.some(e => e.type === "speak") || exam;
+      rows.push({ key, lv, n, les, flash: flash || 0, total: les.vocab.length, quiz: quiz.length ? Math.max(...quiz) : null, tr, spN, spItems, spAvg, exam, touched });
+    }
+    return rows;
   },
   ago(t){
     const s = (Date.now() - new Date(t)) / 1000;
@@ -2353,7 +2457,7 @@ const Teacher = {
   },
   render(){
     const f = this.filter, q = f.q.trim().toLowerCase();
-    const list = this.students.filter(s => (f.cls === "all" || s.cls === f.cls) && (!q || (s.name || "").toLowerCase().includes(q)));
+    const list = this.students.filter(s => (f.cls === "all" || s.cls === f.cls) && (!q || [s.name, s.acc && s.acc.username, s.acc && s.acc.phone].some(v => (v || "").toLowerCase().includes(q))));
     const week = Date.now() - 7 * 86400000;
     const active = this.students.filter(s => new Date(s.last) >= week).length;
     const exLast = this.students.map(s => s.exam[s.exam.length - 1]).filter(Boolean);
@@ -2365,7 +2469,7 @@ const Teacher = {
       <div class="t-top"><div><h2>Bảng theo dõi lớp học</h2><p class="muted">Cập nhật lúc ${this.loadedAt.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })} · ${this.events.length} hoạt động đã ghi</p></div>
         <div class="t-acts"><button class="btn" id="tReload">${ICON.redo}Tải lại</button><button class="btn" id="tOut">Đăng xuất</button><button class="btn" id="tHome">${ICON.left}Về trang học</button></div></div>
       <div class="t-kpis">
-        <div class="t-kpi"><small>Học viên đã đăng nhập</small><b>${this.students.length}</b></div>
+        <div class="t-kpi"><small>Tài khoản học viên</small><b>${this.accounts.length}</b><span class="t-sub">${this.students.length - this.students.filter(x => x.acc).length} người học thử</span></div>
         <div class="t-kpi"><small>Hoạt động 7 ngày qua</small><b>${active}</b></div>
         <div class="t-kpi"><small>Điểm TB bài tập HSK (lần gần nhất)</small><b>${exAvg}<span>/20</span></b></div>
         <div class="t-kpi"><small>Lượt luyện phát âm</small><b>${spN}</b></div>
@@ -2373,17 +2477,17 @@ const Teacher = {
       ${top.length ? `<div class="panel t-miss"><h3>Câu bài tập HSK hay sai nhất</h3>${top.map(([n, c]) => `<div class="t-bar"><span>Câu ${n}</span><i><b style="width:${c / topMax * 100}%"></b></i><em>${c} HV</em></div>`).join("")}</div>` : ""}
       <div class="panel t-list">
         <div class="t-filter"><div class="seg" role="group" aria-label="Lọc theo lớp">${[["all", "Tất cả"], ["hsk", "Lớp HSK"], ["gt", "Lớp Giao tiếp"]].map(([v, l]) => `<button data-c="${v}" aria-pressed="${f.cls === v}">${l}</button>`).join("")}</div>
-          <label class="sr" for="tSearch">Tìm học viên</label><input id="tSearch" class="inp t-search" placeholder="Tìm theo tên…" value="${esc(f.q)}"></div>
+          <label class="sr" for="tSearch">Tìm học viên</label><input id="tSearch" class="inp t-search" placeholder="Tìm theo tên, tên đăng nhập, SĐT…" value="${esc(f.q)}"></div>
         ${list.length ? `<div class="tbl-wrap"><table class="t-table"><thead><tr><th>Học viên</th><th>Lần cuối</th><th>Số ngày học</th><th>Flashcard đã thuộc</th><th>Kiểm tra từ</th><th>Luyện dịch</th><th>Phát âm</th><th>Bài tập HSK</th><th>Trang trại</th></tr></thead><tbody>
           ${list.map(s => { const x = this.sum(s); return `<tr data-sid="${esc(s.sid)}" tabindex="0">
-            <td><b>${esc(s.name || "—")}</b><small>${esc(this.lvl(s))}</small></td>
+            <td><b>${esc(s.name || "—")}</b><small>${s.acc ? `@${esc(s.acc.username)} · ${esc(s.acc.phone)}` : `<span class="t-guest">Học thử (chưa có tài khoản)</span>`}</small><small>${esc(this.lvl(s))}</small></td>
             <td>${this.ago(s.last)}</td><td>${s.days.size}</td>
             <td>${x.ftot ? `${x.known}/${x.ftot}<i class="t-mini"><b style="width:${x.known / x.ftot * 100}%"></b></i>` : `<span class="t-dim">—</span>`}</td>
             <td>${this.pill(x.quizBest)}</td><td>${this.pill(x.trAvg)}</td>
             <td>${x.spAvg == null ? `<span class="t-dim">—</span>` : `${this.pill(x.spAvg, 100, "")}<small>${x.spN} lượt</small>`}</td>
             <td>${x.exLast ? `${this.pill(x.exLast.right, 20, "/20")}<small>${s.exam.length} lần · cao nhất ${x.exBest}</small>` : `<span class="t-dim">Chưa làm</span>`}</td>
             <td>${s.earned ? `<b>${s.earned}</b> xu đã kiếm<small>${s.harvest} lần thu hoạch</small>` : `<span class="t-dim">—</span>`}</td></tr>`; }).join("")}
-          </tbody></table></div>` : `<p class="muted t-empty">${this.students.length ? "Không có học viên khớp bộ lọc." : "Chưa có học viên nào gửi tiến độ. Khi học viên đăng nhập và học, dữ liệu sẽ hiện ở đây."}</p>`}
+          </tbody></table></div>` : `<p class="muted t-empty">${this.students.length ? "Không có học viên khớp bộ lọc." : "Chưa có học viên nào. Khi học viên đăng ký tài khoản và học, dữ liệu sẽ hiện ở đây."}</p>`}
       </div>
       <div id="tDetail"></div>`;
     $("#tReload").onclick = () => this.load();
@@ -2400,7 +2504,16 @@ const Teacher = {
     const flash = Object.entries(s.flash), tr = Object.values(s.trans);
     const spWorst = [...s.speak].sort((a, b) => (a.total || 0) - (b.total || 0)).slice(0, 8);
     $("#tDetail").innerHTML = `<div class="panel t-detail">
-      <div class="t-top"><div><h2>${esc(s.name)}</h2><p class="muted">${esc(this.lvl(s))} · bắt đầu ${this.fmt(s.first)} · hoạt động gần nhất ${this.fmt(s.last)}</p></div><button class="btn" id="tClose">Đóng</button></div>
+      <div class="t-top"><div><h2>${esc(s.name)}</h2><p class="muted">${esc(this.lvl(s))} · ${s.acc ? `tài khoản <b>@${esc(s.acc.username)}</b> · SĐT ${esc(s.acc.phone)} · đăng ký ${this.fmt(s.first)}` : "học thử, chưa có tài khoản"} · hoạt động gần nhất ${this.fmt(s.last)}</p></div><button class="btn" id="tClose">Đóng</button></div>
+      <h3>Tiến độ từng bài</h3>
+      <div class="tbl-wrap"><table class="t-table t-lessons"><thead><tr><th>Bài</th><th>Flashcard đã thuộc</th><th>Kiểm tra từ</th><th>Trung → Việt</th><th>Sắp xếp</th><th>Gõ chữ</th><th>Phát âm</th><th>Bài tập HSK</th></tr></thead><tbody>
+        ${this.lessons(s).map(r => { const t = m => r.tr[m] ? this.pill(r.tr[m].right, r.tr[m].total, "/" + r.tr[m].total) : `<span class="t-dim">—</span>`;
+          return `<tr class="${r.touched ? "" : "t-untouched"}"><td><b>${this.ln(r.key)}</b><small class="han">${esc(r.les.zh)}</small></td>
+          <td>${r.flash}/${r.total}<i class="t-mini"><b style="width:${r.flash / r.total * 100}%"></b></i></td>
+          <td>${this.pill(r.quiz)}</td><td>${t("zhvi")}</td><td>${t("sort")}</td><td>${t("type")}</td>
+          <td>${r.spN ? `${this.pill(r.spAvg, 100, "")}<small>đã đọc ${r.spN}/${r.spItems} mục</small>` : `<span class="t-dim">—</span>`}</td>
+          <td>${r.exam ? `${this.pill(r.exam.right, r.exam.total, "/" + r.exam.total)}<small>${r.exam.tries} lần nộp</small>` : r.les.test ? `<span class="t-dim">Chưa làm</span>` : `<span class="t-dim">Chưa có đề</span>`}</td></tr>`; }).join("")}
+      </tbody></table></div>
       <div class="t-grid">
         <section><h3>Bài tập HSK</h3>${s.exam.length ? `<ul class="t-ul">${[...s.exam].reverse().map(x => `<li><b>${x.right}/${x.total}</b> · ${this.fmt(x.t)}${x.wrong && x.wrong.length ? `<br><small>Sai câu: ${x.wrong.join(", ")}</small>` : `<br><small>Đúng toàn bộ</small>`}</li>`).join("")}</ul>` : `<p class="t-dim">Chưa làm bài.</p>`}</section>
         <section><h3>Từ vựng</h3>${flash.length ? flash.map(([l, x]) => `<p>Flashcard ${esc(this.ln(l))}: <b>${x.known}/${x.total}</b> từ đã thuộc</p>`).join("") : `<p class="t-dim">Chưa học flashcard.</p>`}
@@ -2408,9 +2521,15 @@ const Teacher = {
         <section><h3>Luyện dịch (kết quả tốt nhất)</h3>${tr.length ? tr.map(x => `<p>${TRANS_LABEL[x.mode] || x.mode}: <b>${x.right}/${x.total}</b></p>`).join("") : `<p class="t-dim">Chưa làm.</p>`}</section>
         <section><h3>Phát âm (${s.speak.length} lượt)</h3>${spWorst.length ? `<p class="muted">Các mục điểm thấp nhất:</p><ul class="t-ul">${spWorst.map(x => `<li><span class="han">${esc(x.item)}</span> · <b>${x.total}</b>/100<br><small>Thanh mẫu ${x.ini ?? "—"} · Vận mẫu ${x.fin ?? "—"} · Thanh điệu ${x.tone ?? "—"} · Lưu loát ${x.flu ?? "—"}</small></li>`).join("")}</ul>` : `<p class="t-dim">Chưa luyện.</p>`}</section>
       </div>
+      ${s.acc ? `<form class="t-reset" id="tReset" novalidate><h3>Đặt lại mật khẩu</h3><p class="muted">Dùng khi học viên quên mật khẩu. Học viên sẽ bị đăng xuất khỏi mọi thiết bị và đăng nhập lại bằng mật khẩu mới.</p>
+        <div class="t-reset-row"><label class="sr" for="tNewPw">Mật khẩu mới</label><input id="tNewPw" class="inp" placeholder="Mật khẩu mới (ít nhất 6 ký tự)" autocomplete="off"><button class="btn" type="submit">Đặt lại</button></div><p id="tResetMsg" class="muted" hidden></p></form>` : ""}
       <h3>Nhật ký hoạt động gần đây</h3>
       <ol class="t-log">${[...s.events].reverse().slice(0, 30).map(e => `<li><time>${this.fmt(e.t)}</time><span>${TYPE_LABEL[e.type] || e.type}</span><em>${esc(this.brief(e))}</em></li>`).join("")}</ol>
     </div>`;
+    const rf = $("#tReset"); if(rf) rf.onsubmit = async e => { e.preventDefault(); const pw = $("#tNewPw").value.trim(), msg = $("#tResetMsg"); msg.hidden = false;
+      if(pw.length < 6){ msg.textContent = "Mật khẩu mới cần ít nhất 6 ký tự."; return; }
+      msg.textContent = "Đang đặt lại…"; const r = await Auth.call("resetpw", { key: this.key, u: s.acc.username, password: pw });
+      msg.textContent = r.ok ? `Đã đặt lại. Hãy báo học viên đăng nhập bằng tên “${s.acc.username}” và mật khẩu mới.` : "Không đặt lại được: " + (AUTH_ERR[r.error] || r.error); };
     $("#tClose").onclick = () => { this.sel = null; $("#tDetail").innerHTML = ""; document.querySelectorAll(".t-table tbody tr").forEach(tr => tr.classList.remove("sel")); };
     if(!keep) $("#tDetail").scrollIntoView({ behavior: "smooth", block: "start" });
   },
@@ -2809,7 +2928,189 @@ function toast(html, kind){
 }
 function refreshCoinBadge(){ const n = Farm.st ? Farm.st.coins : 0; document.querySelectorAll(".coin-count").forEach(x => x.textContent = n); const f = $("#fmCoins"); if(f) f.textContent = n; }
 
+/* ======================= TÀI KHOẢN & ĐỒNG BỘ DỮ LIỆU =======================
+   Mọi dữ liệu học tập lưu dưới khóa "ww_..." trong trình duyệt. Khi đã đăng nhập, các khóa này được
+   gửi lên Google Sheet (Apps Script, action "save") vài giây sau mỗi thay đổi, và tải về khi đăng nhập
+   trên thiết bị khác (action "login" / "load"). Các khóa riêng của từng máy không đồng bộ. */
+const SYNC_SKIP = new Set(["ww_q", "ww_rate", "ww_voice", "ww_mic_ok", "ww_auth", "ww_sync"]);
+const rawGet = (k, d) => { try{ const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); }catch(e){ return d; } };
+const rawSet = (k, v) => { try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} };
+const Auth = {
+  get(){ return rawGet("ww_auth", null); },               // { u, token }
+  set(a){ a ? rawSet("ww_auth", a) : (()=>{ try{ localStorage.removeItem("ww_auth"); }catch(e){} })(); },
+  on(){ return Track.on(); },
+  async call(action, body, timeoutMs = 20000){
+    const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), timeoutMs);
+    try{
+      const r = await fetch(TEACHER_API, { method: "POST", body: JSON.stringify({ action, ...body }), signal: ctl.signal, redirect: "follow" });
+      return await r.json();
+    }catch(e){ return { ok: false, error: "network" }; }
+    finally{ clearTimeout(tm); }
+  }
+};
+const Sync = {
+  tm: null, busy: false, applying: false,
+  meta(){ return rawGet("ww_sync", { at: 0, dirty: false }); },
+  setMeta(m){ rawSet("ww_sync", { ...this.meta(), ...m }); },
+  keys(){ const out = []; try{ for(let i = 0; i < localStorage.length; i++){ const k = localStorage.key(i); if(k && k.startsWith("ww_") && !SYNC_SKIP.has(k)) out.push(k); } }catch(e){} return out; },
+  snapshot(){ const d = {}; this.keys().forEach(k => { const v = rawGet(k, undefined); if(v !== undefined) d[k] = v; }); return d; },
+  apply(data){
+    this.applying = true;
+    try{ this.keys().forEach(k => localStorage.removeItem(k)); }catch(e){}
+    Object.entries(data || {}).forEach(([k, v]) => { if(k.startsWith("ww_") && !SYNC_SKIP.has(k)) rawSet(k, v); });
+    this.applying = false; Farm.st = null;
+  },
+  touch(k){
+    if(this.applying || !k || !k.startsWith("ww_") || SYNC_SKIP.has(k) || !Auth.get() || !Auth.on()) return;
+    this.setMeta({ dirty: true }); clearTimeout(this.tm); this.tm = setTimeout(() => this.push(), 3000);
+  },
+  async push(){
+    const a = Auth.get(); if(!a || !Auth.on()) return true;
+    if(this.busy){ clearTimeout(this.tm); this.tm = setTimeout(() => this.push(), 2000); return false; }
+    this.busy = true; this.setMeta({ dirty: false });
+    const res = await Auth.call("save", { u: a.u, token: a.token, data: this.snapshot() });
+    this.busy = false;
+    if(res.ok){ this.setMeta({ at: res.updatedAt }); return true; }
+    this.setMeta({ dirty: true });
+    if(res.error === "auth"){ sessionExpired(); }
+    else if(res.error === "too_large"){ toast("Dữ liệu quá lớn để lưu. Hãy báo giáo viên.", "warn"); }
+    else { clearTimeout(this.tm); this.tm = setTimeout(() => this.push(), 15000); }
+    return false;
+  },
+  /* khi mở trang: có thay đổi chưa gửi thì gửi lên; nếu không thì tải bản mới hơn từ máy chủ (vd. đã học trên máy khác) */
+  async start(){
+    const a = Auth.get(); if(!a || !Auth.on()) return;
+    if(this.meta().dirty) return this.push();
+    const res = await Auth.call("load", { u: a.u, token: a.token });
+    if(!res.ok){ if(res.error === "auth") sessionExpired(); return; }
+    if((res.updatedAt || 0) > (this.meta().at || 0) && !this.meta().dirty){
+      this.apply(res.data); ensureProfile(res.profile); this.setMeta({ at: res.updatedAt, dirty: false }); refreshAfterSync();
+    }
+  }
+};
+window.addEventListener("online", () => { if(Sync.meta().dirty) Sync.push(); });
+document.addEventListener("visibilitychange", () => {
+  const a = Auth.get();
+  if(document.visibilityState !== "hidden" || !a || !Auth.on() || !Sync.meta().dirty || !navigator.sendBeacon) return;
+  navigator.sendBeacon(TEACHER_API, new Blob([JSON.stringify({ action: "save", u: a.u, token: a.token, data: Sync.snapshot() })], { type: "text/plain;charset=utf-8" }));
+});
+/* mật khẩu đã được đặt lại hoặc phiên hết hạn: xoá dữ liệu trên máy (dữ liệu vẫn còn trên tài khoản) và yêu cầu đăng nhập lại */
+function sessionExpired(){
+  Auth.set(null); Sync.apply({}); rawSet("ww_sync", { at: 0, dirty: false }); enterApp.logged = false;
+  toast("Phiên đăng nhập đã hết hạn (có thể mật khẩu vừa được đổi). Hãy đăng nhập lại, tiến độ của bạn vẫn được giữ trong tài khoản.", "warn");
+  openAuth("login");
+}
+/* đảm bảo hồ sơ trong máy khớp với tài khoản */
+function ensureProfile(sp){
+  if(!sp) return;
+  const p = Profile.get() || { name: sp.name, cls: sp.cls || "hsk", level: sp.level || "hsk1", avatar: null };
+  p.sid = sp.username; p.username = sp.username; p.phone = sp.phone;
+  if(!p.name) p.name = sp.name;
+  Sync.applying = true; Profile.set(p); Sync.applying = false;
+}
+function refreshAfterSync(){
+  const vis = id => !$("#" + id).hidden;
+  if(vis("app")){ enterApp(); toast("Đã tải tiến độ mới nhất từ tài khoản."); }
+  else if(vis("scrFarm")) Farm.open();
+  else if(vis("scrWelcome")) openWelcome();
+}
+
+/* ---------- màn hình đăng nhập / đăng ký ---------- */
+const AUTH_ERR = {
+  network: "Không kết nối được máy chủ. Kiểm tra mạng rồi thử lại.",
+  no_user: "Không tìm thấy tài khoản này. Kiểm tra lại tên đăng nhập hoặc số điện thoại.",
+  wrong_password: "Mật khẩu chưa đúng.",
+  bad_username: "Tên đăng nhập cần 3–20 ký tự, chỉ gồm chữ không dấu, số, dấu chấm hoặc gạch dưới.",
+  bad_phone: "Số điện thoại chưa đúng (10 số, bắt đầu bằng 0).",
+  bad_password: "Mật khẩu cần ít nhất 6 ký tự.",
+  user_taken: "Tên đăng nhập này đã có người dùng. Hãy chọn tên khác.",
+  phone_taken: "Số điện thoại này đã được đăng ký. Nếu là của bạn, hãy chọn Đăng nhập.",
+  too_large: "Dữ liệu quá lớn để lưu. Hãy báo giáo viên."
+};
+function guestHasData(){ const p = Profile.get(); return !!(p && !Auth.get()); }
+function openAuth(mode = "login"){
+  document.querySelectorAll(".auth-tabs button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.a === mode)));
+  $("#auLogin").hidden = mode !== "login"; $("#auReg").hidden = mode !== "register";
+  $("#auLoginErr").hidden = $("#auRegErr").hidden = true;
+  const g = guestHasData();
+  $("#auGuestWarn").hidden = !g; $("#rgCarryBox").hidden = !g;
+  if(mode === "register"){
+    const p = Profile.get();
+    if(g && p && !$("#rgName").value) $("#rgName").value = p.name || "";
+    const cls = g && p ? p.cls : "hsk"; $("#rgHsk").checked = cls !== "gt"; $("#rgGt").checked = cls === "gt";
+    renderLevelChips(cls, g && p ? p.level : "hsk1", "#rgLevel", "rglvl");
+  }
+  showScreen("scrAuth");
+  (mode === "login" ? $("#auId") : $("#rgName")).focus();
+}
+document.querySelectorAll(".auth-tabs button").forEach(b => b.onclick = () => openAuth(b.dataset.a));
+document.querySelectorAll("#scrAuth [data-back]").forEach(b => b.onclick = openWelcome);
+document.querySelectorAll('input[name="rgcls"]').forEach(r => r.onchange = () => renderLevelChips(r.value, null, "#rgLevel", "rglvl"));
+document.querySelectorAll(".pw-eye").forEach(b => b.onclick = () => { const i = $("#" + b.dataset.for); const show = i.type === "password"; i.type = show ? "text" : "password"; b.textContent = show ? "Ẩn" : "Hiện"; });
+function authErr(id, code){ const e = $(id); e.textContent = AUTH_ERR[code] || (/\s/.test(code) ? code : "Có lỗi: " + code); e.hidden = false; }
+function busyBtn(btn, on, label){ btn.disabled = on; if(on){ btn.dataset.l = btn.textContent; btn.textContent = label; } else if(btn.dataset.l) btn.textContent = btn.dataset.l; }
+
+$("#auLogin").onsubmit = async e => {
+  e.preventDefault();
+  const id = $("#auId").value.trim(), pw = $("#auPw").value;
+  if(!id || !pw){ authErr("#auLoginErr", "Hãy nhập tên đăng nhập (hoặc số điện thoại) và mật khẩu."); return; }
+  const btn = $("#auLoginBtn"); busyBtn(btn, true, "Đang đăng nhập…"); $("#auLoginErr").hidden = true;
+  const res = await Auth.call("login", { id, password: pw });
+  busyBtn(btn, false);
+  if(!res.ok) return authErr("#auLoginErr", res.error);
+  Auth.set({ u: res.profile.username, token: res.token });
+  Sync.apply(res.data); ensureProfile(res.profile); Sync.setMeta({ at: res.updatedAt, dirty: false });
+  $("#auPw").value = "";
+  const p = Profile.get();
+  if(p.cls === "hsk" && LEVELS[p.level]){ S.level = p.level; rawSet("ww_level", p.level); }
+  Track.log("login", { first: false }, "");
+  toast(`Chào mừng ${esc(p.name)} quay lại!`);
+  p.avatar ? enterApp() : openAvatar();
+};
+$("#auReg").onsubmit = async e => {
+  e.preventDefault();
+  const name = $("#rgName").value.trim().replace(/\s+/g, " "), u = $("#rgUser").value.trim().toLowerCase(), phone = $("#rgPhone").value.replace(/[^\d+]/g, "").replace(/^\+84/, "0");
+  const pw = $("#rgPw").value, pw2 = $("#rgPw2").value;
+  const cls = document.querySelector('input[name="rgcls"]:checked').value, level = document.querySelector('input[name="rglvl"]:checked').value;
+  if(!name) return authErr("#auRegErr", "Hãy nhập họ tên của bạn.");
+  if(!/^[a-z0-9_.]{3,20}$/.test(u)) return authErr("#auRegErr", "bad_username");
+  if(!/^0\d{9}$/.test(phone)) return authErr("#auRegErr", "bad_phone");
+  if(pw.length < 6) return authErr("#auRegErr", "bad_password");
+  if(pw !== pw2) return authErr("#auRegErr", "Hai lần nhập mật khẩu chưa giống nhau.");
+  const carry = guestHasData() && $("#rgCarry").checked, old = Profile.get();
+  let data;
+  if(carry){
+    data = Sync.snapshot();
+    const oldFarm = old && old.sid ? data["ww_farm_" + old.sid] : null;
+    if(oldFarm){ delete data["ww_farm_" + old.sid]; data["ww_farm_" + u] = oldFarm; }
+    data.ww_profile = { ...old, name, cls, level, sid: u, username: u, phone };
+  } else data = { ww_profile: { name, cls, level, avatar: null, sid: u, username: u, phone }, ww_level: level };
+  const btn = $("#auRegBtn"); busyBtn(btn, true, "Đang tạo tài khoản…"); $("#auRegErr").hidden = true;
+  const res = await Auth.call("register", { username: u, phone, password: pw, name, cls, level, data });
+  busyBtn(btn, false);
+  if(!res.ok) return authErr("#auRegErr", res.error);
+  Auth.set({ u, token: res.token });
+  Sync.apply(data); Sync.setMeta({ at: res.updatedAt, dirty: false });
+  $("#rgPw").value = $("#rgPw2").value = "";
+  if(cls === "hsk" && LEVELS[level]) S.level = level;
+  Track.log("login", { first: true, register: true }, "");
+  toast("Đăng ký thành công! Từ giờ bạn đăng nhập trên máy nào cũng giữ được tiến độ.");
+  data.ww_profile.avatar ? enterApp() : openAvatar();
+};
+async function logoutAll(){
+  const a = Auth.get();
+  if(a && Auth.on()){
+    toast("Đang lưu tiến độ…");
+    if(Sync.meta().dirty) await Sync.push();
+    await Track.flush();
+    Auth.call("logout", { u: a.u, token: a.token }, 5000);
+    Auth.set(null); Sync.apply({}); rawSet("ww_sync", { at: 0, dirty: false });
+  } else Profile.clear();
+  enterApp.logged = false; openWelcome();
+}
+
 $("#welTeacher").onclick=()=>Teacher.open();
 initVoiceUI();
 openWelcome();
+Sync.start();
 </script>

@@ -6,6 +6,6 @@ Trang luyện HSK cho học viên: flashcard, luyện dịch, phát âm có ch�
 - `_src/ex*/` – hình ảnh của phần Bài tập HSK.
 - `_src/teacher_api.txt` – link Google Apps Script (để trống nếu chưa cài).
 - `audio/` – file nghe .mp3 của Bài tập HSK.
-- `giao-vien/apps-script-giao-vien.gs` – mã dán vào Google Sheet để theo dõi học viên.
+- `giao-vien/apps-script-giao-vien.gs` – mã dán vào Google Sheet: tài khoản học viên (đăng ký/đăng nhập, đồng bộ dữ liệu giữa các thiết bị) và bảng theo dõi giáo viên.
 
 Cập nhật: sửa `_src/` → chạy `python3 _src/build.py` → commit & push. Netlify tự đăng bản mới.
