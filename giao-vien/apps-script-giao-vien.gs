@@ -17,12 +17,15 @@
  * Trang tính được tạo tự động:
  *   Accounts – mỗi học viên một dòng (tên đăng nhập, SĐT, họ tên, lớp, trình độ, mật khẩu đã mã hoá, dữ liệu học tập).
  *   Events   – nhật ký hoạt động học tập (dùng cho bảng theo dõi của giáo viên).
+ *   Readings – các bài đọc giáo viên soạn trên trang web (chỉ giáo viên có mật khẩu mới thêm/sửa/xoá được).
  * Mật khẩu KHÔNG được lưu dạng chữ thường, chỉ lưu bản mã hoá (SHA-256 + muối).
  */
 const EVENTS = 'Events', ACCOUNTS = 'Accounts';
 const EV_HEAD = ['Thời gian', 'Mã sự kiện', 'Mã học viên', 'Họ tên', 'Lớp', 'Trình độ', 'Loại', 'Bài', 'Chi tiết (JSON)'];
 const AC_HEAD = ['Tên đăng nhập', 'Số điện thoại', 'Họ tên', 'Lớp', 'Trình độ', 'Muối', 'Mật khẩu (mã hoá)', 'Phiên đăng nhập', 'Ngày đăng ký', 'Đăng nhập gần nhất', 'Cập nhật dữ liệu', 'Dữ liệu học tập (JSON)'];
 const C = { user: 1, phone: 2, name: 3, cls: 4, level: 5, salt: 6, hash: 7, tokens: 8, created: 9, last: 10, upd: 11, data: 12 };
+const READINGS = 'Readings';
+const RD_HEAD = ['Mã', 'Cấp', 'Bài', 'Tiêu đề', 'Cập nhật', 'Nội dung (JSON)'];
 const MAX_DATA = 48000; // giới hạn 1 ô Google Sheet là 50.000 ký tự
 
 function sheet_(name, head) {
@@ -167,6 +170,36 @@ function doPost(e) {
       if (String(b.password || '').length < 6) return json_({ ok: false, error: 'bad_password' });
       const salt = Utilities.getUuid();
       ac.getRange(r, C.salt, 1, 3).setValues([[salt, hash_(salt, String(b.password)), '[]']]); // đăng xuất mọi thiết bị
+      return json_({ ok: true });
+    }
+
+    /* ---- Bài đọc: ai cũng đọc được; chỉ giáo viên (TEACHER_KEY) được thêm / sửa / xoá ---- */
+    if (act === 'readings') {
+      const sh = sheet_(READINGS, RD_HEAD), n = sh.getLastRow() - 1;
+      const list = n < 1 ? [] : sh.getRange(2, 1, n, RD_HEAD.length).getValues().map(r => { try { return JSON.parse(r[5]); } catch (err) { return null; } }).filter(Boolean);
+      return json_({ ok: true, readings: list });
+    }
+    if (act === 'saveReading') {
+      if (!teacherOk_(b.key)) return json_({ ok: false, error: 'unauthorized' });
+      const rd = b.reading || {};
+      if (!rd.title || !rd.text) return json_({ ok: false, error: 'missing' });
+      rd.id = rd.id ? str_(rd.id, 40) : Utilities.getUuid().slice(0, 12);
+      rd.updated = Date.now();
+      const js = JSON.stringify(rd);
+      if (js.length > MAX_DATA) return json_({ ok: false, error: 'too_large' });
+      const sh = sheet_(READINGS, RD_HEAD), n = sh.getLastRow() - 1;
+      const ids = n < 1 ? [] : sh.getRange(2, 1, n, 1).getValues().map(r => String(r[0]));
+      const row = [rd.id, str_(rd.level, 10), Number(rd.lesson) || 0, str_(rd.title, 200), new Date(), js];
+      const i = ids.indexOf(rd.id);
+      if (i >= 0) sh.getRange(i + 2, 1, 1, RD_HEAD.length).setValues([row]); else sh.appendRow(row);
+      return json_({ ok: true, reading: rd });
+    }
+    if (act === 'deleteReading') {
+      if (!teacherOk_(b.key)) return json_({ ok: false, error: 'unauthorized' });
+      const sh = sheet_(READINGS, RD_HEAD), n = sh.getLastRow() - 1;
+      const ids = n < 1 ? [] : sh.getRange(2, 1, n, 1).getValues().map(r => String(r[0]));
+      const i = ids.indexOf(String(b.id || ''));
+      if (i >= 0) sh.deleteRow(i + 2);
       return json_({ ok: true });
     }
 

@@ -377,6 +377,57 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .ex-wrong li small{color:var(--muted)}
 .ex-wrong a{color:var(--accent)}
 .ex-why{margin-top:4px;background:var(--surface-2);border-radius:8px;padding:8px 10px;font-size:14.5px}
+/* bài đọc */
+.rd{display:grid;gap:16px}
+.rd-head h3{margin:0}.rd-head p{margin:4px 0 0}
+.rd-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.rd-card{display:grid;gap:6px;text-align:left;border:2px solid var(--line);background:var(--surface);border-radius:14px;padding:14px;cursor:pointer;transition:transform .15s,border-color .15s,box-shadow .15s}
+.rd-card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 6px 16px color-mix(in srgb,var(--accent) 20%,transparent)}
+.rd-card-t{font-size:22px;color:var(--ink)}.rd-card small{color:var(--muted)}
+.rd-badge{justify-self:start;font-size:12.5px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--surface-2);color:var(--muted)}
+.rd-badge.ok{background:color-mix(in srgb,var(--good) 15%,transparent);color:var(--good)}.rd-badge.mid{background:#FFF3D6;color:var(--warn)}
+.rd-paper{background:#FFFDF6;border:1px solid #EADFC2;border-radius:14px;padding:18px 22px;box-shadow:var(--shadow)}
+.rd-title{text-align:center;margin:0 0 10px;font-size:26px}
+.rd-text p{margin:0 0 10px;font-size:24px;line-height:2.1;text-indent:2em}
+.rd-text ruby{ruby-align:center}.rd-text rt,.rd-title rt,.ra-prev rt{font-family:var(--f-body);font-size:12px;color:var(--accent);letter-spacing:0}
+.rd-text.hide-py rt{display:none}
+.rd-text .rd-pyline{font-family:var(--f-body);font-size:15px;line-height:1.5;color:var(--accent);text-indent:0;margin-top:-6px}
+.rd-trans{margin-top:12px;padding-top:10px;border-top:1px dashed #EADFC2;font-size:15.5px}.rd-trans p{margin:4px 0}
+.rd-sec{display:grid;gap:12px}.rd-sec h3{margin:6px 0 0}
+.rd-vocab td{vertical-align:middle}.rd-vh{font-size:22px;white-space:nowrap}
+.say-sm{border:0;background:var(--surface-2);border-radius:8px;width:28px;height:28px;display:inline-grid;place-items:center;vertical-align:middle;color:var(--accent);cursor:pointer}.say-sm svg{width:15px;height:15px}
+.rd-qbox{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;padding:12px 0;border-top:1px solid var(--line)}
+.rd-qbody{display:grid;gap:8px;min-width:0}
+.rd-type{color:var(--muted);font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.03em}
+.rd-q{font-size:21px;line-height:1.6}
+.rd-tf{display:flex;gap:10px;flex-wrap:wrap}
+.rd-opt{border:2px solid var(--line);background:var(--surface);border-radius:12px;padding:8px 18px;font-weight:700;font-size:15px}
+.rd-mc{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:560px){.rd-mc{grid-template-columns:minmax(0,1fr)}.rd-paper{padding:14px}.rd-text p{font-size:21px}}
+.rd-blank{display:inline-block;min-width:3em;border-bottom:2px solid var(--accent);text-align:center;color:var(--accent);padding:0 4px}
+.rd-bank{display:flex;gap:8px;flex-wrap:wrap}
+.rd-chip{border:2px solid var(--line);background:var(--surface);border-radius:10px;padding:4px 12px;font-size:19px}
+/* soạn bài đọc (giáo viên) */
+.t-view{margin-right:4px}
+.ra-list h4{margin:14px 0 6px}
+.ra-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;margin-bottom:8px;background:var(--surface)}
+.ra-row b{font-size:19px}.ra-row small{display:block;color:var(--muted)}
+.ra-empty{margin:0 0 4px}
+.ra-ed{display:grid;gap:14px}.ra-ed label{display:grid;gap:5px;font-weight:600;font-size:14px}
+.ra-ed textarea.inp{resize:vertical;line-height:1.6}
+.ra-ed h3{margin:8px 0 0}
+.ra-lab{font-weight:600;font-size:14px;display:block;margin-bottom:5px}
+.ra-prev{max-height:330px;overflow:auto;padding:12px 14px}.ra-prev p{margin:0 0 8px;font-size:20px;line-height:2}
+.ra-ed details summary{cursor:pointer;font-weight:600;color:var(--accent)}
+.ra-vt .inp{padding:7px 8px;font-size:15px;min-width:70px}.ra-vt{min-width:820px}
+.ra-pyc{display:flex;gap:4px}
+.btn.sm{padding:5px 9px;font-size:13px}
+.ra-q{display:grid;gap:10px;border:1.5px solid var(--line);border-radius:12px;padding:12px;background:var(--surface);margin-bottom:10px}
+.ra-q-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.ra-tf{display:flex;gap:16px;align-items:center;font-size:14px}
+.ra-ed .ra-radio,.ra-ed .ra-opt{display:flex;align-items:center;gap:8px;font-weight:400}
+.ra-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media (max-width:560px){.ra-opts{grid-template-columns:minmax(0,1fr)}}
 /* bảng theo dõi giáo viên */
 .t-wrap{max-width:1180px;margin:0 auto;display:grid;gap:16px}
 .t-wrap>*{min-width:0}
@@ -461,6 +512,7 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .fm-drops{display:flex;align-items:center;gap:3px;font-size:12px;color:var(--muted)}.fm-drops small{margin-left:4px}
 .fm-btns{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
 .fm-btns .btn,.fm-main{padding:6px 10px;font-size:13px}
+.fm-sellpen{color:var(--muted)}.fm-sellpen svg{width:14px;height:14px;vertical-align:-2px}.fm-sellpen.armed{border-color:var(--bad);color:var(--bad);background:#FFF1EE}
 .fm-water .drop{width:10px;height:13px}
 .fm-plot.locked{background:rgba(255,255,255,.45);border-style:dashed;place-content:center}
 .fm-plot.dim{opacity:.55}
@@ -849,6 +901,7 @@ const ICON = {
   left:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>',
   right:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>',
   redo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>',
+  read:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5h6a4 4 0 0 1 4 4v11a3 3 0 0 0-3-3H2z"/><path d="M22 5h-6a4 4 0 0 0-4 4v11a3 3 0 0 1 3-3h7z"/></svg>',
   quiz:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>',
   play:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></svg>',
   copy:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>',
@@ -942,13 +995,14 @@ function renderLesson(){
       <button role="tab" data-s="flash" aria-selected="${S.section==="flash"}">${ICON.cards}Flashcard</button>
       <button role="tab" data-s="trans" aria-selected="${S.section==="trans"}">${ICON.trans}Luyện dịch</button>
       <button role="tab" data-s="speak" aria-selected="${S.section==="speak"}">${ICON.mic}Phát âm</button>
+      <button role="tab" data-s="read" aria-selected="${S.section==="read"}">${ICON.read}Bài đọc</button>
       ${les.test?`<button role="tab" data-s="exam" aria-selected="${S.section==="exam"}">${ICON.quiz}Bài tập HSK</button>`:""}
     </div>
   </div>
   <section class="panel" id="work"></section>`;
   box.querySelector(".sections").onclick=e=>{const b=e.target.closest("button");if(!b)return;S.section=b.dataset.s;store.set("ww_section",S.section);renderLesson();};
   if(S.section==="exam"&&!les.test) S.section="flash";
-  if(S.section==="flash") Flash.mount(les); else if(S.section==="trans") Trans.mount(les); else if(S.section==="exam") Exam.mount(les); else Speak.mount(les);
+  if(S.section==="flash") Flash.mount(les); else if(S.section==="trans") Trans.mount(les); else if(S.section==="exam") Exam.mount(les); else if(S.section==="read") Reading.mount(les); else Speak.mount(les);
 }
 function renderAll(){ stopAnyRecording(); renderLevels(); renderRail(); renderLesson(); }
 
@@ -2346,7 +2400,7 @@ setTimeout(() => Track.flush(), 3000);
 const TYPE_LABEL = { coins: "Nhận xu", harvest: "Thu hoạch", login: "Đăng nhập", session: "Vào học", flash: "Flashcard", quiz: "Kiểm tra từ vựng", trans: "Luyện dịch", speak: "Luyện phát âm", exam: "Bài tập HSK" };
 const TRANS_LABEL = { zhvi: "Trung → Việt", sort: "Sắp xếp", type: "Gõ chữ" };
 const Teacher = {
-  key: "", events: [], accounts: [], students: [], sel: null, filter: { cls: "all", q: "" }, loadedAt: null,
+  view: "hv", key: "", events: [], accounts: [], students: [], sel: null, filter: { cls: "all", q: "" }, loadedAt: null,
   open(){
     try{ this.key = sessionStorage.getItem("ww_tkey") || ""; }catch(e){ this.key = ""; }
     showScreen("scrTeacher");
@@ -2455,7 +2509,19 @@ const Teacher = {
     const p = v / max * 100, c = p >= 80 ? "ok" : p >= 50 ? "mid" : "low";
     return `<span class="t-pill ${c}">${v}${suffix}</span>`;
   },
+  topbar(title, sub){
+    return `<div class="t-top"><div><h2>${esc(title)}</h2><p class="muted">${sub}</p></div>
+      <div class="t-acts"><div class="seg t-view" role="group" aria-label="Khu giáo viên">${[["hv", "Học viên"], ["read", "Bài đọc"]].map(([v, l]) => `<button type="button" data-tv="${v}" aria-pressed="${this.view === v}">${l}</button>`).join("")}</div>
+        <button class="btn" id="tReload">${ICON.redo}Tải lại</button><button class="btn" id="tOut">Đăng xuất</button><button class="btn" id="tHome">${ICON.left}Về trang học</button></div></div>`;
+  },
+  bindTop(){
+    $("#tReload").onclick = () => { if(this.view === "read"){ RdAdmin.draft = null; RdAdmin.render(); } else this.load(); };
+    $("#tHome").onclick = () => { RdAdmin.draft = null; const p = Profile.get(); if(p && p.avatar) enterApp(); else openWelcome(); };
+    $("#tOut").onclick = () => { try{ sessionStorage.removeItem("ww_tkey"); }catch(e){} this.key = ""; RdAdmin.draft = null; this.renderLogin(); };
+    document.querySelectorAll("#tBody [data-tv]").forEach(b => b.onclick = () => { if(this.view === b.dataset.tv) return; this.view = b.dataset.tv; this.view === "read" ? RdAdmin.render() : this.render(); });
+  },
   render(){
+    if(this.view === "read") return RdAdmin.render();
     const f = this.filter, q = f.q.trim().toLowerCase();
     const list = this.students.filter(s => (f.cls === "all" || s.cls === f.cls) && (!q || [s.name, s.acc && s.acc.username, s.acc && s.acc.phone].some(v => (v || "").toLowerCase().includes(q))));
     const week = Date.now() - 7 * 86400000;
@@ -2466,8 +2532,7 @@ const Teacher = {
     const miss = {}; exLast.forEach(x => (x.wrong || []).forEach(n => miss[n] = (miss[n] || 0) + 1));
     const top = Object.entries(miss).sort((a, b) => b[1] - a[1]).slice(0, 6); const topMax = top.length ? top[0][1] : 1;
     $("#tBody").innerHTML = `
-      <div class="t-top"><div><h2>Bảng theo dõi lớp học</h2><p class="muted">Cập nhật lúc ${this.loadedAt.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })} · ${this.events.length} hoạt động đã ghi</p></div>
-        <div class="t-acts"><button class="btn" id="tReload">${ICON.redo}Tải lại</button><button class="btn" id="tOut">Đăng xuất</button><button class="btn" id="tHome">${ICON.left}Về trang học</button></div></div>
+      ${this.topbar("Bảng theo dõi lớp học", `Cập nhật lúc ${this.loadedAt.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })} · ${this.events.length} hoạt động đã ghi`)}
       <div class="t-kpis">
         <div class="t-kpi"><small>Tài khoản học viên</small><b>${this.accounts.length}</b><span class="t-sub">${this.students.length - this.students.filter(x => x.acc).length} người học thử</span></div>
         <div class="t-kpi"><small>Hoạt động 7 ngày qua</small><b>${active}</b></div>
@@ -2490,10 +2555,8 @@ const Teacher = {
           </tbody></table></div>` : `<p class="muted t-empty">${this.students.length ? "Không có học viên khớp bộ lọc." : "Chưa có học viên nào. Khi học viên đăng ký tài khoản và học, dữ liệu sẽ hiện ở đây."}</p>`}
       </div>
       <div id="tDetail"></div>`;
-    $("#tReload").onclick = () => this.load();
-    $("#tHome").onclick = () => { const p = Profile.get(); if(p && p.avatar) enterApp(); else openWelcome(); };
-    $("#tOut").onclick = () => { try{ sessionStorage.removeItem("ww_tkey"); }catch(e){} this.key = ""; this.renderLogin(); };
-    document.querySelectorAll("#tBody .seg button").forEach(b => b.onclick = () => { this.filter.cls = b.dataset.c; this.render(); });
+    this.bindTop();
+    document.querySelectorAll("#tBody .t-filter .seg button").forEach(b => b.onclick = () => { this.filter.cls = b.dataset.c; this.render(); });
     const se = $("#tSearch"); se.oninput = () => { this.filter.q = se.value; clearTimeout(this._st); this._st = setTimeout(() => { this.render(); const n = $("#tSearch"); n.focus(); n.setSelectionRange(n.value.length, n.value.length); }, 250); };
     document.querySelectorAll(".t-table tbody tr").forEach(tr => { const go = () => this.detail(tr.dataset.sid); tr.onclick = go; tr.onkeydown = e => { if(e.key === "Enter") go(); }; });
     if(this.sel) this.detail(this.sel, true);
@@ -2643,6 +2706,9 @@ const ANIMALS = {
   fish:   { grp:"thuysan",vi:"Cá",        zh:"鱼", py:"yú",   price:5,  sell:9, water:true },
   shrimp: { grp:"thuysan",vi:"Tôm",       zh:"虾", py:"xiā",  price:6,  sell:10, water:true }
 };
+/* bán vật nuôi cho sản phẩm (gà, vịt, cừu, chim, bò) khi không muốn nuôi tiếp – giá thấp để không "lướt sóng" lấy xu:
+   con còn nhỏ (chưa thu sản phẩm lần nào, chưa đủ 3 lần ăn) ≈ 80% giá mua; con đã lớn = giá mua + 2 xu */
+function penSellPrice(pn){ const a = ANIMALS[pn.a]; return pn.cyc || pn.f >= 3 ? a.price + 2 : Math.round(a.price * 0.8); }
 const PRODUCTS = {
   wool:    { vi:"Lông cừu",   zh:"羊毛", py:"yángmáo", sell:5, from:"sheep" },
   milk:    { vi:"Sữa bò",     zh:"牛奶", py:"niúnǎi",  sell:5, from:"cow" },
@@ -2837,7 +2903,8 @@ const Farm = {
       <div class="fm-name">${esc(a.vi)} <span class="han">${a.zh}</span><small class="fm-grp">${ANIMAL_GROUP[a.grp][0]} · ${ANIMAL_GROUP[a.grp][1]}</small></div>
       <div class="fm-drops fm-feeds" aria-label="Đã cho ăn ${pn.f}/3 lần">${[0, 1, 2].map(k => `<i class="${k < pn.f ? "on" : ""}"></i>`).join("")}<small>${grown ? (pr ? `Có ${pr.vi.toLowerCase()}!` : "Đã lớn!") : `Cho ăn ${pn.f}/3`}</small></div>
       <div class="fm-btns">${grown ? (pr ? `<button class="btn primary fm-main" data-act="collect" data-i="${i}">Thu <span class="han">${pr.zh}</span></button>` : `<button class="btn primary fm-main" data-act="ship" data-i="${i}">Thu hoạch</button>`)
-        : `<button class="btn" data-act="feed" data-i="${i}" ${st.bag.feed ? "" : "disabled"}>Cho ăn</button>`}</div>
+        : `<button class="btn" data-act="feed" data-i="${i}" ${st.bag.feed ? "" : "disabled"}>Cho ăn</button>`}
+        ${pr ? `<button class="btn fm-sellpen ${this.armSell === i ? "armed" : ""}" data-act="sellpen" data-i="${i}" title="Bán con vật này nếu không muốn nuôi tiếp">${this.armSell === i ? `Bấm lần nữa để bán · ${coinSVG()}${penSellPrice(pn)}` : `Bán ${coinSVG()}${penSellPrice(pn)}`}</button>` : ""}</div>
     </div>`;
   },
   side(){
@@ -2880,7 +2947,13 @@ const Farm = {
   },
   act(a, d){
     const st = this.st, i = d.i != null ? +d.i : null;
+    if(a !== "sellpen") this.armSell = null;
     switch(a){
+      case "sellpen": { const pn = st.pens[i]; if(!pn || !ANIMALS[pn.a].prod) return;
+        if(this.armSell !== i){ this.armSell = i; break; }
+        this.armSell = null; const a2 = ANIMALS[pn.a], g = penSellPrice(pn); st.pens[i] = null; st.coins += g;
+        Track.log("sellanimal", { animal: pn.a, coins: g, balance: st.coins });
+        toast(`${coinSVG()} <b>+${g} xu</b> · đã bán ${esc(a2.vi)} <span class="han">${a2.zh}</span>. Chuồng đã trống, có thể thả con khác.`); break; }
       case "pick": this.openPlot = i; break;
       case "close": this.openPlot = null; break;
       case "plant": if((st.bag.seeds[d.c] || 0) < 1) return; st.bag.seeds[d.c]--; st.plots[i] = { crop: d.c, w: 0, fert: false, t: Date.now() }; this.openPlot = null; toast(`Đã gieo hạt ${CROPS[d.c].vi}. Nhớ tưới 3 lần nhé!`); break;
@@ -2932,7 +3005,7 @@ function refreshCoinBadge(){ const n = Farm.st ? Farm.st.coins : 0; document.que
    Mọi dữ liệu học tập lưu dưới khóa "ww_..." trong trình duyệt. Khi đã đăng nhập, các khóa này được
    gửi lên Google Sheet (Apps Script, action "save") vài giây sau mỗi thay đổi, và tải về khi đăng nhập
    trên thiết bị khác (action "login" / "load"). Các khóa riêng của từng máy không đồng bộ. */
-const SYNC_SKIP = new Set(["ww_q", "ww_rate", "ww_voice", "ww_mic_ok", "ww_auth", "ww_sync"]);
+const SYNC_SKIP = new Set(["ww_q", "ww_rate", "ww_voice", "ww_mic_ok", "ww_auth", "ww_sync", "ww_readings"]);
 const rawGet = (k, d) => { try{ const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); }catch(e){ return d; } };
 const rawSet = (k, v) => { try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} };
 const Auth = {
@@ -3110,6 +3183,233 @@ async function logoutAll(){
 }
 
 $("#welTeacher").onclick=()=>Teacher.open();
+/* ======================= BÀI ĐỌC 阅读 =======================
+   Giáo viên soạn bài đọc ngay trên trang (khu giáo viên → tab "Bài đọc"), lưu lên Google Sheet (sheet "Readings").
+   Học viên đọc bài theo từng bài học: bật/tắt phiên âm, xem bản dịch, từ vựng bổ sung, làm câu hỏi
+   (Đúng/Sai · Chọn đáp án · Điền từ) và nhận xu ở lần làm đầu tiên.
+   Cấu trúc 1 bài đọc:
+   { id, level, lesson, title, text, trans, pyManual, vocab:[{h,p,pos,vi,ex}],
+     questions:[{type:"tf",q,ans:true|false,why} | {type:"mc",q,opts:[…],ans:0,why} | {type:"fill",q:"…___…",ans:"từ",why}],
+     fillExtra:"từ thừa, cách nhau bằng dấu phẩy", updated } */
+const TF_LABEL = ["Sai", "Đúng"];
+const QTYPE = { tf: "Phán đoán đúng / sai", mc: "Chọn đáp án đúng", fill: "Điền từ thích hợp" };
+function pyArr(s){ try{ return window.pinyinPro ? pinyinPro.pinyin(s, { type: "array" }) : []; }catch(e){ return []; } }
+function pyLine(s){ try{ return window.pinyinPro ? pinyinPro.pinyin(s) : ""; }catch(e){ return ""; } }
+/* chữ Hán kèm phiên âm phía trên (ruby). Ký tự không phải chữ Hán giữ nguyên. */
+function rubyHTML(text){
+  const chars = [...text], arr = pyArr(text), ok = arr.length === chars.length;
+  return chars.map((c, i) => /[一-鿿]/.test(c) && ok ? `<ruby>${esc(c)}<rt>${esc(arr[i])}</rt></ruby>` : esc(c)).join("");
+}
+const Reading = {
+  list: rawGet("ww_readings", []), loading: null, les: null, cur: null, st: null, showPy: true, showTr: false,
+  forLesson(lv, n){ return this.list.filter(r => r.level === lv && +r.lesson === +n).sort((a, b) => (a.order || 0) - (b.order || 0) || String(a.title).localeCompare(String(b.title))); },
+  async fetch(){
+    if(!Auth.on()) return this.list;
+    if(this.loading) return this.loading;
+    this.loading = Auth.call("readings", {}).then(res => { this.loading = null; if(res.ok){ this.list = res.readings || []; rawSet("ww_readings", this.list); } return this.list; });
+    return this.loading;
+  },
+  mount(les){
+    this.les = les; this.cur = null; this.render();
+    this.fetch().then(() => { if(S.section === "read" && this.les === les && !this.cur) this.render(); });
+  },
+  key(id){ return "ww_read_" + id; },
+  render(){
+    const W = $("#work"); if(!W) return;
+    if(this.cur) return this.renderOne();
+    const items = this.forLesson(S.level, S.lesson);
+    W.innerHTML = `<div class="rd">
+      <div class="rd-head"><h3><span class="han">阅读</span> Bài đọc</h3><p class="muted">Đọc bài, bật/tắt phiên âm khi cần, rồi trả lời câu hỏi để kiểm tra mức độ hiểu bài.</p></div>
+      ${items.length ? `<div class="rd-list">${items.map(r => { const s = store.get(this.key(r.id), null), done = s && s.submitted, sc = done ? this.score(r, s) : null;
+        return `<button class="rd-card" data-id="${esc(r.id)}"><span class="rd-card-t han">${esc(r.title)}</span>
+          <small>${r.questions.length} câu hỏi · ${r.vocab.length} từ bổ sung</small>
+          <span class="rd-badge ${done ? (sc.right === sc.total ? "ok" : "mid") : ""}">${done ? `Đã làm · ${sc.right}/${sc.total}` : "Chưa làm"}</span></button>`; }).join("")}</div>`
+      : `<div class="empty"><span class="han">读</span>${this.loading ? "Đang tải bài đọc…" : "<b>Bài này chưa có bài đọc.</b><br>Giáo viên sẽ cập nhật sớm nhé."}</div>`}
+    </div>`;
+    W.querySelectorAll(".rd-card").forEach(b => b.onclick = () => this.open(b.dataset.id));
+  },
+  open(id){
+    const r = this.list.find(x => x.id === id); if(!r) return;
+    this.cur = r; this.st = store.get(this.key(id), null) || { ans: {}, submitted: false };
+    this.renderOne(); $("#work").scrollIntoView({ behavior: "smooth", block: "start" });
+  },
+  score(r, st){
+    let right = 0; const wrong = [];
+    r.questions.forEach((q, i) => { const a = st.ans[i]; const ok = q.type === "tf" ? a === (q.ans ? 1 : 0) : q.type === "mc" ? a === q.ans : a === q.ans; ok ? right++ : wrong.push(i); });
+    return { right, total: r.questions.length, wrong };
+  },
+  bank(r){ const w = r.questions.filter(q => q.type === "fill").map(q => q.ans).concat(String(r.fillExtra || "").split(/[,，、]/).map(x => x.trim()).filter(Boolean));
+    return [...new Set(w)].sort((a, b) => a.localeCompare(b, "zh")); },
+  renderOne(){
+    const W = $("#work"), r = this.cur, st = this.st, sub = st.submitted, paras = String(r.text || "").split(/\n+/).map(x => x.trim()).filter(Boolean);
+    const manual = String(r.pyManual || "").split(/\n+/).map(x => x.trim());
+    const bank = this.bank(r), sc = sub ? this.score(r, st) : null;
+    const optCls = (i, v, correct) => { const a = st.ans[i]; if(!sub) return a === v ? "picked" : ""; if(v === correct) return a === v ? "right" : "answer"; return a === v ? "wrong" : ""; };
+    let qn = 0;
+    const qHTML = r.questions.map((q, i) => {
+      qn++; const mark = sub ? (sc.wrong.includes(i) ? `<span class="ex-mark no">✗</span>` : `<span class="ex-mark ok">✓</span>`) : "";
+      let body = "";
+      if(q.type === "tf") body = `<div class="han rd-q">${esc(q.q)}</div><div class="rd-tf">${[1, 0].map(v => `<button class="ex-opt rd-opt ${optCls(i, v, q.ans ? 1 : 0)}" data-i="${i}" data-v="${v}" ${sub ? "disabled" : ""}>${v ? "✓ Đúng" : "✗ Sai"}</button>`).join("")}</div>`;
+      else if(q.type === "mc") body = `<div class="han rd-q">${esc(q.q)}</div><div class="ex-choice rd-mc">${q.opts.map((o, k) => `<button class="ex-opt ex-copt ${optCls(i, k, q.ans)}" data-i="${i}" data-v="${k}" ${sub ? "disabled" : ""}><b>${"ABCD"[k]}</b> <span class="han">${esc(o)}</span></button>`).join("")}</div>`;
+      else body = `<div class="han rd-q">${esc(q.q).replace(/_{2,}|（\s*）|\(\s*\)/, `<span class="rd-blank">${st.ans[i] ? esc(st.ans[i]) : "　　"}</span>`)}</div>
+        <div class="rd-bank">${bank.map(w => `<button class="ex-opt rd-chip han ${optCls(i, w, q.ans)}" data-i="${i}" data-v="${esc(w)}" ${sub ? "disabled" : ""}>${esc(w)}</button>`).join("")}</div>`;
+      return `<div class="rd-qbox" id="rdq${i}"><div class="ex-num">${qn}.${mark}</div><div class="rd-qbody"><small class="rd-type">${QTYPE[q.type]}</small>${body}
+        ${sub && sc.wrong.includes(i) ? `<div class="ex-why"><b>Đáp án: ${q.type === "tf" ? TF_LABEL[q.ans ? 1 : 0] : q.type === "mc" ? "ABCD"[q.ans] + ". " + esc(q.opts[q.ans]) : esc(q.ans)}</b>${q.why ? "<br>" + esc(q.why) : ""}</div>` : ""}</div></div>`;
+    }).join("");
+    W.innerHTML = `<div class="rd rd-one">
+      <div class="toolbar"><button class="btn" id="rdBack">${ICON.left}Danh sách bài đọc</button>
+        <div class="grp"><button class="btn" id="rdPy" aria-pressed="${this.showPy}">${this.showPy ? "Ẩn" : "Hiện"} phiên âm</button>${r.trans ? `<button class="btn" id="rdTr" aria-pressed="${this.showTr}">${this.showTr ? "Ẩn" : "Hiện"} bản dịch</button>` : ""}<button class="btn" id="rdSay">${ICON.sound}Nghe bài</button></div></div>
+      <article class="rd-paper">
+        <h2 class="han rd-title">${this.showPy && !r.pyManual ? rubyHTML(r.title) : esc(r.title)}</h2>
+        <div class="rd-text han ${this.showPy ? "" : "hide-py"}">${paras.map((p, k) => `<p>${r.pyManual ? esc(p) : rubyHTML(p)}</p>${r.pyManual && this.showPy && manual[k] ? `<p class="rd-pyline">${esc(manual[k])}</p>` : ""}`).join("")}</div>
+        ${r.trans && this.showTr ? `<div class="rd-trans"><b>Bản dịch</b>${String(r.trans).split(/\n+/).map(x => `<p>${esc(x)}</p>`).join("")}</div>` : ""}
+      </article>
+      ${r.vocab.length ? `<section class="rd-sec"><h3>Từ vựng bổ sung</h3><div class="tbl-wrap"><table class="syl rd-vocab"><thead><tr><th>STT</th><th>Chữ Hán</th><th>Phiên âm</th><th>Từ loại</th><th>Nghĩa</th><th>Ví dụ</th></tr></thead><tbody>
+        ${r.vocab.map((v, k) => `<tr><td>${k + 1}</td><td class="han rd-vh">${esc(v.h)} <button class="say-sm" data-say="${esc(v.h)}" aria-label="Nghe ${esc(v.h)}">${ICON.sound}</button></td><td class="py">${esc(v.p || pyLine(v.h))}</td><td>${esc(POS[v.pos] || v.pos || "")}</td><td>${esc(v.vi)}</td><td class="han">${esc(v.ex || "")}</td></tr>`).join("")}
+      </tbody></table></div></section>` : ""}
+      ${r.questions.length ? `<section class="rd-sec"><h3>Câu hỏi</h3><div id="rdRes"></div>${qHTML}
+        <div class="ex-submit">${sub ? `<button class="btn primary big" id="rdRetry">${ICON.redo}Làm lại</button>` : `<button class="btn primary big" id="rdSubmit">${ICON.check}Nộp bài</button>`}</div></section>` : ""}
+    </div>`;
+    if(sub) $("#rdRes").innerHTML = `<div class="ex-result"><div class="ex-score"><span class="big">${sc.right}<small>/${sc.total}</small></span><span>câu đúng</span></div>
+      <p class="ex-msg">${sc.right === sc.total ? "Xuất sắc! Bạn hiểu bài rất tốt. 太棒了！" : "Xem lại các câu sai và đáp án bên dưới nhé."}</p></div>`;
+    $("#rdBack").onclick = () => { this.cur = null; this.render(); };
+    $("#rdPy").onclick = () => { this.showPy = !this.showPy; this.renderOne(); };
+    const tr = $("#rdTr"); if(tr) tr.onclick = () => { this.showTr = !this.showTr; this.renderOne(); };
+    $("#rdSay").onclick = () => speak(paras.join("。"));
+    W.querySelectorAll("[data-say]").forEach(b => b.onclick = () => speak(b.dataset.say));
+    W.querySelectorAll(".rd-qbox .ex-opt").forEach(b => b.onclick = () => {
+      if(st.submitted) return; const i = +b.dataset.i, q = r.questions[i];
+      st.ans[i] = q.type === "fill" ? b.dataset.v : +b.dataset.v; store.set(this.key(r.id), st); this.renderOne();
+    });
+    const sb = $("#rdSubmit");
+    if(sb) sb.onclick = () => {
+      const left = r.questions.length - Object.keys(st.ans).length;
+      if(left && !sb.dataset.armed){ sb.dataset.armed = 1; sb.innerHTML = `${ICON.check}Còn ${left} câu chưa làm – bấm lần nữa để nộp`; return; }
+      st.submitted = true; store.set(this.key(r.id), st); const s2 = this.score(r, st);
+      Track.log("reading", { id: r.id, title: r.title, right: s2.right, total: s2.total, wrong: s2.wrong.map(x => x + 1) });
+      Farm.earn(s2.right / s2.total * 100, `Bài đọc “${r.title}” (${s2.right}/${s2.total} câu đúng)`, "read:" + r.id);
+      this.renderOne(); $("#rdRes").scrollIntoView({ behavior: "smooth", block: "center" });
+    };
+    const rb = $("#rdRetry"); if(rb) rb.onclick = () => { this.st = { ans: {}, submitted: false }; store.set(this.key(r.id), this.st); this.renderOne(); };
+  }
+};
+
+/* ---------- Soạn bài đọc (chỉ giáo viên) ---------- */
+const RdAdmin = {
+  draft: null, msg: "",
+  lessonOpts(){ const o = []; for(const [lv, L] of Object.entries(LEVELS)) for(const [n, les] of Object.entries(L.lessons)) o.push([lv, n, `${L.name} · Bài ${n} – ${les.zh}`]); return o; },
+  blank(){ const [lv, n] = this.lessonOpts().slice(-1)[0] || ["hsk1", 1]; return { id: "", level: lv, lesson: +n, title: "", text: "", trans: "", pyManual: "", vocab: [], questions: [], fillExtra: "" }; },
+  async render(){
+    const B = $("#tBody");
+    if(this.draft) return this.renderEditor();
+    B.innerHTML = Teacher.topbar("Bài đọc", "Đang tải danh sách bài đọc…") + `<div class="panel"><p class="muted">Đang tải…</p></div>`; Teacher.bindTop();
+    Reading.loading = null; await Reading.fetch();
+    const groups = this.lessonOpts().map(([lv, n, label]) => [label, Reading.forLesson(lv, n), lv, n]);
+    B.innerHTML = Teacher.topbar("Bài đọc", `${Reading.list.length} bài đọc · học viên thấy bài đọc trong tab “Bài đọc” của từng bài học`) + `
+      ${this.msg ? `<div class="fm-note">${esc(this.msg)}</div>` : ""}
+      <div class="panel ra-list"><div class="t-top"><h3>Danh sách bài đọc</h3><button class="btn primary" id="raNew">＋ Thêm bài đọc</button></div>
+      ${groups.map(([label, items]) => `<h4 class="fm-h han">${esc(label)}</h4>${items.length ? items.map(r => `<div class="ra-row"><div><b class="han">${esc(r.title)}</b><small>${r.questions.length} câu hỏi · ${r.vocab.length} từ bổ sung${r.updated ? " · sửa lúc " + Teacher.fmt(r.updated) : ""}</small></div>
+        <div class="t-acts"><button class="btn" data-edit="${esc(r.id)}">Sửa</button></div></div>`).join("") : `<p class="t-dim ra-empty">Chưa có bài đọc.</p>`}`).join("")}</div>`;
+    this.msg = ""; Teacher.bindTop();
+    $("#raNew").onclick = () => { this.draft = this.blank(); this.renderEditor(); };
+    B.querySelectorAll("[data-edit]").forEach(b => b.onclick = () => { this.draft = JSON.parse(JSON.stringify(Reading.list.find(r => r.id === b.dataset.edit))); this.renderEditor(); });
+  },
+  renderEditor(){
+    const d = this.draft, B = $("#tBody");
+    const posOpts = v => Object.entries(POS).map(([k, l]) => `<option value="${k}" ${v === k ? "selected" : ""}>${l}</option>`).join("");
+    const qEd = (q, i) => `<div class="ra-q" data-qi="${i}"><div class="ra-q-top"><b>Câu ${i + 1} · ${QTYPE[q.type]}</b><span class="t-acts"><button type="button" class="btn sm" data-qup="${i}" ${i ? "" : "disabled"}>↑</button><button type="button" class="btn sm" data-qdel="${i}">Xoá</button></span></div>
+      ${q.type === "fill" ? `<label>Câu có chỗ trống (gõ ___ ở vị trí cần điền)<input class="inp han" data-f="q" value="${esc(q.q)}" placeholder="VD: 弟弟没起床，还在___呢。"></label>
+        <label>Từ đúng<input class="inp han" data-f="ans" value="${esc(q.ans)}" placeholder="VD: 睡觉"></label>`
+      : `<label>${q.type === "tf" ? "Câu phán đoán" : "Câu hỏi"}<input class="inp han" data-f="q" value="${esc(q.q)}"></label>`}
+      ${q.type === "tf" ? `<div class="ra-tf"><span>Đáp án:</span>${[1, 0].map(v => `<label class="ra-radio"><input type="radio" name="tf${i}" data-f="ans" value="${v}" ${(q.ans ? 1 : 0) === v ? "checked" : ""}> ${TF_LABEL[v]}</label>`).join("")}</div>` : ""}
+      ${q.type === "mc" ? `<div class="ra-opts">${q.opts.map((o, k) => `<label class="ra-opt"><input type="radio" name="mc${i}" data-f="ans" value="${k}" ${q.ans === k ? "checked" : ""} title="Đáp án đúng"> <b>${"ABCD"[k]}</b><input class="inp han" data-f="opt" data-k="${k}" value="${esc(o)}"></label>`).join("")}</div><small class="muted">Chọn nút tròn trước đáp án đúng. Để trống phương án không dùng.</small>` : ""}
+      <label>Giải thích khi học viên làm sai (tuỳ chọn)<input class="inp" data-f="why" value="${esc(q.why || "")}"></label></div>`;
+    B.innerHTML = Teacher.topbar(d.id ? "Sửa bài đọc" : "Thêm bài đọc", "Nhập nội dung, câu hỏi và từ vựng rồi bấm Lưu.") + `
+    <form class="panel ra-ed" id="raForm" novalidate>
+      <div class="grid2"><label>Thuộc bài<select class="inp" id="raLes">${this.lessonOpts().map(([lv, n, l]) => `<option value="${lv}|${n}" ${d.level === lv && +d.lesson === +n ? "selected" : ""}>${esc(l)}</option>`).join("")}</select></label>
+        <label>Tiêu đề bài đọc<input class="inp han" id="raTitle" value="${esc(d.title)}" placeholder="VD: 我的大学生活"></label></div>
+      <div class="grid2 ra-text"><label>Nội dung (chữ Hán, mỗi đoạn một dòng)<textarea class="inp han" id="raText" rows="8">${esc(d.text)}</textarea></label>
+        <div><span class="ra-lab">Xem trước (phiên âm tự động)</span><div class="rd-paper ra-prev han" id="raPrev"></div></div></div>
+      <details ${d.pyManual ? "open" : ""}><summary>Phiên âm thủ công (tuỳ chọn – dùng khi phiên âm tự động bị sai chữ đa âm)</summary>
+        <label>Mỗi dòng là phiên âm của một đoạn tương ứng. Có nội dung ở đây thì trang hiện dòng phiên âm này thay cho phiên âm tự động.<textarea class="inp" id="raPy" rows="3">${esc(d.pyManual)}</textarea></label></details>
+      <label>Bản dịch tiếng Việt (tuỳ chọn – học viên bấm “Hiện bản dịch” mới thấy)<textarea class="inp" id="raTr" rows="3">${esc(d.trans)}</textarea></label>
+
+      <h3>Từ vựng bổ sung</h3>
+      <div class="tbl-wrap"><table class="syl ra-vt"><thead><tr><th>STT</th><th>Chữ Hán</th><th>Phiên âm</th><th>Từ loại</th><th>Nghĩa</th><th>Ví dụ</th><th></th></tr></thead><tbody>
+        ${d.vocab.map((v, k) => `<tr data-vi="${k}"><td>${k + 1}</td><td><input class="inp han" data-v="h" value="${esc(v.h)}"></td><td><div class="ra-pyc"><input class="inp" data-v="p" value="${esc(v.p)}"><button type="button" class="btn sm" data-autopy="${k}" title="Tự điền phiên âm">拼</button></div></td>
+          <td><select class="inp" data-v="pos">${posOpts(v.pos)}</select></td><td><input class="inp" data-v="vi" value="${esc(v.vi)}"></td><td><input class="inp han" data-v="ex" value="${esc(v.ex || "")}"></td><td><button type="button" class="btn sm" data-vdel="${k}">Xoá</button></td></tr>`).join("")}
+      </tbody></table></div>
+      <button type="button" class="btn" id="raAddV">＋ Thêm từ</button>
+
+      <h3>Câu hỏi</h3>
+      <div id="raQs">${d.questions.map(qEd).join("") || `<p class="t-dim">Chưa có câu hỏi.</p>`}</div>
+      <div class="t-acts"><button type="button" class="btn" data-addq="tf">＋ Đúng / Sai</button><button type="button" class="btn" data-addq="mc">＋ Chọn đáp án</button><button type="button" class="btn" data-addq="fill">＋ Điền từ</button></div>
+      ${d.questions.some(q => q.type === "fill") ? `<label>Từ gây nhiễu cho phần điền từ (tuỳ chọn, cách nhau bằng dấu phẩy)<input class="inp han" id="raExtra" value="${esc(d.fillExtra || "")}" placeholder="VD: 找, 名字"></label>` : ""}
+
+      <p class="err" id="raErr" hidden></p>
+      <div class="login-acts"><span class="t-acts"><button type="button" class="btn" id="raCancel">Huỷ</button>${d.id ? `<button type="button" class="btn bad" id="raDel">Xoá bài đọc</button>` : ""}</span><button type="submit" class="btn primary big" id="raSave">Lưu bài đọc</button></div>
+    </form>`;
+    Teacher.bindTop(); this.bindEditor(); this.preview();
+  },
+  preview(){ const p = $("#raPrev"); if(p) p.innerHTML = String(this.draft.text || "").split(/\n+/).filter(x => x.trim()).map(x => `<p>${rubyHTML(x.trim())}</p>`).join("") || `<p class="t-dim">Gõ nội dung để xem trước.</p>`; },
+  sync(){ /* đọc giá trị trong form vào bản nháp (không vẽ lại để giữ con trỏ) */
+    const d = this.draft, f = $("#raForm"); if(!f) return;
+    const [lv, n] = $("#raLes").value.split("|"); d.level = lv; d.lesson = +n;
+    d.title = $("#raTitle").value.trim(); d.text = $("#raText").value; d.pyManual = $("#raPy").value; d.trans = $("#raTr").value;
+    const ex = $("#raExtra"); if(ex) d.fillExtra = ex.value;
+    f.querySelectorAll("tr[data-vi]").forEach(tr => { const v = d.vocab[+tr.dataset.vi]; tr.querySelectorAll("[data-v]").forEach(i => v[i.dataset.v] = i.value.trim()); });
+    f.querySelectorAll(".ra-q").forEach(box => { const q = d.questions[+box.dataset.qi];
+      box.querySelectorAll("[data-f]").forEach(i => {
+        if(i.dataset.f === "opt") q.opts[+i.dataset.k] = i.value.trim();
+        else if(i.dataset.f === "ans"){ if(i.type === "radio"){ if(i.checked) q.ans = q.type === "tf" ? i.value === "1" : +i.value; } else q.ans = i.value.trim(); }
+        else q[i.dataset.f] = i.value.trim(); }); });
+  },
+  bindEditor(){
+    const f = $("#raForm"), d = this.draft;
+    f.oninput = e => { this.sync(); if(e.target.id === "raText") this.preview(); };
+    f.onchange = () => this.sync();
+    const re = () => { this.sync(); this.renderEditor(); };
+    $("#raAddV").onclick = () => { this.sync(); d.vocab.push({ h: "", p: "", pos: "dt", vi: "", ex: "" }); this.renderEditor(); const rows = f.ownerDocument.querySelectorAll("tr[data-vi] input[data-v=h]"); rows[rows.length - 1].focus(); };
+    f.querySelectorAll("[data-vdel]").forEach(b => b.onclick = () => { this.sync(); d.vocab.splice(+b.dataset.vdel, 1); re(); });
+    f.querySelectorAll("[data-autopy]").forEach(b => b.onclick = () => { this.sync(); const v = d.vocab[+b.dataset.autopy]; v.p = pyLine(v.h); re(); });
+    f.querySelectorAll("[data-addq]").forEach(b => b.onclick = () => { this.sync(); const t = b.dataset.addq;
+      d.questions.push(t === "tf" ? { type: "tf", q: "", ans: true, why: "" } : t === "mc" ? { type: "mc", q: "", opts: ["", "", "", ""], ans: 0, why: "" } : { type: "fill", q: "", ans: "", why: "" }); re();
+      const qs = document.querySelectorAll(".ra-q"); qs[qs.length - 1].scrollIntoView({ block: "center" }); });
+    f.querySelectorAll("[data-qdel]").forEach(b => b.onclick = () => { this.sync(); d.questions.splice(+b.dataset.qdel, 1); re(); });
+    f.querySelectorAll("[data-qup]").forEach(b => b.onclick = () => { this.sync(); const i = +b.dataset.qup; [d.questions[i - 1], d.questions[i]] = [d.questions[i], d.questions[i - 1]]; re(); });
+    $("#raCancel").onclick = () => { this.draft = null; this.render(); };
+    const del = $("#raDel"); if(del) del.onclick = async () => {
+      if(!del.dataset.armed){ del.dataset.armed = 1; del.textContent = "Bấm lần nữa để xoá hẳn"; return; }
+      del.disabled = true; const r = await Auth.call("deleteReading", { key: Teacher.key, id: d.id });
+      if(!r.ok) return this.err(r.error);
+      this.msg = `Đã xoá bài đọc “${d.title}”.`; this.draft = null; this.render(); };
+    f.onsubmit = async e => {
+      e.preventDefault(); this.sync();
+      const prob = this.validate(); if(prob) return this.err(prob);
+      const out = { ...d, questions: d.questions.map(q => q.type === "mc" ? { ...q, opts: q.opts.filter(Boolean) } : q), vocab: d.vocab.filter(v => v.h) };
+      const btn = $("#raSave"); btn.disabled = true; btn.textContent = "Đang lưu…";
+      const r = await Auth.call("saveReading", { key: Teacher.key, reading: out });
+      btn.disabled = false; btn.textContent = "Lưu bài đọc";
+      if(!r.ok) return this.err(r.error);
+      this.msg = `Đã lưu bài đọc “${d.title}”. Học viên sẽ thấy bài ở tab “Bài đọc”.`; this.draft = null; this.render();
+    };
+  },
+  validate(){
+    const d = this.draft;
+    if(!d.title) return "Hãy nhập tiêu đề bài đọc.";
+    if(!d.text.trim()) return "Hãy nhập nội dung bài đọc.";
+    for(const [i, q] of d.questions.entries()){
+      const n = `Câu ${i + 1}: `;
+      if(!q.q) return n + "chưa nhập nội dung câu hỏi.";
+      if(q.type === "mc"){ const filled = q.opts.filter(Boolean).length; if(filled < 2) return n + "cần ít nhất 2 phương án."; if(!q.opts[q.ans]) return n + "phương án được chọn làm đáp án đang trống.";
+        if(q.opts.slice(0, q.opts.findLastIndex ? q.opts.findLastIndex(Boolean) + 1 : 4).some(o => !o)) return n + "hãy điền các phương án liền nhau từ A (không bỏ trống ở giữa)."; }
+      if(q.type === "fill"){ if(!/_{2,}|（\s*）|\(\s*\)/.test(q.q)) return n + "hãy gõ ___ ở chỗ cần điền."; if(!q.ans) return n + "chưa nhập từ đúng."; }
+    }
+    return "";
+  },
+  err(code){ const e = $("#raErr"); if(!e) return; e.textContent = { unauthorized: "Phiên giáo viên hết hạn, hãy đăng nhập lại khu giáo viên.", network: AUTH_ERR.network, unknown_action: "Máy chủ chưa có chức năng bài đọc – hãy cập nhật mã Apps Script (Triển khai → Quản lý bản triển khai → Phiên bản mới).", too_large: "Bài đọc quá dài để lưu." }[code] || code; e.hidden = false; e.scrollIntoView({ block: "center" }); }
+};
+
 initVoiceUI();
 openWelcome();
 Sync.start();
