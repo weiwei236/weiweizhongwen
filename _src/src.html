@@ -691,7 +691,7 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 
 <script>
 /* ======================= DATA ======================= */
-const POS = {dt:"Danh từ", dai:"Đại từ", dong:"Động từ", tt:"Tính từ", lg:"Lượng từ", pho:"Phó từ", gioi:"Giới từ", nn:"Động từ năng nguyện", hau:"Hậu tố / Danh từ", tien:"Tiền tố"};
+const POS = {dt:"Danh từ", dai:"Đại từ", dong:"Động từ", tt:"Tính từ", lg:"Lượng từ", pho:"Phó từ", gioi:"Giới từ", nn:"Động từ năng nguyện", hau:"Hậu tố / Danh từ", tien:"Tiền tố", tro:"Trợ từ", sl:"Số lượng từ", cum:"Cụm từ"};
 const L10_VOCAB = [
  {h:"杯子",p:"bēizi",pos:"dt",vi:"cốc, ly",ex:["这个杯子多少钱？","Zhège bēizi duōshao qián?","Cái cốc này bao nhiêu tiền?"]},
  {h:"售货员",p:"shòuhuòyuán",pos:"dt",vi:"nhân viên bán hàng",ex:["她是商店的售货员。","Tā shì shāngdiàn de shòuhuòyuán.","Cô ấy là nhân viên bán hàng của cửa hàng."]},
@@ -870,12 +870,72 @@ const L11_SPEAK_SENT = [
  {h:"喝热水对身体很好。",p:"Hē rè shuǐ duì shēntǐ hěn hǎo.",vi:"Uống nước nóng rất tốt cho sức khỏe."}
 ];
 
+const L12_VOCAB = [
+ {h:"天气",p:"tiānqì",pos:"dt",vi:"thời tiết",ex:["今天天气怎么样？","Jīntiān tiānqì zěnmeyàng?","Hôm nay thời tiết thế nào?"]},
+ {h:"天",p:"tiān",pos:"dt",vi:"thời tiết, trời",ex:["今天天很热。","Jīntiān tiān hěn rè.","Hôm nay trời rất nóng."]},
+ {h:"下雨",p:"xià yǔ",pos:"cum",vi:"mưa, mưa rơi",ex:["外边下雨了。","Wàibian xià yǔ le.","Bên ngoài mưa rồi."]},
+ {h:"雨",p:"yǔ",pos:"dt",vi:"mưa",ex:["昨天的雨很大。","Zuótiān de yǔ hěn dà.","Trận mưa hôm qua rất to."]},
+ {h:"下",p:"xià",pos:"dong",vi:"(mưa, tuyết...) rơi",ex:["西安下雪了。","Xī'ān xià xuě le.","Tây An có tuyết rơi rồi."]},
+ {h:"雪",p:"xuě",pos:"dt",vi:"tuyết",ex:["昨天下雪了。","Zuótiān xià xuě le.","Hôm qua tuyết rơi."]},
+ {h:"了",p:"le",pos:"tro",vi:"trợ từ ngữ khí",ex:["天冷了。","Tiān lěng le.","Trời lạnh rồi."]},
+ {h:"冷",p:"lěng",pos:"tt",vi:"lạnh",ex:["今天有点儿冷。","Jīntiān yǒudiǎnr lěng.","Hôm nay hơi lạnh."]},
+ {h:"觉得",p:"juéde",pos:"dong",vi:"cảm thấy",ex:["我觉得这件衣服很漂亮。","Wǒ juéde zhè jiàn yīfu hěn piàoliang.","Tôi thấy chiếc áo này rất đẹp."]},
+ {h:"有点儿",p:"yǒudiǎnr",pos:"pho",vi:"hơi, một chút",ex:["这个苹果有点儿贵。","Zhège píngguǒ yǒudiǎnr guì.","Quả táo này hơi đắt."]},
+ {h:"一点儿",p:"yìdiǎnr",pos:"sl",vi:"một chút, một ít",ex:["你喝一点儿水吧。","Nǐ hē yìdiǎnr shuǐ ba.","Bạn uống một chút nước đi."]},
+ {h:"病",p:"bìng",pos:"dong",vi:"ốm, bị ốm, bệnh, bị bệnh",ex:["他病了，今天没来学校。","Tā bìng le, jīntiān méi lái xuéxiào.","Cậu ấy bị ốm, hôm nay không đến trường."]},
+ {h:"生病",p:"shēngbìng",pos:"dong",vi:"ốm, bị ốm, bệnh, bị bệnh",ex:["我妈妈生病了。","Wǒ māma shēngbìng le.","Mẹ tôi bị ốm rồi."]},
+ {h:"看病",p:"kànbìng",pos:"dong",vi:"khám bệnh",ex:["我明天上午去医院看病。","Wǒ míngtiān shàngwǔ qù yīyuàn kànbìng.","Sáng mai tôi đi bệnh viện khám bệnh."]},
+ {h:"药",p:"yào",pos:"dt",vi:"thuốc",ex:["你吃药了吗？","Nǐ chī yào le ma?","Bạn uống thuốc chưa?"]},
+ {h:"喝",p:"hē",pos:"dong",vi:"uống",ex:["你想喝什么？","Nǐ xiǎng hē shénme?","Bạn muốn uống gì?"]},
+ {h:"热",p:"rè",pos:"tt",vi:"nóng, ấm",ex:["今天天气很热。","Jīntiān tiānqì hěn rè.","Hôm nay thời tiết rất nóng."]},
+ {h:"水",p:"shuǐ",pos:"dt",vi:"nước",ex:["我想喝一点儿热水。","Wǒ xiǎng hē yìdiǎnr rè shuǐ.","Tôi muốn uống một chút nước nóng."]},
+ {h:"这里",p:"zhèlǐ",pos:"dai",vi:"ở đây, chỗ này",ex:["这里的天气怎么样？","Zhèlǐ de tiānqì zěnmeyàng?","Thời tiết ở đây thế nào?"]},
+ {h:"来",p:"lái",pos:"dong",vi:"đến",ex:["你什么时候来西安？","Nǐ shénme shíhou lái Xī'ān?","Khi nào bạn đến Tây An?"]},
+ {h:"公司",p:"gōngsī",pos:"dt",vi:"công ty",ex:["我爸爸在公司工作。","Wǒ bàba zài gōngsī gōngzuò.","Bố tôi làm việc ở công ty."]},
+ {h:"回",p:"huí",pos:"dong",vi:"về, quay về",ex:["我们晚上七点回家。","Wǒmen wǎnshang qī diǎn huí jiā.","Bảy giờ tối chúng tôi về nhà."]},
+ {h:"天",p:"tiān",pos:"lg",vi:"ngày",ex:["他病了三天。","Tā bìngle sān tiān.","Cậu ấy ốm ba ngày rồi."]},
+ {h:"再",p:"zài",pos:"pho",vi:"sau đó, mới (chỉ trình tự)",ex:["你吃了药再睡觉。","Nǐ chīle yào zài shuìjiào.","Bạn uống thuốc xong rồi hãy ngủ."]}
+];
+const L12_ZHVI = [
+ {zh:"昨天西安下雪了，天气很冷。",py:"Zuótiān Xī'ān xià xuě le, tiānqì hěn lěng.",vi:"Hôm qua Tây An có tuyết rơi, thời tiết rất lạnh."},
+ {zh:"白家月觉得今天有点儿冷。",py:"Bái Jiāyuè juéde jīntiān yǒudiǎnr lěng.",vi:"Bạch Gia Nguyệt cảm thấy hôm nay hơi lạnh."},
+ {zh:"陈天中病了，他今天没去公司。",py:"Chén Tiānzhōng bìng le, tā jīntiān méi qù gōngsī.",vi:"Trần Thiên Trung bị ốm, hôm nay anh ấy không đến công ty."},
+ {zh:"你喝一点儿热水吧。",py:"Nǐ hē yìdiǎnr rè shuǐ ba.",vi:"Bạn uống một chút nước nóng đi."},
+ {zh:"李文明天上午去医院看病。",py:"Lǐ Wén míngtiān shàngwǔ qù yīyuàn kànbìng.",vi:"Sáng mai Lý Văn đi bệnh viện khám bệnh."},
+ {zh:"这里的天气怎么样？",py:"Zhèlǐ de tiānqì zěnmeyàng?",vi:"Thời tiết ở đây thế nào?"},
+ {zh:"安妮生病了，三天没来学校。",py:"Ānnī shēngbìng le, sān tiān méi lái xuéxiào.",vi:"Annie bị ốm, ba ngày rồi không đến trường."},
+ {zh:"外边下雨了，你明天再回家吧。",py:"Wàibian xià yǔ le, nǐ míngtiān zài huí jiā ba.",vi:"Bên ngoài mưa rồi, ngày mai bạn hãy về nhà."},
+ {zh:"王一雪吃了药，现在好一点儿了。",py:"Wáng Yīxuě chīle yào, xiànzài hǎo yìdiǎnr le.",vi:"Vương Nhất Tuyết uống thuốc rồi, bây giờ đã đỡ hơn một chút."},
+ {zh:"刘明什么时候来西安？",py:"Liú Míng shénme shíhou lái Xī'ān?",vi:"Khi nào Lưu Minh đến Tây An?"}
+];
+const L12_VIZH = [
+ {vi:"Hôm nay trời hơi lạnh.",ans:["今天","有点儿","冷"],extra:["一点儿","热"],alt:["今天天气有点儿冷","今天天有点儿冷","今天有点冷"],py:"Jīntiān yǒudiǎnr lěng."},
+ {vi:"Hôm qua tuyết rơi.",ans:["昨天","下","雪","了"],extra:["雨","再"],alt:[],py:"Zuótiān xià xuě le."},
+ {vi:"Tôi cảm thấy chiếc áo này hơi đắt.",ans:["我","觉得","这","件","衣服","有点儿","贵"],extra:["一点儿","个"],alt:["我觉得这件衣服有点贵"],py:"Wǒ juéde zhè jiàn yīfu yǒudiǎnr guì."},
+ {vi:"Bạn uống một chút nước đi.",ans:["你","喝","一点儿","水","吧"],extra:["有点儿","吗"],alt:["你喝点儿水吧","你喝一点水吧"],py:"Nǐ hē yìdiǎnr shuǐ ba."},
+ {vi:"Mẹ tôi bị ốm rồi.",ans:["我","妈妈","生病","了"],extra:["看病","吗"],alt:["我妈妈病了","我的妈妈生病了","我的妈妈病了"],py:"Wǒ māma shēngbìng le."},
+ {vi:"Ngày mai tôi đi bệnh viện khám bệnh.",ans:["明天","我","去","医院","看病"],extra:["生病","回"],alt:["我明天去医院看病"],py:"Míngtiān wǒ qù yīyuàn kànbìng."},
+ {vi:"Bố tôi làm việc ở công ty.",ans:["我","爸爸","在","公司","工作"],extra:["回","来"],alt:["我的爸爸在公司工作"],py:"Wǒ bàba zài gōngsī gōngzuò."},
+ {vi:"Thời tiết ở Tây An thế nào?",ans:["西安","的","天气","怎么样"],extra:["这里","什么"],alt:["西安天气怎么样"],py:"Xī'ān de tiānqì zěnmeyàng?"},
+ {vi:"Bạn uống thuốc xong rồi hãy ngủ.",ans:["你","吃","了","药","再","睡觉"],extra:["喝","还"],alt:["你吃了药再睡","你吃药了再睡觉"],py:"Nǐ chīle yào zài shuìjiào."},
+ {vi:"Vương Nhất Phi ba ngày không đến công ty.",ans:["王一飞","三","天","没","来","公司"],extra:["不","回"],alt:["王一飞三天没去公司"],py:"Wáng Yīfēi sān tiān méi lái gōngsī."}
+];
+const L12_SPEAK_SENT = [
+ {h:"昨天下雪了。",p:"Zuótiān xià xuě le.",vi:"Hôm qua tuyết rơi."},
+ {h:"今天天气有点儿冷。",p:"Jīntiān tiānqì yǒudiǎnr lěng.",vi:"Hôm nay thời tiết hơi lạnh."},
+ {h:"你觉得这里的天气怎么样？",p:"Nǐ juéde zhèlǐ de tiānqì zěnmeyàng?",vi:"Bạn thấy thời tiết ở đây thế nào?"},
+ {h:"我生病了，想去医院看病。",p:"Wǒ shēngbìng le, xiǎng qù yīyuàn kànbìng.",vi:"Tôi bị ốm rồi, muốn đi bệnh viện khám bệnh."},
+ {h:"你喝一点儿热水吧。",p:"Nǐ hē yìdiǎnr rè shuǐ ba.",vi:"Bạn uống một chút nước nóng đi."},
+ {h:"你吃了药再睡觉。",p:"Nǐ chīle yào zài shuìjiào.",vi:"Bạn uống thuốc xong rồi hãy ngủ."}
+];
+
 /* Thêm bài mới: tạo object giống L10 và đặt vào lessons[n] của cấp tương ứng */
 const LEVELS = {
- hsk1:{name:"HSK 1", total:11, lessons:{
+ hsk1:{name:"HSK 1", total:12, lessons:{
    9:{title:"Bài 9",theme:"",zh:"我明天上午在学校学习",vocab:L9_VOCAB,zhvi:L9_ZHVI,vizh:L9_VIZH,sentences:L9_SPEAK_SENT},
    10:{title:"Bài 10",theme:"",zh:"这儿的苹果真便宜！",vocab:L10_VOCAB,zhvi:L10_ZHVI,vizh:L10_VIZH,sentences:L10_SPEAK_SENT},
-   11:{title:"Bài 11",theme:"",zh:"我读大学呢",vocab:L11_VOCAB,zhvi:L11_ZHVI,vizh:L11_VIZH,sentences:L11_SPEAK_SENT}}},
+   11:{title:"Bài 11",theme:"",zh:"我读大学呢",vocab:L11_VOCAB,zhvi:L11_ZHVI,vizh:L11_VIZH,sentences:L11_SPEAK_SENT},
+   12:{title:"Bài 12",theme:"",zh:"昨天下雪了",vocab:L12_VOCAB,zhvi:L12_ZHVI,vizh:L12_VIZH,sentences:L12_SPEAK_SENT}}},
  hsk2:{name:"HSK 2", total:0, lessons:{}},
  hsk3:{name:"HSK 3", total:0, lessons:{}},
  hsk4:{name:"HSK 4", total:0, lessons:{}}
@@ -998,7 +1058,7 @@ function renderLesson(){
   box.innerHTML=`
   <div class="lesson-head">
     <div><h1><span class="han">${L.name.replace(/\s+/g,"")}级 - 第${S.lesson}课: </span><span class="han hl">${esc(les.zh)}</span></h1>
-    <p>${les.vocab.length} từ mới · ${les.zhvi.length+les.vizh.length} câu luyện dịch · ${les.vocab.length+les.sentences.length} mục luyện phát âm</p></div>
+    <p>${les.vocab.length} từ mới · ${les.zhvi.length+les.vizh.length} câu luyện dịch · ${new Set(les.vocab.map(w=>w.h)).size+les.sentences.length} mục luyện phát âm</p></div>
     <div class="sections" role="tablist" aria-label="Phần luyện tập">
       <button role="tab" data-s="flash" aria-selected="${S.section==="flash"}">${ICON.cards}Flashcard</button>
       <button role="tab" data-s="trans" aria-selected="${S.section==="trans"}">${ICON.trans}Luyện dịch</button>
@@ -1024,10 +1084,10 @@ const Flash = {
     this.filter="all"; this.quiz=null; this.build(false); this.render();
   },
   save(){store.set(this.key,[...this.known]);store.set(this.key+"_u",[...this.unknown]);},
-  pool(){const v=this.les.vocab; if(this.filter==="known")return v.filter(w=>this.known.has(w.h)); if(this.filter==="unknown")return v.filter(w=>!this.known.has(w.h)); return v;},
-  build(sh){const p=this.pool().map(w=>w.h); this.order=sh?shuffle(p):p; this.idx=0; this.flipped=false;},
-  cur(){const h=this.order[this.idx]; return this.les.vocab.find(w=>w.h===h);},
-  mark(ok){const w=this.cur(); if(!w)return; if(ok){this.known.add(w.h);this.unknown.delete(w.h);}else{this.known.delete(w.h);this.unknown.add(w.h);} this.save(); Track.logLater("flash"+this.key,"flash",()=>({known:this.known.size,total:this.les.vocab.length}));
+  pool(){const v=this.les.vocab; if(this.filter==="known")return v.filter(w=>this.known.has(w.k)); if(this.filter==="unknown")return v.filter(w=>!this.known.has(w.k)); return v;},
+  build(sh){const p=this.pool().map(w=>w.k); this.order=sh?shuffle(p):p; this.idx=0; this.flipped=false;},
+  cur(){const h=this.order[this.idx]; return this.les.vocab.find(w=>w.k===h);},
+  mark(ok){const w=this.cur(); if(!w)return; if(ok){this.known.add(w.k);this.unknown.delete(w.k);}else{this.known.delete(w.k);this.unknown.add(w.k);} this.save(); Track.logLater("flash"+this.key,"flash",()=>({known:this.known.size,total:this.les.vocab.length}));
     if(this.filter!=="all"){ this.order.splice(this.idx,1); if(this.idx>=this.order.length)this.idx=0; this.flipped=false; this.render(); }
     else this.next(); },
   next(){ if(!this.order.length)return; this.idx=(this.idx+1)%this.order.length; this.flipped=false; this.render(); },
@@ -1035,9 +1095,9 @@ const Flash = {
   render(){
     const W=$("#work"); if(!W)return;
     if(this.quiz) return this.renderQuiz();
-    const v=this.les.vocab, nk=v.filter(w=>this.known.has(w.h)).length;
+    const v=this.les.vocab, nk=v.filter(w=>this.known.has(w.k)).length;
     const w=this.cur();
-    const st = w ? (this.known.has(w.h)?'<span class="badge-state k">Đã thuộc</span>':(this.unknown.has(w.h)?'<span class="badge-state u">Chưa thuộc</span>':'')) : '';
+    const st = w ? (this.known.has(w.k)?'<span class="badge-state k">Đã thuộc</span>':(this.unknown.has(w.k)?'<span class="badge-state u">Chưa thuộc</span>':'')) : '';
     W.innerHTML=`
     <div class="toolbar">
       <div class="seg" role="group" aria-label="Lọc thẻ">
@@ -1081,7 +1141,7 @@ const Flash = {
         <div><div class="stat"><span>Đã thuộc</span><b>${nk} / ${v.length}</b></div>
         <div class="meter" style="margin-top:6px"><i style="width:${Math.round(nk/v.length*100)}%"></i></div></div>
         <h3>Danh sách từ</h3>
-        <div class="wordgrid">${v.map(x=>`<button data-go="${esc(x.h)}" class="${this.known.has(x.h)?"k":this.unknown.has(x.h)?"u":""} ${w&&x.h===w.h?"cur":""}" title="${esc(x.p)} – ${esc(x.vi)}">${esc(x.h)}</button>`).join("")}</div>
+        <div class="wordgrid">${v.map(x=>`<button data-go="${esc(x.k)}" class="${this.known.has(x.k)?"k":this.unknown.has(x.k)?"u":""} ${w&&x.k===w.k?"cur":""}" title="${esc(x.p)} – ${esc(x.vi)}">${esc(x.h)}</button>`).join("")}</div>
         <p class="keys">Viền xanh: đã thuộc · viền đỏ: chưa thuộc.</p>
         <button class="btn" id="fcReset" style="justify-self:start">Đặt lại tiến độ</button>
       </aside>
@@ -1141,7 +1201,7 @@ const Flash = {
       const pick=q.opts[+b.dataset.k], ok=pick.h===q.w.h;
       W.querySelectorAll(".opts button").forEach((x,k)=>{x.disabled=true; if(q.opts[k].h===q.w.h)x.classList.add("right");});
       if(!ok)b.classList.add("wrong");
-      if(ok){Q.right++;} else {Q.wrong.push(q.w); this.known.delete(q.w.h); this.unknown.add(q.w.h); this.save();}
+      if(ok){Q.right++;} else {Q.wrong.push(q.w); this.known.delete(q.w.k); this.unknown.add(q.w.k); this.save();}
       $("#qFb").innerHTML=`<div class="feedback ${ok?"ok":"no"}"><b>${ok?"Chính xác!":"Chưa đúng."}</b><span class="han" style="font-size:22px">${esc(q.w.h)}</span> <span class="py" style="color:var(--accent)">${esc(q.w.p)}</span> · ${esc(q.w.vi)}</div>
       <div style="text-align:right;margin-top:10px"><button class="btn primary" id="qNext">Câu tiếp ${ICON.right}</button></div>`;
       speak(q.w.h);
@@ -1465,7 +1525,7 @@ const Speak = {
   les:null, items:[], cur:0, scores:{}, last:null,
   mount(les){
     this.les=les;
-    this.items=[...les.vocab.map(w=>({h:w.h,p:w.p,vi:w.vi,type:"w"})),...les.sentences.map(s=>({...s,type:"s"}))];
+    this.items=[...les.vocab.filter((w,i,a)=>a.findIndex(x=>x.h===w.h)===i).map(w=>({h:w.h,p:w.p,vi:les.vocab.filter(x=>x.h===w.h).map(x=>x.vi).join("; "),type:"w"})),...les.sentences.map(s=>({...s,type:"s"}))];
     this.scores=store.get(`ww_speak_${S.level}_${S.lesson}`,{}); this.first=store.get(`ww_speak_first_${S.level}_${S.lesson}`,{}); this.cur=0; this.last=null; this.render(); warmMic();
   },
   render(){
@@ -1923,6 +1983,8 @@ const L11_TEST = {
   }
 };
 LEVELS.hsk1.lessons[11].test=L11_TEST;
+/* khoá riêng cho từng từ (để 2 từ cùng chữ, ví dụ 天 "trời" và 天 "ngày", vẫn là 2 thẻ khác nhau) */
+Object.values(LEVELS).forEach(L=>Object.values(L.lessons).forEach(les=>{const seen={}; les.vocab.forEach(w=>{seen[w.h]=(seen[w.h]||0)+1; w.k=seen[w.h]>1?w.h+"·"+seen[w.h]:w.h;});}));
 
 /* ======================= NHÂN VẬT CHIBI ======================= */
 const AV_OPTS={
