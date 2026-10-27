@@ -1983,6 +1983,70 @@ const L11_TEST = {
   }
 };
 LEVELS.hsk1.lessons[11].test=L11_TEST;
+const L12_TEST = {
+  answers: "ACBCBDCBAB" + "DBCBACBAAA",
+  audio: { page: "https://hoanguchinesestation.com/tai-lieu/audio/audio-sbt-hsk-3-0-1", track: "12-2", main: "audio/12-2.mp3", parts: { 1: "", 2: "", 3: "", 4: "" } },
+  sections: [
+    { zh: "一、听力", vi: "Nghe hiểu", audio: true, parts: [
+      { no: 1, zh: "第一部分", vi: "Câu 1–3: Nghe cụm từ, chọn hình đúng. Mỗi câu nghe hai lần.", type: "pics3",
+        example: { lines: [["", "三个苹果"]], gloss: "ba quả táo", imgs: ["b12_l1_ex_A", "b12_l1_ex_B", "b12_l1_ex_C"], ans: "C" },
+        qs: [{ n: 1, imgs: ["b12_l1_q1_A", "b12_l1_q1_B", "b12_l1_q1_C"] }, { n: 2, imgs: ["b12_l1_q2_A", "b12_l1_q2_B", "b12_l1_q2_C"] }, { n: 3, imgs: ["b12_l1_q3_A", "b12_l1_q3_B", "b12_l1_q3_C"] }] },
+      { no: 2, zh: "第二部分", vi: "Câu 4–5: Nghe câu hỏi, chọn câu trả lời đúng. Mỗi câu nghe hai lần.", type: "choice",
+        example: { lines: [["", "今天天气怎么样？"]], gloss: "Hôm nay thời tiết thế nào?", opts: [["非常热", "rất nóng"], ["很好听", "rất hay"], ["在喝水", "đang uống nước"]], ans: "A" },
+        qs: [{ n: 4, opts: ["在吃药", "有点儿", "不太好"] }, { n: 5, opts: ["下雪了", "太热了", "不喝水"] }] },
+      { no: 3, zh: "第三部分", vi: "Câu 6–8: Nghe hội thoại, chọn hình phù hợp nhất. Mỗi câu nghe hai lần.", type: "poolpics",
+        pool: ["b12_l3_A", "b12_l3_B", "b12_l3_C", "b12_l3_D"],
+        example: { lines: [["女", "你好！"], ["男", "你好！很高兴认识你。"]], gloss: "Chào bạn! — Chào bạn! Rất vui được làm quen với bạn.", ans: "A" },
+        qs: [{ n: 6 }, { n: 7 }, { n: 8 }] },
+      { no: 4, zh: "第四部分", vi: "Câu 9–10: Nghe câu và câu hỏi, chọn đáp án đúng. Mỗi câu nghe hai lần.", type: "choice",
+        example: { lines: [["", "下午我去超市，我想买一些水果。"], ["问", "说话人下午去哪里？"]], gloss: "Chiều nay tôi đi siêu thị, tôi muốn mua ít trái cây. — Hỏi: Chiều nay người nói đi đâu?",
+          opts: [["超市", "siêu thị"], ["医院", "bệnh viện"], ["学校", "trường học"]], ans: "A" },
+        qs: [{ n: 9, opts: ["看医生", "看朋友", "看病人"] }, { n: 10, opts: ["工作", "休息", "读书"] }] }
+    ]},
+    { zh: "二、阅读", vi: "Đọc hiểu", parts: [
+      { no: 1, zh: "第一部分", vi: "Câu 11–13: Chọn hình phù hợp nhất với mỗi câu.", type: "poolpics",
+        pool: ["b12_r1_A", "b12_r1_B", "b12_r1_C", "b12_r1_D"],
+        example: { lines: [["", "我很喜欢这本书。"]], gloss: "Tôi rất thích quyển sách này.", ans: "A" },
+        qs: [{ n: 11, text: "我女儿生病了。" }, { n: 12, text: "今天天不太好，下雪了。" }, { n: 13, text: "12:00了，你们怎么还在看电视？" }] },
+      { no: 2, zh: "第二部分", vi: "Câu 14–16: Nối câu hỏi với câu trả lời phù hợp.", type: "pooltext",
+        pool: ["热水。", "我病了。", "对。", "好的，谢谢！"],
+        example: { lines: [["", "你喝水吗？"]], gloss: "Bạn uống nước không?", ans: "D" },
+        qs: [{ n: 14, text: "你怎么了？" }, { n: 15, text: "你想喝点儿什么？" }, { n: 16, text: "你开车了？" }] },
+      { no: 3, zh: "第三部分", vi: "Câu 17–18: Chọn từ thích hợp điền vào chỗ trống.", type: "pooltext", inline: true,
+        pool: ["冷", "生病", "名字"],
+        example: { lines: [["", "你叫什么（ C ）？"]], gloss: "Bạn tên là gì?", ans: "C" },
+        qs: [{ n: 17, text: "他（　　）了，没来上班。" }, { n: 18, lines: [["男", "外边雨大吗？"], ["女", "很大，我觉得有点儿（　　）。"]] }] },
+      { no: 4, zh: "第四部分", vi: "Câu 19–20: Chọn đáp án đúng.", type: "choice",
+        example: { lines: [["", "请问现在几点了？"], ["★", "说话人想知道什么？"]], gloss: "Xin hỏi bây giờ mấy giờ rồi? — Người nói muốn biết điều gì?",
+          opts: [["时间", "thời gian"], ["名字", "tên"], ["房间号", "số phòng"]], ans: "A" },
+        qs: [{ n: 19, lines: [["", "昨天的天气很好，我和朋友们去外边玩了。"], ["★", "说话人觉得昨天："]], opts: ["天气好", "雨不大", "有点儿冷"] },
+             { n: 20, lines: [["", "老张去看病，医生说他要吃三天药。"], ["★", "医生说老张："]], opts: ["要吃药", "要多睡觉", "要多喝水"] }] }
+    ]}
+  ],
+  explain: {
+    1: "Đáp án A – bãi biển trời nắng, nhiều mây trắng: thời tiết đẹp. Tranh B là trời âm u, tranh C là trong phòng. Nghe lại và chú ý từ nói về thời tiết (天气).",
+    2: "Đáp án C – cảnh tuyết rơi (下雪). Tranh A là núi có sương mù, tranh B là cánh đồng hoa cải ngày nắng.",
+    3: "Đáp án B – cô gái mặc áo ấm giữa trời tuyết: “lạnh” (冷). Tranh A là người lau mồ hôi vì nóng (热), tranh C là người nằm võng nghỉ ngơi.",
+    4: "Đáp án C 不太好 (không được tốt lắm) – câu trả lời phù hợp cho câu hỏi về tình trạng, ví dụ sức khoẻ hay thời tiết thế nào. A 在吃药 là đang uống thuốc, B 有点儿 (hơi…) đứng một mình chưa thành câu trả lời.",
+    5: "Đáp án B 太热了 (nóng quá). Cấu trúc 太 + tính từ + 了 diễn tả mức độ rất cao. A 下雪了 là tuyết rơi rồi, C 不喝水 là không uống nước.",
+    6: "Hội thoại nói về việc đi khám bệnh (看病 / 医生), nên chọn tranh D – bác sĩ đang khám cho bệnh nhân.",
+    7: "Hội thoại nói về trời mưa (下雨), nên chọn tranh C – cảnh mưa trong công viên.",
+    8: "Hội thoại nói về việc bị ốm, khó chịu trong người (病 / 不舒服), nên chọn tranh B – người đàn ông ôm vai, vẻ mặt đau.",
+    9: "Đáp án A 看医生 (đi khám bác sĩ). Chú ý phân biệt: 看朋友 là thăm bạn, 看病人 là thăm người bệnh.",
+    10: "Đáp án B 休息 (nghỉ ngơi). A 工作 là làm việc, C 读书 là đọc sách, đi học. Nghe lại và chú ý người nói sẽ làm gì.",
+    11: "我女儿生病了 nghĩa là “Con gái tôi bị ốm rồi”, nên chọn tranh D – cô gái ngồi trên giường, lau mũi vì ốm.",
+    12: "今天天不太好，下雪了 là “Hôm nay trời không đẹp lắm, tuyết rơi rồi”, nên chọn tranh B – con đường phủ đầy tuyết.",
+    13: "12:00了，你们怎么还在看电视？ là “12 giờ rồi, sao các con vẫn còn xem tivi?”, nên chọn tranh C – cả nhà ngồi xem tivi.",
+    14: "你怎么了？ hỏi “Bạn bị làm sao vậy?”, trả lời B 我病了。 (Tôi bị ốm rồi).",
+    15: "你想喝点儿什么？ hỏi “Bạn muốn uống gì?”, trả lời bằng đồ uống: A 热水。 (Nước nóng).",
+    16: "你开车了？ là câu hỏi xác nhận “Bạn lái xe à?”, trả lời C 对。 (Đúng vậy).",
+    17: "他生病了，没来上班 – “Anh ấy bị ốm nên không đi làm”. Sau 了 nói về sự thay đổi trạng thái → B 生病.",
+    18: "外边雨很大 (mưa to), nên người nữ cảm thấy “hơi lạnh”: 我觉得有点儿冷 → A 冷. 有点儿 + tính từ thường diễn tả cảm giác không như ý.",
+    19: "昨天的天气很好 nghĩa là “thời tiết hôm qua rất đẹp”, nên đáp án là A 天气好.",
+    20: "医生说他要吃三天药 – “bác sĩ nói ông ấy phải uống thuốc ba ngày” → A 要吃药. Trong bài không nhắc đến ngủ nhiều hay uống nhiều nước."
+  }
+};
+LEVELS.hsk1.lessons[12].test=L12_TEST;
 /* khoá riêng cho từng từ (để 2 từ cùng chữ, ví dụ 天 "trời" và 天 "ngày", vẫn là 2 thẻ khác nhau) */
 Object.values(LEVELS).forEach(L=>Object.values(L.lessons).forEach(les=>{const seen={}; les.vocab.forEach(w=>{seen[w.h]=(seen[w.h]||0)+1; w.k=seen[w.h]>1?w.h+"·"+seen[w.h]:w.h;});}));
 
