@@ -691,7 +691,7 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 
 <script>
 /* ======================= DATA ======================= */
-const POS = {dt:"Danh từ", dai:"Đại từ", dong:"Động từ", tt:"Tính từ", lg:"Lượng từ", pho:"Phó từ", gioi:"Giới từ", nn:"Động từ năng nguyện", hau:"Hậu tố / Danh từ", tien:"Tiền tố", tro:"Trợ từ", sl:"Số lượng từ", cum:"Cụm từ"};
+const POS = {dt:"Danh từ", dai:"Đại từ", dong:"Động từ", tt:"Tính từ", lg:"Lượng từ", pho:"Phó từ", gioi:"Giới từ", nn:"Động từ năng nguyện", hau:"Hậu tố / Danh từ", tien:"Tiền tố", tro:"Trợ từ", sl:"Số lượng từ", cum:"Cụm từ", so:"Số từ"};
 const L10_VOCAB = [
  {h:"杯子",p:"bēizi",pos:"dt",vi:"cốc, ly",ex:["这个杯子多少钱？","Zhège bēizi duōshao qián?","Cái cốc này bao nhiêu tiền?"]},
  {h:"售货员",p:"shòuhuòyuán",pos:"dt",vi:"nhân viên bán hàng",ex:["她是商店的售货员。","Tā shì shāngdiàn de shòuhuòyuán.","Cô ấy là nhân viên bán hàng của cửa hàng."]},
@@ -929,13 +929,69 @@ const L12_SPEAK_SENT = [
  {h:"你吃了药再睡觉。",p:"Nǐ chīle yào zài shuìjiào.",vi:"Bạn uống thuốc xong rồi hãy ngủ."}
 ];
 
+const L13_VOCAB = [
+ {h:"可以",p:"kěyǐ",pos:"nn",vi:"có thể, được (cho phép làm gì)",ex:["我可以坐这里吗？","Wǒ kěyǐ zuò zhèlǐ ma?","Tôi có thể ngồi ở đây không?"]},
+ {h:"再",p:"zài",pos:"pho",vi:"lại, thêm lần nữa",ex:["请你再说一下。","Qǐng nǐ zài shuō yíxià.","Mời bạn nói lại một lần nữa."]},
+ {h:"问题",p:"wèntí",pos:"dt",vi:"câu hỏi, vấn đề",ex:["老师，我有一个问题。","Lǎoshī, wǒ yǒu yí ge wèntí.","Thưa cô, em có một câu hỏi."]},
+ {h:"卖",p:"mài",pos:"dong",vi:"bán",ex:["这个超市卖水果吗？","Zhège chāoshì mài shuǐguǒ ma?","Siêu thị này có bán trái cây không?"]},
+ {h:"打电话",p:"dǎ diànhuà",pos:"cum",vi:"gọi điện thoại",ex:["晚上我给妈妈打电话。","Wǎnshang wǒ gěi māma dǎ diànhuà.","Buổi tối tôi gọi điện cho mẹ."]},
+ {h:"一下",p:"yíxià",pos:"sl",vi:"một chút, thử (dùng sau động từ, biểu thị hành động xảy ra nhanh hoặc thử làm)",ex:["你看一下这本书。","Nǐ kàn yíxià zhè běn shū.","Bạn xem thử quyển sách này một chút."]},
+ {h:"服务员",p:"fúwùyuán",pos:"dt",vi:"nhân viên phục vụ, người phục vụ",ex:["服务员，请给我一杯茶。","Fúwùyuán, qǐng gěi wǒ yì bēi chá.","Phục vụ ơi, cho tôi một tách trà."]},
+ {h:"女士",p:"nǚshì",pos:"dt",vi:"bà, cô, quý bà, quý cô",ex:["女士，您要什么？","Nǚshì, nín yào shénme?","Thưa cô, cô cần gì ạ?"]},
+ {h:"请",p:"qǐng",pos:"dong",vi:"mời, xin, hãy",ex:["请坐！","Qǐng zuò!","Mời ngồi!"]},
+ {h:"坐",p:"zuò",pos:"dong",vi:"ngồi",ex:["你坐这里吧。","Nǐ zuò zhèlǐ ba.","Bạn ngồi ở đây đi."]},
+ {h:"给",p:"gěi",pos:"dong",vi:"đưa cho, cho",ex:["妈妈给我一个苹果。","Māma gěi wǒ yí ge píngguǒ.","Mẹ cho tôi một quả táo."]},
+ {h:"杯",p:"bēi",pos:"dt",vi:"ly, cốc, tách",ex:["我想喝一杯热水。","Wǒ xiǎng hē yì bēi rè shuǐ.","Tôi muốn uống một cốc nước nóng."]},
+ {h:"要",p:"yào",pos:"dong",vi:"cần, muốn",ex:["你要什么？","Nǐ yào shénme?","Bạn muốn gì?"]},
+ {h:"早饭",p:"zǎofàn",pos:"dt",vi:"bữa sáng",ex:["你吃早饭了吗？","Nǐ chī zǎofàn le ma?","Bạn ăn sáng chưa?"]},
+ {h:"这个",p:"zhège",pos:"dai",vi:"cái này",ex:["这个多少钱？","Zhège duōshao qián?","Cái này bao nhiêu tiền?"]},
+ {h:"面包",p:"miànbāo",pos:"dt",vi:"bánh mì",ex:["我早饭吃面包。","Wǒ zǎofàn chī miànbāo.","Bữa sáng tôi ăn bánh mì."]},
+ {h:"鸡蛋",p:"jīdàn",pos:"dt",vi:"trứng gà",ex:["请给我两个鸡蛋。","Qǐng gěi wǒ liǎng ge jīdàn.","Cho tôi hai quả trứng gà."]},
+ {h:"先生",p:"xiānsheng",pos:"dt",vi:"anh, ông, ngài, quý ông",ex:["先生，请坐。","Xiānsheng, qǐng zuò.","Thưa anh, mời ngồi."]},
+ {h:"一半",p:"yíbàn",pos:"so",vi:"một nửa",ex:["这个面包给你一半。","Zhège miànbāo gěi nǐ yíbàn.","Cái bánh mì này cho bạn một nửa."]},
+ {h:"茶",p:"chá",pos:"dt",vi:"trà, chè",ex:["请给我一杯茶。","Qǐng gěi wǒ yì bēi chá.","Cho tôi một tách trà."]}
+];
+const L13_ZHVI = [
+ {zh:"服务员，请给我一杯茶。",py:"Fúwùyuán, qǐng gěi wǒ yì bēi chá.",vi:"Phục vụ ơi, cho tôi một tách trà."},
+ {zh:"先生，请坐，您要什么？",py:"Xiānsheng, qǐng zuò, nín yào shénme?",vi:"Thưa anh, mời ngồi, anh muốn dùng gì?"},
+ {zh:"白家月早饭吃了一个面包和两个鸡蛋。",py:"Bái Jiāyuè zǎofàn chīle yí ge miànbāo hé liǎng ge jīdàn.",vi:"Bữa sáng Bạch Gia Nguyệt ăn một cái bánh mì và hai quả trứng gà."},
+ {zh:"老师，我可以问一个问题吗？",py:"Lǎoshī, wǒ kěyǐ wèn yí ge wèntí ma?",vi:"Thưa cô, em có thể hỏi một câu không?"},
+ {zh:"这个苹果太大了，我们一人一半吧。",py:"Zhège píngguǒ tài dà le, wǒmen yì rén yíbàn ba.",vi:"Quả táo này to quá, mỗi người chúng ta một nửa nhé."},
+ {zh:"李文晚上给妈妈打电话。",py:"Lǐ Wén wǎnshang gěi māma dǎ diànhuà.",vi:"Buổi tối Lý Văn gọi điện cho mẹ."},
+ {zh:"那个超市卖不卖茶？",py:"Nàge chāoshì mài bu mài chá?",vi:"Siêu thị kia có bán trà không?"},
+ {zh:"你看一下，你要哪个？",py:"Nǐ kàn yíxià, nǐ yào nǎge?",vi:"Bạn xem thử đi, bạn muốn cái nào?"},
+ {zh:"安妮，你再说一下，好吗？",py:"Ānnī, nǐ zài shuō yíxià, hǎo ma?",vi:"Annie, bạn nói lại lần nữa được không?"},
+ {zh:"女士，这是您的茶，请喝茶。",py:"Nǚshì, zhè shì nín de chá, qǐng hē chá.",vi:"Thưa cô, đây là trà của cô, mời cô dùng trà."}
+];
+const L13_VIZH = [
+ {vi:"Cho tôi một tách trà.",ans:["请","给","我","一","杯","茶"],extra:["个","要"],alt:["给我一杯茶"],py:"Qǐng gěi wǒ yì bēi chá."},
+ {vi:"Mời ngồi, bạn muốn gì?",ans:["请","坐","你","要","什么"],extra:["给","哪"],alt:["请坐您要什么"],py:"Qǐng zuò, nǐ yào shénme?"},
+ {vi:"Tôi có thể ngồi ở đây không?",ans:["我","可以","坐","这里","吗"],extra:["那里","呢"],alt:["我可以坐这儿吗"],py:"Wǒ kěyǐ zuò zhèlǐ ma?"},
+ {vi:"Bữa sáng tôi ăn bánh mì và trứng gà.",ans:["我","早饭","吃","面包","和","鸡蛋"],extra:["喝","茶"],alt:["早饭我吃面包和鸡蛋"],py:"Wǒ zǎofàn chī miànbāo hé jīdàn."},
+ {vi:"Buổi tối tôi gọi điện cho mẹ.",ans:["晚上","我","给","妈妈","打电话"],extra:["卖","请"],alt:["我晚上给妈妈打电话"],py:"Wǎnshang wǒ gěi māma dǎ diànhuà."},
+ {vi:"Bạn xem thử quyển sách này.",ans:["你","看","一下","这","本","书"],extra:["一半","个"],alt:["你看一下这本书吧"],py:"Nǐ kàn yíxià zhè běn shū."},
+ {vi:"Siêu thị này có bán trứng gà không?",ans:["这个","超市","卖","鸡蛋","吗"],extra:["买","呢"],alt:["这个超市卖不卖鸡蛋"],py:"Zhège chāoshì mài jīdàn ma?"},
+ {vi:"Cái bánh mì này cho bạn một nửa.",ans:["这个","面包","给","你","一半"],extra:["一下","杯"],alt:["这个面包给你一半吧"],py:"Zhège miànbāo gěi nǐ yíbàn."},
+ {vi:"Thưa cô, em có một câu hỏi.",ans:["老师","我","有","一","个","问题"],extra:["没","杯"],alt:["老师我有个问题"],py:"Lǎoshī, wǒ yǒu yí ge wèntí."},
+ {vi:"Trần Thiên Trung muốn một cốc nước nóng.",ans:["陈天中","要","一","杯","热","水"],extra:["个","冷"],alt:["陈天中要一杯热水"],py:"Chén Tiānzhōng yào yì bēi rè shuǐ."}
+];
+const L13_SPEAK_SENT = [
+ {h:"请给我一杯茶。",p:"Qǐng gěi wǒ yì bēi chá.",vi:"Cho tôi một tách trà."},
+ {h:"先生，请坐，您要什么？",p:"Xiānsheng, qǐng zuò, nín yào shénme?",vi:"Thưa anh, mời ngồi, anh muốn dùng gì?"},
+ {h:"我可以问一个问题吗？",p:"Wǒ kěyǐ wèn yí ge wèntí ma?",vi:"Tôi có thể hỏi một câu không?"},
+ {h:"我早饭吃面包和鸡蛋。",p:"Wǒ zǎofàn chī miànbāo hé jīdàn.",vi:"Bữa sáng tôi ăn bánh mì và trứng gà."},
+ {h:"我打电话问一下吧。",p:"Wǒ dǎ diànhuà wèn yíxià ba.",vi:"Để tôi gọi điện hỏi thử xem."},
+ {h:"这个面包给你一半。",p:"Zhège miànbāo gěi nǐ yíbàn.",vi:"Cái bánh mì này cho bạn một nửa."}
+];
+
 /* Thêm bài mới: tạo object giống L10 và đặt vào lessons[n] của cấp tương ứng */
 const LEVELS = {
- hsk1:{name:"HSK 1", total:12, lessons:{
+ hsk1:{name:"HSK 1", total:13, lessons:{
    9:{title:"Bài 9",theme:"",zh:"我明天上午在学校学习",vocab:L9_VOCAB,zhvi:L9_ZHVI,vizh:L9_VIZH,sentences:L9_SPEAK_SENT},
    10:{title:"Bài 10",theme:"",zh:"这儿的苹果真便宜！",vocab:L10_VOCAB,zhvi:L10_ZHVI,vizh:L10_VIZH,sentences:L10_SPEAK_SENT},
    11:{title:"Bài 11",theme:"",zh:"我读大学呢",vocab:L11_VOCAB,zhvi:L11_ZHVI,vizh:L11_VIZH,sentences:L11_SPEAK_SENT},
-   12:{title:"Bài 12",theme:"",zh:"昨天下雪了",vocab:L12_VOCAB,zhvi:L12_ZHVI,vizh:L12_VIZH,sentences:L12_SPEAK_SENT}}},
+   12:{title:"Bài 12",theme:"",zh:"昨天下雪了",vocab:L12_VOCAB,zhvi:L12_ZHVI,vizh:L12_VIZH,sentences:L12_SPEAK_SENT},
+   13:{title:"Bài 13",theme:"",zh:"请给我一杯茶",vocab:L13_VOCAB,zhvi:L13_ZHVI,vizh:L13_VIZH,sentences:L13_SPEAK_SENT}}},
  hsk2:{name:"HSK 2", total:0, lessons:{}},
  hsk3:{name:"HSK 3", total:0, lessons:{}},
  hsk4:{name:"HSK 4", total:0, lessons:{}}
@@ -2047,6 +2103,70 @@ const L12_TEST = {
   }
 };
 LEVELS.hsk1.lessons[12].test=L12_TEST;
+const L13_TEST = {
+  answers: "CACCCCDBBA" + "BDCCABBACA",
+  audio: { page: "https://hoanguchinesestation.com/tai-lieu/audio/audio-sbt-hsk-3-0-1", track: "13-2", main: "audio/13-2.mp3", parts: { 1: "", 2: "", 3: "", 4: "" } },
+  sections: [
+    { zh: "一、听力", vi: "Nghe hiểu", audio: true, parts: [
+      { no: 1, zh: "第一部分", vi: "Câu 1–3: Nghe cụm từ, chọn hình đúng. Mỗi câu nghe hai lần.", type: "pics3",
+        example: { lines: [["", "三个苹果"]], gloss: "ba quả táo", imgs: ["b13_l1_ex_A", "b13_l1_ex_B", "b13_l1_ex_C"], ans: "C" },
+        qs: [{ n: 1, imgs: ["b13_l1_q1_A", "b13_l1_q1_B", "b13_l1_q1_C"] }, { n: 2, imgs: ["b13_l1_q2_A", "b13_l1_q2_B", "b13_l1_q2_C"] }, { n: 3, imgs: ["b13_l1_q3_A", "b13_l1_q3_B", "b13_l1_q3_C"] }] },
+      { no: 2, zh: "第二部分", vi: "Câu 4–5: Nghe câu hỏi, chọn câu trả lời đúng. Mỗi câu nghe hai lần.", type: "choice",
+        example: { lines: [["", "今天天气怎么样？"]], gloss: "Hôm nay thời tiết thế nào?", opts: [["非常热", "rất nóng"], ["很好听", "rất hay"], ["在喝水", "đang uống nước"]], ans: "A" },
+        qs: [{ n: 4, opts: ["给你", "吃早饭", "要一杯茶"] }, { n: 5, opts: ["学习", "不对", "没问题"] }] },
+      { no: 3, zh: "第三部分", vi: "Câu 6–8: Nghe hội thoại, chọn hình phù hợp nhất. Mỗi câu nghe hai lần.", type: "poolpics",
+        pool: ["b13_l3_A", "b13_l3_B", "b13_l3_C", "b13_l3_D"],
+        example: { lines: [["女", "你好！"], ["男", "你好！很高兴认识你。"]], gloss: "Chào bạn! — Chào bạn! Rất vui được làm quen với bạn.", ans: "A" },
+        qs: [{ n: 6 }, { n: 7 }, { n: 8 }] },
+      { no: 4, zh: "第四部分", vi: "Câu 9–10: Nghe câu và câu hỏi, chọn đáp án đúng. Mỗi câu nghe hai lần.", type: "choice",
+        example: { lines: [["", "下午我去超市，我想买一些水果。"], ["问", "说话人下午去哪里？"]], gloss: "Chiều nay tôi đi siêu thị, tôi muốn mua ít trái cây. — Hỏi: Chiều nay người nói đi đâu?",
+          opts: [["超市", "siêu thị"], ["医院", "bệnh viện"], ["学校", "trường học"]], ans: "A" },
+        qs: [{ n: 9, opts: ["问问题", "找人玩", "看医生"] }, { n: 10, opts: ["饭店", "学校", "朋友家"] }] }
+    ]},
+    { zh: "二、阅读", vi: "Đọc hiểu", parts: [
+      { no: 1, zh: "第一部分", vi: "Câu 11–13: Chọn hình phù hợp nhất với mỗi câu.", type: "poolpics",
+        pool: ["b13_r1_A", "b13_r1_B", "b13_r1_C", "b13_r1_D"],
+        example: { lines: [["", "我很喜欢这本书。"]], gloss: "Tôi rất thích quyển sách này.", ans: "A" },
+        qs: [{ n: 11, text: "她太小了，这个苹果给她一半吧。" }, { n: 12, text: "请给我一杯牛奶，谢谢。" }, { n: 13, text: "我打电话问一下吧。" }] },
+      { no: 2, zh: "第二部分", vi: "Câu 14–16: Nối câu hỏi với câu trả lời phù hợp.", type: "pooltext",
+        pool: ["不客气。", "一个面包。", "不知道。", "好的，谢谢！"],
+        example: { lines: [["", "你喝水吗？"]], gloss: "Bạn uống nước không?", ans: "D" },
+        qs: [{ n: 14, text: "那里卖不卖手机？" }, { n: 15, text: "我会写了，谢谢老师。" }, { n: 16, text: "你要什么？" }] },
+      { no: 3, zh: "第三部分", vi: "Câu 17–18: Chọn từ thích hợp điền vào chỗ trống.", type: "pooltext", inline: true,
+        pool: ["给", "一下", "名字"],
+        example: { lines: [["", "你叫什么（ C ）？"]], gloss: "Bạn tên là gì?", ans: "C" },
+        qs: [{ n: 17, text: "你看（　　），你要什么？" }, { n: 18, lines: [["男", "请坐，您要什么？"], ["女", "请（　　）我一杯茶。"]] }] },
+      { no: 4, zh: "第四部分", vi: "Câu 19–20: Chọn đáp án đúng.", type: "choice",
+        example: { lines: [["", "请问现在几点了？"], ["★", "说话人想知道什么？"]], gloss: "Xin hỏi bây giờ mấy giờ rồi? — Người nói muốn biết điều gì?",
+          opts: [["时间", "thời gian"], ["名字", "tên"], ["房间号", "số phòng"]], ans: "A" },
+        qs: [{ n: 19, lines: [["", "明天星期天，我们可以去饭店吃饺子吗？"], ["★", "明天是："]], opts: ["星期五", "星期六", "星期日"] },
+             { n: 20, lines: [["", "爸爸今天在家里工作，我们不要去他的房间。"], ["★", "爸爸今天："]], opts: ["在家里工作", "做了面条儿", "不能去公司"] }] }
+    ]}
+  ],
+  explain: {
+    1: "Đáp án C – đĩa sủi cảo (饺子). Tranh A là bát mì, tranh B là bát cơm. Chú ý phân biệt 饺子 (sủi cảo), 面条儿 (mì) và 米饭 (cơm).",
+    2: "Đáp án A – người đàn ông đưa đồ cho cậu bé: “đưa cho” (给). Tranh B là rót trà, tranh C là mọi người bắt tay chào nhau.",
+    3: "Đáp án C – người đàn ông đang gọi điện thoại (打电话). Tranh A là cô gái xem đồ trong cửa hàng hoa, tranh B là hai người đang nói chuyện.",
+    4: "Đáp án C 要一杯茶 (muốn một tách trà) – câu trả lời cho câu hỏi kiểu 您要什么？/ 你想喝什么？ A 给你 là “đưa bạn này”, B 吃早饭 là ăn sáng.",
+    5: "Đáp án C 没问题 (không vấn đề gì) – dùng để đồng ý khi người khác nhờ hoặc đề nghị điều gì, ví dụ 可以吗？/ 好吗？ A 学习 là học, B 不对 là không đúng.",
+    6: "Hội thoại nói về bánh mì (面包), nên chọn tranh C – chiếc bánh mì được bẻ đôi.",
+    7: "Hội thoại giữa khách và nhân viên phục vụ (服务员) trong quán, nên chọn tranh D.",
+    8: "Hội thoại nói về món sủi cảo (饺子) trên bàn ăn, nên chọn tranh B.",
+    9: "Đáp án B 找人玩 (tìm người chơi cùng). Chú ý phân biệt: A 问问题 là hỏi câu hỏi, C 看医生 là đi khám bác sĩ.",
+    10: "Đáp án A 饭店 (nhà hàng). Nghe lại và chú ý từ chỉ nơi chốn; B 学校 là trường học, C 朋友家 là nhà bạn.",
+    11: "她太小了，这个苹果给她一半吧 – “Cô bé nhỏ quá, cho bé một nửa quả táo thôi” (一半 = một nửa), nên chọn tranh B – quả táo bổ đôi.",
+    12: "请给我一杯牛奶 – “Cho tôi một ly sữa”, nên chọn tranh D – rót sữa vào ly. Cấu trúc 请给我 + số + 杯 + đồ uống.",
+    13: "我打电话问一下吧 – “Để tôi gọi điện hỏi thử”, nên chọn tranh C – bấm số điện thoại. 动词 + 一下 diễn tả làm thử, làm nhanh.",
+    14: "那里卖不卖手机？ hỏi “Ở đó có bán điện thoại không?” – người được hỏi không rõ nên trả lời C 不知道。",
+    15: "我会写了，谢谢老师 – “Em biết viết rồi, cảm ơn cô” – đáp lại lời cảm ơn bằng A 不客气。 (Không có gì).",
+    16: "你要什么？ hỏi “Bạn muốn gì?”, trả lời bằng món mình cần: B 一个面包。 (Một cái bánh mì).",
+    17: "你看一下 – “bạn xem thử một chút”. Động từ + 一下 diễn tả hành động nhanh / làm thử → B 一下.",
+    18: "请给我一杯茶 – “Cho tôi một tách trà”. Cấu trúc 请 + 给 + người + đồ vật → A 给.",
+    19: "Câu nói 明天星期天 – “ngày mai là Chủ nhật”. 星期天 và 星期日 đều nghĩa là Chủ nhật → C 星期日.",
+    20: "爸爸今天在家里工作 – “hôm nay bố làm việc ở nhà” → A 在家里工作. Trong câu không nói bố nấu mì hay không thể đến công ty."
+  }
+};
+LEVELS.hsk1.lessons[13].test=L13_TEST;
 /* khoá riêng cho từng từ (để 2 từ cùng chữ, ví dụ 天 "trời" và 天 "ngày", vẫn là 2 thẻ khác nhau) */
 Object.values(LEVELS).forEach(L=>Object.values(L.lessons).forEach(les=>{const seen={}; les.vocab.forEach(w=>{seen[w.h]=(seen[w.h]||0)+1; w.k=seen[w.h]>1?w.h+"·"+seen[w.h]:w.h;});}));
 
