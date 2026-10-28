@@ -2038,6 +2038,70 @@ const Exam = {
 
 LEVELS.hsk1.lessons[10].test=L10_TEST;
 
+const L9_TEST = {
+  answers: "BCABCDCBAB" + "DCBCABBAAB",
+  audio: { page: "https://hoanguchinesestation.com/tai-lieu/audio/audio-sbt-hsk-3-0-1", track: "9-2", main: "audio/9-2.mp3", parts: { 1: "", 2: "", 3: "", 4: "" } },
+  sections: [
+    { zh: "一、听力", vi: "Nghe hiểu", audio: true, parts: [
+      { no: 1, zh: "第一部分", vi: "Câu 1–3: Nghe cụm từ, chọn hình đúng. Mỗi câu nghe hai lần.", type: "pics3",
+        example: { lines: [["", "三个苹果"]], gloss: "ba quả táo", imgs: ["b9_l1_ex_A", "b9_l1_ex_B", "b9_l1_ex_C"], ans: "C" },
+        qs: [{ n: 1, imgs: ["b9_l1_q1_A", "b9_l1_q1_B", "b9_l1_q1_C"] }, { n: 2, imgs: ["b9_l1_q2_A", "b9_l1_q2_B", "b9_l1_q2_C"] }, { n: 3, imgs: ["b9_l1_q3_A", "b9_l1_q3_B", "b9_l1_q3_C"] }] },
+      { no: 2, zh: "第二部分", vi: "Câu 4–5: Nghe câu hỏi, chọn câu trả lời đúng. Mỗi câu nghe hai lần.", type: "choice",
+        example: { lines: [["", "今天天气怎么样？"]], gloss: "Hôm nay thời tiết thế nào?", opts: [["非常热", "rất nóng"], ["很好听", "rất hay"], ["在喝水", "đang uống nước"]], ans: "A" },
+        qs: [{ n: 4, opts: ["书", "我的", "他的电脑"] }, { n: 5, opts: ["星期天", "孩子们", "去外边唱歌"] }] },
+      { no: 3, zh: "第三部分", vi: "Câu 6–8: Nghe hội thoại, chọn hình phù hợp nhất. Mỗi câu nghe hai lần.", type: "poolpics",
+        pool: ["b9_l3_A", "b9_l3_B", "b9_l3_C", "b9_l3_D"],
+        example: { lines: [["女", "你好！"], ["男", "你好！很高兴认识你。"]], gloss: "Chào bạn! — Chào bạn! Rất vui được làm quen với bạn.", ans: "A" },
+        qs: [{ n: 6 }, { n: 7 }, { n: 8 }] },
+      { no: 4, zh: "第四部分", vi: "Câu 9–10: Nghe câu và câu hỏi, chọn đáp án đúng. Mỗi câu nghe hai lần.", type: "choice",
+        example: { lines: [["", "下午我去超市，我想买一些水果。"], ["问", "说话人下午去哪里？"]], gloss: "Chiều nay tôi đi siêu thị, tôi muốn mua ít trái cây. — Hỏi: Chiều nay người nói đi đâu?",
+          opts: [["超市", "siêu thị"], ["医院", "bệnh viện"], ["学校", "trường học"]], ans: "A" },
+        qs: [{ n: 9, opts: ["上午 8:00", "上午 10:00", "晚上 8:00"] }, { n: 10, opts: ["菜店", "书店", "超市"] }] }
+    ]},
+    { zh: "二、阅读", vi: "Đọc hiểu", parts: [
+      { no: 1, zh: "第一部分", vi: "Câu 11–13: Chọn hình phù hợp nhất với mỗi câu.", type: "poolpics",
+        pool: ["b9_r1_A", "b9_r1_B", "b9_r1_C", "b9_r1_D"],
+        example: { lines: [["", "我很喜欢这本书。"]], gloss: "Tôi rất thích quyển sách này.", ans: "A" },
+        qs: [{ n: 11, text: "妹妹和小狗今天在家里玩。" }, { n: 12, text: "房间外有一只小猫。" }, { n: 13, text: "这是我的第三个电脑。" }] },
+      { no: 2, zh: "第二部分", vi: "Câu 14–16: Nối câu hỏi với câu trả lời phù hợp.", type: "pooltext",
+        pool: ["在家里。", "我女朋友。", "一只小猫。", "好的，谢谢！"],
+        example: { lines: [["", "你喝水吗？"]], gloss: "Bạn uống nước không?", ans: "D" },
+        qs: [{ n: 14, text: "桌子上有什么？" }, { n: 15, text: "你今天下午在哪儿？" }, { n: 16, text: "你和谁在超市呢？" }] },
+      { no: 3, zh: "第三部分", vi: "Câu 17–18: Chọn từ thích hợp điền vào chỗ trống.", type: "pooltext", inline: true,
+        pool: ["2:00", "上课", "名字"],
+        example: { lines: [["", "你叫什么（ C ）？"]], gloss: "Bạn tên là gì?", ans: "C" },
+        qs: [{ n: 17, text: "我上午在学校（　　），我们下午去看电影吧。" }, { n: 18, lines: [["男", "我们下午几点在学校见？"], ["女", "下午（　　）吧。"]] }] },
+      { no: 4, zh: "第四部分", vi: "Câu 19–20: Chọn đáp án đúng.", type: "choice",
+        example: { lines: [["", "请问现在几点了？"], ["★", "说话人想知道什么？"]], gloss: "Xin hỏi bây giờ mấy giờ rồi? — Người nói muốn biết điều gì?",
+          opts: [["时间", "thời gian"], ["名字", "tên"], ["房间号", "số phòng"]], ans: "A" },
+        qs: [{ n: 19, lines: [["", "我有一只小狗，很漂亮，它是我的好朋友。"], ["★", "说话人有几只小狗？"]], opts: ["一", "四", "十一"] },
+             { n: 20, lines: [["", "星期天中午妈妈在做饭，我和妹妹在房间里玩。"], ["★", "说话人和妹妹在哪儿？"]], opts: ["外边", "房间里", "超市里"] }] }
+    ]}
+  ],
+  explain: {
+    1: "Đáp án B – mọi người đang ngồi trong phòng khách, ở nhà xem tivi. Tranh A là đá bóng ngoài sân, tranh C là xem phim ở rạp (电影院). Nghe lại và chú ý từ chỉ nơi chốn / hoạt động.",
+    2: "Đáp án C – quyển sách đang mở. Tranh A là chồng sách cũ, tranh B là điện thoại bàn. Nghe lại cụm từ để phân biệt.",
+    3: "Đáp án A – người phụ nữ đang ngồi đọc sách, học bài ở bàn. Tranh B là người đàn ông gọi điện thoại, tranh C là cô gái đang hát (唱歌).",
+    4: "Đáp án B 我的 (của tôi) – câu trả lời cho câu hỏi “của ai?” (谁的…？). A 书 là sách, C 他的电脑 là máy tính của anh ấy.",
+    5: "Đáp án C 去外边唱歌 (ra ngoài hát) – trả lời câu hỏi làm gì. A 星期天 là Chủ nhật (thời gian), B 孩子们 là các em nhỏ (người).",
+    6: "Hội thoại nói về chú chó nhỏ (小狗), nên chọn tranh D.",
+    7: "Hội thoại nói về việc mua đồ ở siêu thị (超市 / 买菜 / 水果), nên chọn tranh C – hai bố con chọn rau quả.",
+    8: "Hội thoại nói về việc học / đọc sách ở thư viện, trường học (学习 / 看书), nên chọn tranh B – chàng trai đang đọc sách.",
+    9: "Đáp án A 上午 8:00 (8 giờ sáng). Chú ý phân biệt 上午 (buổi sáng) – 晚上 (buổi tối) và các con số giờ 8:00 – 10:00.",
+    10: "Đáp án B 书店 (hiệu sách). A 菜店 là cửa hàng rau, C 超市 là siêu thị. Chú ý nghe chữ đầu: 书 – 菜.",
+    11: "妹妹和小狗今天在家里玩 – “Hôm nay em gái chơi với chú chó nhỏ ở nhà”, nên chọn tranh D – bé gái ôm chú chó trên ghế sofa.",
+    12: "房间外有一只小猫 – “Bên ngoài phòng có một chú mèo nhỏ”, nên chọn tranh C. Đây là câu tồn hiện: Nơi chốn + 有 + số lượng + danh từ.",
+    13: "这是我的第三个电脑 – “Đây là chiếc máy tính thứ ba của tôi”, nên chọn tranh B – cô gái cầm máy tính. 第 + số + lượng từ chỉ số thứ tự.",
+    14: "桌子上有什么？ hỏi “Trên bàn có gì?”, trả lời bằng đồ vật / con vật: C 一只小猫。 (Một chú mèo nhỏ).",
+    15: "你今天下午在哪儿？ hỏi nơi chốn “Chiều nay bạn ở đâu?”, trả lời A 在家里。 (Ở nhà).",
+    16: "你和谁在超市呢？ hỏi “Bạn ở siêu thị với ai?”, trả lời bằng người: B 我女朋友。 (Bạn gái tôi).",
+    17: "我上午在学校上课 – “Buổi sáng tôi lên lớp ở trường”. Sau 在 + nơi chốn cần một động từ → B 上课.",
+    18: "Câu hỏi 几点见？ hỏi mấy giờ gặp, nên trả lời bằng giờ: 下午2:00吧 → A 2:00.",
+    19: "我有一只小狗 – “Tôi có một chú chó nhỏ” → A 一.",
+    20: "我和妹妹在房间里玩 – “Tôi và em gái chơi trong phòng” → B 房间里. Mẹ nấu cơm, không có ai ở bên ngoài hay ở siêu thị."
+  }
+};
+LEVELS.hsk1.lessons[9].test=L9_TEST;
 const L11_TEST = {
   answers: "CBCBCDCBBC" + "CBDABCBACC",
   audio: { page: "https://hoanguchinesestation.com/tai-lieu/audio/audio-sbt-hsk-3-0-1", track: "11-2", main: "audio/11-2.mp3", parts: { 1: "", 2: "", 3: "", 4: "" } },

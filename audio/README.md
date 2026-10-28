@@ -1,5 +1,6 @@
 # Thư mục audio
 Đặt file nghe của phần Bài tập HSK vào đây, đúng tên:
+- `9-2.mp3` – Bài 9
 - `10-2.mp3` – Bài 10
 - `11-2.mp3` – Bài 11
 - `12-2.mp3` – Bài 12
