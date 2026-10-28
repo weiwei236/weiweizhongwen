@@ -751,7 +751,7 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 
 <script>
 /* ======================= DATA ======================= */
-const POS = {dt:"Danh từ", dai:"Đại từ", dong:"Động từ", tt:"Tính từ", lg:"Lượng từ", pho:"Phó từ", gioi:"Giới từ", nn:"Động từ năng nguyện", hau:"Hậu tố / Danh từ", tien:"Tiền tố", tro:"Trợ từ", sl:"Số lượng từ", cum:"Cụm từ", so:"Số từ"};
+const POS = {dt:"Danh từ", dai:"Đại từ", dong:"Động từ", tt:"Tính từ", lg:"Lượng từ", pho:"Phó từ", gioi:"Giới từ", nn:"Động từ năng nguyện", hau:"Hậu tố / Danh từ", tien:"Tiền tố", tro:"Trợ từ", sl:"Số lượng từ", cum:"Cụm từ", so:"Số từ", rieng:"Danh từ riêng", lien:"Liên từ"};
 const L10_VOCAB = [
  {h:"杯子",p:"bēizi",pos:"dt",vi:"cốc, ly",ex:["这个杯子多少钱？","Zhège bēizi duōshao qián?","Cái cốc này bao nhiêu tiền?"]},
  {h:"售货员",p:"shòuhuòyuán",pos:"dt",vi:"nhân viên bán hàng",ex:["她是商店的售货员。","Tā shì shāngdiàn de shòuhuòyuán.","Cô ấy là nhân viên bán hàng của cửa hàng."]},
@@ -1044,14 +1044,133 @@ const L13_SPEAK_SENT = [
  {h:"这个面包给你一半。",p:"Zhège miànbāo gěi nǐ yíbàn.",vi:"Cái bánh mì này cho bạn một nửa."}
 ];
 
+const L14_VOCAB = [
+ {h:"上",p:"shàng",pos:"dong",vi:"lên (xe, tàu...)",ex:["我们上火车吧。","Wǒmen shàng huǒchē ba.","Chúng ta lên tàu thôi."]},
+ {h:"火车",p:"huǒchē",pos:"dt",vi:"tàu, tàu hoả, xe lửa",ex:["我坐火车去西安。","Wǒ zuò huǒchē qù Xī'ān.","Tôi đi tàu hoả đến Tây An."]},
+ {h:"中午",p:"zhōngwǔ",pos:"dt",vi:"buổi trưa",ex:["中午我在学校吃饭。","Zhōngwǔ wǒ zài xuéxiào chī fàn.","Buổi trưa tôi ăn cơm ở trường."]},
+ {h:"开",p:"kāi",pos:"dong",vi:"lái, chạy, khởi hành (phương tiện giao thông)",ex:["火车几点开？","Huǒchē jǐ diǎn kāi?","Tàu mấy giờ chạy?"]},
+ {h:"有些",p:"yǒuxiē",pos:"dai",vi:"có một số, có một vài",ex:["有些人在看书。","Yǒuxiē rén zài kàn shū.","Có một số người đang đọc sách."]},
+ {h:"有的",p:"yǒude",pos:"dai",vi:"có người, có cái",ex:["有的人在睡觉，有的人在说话。","Yǒude rén zài shuìjiào, yǒude rén zài shuōhuà.","Có người đang ngủ, có người đang nói chuyện."]},
+ {h:"了",p:"le",pos:"tro",vi:"dùng sau động từ chỉ sự hoàn thành của động tác",ex:["我买了一个新电脑。","Wǒ mǎile yí ge xīn diànnǎo.","Tôi đã mua một chiếc máy tính mới."]},
+ {h:"写",p:"xiě",pos:"dong",vi:"viết",ex:["你会写这个字吗？","Nǐ huì xiě zhège zì ma?","Bạn biết viết chữ này không?"]},
+ {h:"都",p:"dōu",pos:"pho",vi:"đều",ex:["我们都是学生。","Wǒmen dōu shì xuésheng.","Chúng tôi đều là học sinh."]},
+ {h:"听见",p:"tīngjiàn",pos:"dong",vi:"nghe thấy",ex:["你听见了吗？","Nǐ tīngjiàn le ma?","Bạn nghe thấy chưa?"]},
+ {h:"不要",p:"búyào",pos:"pho",vi:"đừng, không được",ex:["上课了，不要说话。","Shàngkè le, búyào shuōhuà.","Vào học rồi, đừng nói chuyện."]},
+ {h:"说话",p:"shuōhuà",pos:"dong",vi:"nói chuyện",ex:["他们在说话呢。","Tāmen zài shuōhuà ne.","Họ đang nói chuyện."]},
+ {h:"听",p:"tīng",pos:"dong",vi:"nghe",ex:["我喜欢听中文歌。","Wǒ xǐhuan tīng Zhōngwén gē.","Tôi thích nghe bài hát tiếng Trung."]},
+ {h:"哪些",p:"nǎxiē",pos:"dai",vi:"những... nào",ex:["你会写哪些汉字？","Nǐ huì xiě nǎxiē Hànzì?","Bạn biết viết những chữ Hán nào?"]},
+ {h:"字",p:"zì",pos:"dt",vi:"chữ",ex:["这个字怎么写？","Zhège zì zěnme xiě?","Chữ này viết thế nào?"]},
+ {h:"汉语",p:"Hànyǔ",pos:"rieng",vi:"tiếng Trung Quốc, tiếng Hán",ex:["我会说一点儿汉语。","Wǒ huì shuō yìdiǎnr Hànyǔ.","Tôi biết nói một chút tiếng Trung."]},
+ {h:"汉字",p:"Hànzì",pos:"rieng",vi:"chữ Hán",ex:["我会写很多汉字了。","Wǒ huì xiě hěn duō Hànzì le.","Tôi biết viết nhiều chữ Hán rồi."]},
+ {h:"明年",p:"míngnián",pos:"dt",vi:"sang năm, năm tới",ex:["明年我要去西安。","Míngnián wǒ yào qù Xī'ān.","Sang năm tôi sẽ đi Tây An."]},
+ {h:"上",p:"shàng",pos:"dong",vi:"lên, bắt đầu (làm gì đó vào thời gian cố định)",ex:["他明年上中学。","Tā míngnián shàng zhōngxué.","Sang năm cậu ấy lên trung học."]},
+ {h:"中学",p:"zhōngxué",pos:"dt",vi:"trường trung học, trung học",ex:["我哥哥在中学工作。","Wǒ gēge zài zhōngxué gōngzuò.","Anh trai tôi làm việc ở trường trung học."]},
+ {h:"小学",p:"xiǎoxué",pos:"dt",vi:"trường tiểu học, tiểu học",ex:["我妹妹在读小学。","Wǒ mèimei zài dú xiǎoxué.","Em gái tôi đang học tiểu học."]},
+ {h:"中学生",p:"zhōngxuéshēng",pos:"dt",vi:"học sinh trung học, học sinh cấp hai",ex:["他是中学生。","Tā shì zhōngxuéshēng.","Cậu ấy là học sinh trung học."]},
+ {h:"小学生",p:"xiǎoxuéshēng",pos:"dt",vi:"học sinh tiểu học, học sinh cấp một",ex:["她们都是小学生。","Tāmen dōu shì xiǎoxuéshēng.","Các em ấy đều là học sinh tiểu học."]},
+ {h:"上学",p:"shàngxué",pos:"dong",vi:"đi học, bắt đầu đi học",ex:["弟弟八点上学。","Dìdi bā diǎn shàngxué.","Em trai tám giờ đi học."]},
+ {h:"他们",p:"tāmen",pos:"dai",vi:"họ, chúng, bọn họ, các anh ấy, các em ấy...",ex:["他们都是我的同学。","Tāmen dōu shì wǒ de tóngxué.","Họ đều là bạn học của tôi."]},
+ {h:"她们",p:"tāmen",pos:"dai",vi:"họ, chúng, bọn họ, các chị ấy, các em ấy...",ex:["她们在超市买东西。","Tāmen zài chāoshì mǎi dōngxi.","Các chị ấy đang mua đồ ở siêu thị."]},
+ {h:"它们",p:"tāmen",pos:"dai",vi:"chúng (đại từ nhân xưng ngôi thứ ba số nhiều, chỉ vật)",ex:["我有两只小猫，它们很漂亮。","Wǒ yǒu liǎng zhī xiǎo māo, tāmen hěn piàoliang.","Tôi có hai chú mèo nhỏ, chúng rất đẹp."]},
+ {h:"晚",p:"wǎn",pos:"tt",vi:"muộn, trễ",ex:["太晚了，我们回家吧。","Tài wǎn le, wǒmen huí jiā ba.","Muộn quá rồi, chúng ta về nhà thôi."]}
+];
+const L14_ZHVI = [
+ {zh:"我们都会写汉字了。",py:"Wǒmen dōu huì xiě Hànzì le.",vi:"Chúng tôi đều biết viết chữ Hán rồi."},
+ {zh:"白家月昨天看了一个电影。",py:"Bái Jiāyuè zuótiān kànle yí ge diànyǐng.",vi:"Hôm qua Bạch Gia Nguyệt đã xem một bộ phim."},
+ {zh:"火车中午十二点开。",py:"Huǒchē zhōngwǔ shí'èr diǎn kāi.",vi:"Tàu chạy lúc 12 giờ trưa."},
+ {zh:"火车上，有的人在看书，有的人在睡觉。",py:"Huǒchē shang, yǒude rén zài kàn shū, yǒude rén zài shuìjiào.",vi:"Trên tàu, có người đang đọc sách, có người đang ngủ."},
+ {zh:"上课了，不要说话。",py:"Shàngkè le, búyào shuōhuà.",vi:"Vào học rồi, đừng nói chuyện."},
+ {zh:"陈天中的弟弟明年上中学。",py:"Chén Tiānzhōng de dìdi míngnián shàng zhōngxué.",vi:"Sang năm em trai của Trần Thiên Trung lên trung học."},
+ {zh:"同学们都没听见。",py:"Tóngxuémen dōu méi tīngjiàn.",vi:"Các bạn học đều không nghe thấy."},
+ {zh:"李文的妹妹是小学生。",py:"Lǐ Wén de mèimei shì xiǎoxuéshēng.",vi:"Em gái của Lý Văn là học sinh tiểu học."},
+ {zh:"现在太晚了，我们回家吧。",py:"Xiànzài tài wǎn le, wǒmen huí jiā ba.",vi:"Bây giờ muộn quá rồi, chúng ta về nhà thôi."},
+ {zh:"王一雪昨天没去超市买东西。",py:"Wáng Yīxuě zuótiān méi qù chāoshì mǎi dōngxi.",vi:"Hôm qua Vương Nhất Tuyết không đi siêu thị mua đồ."}
+];
+const L14_VIZH = [
+ {vi:"Chúng tôi đều biết viết rồi.",ans:["我们","都","会","写","了"],extra:["没","也"],alt:[],py:"Wǒmen dōu huì xiě le."},
+ {vi:"Tôi đã mua một chiếc máy tính mới.",ans:["我","买","了","一","个","新","电脑"],extra:["没","本"],alt:[],py:"Wǒ mǎile yí ge xīn diànnǎo."},
+ {vi:"Hôm qua tôi không đi siêu thị mua đồ.",ans:["我","昨天","没","去","超市","买","东西"],extra:["了","不"],alt:["昨天我没去超市买东西"],py:"Wǒ zuótiān méi qù chāoshì mǎi dōngxi."},
+ {vi:"Tàu mấy giờ chạy?",ans:["火车","几","点","开"],extra:["上","什么"],alt:[],py:"Huǒchē jǐ diǎn kāi?"},
+ {vi:"Vào học rồi, đừng nói chuyện.",ans:["上课","了","不要","说话"],extra:["下课","没"],alt:[],py:"Shàngkè le, búyào shuōhuà."},
+ {vi:"Bạn biết viết những chữ Hán nào?",ans:["你","会","写","哪些","汉字"],extra:["都","什么"],alt:[],py:"Nǐ huì xiě nǎxiē Hànzì?"},
+ {vi:"Các em ấy đều là học sinh tiểu học.",ans:["她们","都","是","小学生"],extra:["中学生","也"],alt:["他们都是小学生"],py:"Tāmen dōu shì xiǎoxuéshēng."},
+ {vi:"Sang năm em trai tôi lên trung học.",ans:["明年","我","弟弟","上","中学"],extra:["小学","下"],alt:["我弟弟明年上中学"],py:"Míngnián wǒ dìdi shàng zhōngxué."},
+ {vi:"Có người đang đọc sách, có người đang ngủ.",ans:["有的","人","在","看书","有的","人","在","睡觉"],extra:["有些","都"],alt:[],py:"Yǒude rén zài kàn shū, yǒude rén zài shuìjiào."},
+ {vi:"Các bạn học đều không nghe thấy.",ans:["同学们","都","没","听见"],extra:["不","了"],alt:[],py:"Tóngxuémen dōu méi tīngjiàn."}
+];
+const L14_SPEAK_SENT = [
+ {h:"我看了一个电影。",p:"Wǒ kànle yí ge diànyǐng.",vi:"Tôi đã xem một bộ phim."},
+ {h:"我们都会写汉字了。",p:"Wǒmen dōu huì xiě Hànzì le.",vi:"Chúng tôi đều biết viết chữ Hán rồi."},
+ {h:"火车中午十二点开。",p:"Huǒchē zhōngwǔ shí'èr diǎn kāi.",vi:"Tàu chạy lúc 12 giờ trưa."},
+ {h:"上课了，不要说话。",p:"Shàngkè le, búyào shuōhuà.",vi:"Vào học rồi, đừng nói chuyện."},
+ {h:"有的人在看书，有的人在睡觉。",p:"Yǒude rén zài kàn shū, yǒude rén zài shuìjiào.",vi:"Có người đang đọc sách, có người đang ngủ."},
+ {h:"我弟弟明年上中学。",p:"Wǒ dìdi míngnián shàng zhōngxué.",vi:"Sang năm em trai tôi lên trung học."}
+];
+const L15_VOCAB = [
+ {h:"爱",p:"ài",pos:"dong",vi:"yêu, thích",ex:["我爱吃饺子。","Wǒ ài chī jiǎozi.","Tôi thích ăn sủi cảo."]},
+ {h:"哪个",p:"nǎge",pos:"dai",vi:"cái nào, người nào",ex:["你喜欢哪个？","Nǐ xǐhuan nǎge?","Bạn thích cái nào?"]},
+ {h:"去年",p:"qùnián",pos:"dt",vi:"năm ngoái",ex:["去年我去了西安。","Qùnián wǒ qùle Xī'ān.","Năm ngoái tôi đã đến Tây An."]},
+ {h:"男朋友",p:"nánpéngyou",pos:"dt",vi:"bạn trai, người yêu",ex:["她男朋友是北京人。","Tā nánpéngyou shì Běijīng rén.","Bạn trai cô ấy là người Bắc Kinh."]},
+ {h:"几",p:"jǐ",pos:"so",vi:"vài, mấy",ex:["我买了几本书。","Wǒ mǎile jǐ běn shū.","Tôi đã mua vài quyển sách."]},
+ {h:"年",p:"nián",pos:"dt",vi:"năm",ex:["我在西安住了两年。","Wǒ zài Xī'ān zhùle liǎng nián.","Tôi đã sống ở Tây An hai năm."]},
+ {h:"好玩儿",p:"hǎowánr",pos:"tt",vi:"vui, thích, thú vị",ex:["西安很好玩儿。","Xī'ān hěn hǎowánr.","Tây An rất thú vị."]},
+ {h:"飞机",p:"fēijī",pos:"dt",vi:"máy bay",ex:["我坐飞机去北京。","Wǒ zuò fēijī qù Běijīng.","Tôi đi máy bay đến Bắc Kinh."]},
+ {h:"要",p:"yào",pos:"dong",vi:"cần, mất (thời gian)",ex:["坐飞机要两个小时。","Zuò fēijī yào liǎng ge xiǎoshí.","Đi máy bay mất hai tiếng."]},
+ {h:"小时",p:"xiǎoshí",pos:"dt",vi:"tiếng đồng hồ, giờ",ex:["我学习了三个小时。","Wǒ xuéxíle sān ge xiǎoshí.","Tôi đã học ba tiếng đồng hồ."]},
+ {h:"家人",p:"jiārén",pos:"dt",vi:"người nhà",ex:["我的家人都在西安。","Wǒ de jiārén dōu zài Xī'ān.","Người nhà tôi đều ở Tây An."]},
+ {h:"时间",p:"shíjiān",pos:"dt",vi:"thời gian",ex:["你明天有时间吗？","Nǐ míngtiān yǒu shíjiān ma?","Ngày mai bạn có thời gian không?"]},
+ {h:"机场",p:"jīchǎng",pos:"dt",vi:"sân bay",ex:["机场在哪儿？","Jīchǎng zài nǎr?","Sân bay ở đâu?"]},
+ {h:"接",p:"jiē",pos:"dong",vi:"đón, tiếp đón",ex:["明天我去机场接你。","Míngtiān wǒ qù jīchǎng jiē nǐ.","Ngày mai tôi đi sân bay đón bạn."]},
+ {h:"住",p:"zhù",pos:"dong",vi:"ở",ex:["你住在哪儿？","Nǐ zhù zài nǎr?","Bạn sống ở đâu?"]},
+ {h:"早",p:"zǎo",pos:"tt",vi:"sớm",ex:["现在太早了。","Xiànzài tài zǎo le.","Bây giờ sớm quá."]},
+ {h:"那",p:"nà",pos:"lien",vi:"vậy thì, thế thì",ex:["那我们明天见吧。","Nà wǒmen míngtiān jiàn ba.","Vậy thì ngày mai chúng ta gặp nhé."]},
+ {h:"西安",p:"Xī'ān",pos:"rieng",vi:"Tây An",ex:["我住在西安。","Wǒ zhù zài Xī'ān.","Tôi sống ở Tây An."]},
+ {h:"北京",p:"Běijīng",pos:"rieng",vi:"Bắc Kinh",ex:["我去年去了北京。","Wǒ qùnián qùle Běijīng.","Năm ngoái tôi đã đến Bắc Kinh."]},
+ {h:"大兴机场",p:"Dàxīng Jīchǎng",pos:"rieng",vi:"sân bay Đại Hưng",ex:["我在大兴机场接你。","Wǒ zài Dàxīng Jīchǎng jiē nǐ.","Tôi đón bạn ở sân bay Đại Hưng."]}
+];
+const L15_ZHVI = [
+ {zh:"我喜欢这个，也喜欢那个。",py:"Wǒ xǐhuan zhège, yě xǐhuan nàge.",vi:"Tôi thích cái này, cũng thích cái kia."},
+ {zh:"刘明是北京人，王一飞也是北京人。",py:"Liú Míng shì Běijīng rén, Wáng Yīfēi yě shì Běijīng rén.",vi:"Lưu Minh là người Bắc Kinh, Vương Nhất Phi cũng là người Bắc Kinh."},
+ {zh:"安妮喜欢喝中国茶，还喜欢吃中国菜。",py:"Ānnī xǐhuan hē Zhōngguó chá, hái xǐhuan chī Zhōngguó cài.",vi:"Annie thích uống trà Trung Quốc, còn thích ăn món Trung Quốc."},
+ {zh:"坐飞机去北京要两个小时。",py:"Zuò fēijī qù Běijīng yào liǎng ge xiǎoshí.",vi:"Đi máy bay đến Bắc Kinh mất hai tiếng."},
+ {zh:"明天我去机场接你。",py:"Míngtiān wǒ qù jīchǎng jiē nǐ.",vi:"Ngày mai tôi đi sân bay đón bạn."},
+ {zh:"白家月去年在西安住了一年。",py:"Bái Jiāyuè qùnián zài Xī'ān zhùle yì nián.",vi:"Năm ngoái Bạch Gia Nguyệt đã sống ở Tây An một năm."},
+ {zh:"你明天几点有时间？",py:"Nǐ míngtiān jǐ diǎn yǒu shíjiān?",vi:"Ngày mai mấy giờ bạn có thời gian?"},
+ {zh:"现在太早了，那我们九点去吧。",py:"Xiànzài tài zǎo le, nà wǒmen jiǔ diǎn qù ba.",vi:"Bây giờ sớm quá, vậy chín giờ chúng ta đi nhé."},
+ {zh:"王一雪的男朋友是北京人。",py:"Wáng Yīxuě de nánpéngyou shì Běijīng rén.",vi:"Bạn trai của Vương Nhất Tuyết là người Bắc Kinh."},
+ {zh:"西安很好玩儿，我的家人都爱去。",py:"Xī'ān hěn hǎowánr, wǒ de jiārén dōu ài qù.",vi:"Tây An rất thú vị, người nhà tôi đều thích đến."}
+];
+const L15_VIZH = [
+ {vi:"Tôi thích cái này, cũng thích cái kia.",ans:["我","喜欢","这个","也","喜欢","那个"],extra:["哪个","都"],alt:["我喜欢这个还喜欢那个"],py:"Wǒ xǐhuan zhège, yě xǐhuan nàge."},
+ {vi:"Bạn thích cái nào?",ans:["你","喜欢","哪个"],extra:["那个","吗"],alt:["你爱哪个"],py:"Nǐ xǐhuan nǎge?"},
+ {vi:"Năm ngoái tôi đã đến Bắc Kinh.",ans:["去年","我","去","了","北京"],extra:["明年","没"],alt:["我去年去了北京","去年我去北京了","我去年去北京了"],py:"Qùnián wǒ qùle Běijīng."},
+ {vi:"Đi máy bay mất hai tiếng.",ans:["坐","飞机","要","两","个","小时"],extra:["二","火车"],alt:[],py:"Zuò fēijī yào liǎng ge xiǎoshí."},
+ {vi:"Ngày mai tôi đi sân bay đón bạn.",ans:["明天","我","去","机场","接","你"],extra:["住","回"],alt:["我明天去机场接你"],py:"Míngtiān wǒ qù jīchǎng jiē nǐ."},
+ {vi:"Bạn sống ở đâu?",ans:["你","住","在","哪儿"],extra:["去","哪个"],alt:["你住哪儿","你住在哪里"],py:"Nǐ zhù zài nǎr?"},
+ {vi:"Bạn có thời gian không?",ans:["你","有","时间","吗"],extra:["没","呢"],alt:["你有没有时间"],py:"Nǐ yǒu shíjiān ma?"},
+ {vi:"Tôi thích uống trà Trung Quốc, còn thích ăn món Trung Quốc.",ans:["我","喜欢","喝","中国","茶","还","喜欢","吃","中国","菜"],extra:["也","爱"],alt:["我喜欢喝中国茶也喜欢吃中国菜"],py:"Wǒ xǐhuan hē Zhōngguó chá, hái xǐhuan chī Zhōngguó cài."},
+ {vi:"Bây giờ sớm quá.",ans:["现在","太","早","了"],extra:["晚","很"],alt:[],py:"Xiànzài tài zǎo le."},
+ {vi:"Người nhà tôi đều ở Tây An.",ans:["我","的","家人","都","在","西安"],extra:["住","也"],alt:["我家人都在西安","我的家人都住在西安"],py:"Wǒ de jiārén dōu zài Xī'ān."}
+];
+const L15_SPEAK_SENT = [
+ {h:"我喜欢这个，也喜欢那个。",p:"Wǒ xǐhuan zhège, yě xǐhuan nàge.",vi:"Tôi thích cái này, cũng thích cái kia."},
+ {h:"我喜欢喝中国茶，还喜欢吃中国菜。",p:"Wǒ xǐhuan hē Zhōngguó chá, hái xǐhuan chī Zhōngguó cài.",vi:"Tôi thích uống trà Trung Quốc, còn thích ăn món Trung Quốc."},
+ {h:"你住在哪儿？",p:"Nǐ zhù zài nǎr?",vi:"Bạn sống ở đâu?"},
+ {h:"坐飞机要两个小时。",p:"Zuò fēijī yào liǎng ge xiǎoshí.",vi:"Đi máy bay mất hai tiếng."},
+ {h:"明天我去机场接你。",p:"Míngtiān wǒ qù jīchǎng jiē nǐ.",vi:"Ngày mai tôi đi sân bay đón bạn."},
+ {h:"西安很好玩儿。",p:"Xī'ān hěn hǎowánr.",vi:"Tây An rất thú vị."}
+];
+
 /* Thêm bài mới: tạo object giống L10 và đặt vào lessons[n] của cấp tương ứng */
 const LEVELS = {
- hsk1:{name:"HSK 1", total:13, lessons:{
+ hsk1:{name:"HSK 1", total:15, lessons:{
    9:{title:"Bài 9",theme:"",zh:"我明天上午在学校学习",vocab:L9_VOCAB,zhvi:L9_ZHVI,vizh:L9_VIZH,sentences:L9_SPEAK_SENT},
    10:{title:"Bài 10",theme:"",zh:"这儿的苹果真便宜！",vocab:L10_VOCAB,zhvi:L10_ZHVI,vizh:L10_VIZH,sentences:L10_SPEAK_SENT},
    11:{title:"Bài 11",theme:"",zh:"我读大学呢",vocab:L11_VOCAB,zhvi:L11_ZHVI,vizh:L11_VIZH,sentences:L11_SPEAK_SENT},
    12:{title:"Bài 12",theme:"",zh:"昨天下雪了",vocab:L12_VOCAB,zhvi:L12_ZHVI,vizh:L12_VIZH,sentences:L12_SPEAK_SENT},
-   13:{title:"Bài 13",theme:"",zh:"请给我一杯茶",vocab:L13_VOCAB,zhvi:L13_ZHVI,vizh:L13_VIZH,sentences:L13_SPEAK_SENT}}},
+   13:{title:"Bài 13",theme:"",zh:"请给我一杯茶",vocab:L13_VOCAB,zhvi:L13_ZHVI,vizh:L13_VIZH,sentences:L13_SPEAK_SENT},
+   14:{title:"Bài 14",theme:"",zh:"",vocab:L14_VOCAB,zhvi:L14_ZHVI,vizh:L14_VIZH,sentences:L14_SPEAK_SENT},
+   15:{title:"Bài 15",theme:"",zh:"",vocab:L15_VOCAB,zhvi:L15_ZHVI,vizh:L15_VIZH,sentences:L15_SPEAK_SENT}}},
  hsk2:{name:"HSK 2", total:0, lessons:{}},
  hsk3:{name:"HSK 3", total:0, lessons:{}},
  hsk4:{name:"HSK 4", total:0, lessons:{}}
@@ -1160,7 +1279,7 @@ function renderRail(){
   let h="";
   for(let i=1;i<=L.total;i++){
     const les=L.lessons[i];
-    h+=`<button role="tab" data-l="${i}" ${les?"":"disabled"} aria-selected="${S.lesson===i}">Bài ${i}<small>${les?(les.theme?esc(les.theme):`<span class="han">${esc(les.zh)}</span>`):"Sắp cập nhật"}</small></button>`;
+    h+=`<button role="tab" data-l="${i}" ${les?"":"disabled"} aria-selected="${S.lesson===i}">Bài ${i}<small>${les?(les.theme?esc(les.theme):(les.zh?`<span class="han">${esc(les.zh)}</span>`:"Bài mới")):"Sắp cập nhật"}</small></button>`;
   }
   $("#rail").innerHTML=h;
   $("#rail").onclick=e=>{const b=e.target.closest("button");if(!b||b.disabled)return;S.lesson=+b.dataset.l;renderAll();};
@@ -1174,7 +1293,7 @@ function renderLesson(){
   }
   box.innerHTML=`
   <div class="lesson-head">
-    <div><h1><span class="han">${L.name.replace(/\s+/g,"")}级 - 第${S.lesson}课: </span><span class="han hl">${esc(les.zh)}</span></h1>
+    <div><h1><span class="han">${L.name.replace(/\s+/g,"")}级 - 第${S.lesson}课${les.zh?": ":""}</span><span class="han hl">${esc(les.zh)}</span></h1>
     <p>${les.vocab.length} từ mới · ${les.zhvi.length+les.vizh.length} câu luyện dịch · ${new Set(les.vocab.map(w=>w.h)).size+les.sentences.length} mục luyện phát âm</p></div>
     <div class="sections" role="tablist" aria-label="Phần luyện tập">
       <button role="tab" data-s="flash" aria-selected="${S.section==="flash"}">${ICON.cards}Flashcard</button>
@@ -2294,6 +2413,92 @@ const L13_TEST = {
   }
 };
 LEVELS.hsk1.lessons[13].test=L13_TEST;
+const L14_TEST = {
+  answers: "CCBCBDBCAACBDBACBACA",
+  audio: { page: "https://hoanguchinesestation.com/tai-lieu/audio/audio-sbt-hsk-3-0-1", track: "14-2", main: "audio/14-2.mp3", parts: { 1: "", 2: "", 3: "", 4: "" } },
+  sections: [
+    { zh: "一、听力", vi: "Nghe hiểu", audio: true, parts: [
+      { no: 1, zh: "第一部分", vi: "Câu 1–3: Nghe cụm từ, chọn hình đúng. Mỗi câu nghe hai lần.", type: "pics3",
+        example: { lines: [["", "三个苹果"]], gloss: "ba quả táo", imgs: ["b14_l1_ex_A", "b14_l1_ex_B", "b14_l1_ex_C"], ans: "C" },
+        qs: [{ n: 1, imgs: ["b14_l1_q1_A", "b14_l1_q1_B", "b14_l1_q1_C"] }, { n: 2, imgs: ["b14_l1_q2_A", "b14_l1_q2_B", "b14_l1_q2_C"] }, { n: 3, imgs: ["b14_l1_q3_A", "b14_l1_q3_B", "b14_l1_q3_C"] }] },
+      { no: 2, zh: "第二部分", vi: "Câu 4–5: Nghe câu hỏi, chọn câu trả lời đúng. Mỗi câu nghe hai lần.", type: "choice",
+        example: { lines: [["", "今天天气怎么样？"]], gloss: "Hôm nay thời tiết thế nào?", opts: [["非常热", "rất nóng"], ["很好听", "rất hay"], ["在喝水", "đang uống nước"]], ans: "A" },
+        qs: [{ n: 4, opts: ["都写", "听见了", "都会写了"] }, { n: 5, opts: ["学习", "超市", "买面包"] }] },
+      { no: 3, zh: "第三部分", vi: "Câu 6–8: Nghe hội thoại, chọn hình phù hợp nhất. Mỗi câu nghe hai lần.", type: "poolpics",
+        pool: ["b14_l3_A", "b14_l3_B", "b14_l3_C", "b14_l3_D"],
+        example: { lines: [["女", "你好！"], ["男", "你好！很高兴认识你。"]], gloss: "Chào bạn! — Chào bạn! Rất vui được làm quen với bạn.", ans: "A" },
+        qs: [{ n: 6 }, { n: 7 }, { n: 8 }] },
+      { no: 4, zh: "第四部分", vi: "Câu 9–10: Nghe câu và câu hỏi, chọn đáp án đúng. Mỗi câu nghe hai lần.", type: "choice",
+        example: { lines: [["", "下午我去超市，我想买一些水果。"], ["问", "说话人下午去哪里？"]], gloss: "Chiều nay tôi đi siêu thị, tôi muốn mua ít trái cây. — Hỏi: Chiều nay người nói đi đâu?",
+          opts: [["超市", "siêu thị"], ["医院", "bệnh viện"], ["学校", "trường học"]], ans: "A" },
+        qs: [{ n: 9, opts: ["下课后", "上课前", "回家后"] }, { n: 10, opts: ["小狗", "小猫", "小狗和小猫"] }] }
+    ]},
+    { zh: "二、阅读", vi: "Đọc hiểu", parts: [
+      { no: 1, zh: "第一部分", vi: "Câu 11–13: Chọn hình phù hợp nhất với mỗi câu.", type: "poolpics",
+        pool: ["b14_r1_A", "b14_r1_B", "b14_r1_C", "b14_r1_D"],
+        example: { lines: [["", "我很喜欢这本书。"]], gloss: "Tôi rất thích quyển sách này.", ans: "A" },
+        qs: [{ n: 11, text: "王先生今天生病了，没来上班。" }, { n: 12, text: "火车上，有的人在读书，有的人在睡觉。" }, { n: 13, text: "喂，他们都来我家了，你也来吧。" }] },
+      { no: 2, zh: "第二部分", vi: "Câu 14–16: Nối câu hỏi với câu trả lời phù hợp.", type: "pooltext",
+        pool: ["是的，我睡了一觉。", "我们都去了。", "写字、看书、吃饭。", "好的，谢谢！"],
+        example: { lines: [["", "你喝水吗？"]], gloss: "Bạn uống nước không?", ans: "D" },
+        qs: [{ n: 14, text: "谁去学校了？" }, { n: 15, text: "你下午没去医院吗？" }, { n: 16, text: "你今天上午都忙了些什么？" }] },
+      { no: 3, zh: "第三部分", vi: "Câu 17–18: Chọn từ thích hợp điền vào chỗ trống.", type: "pooltext", inline: true,
+        pool: ["都", "茶", "名字"],
+        example: { lines: [["", "你叫什么（ C ）？"]], gloss: "Bạn tên là gì?", ans: "C" },
+        qs: [{ n: 17, text: "我喝了一杯（　　）。" }, { n: 18, lines: [["男", "上课了，请大家不要说话。"], ["女", "好的，老师，我们（　　）不说话了。"]] }] },
+      { no: 4, zh: "第四部分", vi: "Câu 19–20: Chọn đáp án đúng.", type: "choice",
+        example: { lines: [["", "请问现在几点了？"], ["★", "说话人想知道什么？"]], gloss: "Xin hỏi bây giờ mấy giờ rồi? — Người nói muốn biết điều gì?",
+          opts: [["时间", "thời gian"], ["名字", "tên"], ["房间号", "số phòng"]], ans: "A" },
+        qs: [{ n: 19, lines: [["", "服务员，我想问一下，我们的房间号是多少？"], ["★", "说话人想知道什么？"]], opts: ["时间", "电话号", "房间号"] },
+             { n: 20, lines: [["", "儿子和女儿都上小学了，他们会写很多字了。"], ["★", "说话人的两个孩子是："]], opts: ["小学生", "中学生", "大学生"] }] }
+    ]}
+  ],
+  explain: {"1": "Đáp án C – cô gái đặt ngón tay lên môi ra hiệu “đừng nói chuyện” (不要说话). Tranh A là ông cụ đang viết, tranh B là nhóm bạn đang nói chuyện vui vẻ.", "2": "Đáp án C – bàn tay đang viết chữ (写字). Tranh A là cô gái chơi đàn, tranh B là nhóm bạn xem điện thoại.", "3": "Đáp án B – người đàn ông ngồi trên tàu hoả (火车). Tranh A là hai người đạp xe, tranh C là cô gái nghe nhạc trên tàu điện.", "4": "Đáp án C 都会写了 (đều biết viết rồi) – trả lời câu hỏi kiểu “các bạn biết viết chưa?”. 都 + 会 + động từ + 了 diễn tả sự thay đổi: tất cả đã biết làm.", "5": "Đáp án B 超市 (siêu thị) – câu trả lời chỉ nơi chốn, phù hợp với câu hỏi “đi đâu / ở đâu”. A 学习 là học, C 买面包 là mua bánh mì (hành động).", "6": "Hội thoại phù hợp với tranh D – cô gái đang ngồi trên tàu xem điện thoại. Nghe lại và chú ý từ 火车 (tàu hoả).", "7": "Hội thoại phù hợp với tranh B – chàng trai đang viết / học bài bên máy tính (写 / 学习).", "8": "Hội thoại phù hợp với tranh C – cô gái giơ tay vươn vai rất vui vẻ. Nghe lại và chú ý tâm trạng của người nói.", "9": "Đáp án A 下课后 (sau khi tan học). Chú ý phân biệt 下课 (tan học) – 上课 (vào học), 后 (sau) – 前 (trước).", "10": "Đáp án A 小狗 (chó con). Chú ý: C là “chó con và mèo con”, B chỉ có mèo con.", "11": "王先生今天生病了，没来上班 – “Hôm nay ông Vương bị ốm, không đi làm”, nên chọn tranh C – người đàn ông đang hắt hơi, bị ốm.", "12": "火车上，有的人在读书，有的人在睡觉 – “Trên tàu, có người đang đọc sách, có người đang ngủ”, nên chọn tranh B – ông cụ ngủ, cậu bé đọc sách trên tàu.", "13": "喂，他们都来我家了，你也来吧 – “Alô, họ đều đến nhà mình rồi, bạn cũng đến đi” – người nói đang gọi điện thoại, nên chọn tranh D.", "14": "谁去学校了？ hỏi “Ai đã đến trường?”, trả lời B 我们都去了。 (Chúng tôi đều đi rồi).", "15": "你下午没去医院吗？ hỏi “Chiều nay bạn không đi bệnh viện à?”, trả lời A 是的，我睡了一觉。 (Đúng vậy, tôi đã ngủ một giấc).", "16": "你今天上午都忙了些什么？ hỏi “Sáng nay bạn đã bận những việc gì?”, trả lời liệt kê việc: C 写字、看书、吃饭。", "17": "我喝了一杯茶 – “Tôi đã uống một tách trà”. Sau 一杯 cần đồ uống → B 茶.", "18": "我们都不说话了 – “Chúng em đều không nói chuyện nữa”. 都 đứng trước từ phủ định 不 → A 都.", "19": "Câu hỏi 我们的房间号是多少？ – người nói muốn biết số phòng → C 房间号.", "20": "儿子和女儿都上小学了 – “Con trai và con gái đều đã lên tiểu học”, vậy hai con là học sinh tiểu học → A 小学生."}
+};
+LEVELS.hsk1.lessons[14].test=L14_TEST;
+const L15_TEST = {
+  answers: "ABCACBDCABDBCBACBACA",
+  audio: { page: "https://hoanguchinesestation.com/tai-lieu/audio/audio-sbt-hsk-3-0-1", track: "15-2", main: "audio/15-2.mp3", parts: { 1: "", 2: "", 3: "", 4: "" } },
+  sections: [
+    { zh: "一、听力", vi: "Nghe hiểu", audio: true, parts: [
+      { no: 1, zh: "第一部分", vi: "Câu 1–3: Nghe cụm từ, chọn hình đúng. Mỗi câu nghe hai lần.", type: "pics3",
+        example: { lines: [["", "三个苹果"]], gloss: "ba quả táo", imgs: ["b15_l1_ex_A", "b15_l1_ex_B", "b15_l1_ex_C"], ans: "C" },
+        qs: [{ n: 1, imgs: ["b15_l1_q1_A", "b15_l1_q1_B", "b15_l1_q1_C"] }, { n: 2, imgs: ["b15_l1_q2_A", "b15_l1_q2_B", "b15_l1_q2_C"] }, { n: 3, imgs: ["b15_l1_q3_A", "b15_l1_q3_B", "b15_l1_q3_C"] }] },
+      { no: 2, zh: "第二部分", vi: "Câu 4–5: Nghe câu hỏi, chọn câu trả lời đúng. Mỗi câu nghe hai lần.", type: "choice",
+        example: { lines: [["", "今天天气怎么样？"]], gloss: "Hôm nay thời tiết thế nào?", opts: [["非常热", "rất nóng"], ["很好听", "rất hay"], ["在喝水", "đang uống nước"]], ans: "A" },
+        qs: [{ n: 4, opts: ["太早了", "没睡觉", "不想去"] }, { n: 5, opts: ["很多", "也不贵", "也很好看"] }] },
+      { no: 3, zh: "第三部分", vi: "Câu 6–8: Nghe hội thoại, chọn hình phù hợp nhất. Mỗi câu nghe hai lần.", type: "poolpics",
+        pool: ["b15_l3_A", "b15_l3_B", "b15_l3_C", "b15_l3_D"],
+        example: { lines: [["女", "你好！"], ["男", "你好！很高兴认识你。"]], gloss: "Chào bạn! — Chào bạn! Rất vui được làm quen với bạn.", ans: "A" },
+        qs: [{ n: 6 }, { n: 7 }, { n: 8 }] },
+      { no: 4, zh: "第四部分", vi: "Câu 9–10: Nghe câu và câu hỏi, chọn đáp án đúng. Mỗi câu nghe hai lần.", type: "choice",
+        example: { lines: [["", "下午我去超市，我想买一些水果。"], ["问", "说话人下午去哪里？"]], gloss: "Chiều nay tôi đi siêu thị, tôi muốn mua ít trái cây. — Hỏi: Chiều nay người nói đi đâu?",
+          opts: [["超市", "siêu thị"], ["医院", "bệnh viện"], ["学校", "trường học"]], ans: "A" },
+        qs: [{ n: 9, opts: ["西安", "北京", "上海"] }, { n: 10, opts: ["坐飞机", "坐火车", "坐出租车"] }] }
+    ]},
+    { zh: "二、阅读", vi: "Đọc hiểu", parts: [
+      { no: 1, zh: "第一部分", vi: "Câu 11–13: Chọn hình phù hợp nhất với mỗi câu.", type: "poolpics",
+        pool: ["b15_r1_A", "b15_r1_B", "b15_r1_C", "b15_r1_D"],
+        example: { lines: [["", "我很喜欢这本书。"]], gloss: "Tôi rất thích quyển sách này.", ans: "A" },
+        qs: [{ n: 11, text: "我家有五口人，我们现在住在北京。" }, { n: 12, text: "这里有好吃的，还有好玩儿的。" }, { n: 13, text: "现在我会说一点儿汉语，也会写一些汉字了。" }] },
+      { no: 2, zh: "第二部分", vi: "Câu 14–16: Nối câu hỏi với câu trả lời phù hợp.", type: "pooltext",
+        pool: ["我女儿。", "十个。", "苹果。", "好的，谢谢！"],
+        example: { lines: [["", "你喝水吗？"]], gloss: "Bạn uống nước không?", ans: "D" },
+        qs: [{ n: 14, text: "你会写几个汉字？" }, { n: 15, text: "谁上中学了？" }, { n: 16, text: "你爱吃什么？" }] },
+      { no: 3, zh: "第三部分", vi: "Câu 17–18: Chọn từ thích hợp điền vào chỗ trống.", type: "pooltext", inline: true,
+        pool: ["电视", "北京", "名字"],
+        example: { lines: [["", "你叫什么（ C ）？"]], gloss: "Bạn tên là gì?", ans: "C" },
+        qs: [{ n: 17, text: "今年我们都想去（　　）。" }, { n: 18, lines: [["男", "我爱看电影，也爱唱歌。你呢？"], ["女", "我喜欢看（　　）。"]] }] },
+      { no: 4, zh: "第四部分", vi: "Câu 19–20: Chọn đáp án đúng.", type: "choice",
+        example: { lines: [["", "请问现在几点了？"], ["★", "说话人想知道什么？"]], gloss: "Xin hỏi bây giờ mấy giờ rồi? — Người nói muốn biết điều gì?",
+          opts: [["时间", "thời gian"], ["名字", "tên"], ["房间号", "số phòng"]], ans: "A" },
+        qs: [{ n: 19, lines: [["", "明天星期天，儿子想去看一个电影。"], ["★", "儿子明天想："]], opts: ["买电脑", "打电话", "看电影"] },
+             { n: 20, lines: [["", "下小雨了，小狗非常高兴，它喜欢小雨。"], ["★", "小狗喜欢："]], opts: ["下小雨", "下大雨", "下小雪"] }] }
+    ]}
+  ],
+  explain: {"1": "Đáp án A – ấm trà và hai chén trà (茶). Tranh B là hai bạn nhỏ ăn táo, tranh C là tách cà phê.", "2": "Đáp án B – máy bay (飞机) ở sân bay. Tranh A là ô tô, tranh C là xe buýt.", "3": "Đáp án C – cả gia đình ngồi ăn cơm cùng nhau (家人). Tranh A là hai mẹ con đọc sách, tranh B là đồng nghiệp làm việc.", "4": "Đáp án A 太早了 (sớm quá). Cấu trúc 太…了 trả lời cho câu hỏi về thời gian, ví dụ “bây giờ đi nhé?”. B 没睡觉 là chưa ngủ, C 不想去 là không muốn đi.", "5": "Đáp án C 也很好看 (cũng rất đẹp) – đáp lại khi người kia khen một thứ đẹp. 也 + phó từ + tính từ. A 很多 là rất nhiều, B 也不贵 là cũng không đắt.", "6": "Hội thoại nói về trà (茶), nên chọn tranh B – khay trà.", "7": "Hội thoại nói về việc mua quần áo, nên chọn tranh D – cửa hàng quần áo.", "8": "Hội thoại nói về thành phố Bắc Kinh (北京), nên chọn tranh C – các toà nhà cao tầng của thành phố.", "9": "Đáp án A 西安 (Tây An). Chú ý phân biệt tên ba thành phố 西安 – 北京 – 上海.", "10": "Đáp án B 坐火车 (đi tàu hoả). Chú ý phân biệt 飞机 (máy bay), 火车 (tàu hoả), 出租车 (taxi).", "11": "我家有五口人，我们现在住在北京 – “Nhà tôi có năm người, bây giờ chúng tôi sống ở Bắc Kinh”, nên chọn tranh D – gia đình năm người.", "12": "这里有好吃的，还有好玩儿的 – “Ở đây có đồ ăn ngon, còn có trò chơi vui”, nên chọn tranh B – vòng quay ngựa gỗ.", "13": "现在我会说一点儿汉语，也会写一些汉字了 – “Bây giờ tôi biết nói một chút tiếng Trung, cũng biết viết một ít chữ Hán rồi”, nên chọn tranh C – vở tập viết chữ Hán.", "14": "你会写几个汉字？ hỏi số lượng “Bạn biết viết mấy chữ Hán?”, trả lời B 十个。 (Mười chữ).", "15": "谁上中学了？ hỏi “Ai đã lên trung học?”, trả lời bằng người: A 我女儿。 (Con gái tôi).", "16": "你爱吃什么？ hỏi “Bạn thích ăn gì?”, trả lời bằng đồ ăn: C 苹果。 (Táo).", "17": "今年我们都想去北京 – “Năm nay chúng tôi đều muốn đi Bắc Kinh”. Sau 去 cần nơi chốn → B 北京.", "18": "我喜欢看电视 – “Tôi thích xem tivi”. 看 + 电视 → A 电视.", "19": "儿子想去看一个电影 – “Con trai muốn đi xem một bộ phim” → C 看电影.", "20": "小狗喜欢小雨 – “Chú chó thích mưa nhỏ” → A 下小雨. Chú ý phân biệt 小雨 (mưa nhỏ), 大雨 (mưa to), 小雪 (tuyết nhỏ)."}
+};
+LEVELS.hsk1.lessons[15].test=L15_TEST;
 /* khoá riêng cho từng từ (để 2 từ cùng chữ, ví dụ 天 "trời" và 天 "ngày", vẫn là 2 thẻ khác nhau) */
 Object.values(LEVELS).forEach(L=>Object.values(L.lessons).forEach(les=>{const seen={}; les.vocab.forEach(w=>{seen[w.h]=(seen[w.h]||0)+1; w.k=seen[w.h]>1?w.h+"·"+seen[w.h]:w.h;});}));
 
@@ -4195,6 +4400,49 @@ const GRAMMAR = {
        { c:["请","[给]","我","一杯牛奶"], end:"。", vi:"Cho tôi một ly sữa." },
        { c:["白家月","[给]","安妮","一个苹果"], end:"。", vi:"Bạch Gia Nguyệt cho Annie một quả táo." },
        { c:["我","[问]","老师","两个问题"], end:"。", vi:"Tôi hỏi giáo viên hai câu hỏi." } ] }] }
+  ],
+  14: [
+   { id:"le2", zh:"动态助词“了（2）”", vi:"Trợ từ động thái “了” (2)",
+     desc:"“了” đứng ngay sau động từ, biểu thị hành động đã xảy ra hoặc đã hoàn thành. Phủ định dùng 没 trước động từ và bỏ 了.",
+     forms:[
+      { cap:"Khẳng định", slots:[["S","Chủ ngữ"],["V","Động từ"],["kw","了"],["Nu","Số lượng"],["O","Tân ngữ"]], ex:[
+        { c:["我","看","[了]","一个","电影"], end:"。", vi:"Tôi đã xem một bộ phim." },
+        { c:["我","买","[了]","一个","新电脑"], end:"。", vi:"Tôi đã mua một chiếc máy tính mới." },
+        { c:["白家月","喝","[了]","一杯","茶"], end:"。", vi:"Bạch Gia Nguyệt đã uống một tách trà." } ] },
+      { cap:"Phủ định: 没 + động từ, bỏ 了", slots:[["S","Chủ ngữ"],["T","(Thời gian)"],["kw","没"],["V","Động từ"],["O","Tân ngữ"]], ex:[
+        { c:["我","昨天","[没]","去","商店买东西"], end:"。", vi:"Hôm qua tôi không đi cửa hàng mua đồ." },
+        { c:["我","","[没]","看","电影"], end:"。", vi:"Tôi không xem phim." } ] } ],
+     practice:[{ type:"fill", items:[
+       [["A","你去哪儿{了}？"],["B","我今天有课，去学校上{了}课，还在那儿吃{了}午饭。"]],
+       [["A","我昨天看{了}电影，{还}去超市。你呢？"],["B","我昨天去{了}超市，{没}看电影。"]] ] }] },
+   { id:"lihe1", zh:"离合词（1）", vi:"Từ li hợp (1)",
+     desc:"Một số động từ như 上课, 下课, 上班, 下班, 说话, 读书, 睡觉, 看病, 生病… khi hợp lại là một từ, nhưng có thể tách ra để chèn thành phần khác vào giữa (了, số lượng, định ngữ…). Thành phần chèn vào có giới hạn.",
+     forms:[{ cap:"Tách: động từ + thành phần chèn + phần còn lại", slots:[["V","Động từ"],["kw","Thành phần chèn"],["O","Phần còn lại"],["X","Dạng hợp","="]], ex:[
+       { c:["睡","[了]","觉","睡觉"], vi:"đã ngủ" },
+       { c:["睡","[了一]","觉","睡觉"], vi:"đã ngủ một giấc" },
+       { c:["上","[了]","课","上课"], vi:"đã lên lớp" },
+       { c:["上","[中文]","课","上课"], vi:"học tiết tiếng Trung" },
+       { c:["下","[了]","班","下班"], vi:"đã tan làm" },
+       { c:["生","[了]","病","生病"], vi:"đã bị ốm" },
+       { c:["生","[了大]","病","生病"], vi:"đã bị ốm nặng" },
+       { c:["说","[了]","话","说话"], vi:"đã nói chuyện" },
+       { c:["说","[了很多]","话","说话"], vi:"đã nói rất nhiều" } ] }] },
+   { id:"dou", zh:"范围副词“都”", vi:"Phó từ chỉ phạm vi “都”",
+     desc:"“都” biểu thị toàn bộ, tất cả. Đối tượng được bao quát đứng TRƯỚC 都. Khi phủ định, từ phủ định (不/没) đứng SAU 都.",
+     forms:[{ slots:[["S","Đối tượng (số nhiều)"],["kw","都"],["kw","(不/没)"],["V","Vị ngữ"]], ex:[
+       { c:["我们","[都]","","会写了"], end:"。", vi:"Chúng tôi đều biết viết rồi." },
+       { c:["我和我的朋友们","[都]","","去"], end:"。", vi:"Tôi và các bạn của tôi đều đi." },
+       { c:["同学们","[都]","[没]","听见"], end:"。", vi:"Các bạn học đều không nghe thấy." },
+       { c:["她们","[都]","[不]","是老师"], end:"。", vi:"Các cô ấy đều không phải giáo viên." } ] }] }
+  ],
+  15: [
+   { id:"binglie", zh:"并列复句“……，还/也……”", vi:"Câu ghép đẳng lập “……，还/也……”",
+     desc:"Câu gồm hai (hoặc nhiều) vế có quan hệ lô-gic và cấu trúc đối xứng. Vế sau dùng 也 (cũng) hoặc 还 (còn) để nối thêm ý.",
+     forms:[{ slots:[["X","Vế 1"],["S","(Chủ ngữ vế 2)"],["kw","也 / 还"],["V","Vế 2"]], ex:[
+       { c:["我喜欢这个，","","[也]","喜欢那个"], end:"。", vi:"Tôi thích cái này, cũng thích cái kia." },
+       { c:["王老师是北京人，","李文","[也]","是北京人"], end:"。", vi:"Thầy Vương là người Bắc Kinh, Lý Văn cũng là người Bắc Kinh." },
+       { c:["我喜欢喝中国茶，","","[还]","喜欢吃中国菜"], end:"。", vi:"Tôi thích uống trà Trung Quốc, còn thích ăn món Trung Quốc." },
+       { c:["这里有好吃的，","","[还]","有好玩儿的"], end:"。", vi:"Ở đây có đồ ăn ngon, còn có chỗ vui chơi." } ] }] }
   ]
  }
 };
