@@ -447,7 +447,12 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .gr-bubble b.han{color:#D2432F;font-size:19px}.gr-sub{color:#D2432F}.gr-bubble span{color:var(--ink)}
 .gr-legend{display:flex;flex-wrap:wrap;gap:6px}
 .gr-filter{flex-wrap:wrap;justify-self:start}
-.gr-toc{display:flex;flex-wrap:wrap;gap:6px}.gr-toc a{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 12px;color:var(--ink);text-decoration:none;font-size:14px}.gr-toc a:hover{border-color:var(--accent)}.gr-toc small{color:var(--muted)}
+.gr-toc{display:flex;flex-wrap:wrap;gap:8px}
+.gr-toc button{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px 6px 6px;font-size:15px;color:var(--ink);cursor:pointer;transition:transform .15s,border-color .15s}
+.gr-toc button b{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--surface-2);color:var(--muted);font-size:12.5px}
+.gr-toc button small{color:var(--muted);font-size:13px}
+.gr-toc button:hover{border-color:#D2432F;transform:translateY(-2px)}
+.gr-toc button[aria-selected="true"]{background:#D2432F;border-color:#D2432F;color:#fff}.gr-toc button[aria-selected="true"] b{background:#fff;color:#D2432F}.gr-toc button[aria-selected="true"] small{color:#FFE3DC}.gr-toc a{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 12px;color:var(--ink);text-decoration:none;font-size:14px}.gr-toc a:hover{border-color:var(--accent)}.gr-toc small{color:var(--muted)}
 .gr-pt{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px 20px;display:grid;gap:12px;box-shadow:var(--shadow);scroll-margin-top:12px}
 .gr-pt header{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.gr-pt h3{margin:0;font-size:20px}.gr-pt h3 small{font-family:var(--f-body);font-size:15px;color:var(--muted);font-weight:600}
 .gr-les{background:#D2432F;color:#fff;border-radius:8px;padding:2px 9px;font-weight:700;font-size:13px}
@@ -4044,7 +4049,7 @@ const Grammar = {
   },
   point(p, lv, n){
     return `<article class="gr-pt" id="gr-${lv}-${n}-${p.id}">
-      <header><span class="gr-les">Bài ${n}</span><h3><span class="han">${esc(p.zh)}</span> <small>${esc(p.vi)}</small></h3></header>
+      <header><span class="gr-les han">第${n}课</span><h3><span class="han">${esc(p.zh)}</span> <small>${esc(p.vi)}</small></h3></header>
       <p class="gr-desc">${esc(p.desc)}</p>
       ${p.table ? `<div class="gr-tab"><b>${esc(p.table.title)}</b><div class="gr-tcells">${p.table.cells.map(([h, py, vi]) => `<button class="gr-tc" data-say="${esc(h.split("/")[0])}"><small>${esc(py)}</small><span class="han">${esc(h)}</span><em>${esc(vi)}</em></button>`).join("")}</div></div>` : ""}
       ${(p.forms || []).map((f, k) => this.form(f, p.id, k)).join("")}
@@ -4060,14 +4065,24 @@ const Grammar = {
     root.querySelectorAll("[data-say]").forEach(b => b.onclick = () => speak(b.dataset.say));
     const py = root.querySelector("#grPy"); if(py) py.onclick = () => { this.showPy = !this.showPy; rerender(); };
   },
+  /* mỗi điểm ngữ pháp là 1 tab – chỉ hiện điểm đang chọn */
+  pts(lv, list){ return list.flatMap(n => (GRAMMAR[lv][n] || []).map(p => ({ n, p, key: n + "|" + p.id }))); },
+  pick(all, key){ return all.find(x => x.key === key) || all[0]; },
+  tabs(all, cur, showLes){
+    return `<div class="gr-toc" role="tablist" aria-label="Chọn điểm ngữ pháp">${all.map((x, i) => `<button role="tab" data-pt="${x.key}" aria-selected="${x === cur}"><b>${i + 1}</b>${showLes ? `<small class="han">第${x.n}课</small>` : ""}<span class="han">${esc(x.p.zh)}</span></button>`).join("")}</div>`;
+  },
   /* tab "Ngữ pháp" trong từng bài học */
   mount(les){
     const W = $("#work"), lv = S.level, n = S.lesson;
-    const draw = () => { W.innerHTML = `<div class="gr gr-in">
-      <div class="gr-hero sm">${xiaoyuSVG()}<div class="gr-bubble"><div><b class="han">小语讲堂</b> · Lớp học của Tiểu Ngữ</div><span>Bài ${n} có ${GRAMMAR[lv][n].length} điểm ngữ pháp. Nhìn màu ở ô công thức rồi dò xuống các câu ví dụ nhé!</span></div></div>
+    let draw = () => { W.innerHTML = `<div class="gr gr-in">
+      <div class="gr-hero sm">${xiaoyuSVG()}<div class="gr-bubble"><div><b class="han">小语讲堂</b> · Lớp học của Tiểu Ngữ</div><span>Bài ${n} có ${GRAMMAR[lv][n].length} điểm ngữ pháp${GRAMMAR[lv][n].length > 1 ? " – bấm từng thẻ để xem từng công thức" : ""}. Nhìn màu ở ô công thức rồi dò xuống các câu ví dụ nhé!</span></div></div>
       <div class="toolbar"><span class="muted">Màu giống nhau = cùng một thành phần câu</span><div class="grp">${this.pyBtn()}<button class="btn" id="grAll">Xem tất cả ngữ pháp</button></div></div>
-      ${this.body(lv, [n])}</div>`;
-      this.bindCommon(W, draw); $("#grAll").onclick = () => this.open(); };
+      ${all.length > 1 ? this.tabs(all, cur, false) : ""}
+      ${cur ? this.point(cur.p, lv, cur.n) : ""}</div>`;
+      this.bindCommon(W, draw); $("#grAll").onclick = () => this.open();
+      W.querySelectorAll("[data-pt]").forEach(b => b.onclick = () => { this.selIn = b.dataset.pt; draw(); }); };
+    let all, cur;
+    const _draw = draw; draw = () => { all = this.pts(lv, [n]); cur = this.pick(all, this.selIn); _draw(); };
     draw();
   },
   /* trang "Tổng hợp ngữ pháp" */
@@ -4077,18 +4092,19 @@ const Grammar = {
   render(){
     const B = $("#grBody"), lv = S.level in GRAMMAR ? S.level : "hsk1", ls = this.lessonsOf(lv);
     const list = this.filter === "all" ? ls : ls.filter(x => x === +this.filter);
+    const all = this.pts(lv, list), cur = this.pick(all, this.sel);
     B.innerHTML = `<div class="gr gr-page">
       <div class="gr-top"><button class="btn" id="grBack">${ICON.left}Về trang học</button>${this.pyBtn()}</div>
       <div class="gr-hero">${xiaoyuSVG()}<div class="gr-bubble"><div><b class="han">小语讲堂</b> · <b class="gr-sub">Lớp học của Tiểu Ngữ</b></div>
         <span>Xin chào, mình là <b>Tiểu Ngữ 小语</b>! Đây là tổng hợp ngữ pháp ${esc((LEVELS[lv] || {}).name || "HSK 1")}. Mỗi điểm ngữ pháp có <b>ô công thức</b> tô màu theo thành phần câu; các câu ví dụ được xếp <b>thẳng cột</b> với công thức để bạn dễ đối chiếu.</span></div></div>
       ${this.legend()}
-      <div class="seg gr-filter" role="group" aria-label="Chọn bài">${[["all", "Tất cả"], ...ls.map(x => [String(x), "Bài " + x])].map(([v, l]) => `<button data-f="${v}" aria-pressed="${String(this.filter) === v}">${l}</button>`).join("")}</div>
-      <nav class="gr-toc">${list.map(n => GRAMMAR[lv][n].map(p => `<a href="#gr-${lv}-${n}-${p.id}"><small>Bài ${n}</small> <span class="han">${esc(p.zh)}</span></a>`).join("")).join("")}</nav>
-      ${this.body(lv, list)}
+      <div class="seg gr-filter" role="group" aria-label="Chọn bài">${[["all", "全部"], ...ls.map(x => [String(x), "第" + x + "课"])].map(([v, l]) => `<button data-f="${v}" aria-pressed="${String(this.filter) === v}">${l}</button>`).join("")}</div>
+      ${this.tabs(all, cur, this.filter === "all")}
+      ${cur ? this.point(cur.p, lv, cur.n) : `<div class="empty"><span class="han">语</span>Chưa có ngữ pháp cho mục này.</div>`}
       <p class="muted gr-foot">Các bài khác sẽ được giáo viên bổ sung dần.</p></div>`;
     $("#grBack").onclick = () => enterApp();
-    B.querySelectorAll("[data-f]").forEach(b => b.onclick = () => { this.filter = b.dataset.f; this.render(); });
-    B.querySelectorAll(".gr-toc a").forEach(a => a.onclick = e => { e.preventDefault(); const t = document.getElementById(a.getAttribute("href").slice(1)); if(t) t.scrollIntoView({ behavior: "smooth", block: "start" }); });
+    B.querySelectorAll("[data-f]").forEach(b => b.onclick = () => { this.filter = b.dataset.f; this.sel = null; this.render(); });
+    B.querySelectorAll("[data-pt]").forEach(b => b.onclick = () => { this.sel = b.dataset.pt; const y = window.scrollY; this.render(); window.scrollTo(0, y); });
     this.bindCommon(B, () => { const y = window.scrollY; this.render(); window.scrollTo(0, y); });
   }
 };
