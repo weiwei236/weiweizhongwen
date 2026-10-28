@@ -4053,7 +4053,7 @@ const Grammar = {
   },
   point(p, lv, n){
     return `<article class="gr-pt" id="gr-${lv}-${n}-${p.id}">
-      <header><span class="gr-les han">第${n}课</span><h3><span class="han">${esc(p.zh)}</span> <small>${esc(p.vi)}</small></h3></header>
+      <header><span class="gr-les">Bài ${n}</span><h3><span class="han">${esc(p.zh)}</span> <small>${esc(p.vi)}</small></h3></header>
       <p class="gr-desc">${esc(p.desc)}</p>
       ${p.table ? `<div class="gr-tab"><b>${esc(p.table.title)}</b><div class="gr-tcells">${p.table.cells.map(([h, py, vi]) => `<button class="gr-tc" data-say="${esc(h.split("/")[0])}"><small>${esc(py)}</small><span class="han">${esc(h)}</span><em>${esc(vi)}</em></button>`).join("")}</div></div>` : ""}
       ${(p.forms || []).map((f, k) => this.form(f, p.id, k)).join("")}
@@ -4073,7 +4073,7 @@ const Grammar = {
   pts(lv, list){ return list.flatMap(n => (GRAMMAR[lv][n] || []).map(p => ({ n, p, key: n + "|" + p.id }))); },
   pick(all, key){ return all.find(x => x.key === key) || all[0]; },
   tabs(all, cur, showLes){
-    return `<div class="gr-toc" role="tablist" aria-label="Chọn điểm ngữ pháp">${all.map((x, i) => `<button role="tab" data-pt="${x.key}" aria-selected="${x === cur}"><b>${i + 1}</b>${showLes ? `<small class="han">第${x.n}课</small>` : ""}<span class="han">${esc(x.p.zh)}</span></button>`).join("")}</div>`;
+    return `<div class="gr-toc" role="tablist" aria-label="Chọn điểm ngữ pháp">${all.map((x, i) => `<button role="tab" data-pt="${x.key}" aria-selected="${x === cur}"><b>${i + 1}</b>${showLes ? `<small>Bài ${x.n}</small>` : ""}<span>${esc(x.p.vi)}</span></button>`).join("")}</div>`;
   },
   /* tab "Ngữ pháp" trong từng bài học */
   mount(les){
@@ -4102,7 +4102,7 @@ const Grammar = {
       <div class="gr-hero">${xiaoyuSVG()}<div class="gr-bubble"><div><b class="han">小语讲堂</b> · <b class="gr-sub">Lớp học của Tiểu Ngữ</b></div>
         <span>Xin chào, mình là <b>Tiểu Ngữ 小语</b>! Đây là tổng hợp ngữ pháp ${esc((LEVELS[lv] || {}).name || "HSK 1")}. Mỗi điểm ngữ pháp có <b>ô công thức</b> tô màu theo thành phần câu; các câu ví dụ được xếp <b>thẳng cột</b> với công thức để bạn dễ đối chiếu.</span></div></div>
       ${this.legend()}
-      <div class="seg gr-filter" role="group" aria-label="Chọn bài">${[["all", "全部"], ...ls.map(x => [String(x), "第" + x + "课"])].map(([v, l]) => `<button data-f="${v}" aria-pressed="${String(this.filter) === v}">${l}</button>`).join("")}</div>
+      <div class="seg gr-filter" role="group" aria-label="Chọn bài">${[["all", "Tất cả"], ...ls.map(x => [String(x), "Bài " + x])].map(([v, l]) => `<button data-f="${v}" aria-pressed="${String(this.filter) === v}">${l}</button>`).join("")}</div>
       ${this.tabs(all, cur, this.filter === "all")}
       ${cur ? this.point(cur.p, lv, cur.n) : `<div class="empty"><span class="han">语</span>Chưa có ngữ pháp cho mục này.</div>`}</div>`;
     $("#grBack").onclick = () => enterApp();
