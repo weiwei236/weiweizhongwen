@@ -487,9 +487,9 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .gr-who{font-weight:700;white-space:nowrap}
 .gr-gap{grid-column:1/-1;height:4px}
 .gr-say .say-sm{vertical-align:middle}
-.gr-blank{display:inline-grid;place-items:center;min-width:var(--w);height:1.45em;margin:0 4px;vertical-align:middle;border:2px dashed #D2432F;border-radius:8px;background:#FFF6F3;font:inherit;cursor:pointer;transition:background .15s,transform .15s}
+.gr-blank{display:inline-flex;align-items:center;justify-content:center;min-width:var(--w);height:1.5em;padding:0 .3em;line-height:1;margin:0 4px;vertical-align:middle;border:2px dashed #D2432F;border-radius:8px;background:#FFF6F3;font:inherit;cursor:pointer;transition:background .15s,transform .15s}
 .gr-blank:hover{background:#FFE6DF;transform:translateY(-1px)}
-.gr-blank span{visibility:hidden;color:#D2432F;font-weight:700}
+.gr-blank span{display:block;line-height:1;transform:translateY(-.07em);visibility:hidden;color:#D2432F;font-weight:700}.gr-blank:focus{outline:none}.gr-blank:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .gr-blank.show{border-style:solid;background:#fff}.gr-blank.show span{visibility:visible}
 @media (max-width:560px){.gr-dlg{font-size:20px;column-gap:4px}}
 .gr-foot{text-align:center}
