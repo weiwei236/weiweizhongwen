@@ -426,7 +426,6 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .ra-pyc{display:flex;gap:4px}
 .ra-prevhost{position:relative}.ra-prev{padding-top:16px}.ra-prev-t{margin:0 0 8px;text-align:center;font-size:20px}
 .ra-rb{cursor:pointer;border-radius:4px;transition:background .12s}.ra-rb:hover,.ra-rb:focus{background:#FFE6DF;outline:none}
-.ra-rb.fixed rt,.py-fixed rt{color:#D2432F;font-weight:700}
 .ra-pyinfo{font-size:13px;margin-top:6px}
 .ra-pypop{position:absolute;z-index:5;width:270px;background:#fff;border:1.5px solid #D2432F;border-radius:12px;box-shadow:var(--shadow);padding:10px;display:grid;gap:8px;font-family:var(--f-body)}
 .ra-pypop>b{font-size:26px}.ra-pypop .inp{font-size:18px;padding:7px 10px}
@@ -4021,7 +4020,7 @@ const RdAdmin = {
     const fix = d.pyFix || (d.pyFix = {}), paras = paraList(d);
     p.innerHTML = (d.title ? `<h4 class="ra-prev-t">${rubyHTML(d.title, fix, "t", true)}</h4>` : "") + (paras.map((x, k) => `<p>${rubyHTML(x, fix, k, true)}</p>`).join("") || `<p class="t-dim">Gõ nội dung để xem trước.</p>`);
     const n = Object.keys(fix).length, info = $("#raPyInfo");
-    if(info) info.innerHTML = n ? `Đã sửa phiên âm ${n} chữ (tô đỏ). <button type="button" class="linkbtn" id="raPyReset">Bỏ hết, dùng lại phiên âm tự động</button>` : "Phiên âm tự động có thể sai ở chữ đa âm (như 了, 还, 得, 长…). Bấm vào chữ để sửa.";
+    if(info) info.innerHTML = n ? `Đã sửa phiên âm ${n} chữ. <button type="button" class="linkbtn" id="raPyReset">Bỏ hết, dùng lại phiên âm tự động</button>` : "Phiên âm tự động có thể sai ở chữ đa âm (như 了, 还, 得, 长…). Bấm vào chữ để sửa.";
     const rs = $("#raPyReset"); if(rs) rs.onclick = () => { d.pyFix = {}; this.preview(); };
     p.querySelectorAll(".ra-rb").forEach(rb => { rb.onclick = () => this.pyPop(rb); rb.onkeydown = e => { if(e.key === "Enter") this.pyPop(rb); }; });
   },
