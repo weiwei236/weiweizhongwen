@@ -479,6 +479,20 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .gr-tc{border:1px solid var(--line);background:#FFFDF6;border-radius:10px;padding:6px;display:grid;justify-items:center;gap:1px;cursor:pointer}
 .gr-tc:hover{border-color:var(--accent)}.gr-tc small{color:var(--accent);font-size:12px}.gr-tc span{font-size:20px}.gr-tc em{font-style:normal;font-size:12px;color:var(--muted)}
 .gr-note{background:var(--leaf-soft);border-radius:12px;padding:10px 14px;font-size:15px}.gr-note small{color:var(--muted)}.gr-note p{margin:4px 0 0}
+.gr-prac{display:grid;gap:12px;border-top:2px dashed #F3C9BE;padding-top:12px}
+.gr-prac h4{margin:0;color:#D2432F;font-size:17px}
+.gr-ptitle{font-weight:700;font-size:15.5px}
+.gr-pblock{display:grid;gap:10px}.gr-phint{font-size:13.5px;color:var(--muted);margin-top:-6px}
+.gr-dlg{display:grid;grid-template-columns:max-content max-content minmax(0,1fr);column-gap:8px;row-gap:8px;align-items:center;font-family:"SimSun","宋体","NSimSun","Songti SC","STSong","Noto Serif SC","Noto Serif CJK SC",serif;font-size:24px;color:var(--ink)}
+.gr-dno{font-family:"Times New Roman",serif;font-size:20px;color:var(--muted)}
+.gr-who{font-weight:700;white-space:nowrap}
+.gr-gap{grid-column:1/-1;height:4px}
+.gr-say .say-sm{vertical-align:middle}
+.gr-blank{display:inline-grid;place-items:center;min-width:var(--w);height:1.45em;margin:0 4px;vertical-align:middle;border:2px dashed #D2432F;border-radius:8px;background:#FFF6F3;font:inherit;cursor:pointer;transition:background .15s,transform .15s}
+.gr-blank:hover{background:#FFE6DF;transform:translateY(-1px)}
+.gr-blank span{visibility:hidden;color:#D2432F;font-weight:700}
+.gr-blank.show{border-style:solid;background:#fff}.gr-blank.show span{visibility:visible}
+@media (max-width:560px){.gr-dlg{font-size:20px;column-gap:4px}}
 .gr-foot{text-align:center}
 .gr-btn svg{width:18px;height:18px}
 @media (max-width:560px){.gr-hero{padding:10px}.gr-hero .xiaoyu{width:70px}.gr-pt{padding:14px 12px}.gr-tbl td{font-size:20px}}
@@ -3807,7 +3821,9 @@ const GRAMMAR = {
         { c:["我","","学生"], end:"", vi:"học sinh của tôi" },
         { c:["你","","同学"], end:"", vi:"bạn học của bạn" },
         { c:["我","","妈妈"], end:"", vi:"mẹ tôi" } ] } ],
-     notes:["Hoàn thành hội thoại: A: 这是我（老师）。 B: 老师，您好！","李文：请问，你（同学）叫什么名字？ 白家月：我（同学）叫王一飞。 → 我同学 = bạn học của tôi, không cần “的”."] },
+     practice:[{ type:"fill", items:[
+       [["A","这是我{老师}。"],["B","老师，您好！"]],
+       [["李文","请问，你{同学}叫什么名字？"],["白家月","我{同学}叫王一飞。"]] ] }] },
    { id:"ma", zh:"用“吗”的是非问句", vi:"Câu hỏi “có … không?” với “吗”",
      desc:"“吗” là trợ từ ngữ khí, đặt ở cuối câu trần thuật để biến nó thành câu hỏi có/không. Trật tự các thành phần khác giữ nguyên.",
      forms:[{ slots:[["S","Chủ ngữ"],["V","Vị ngữ"],["O","Tân ngữ"],["kw","吗"]], ex:[
@@ -3862,7 +3878,9 @@ const GRAMMAR = {
        { c:["两","[个]",""], vi:"hai cái / hai người" },
        { c:["两","[个]","学生"], vi:"hai học sinh" },
        { c:["两","[个]","哥哥"], vi:"hai người anh trai" } ] }],
-     notes:["Hoàn thành hội thoại: 你家有（几口人）？— 我家有三口人，你家呢？— 我家有（四口人）。","你有姐姐吗？— 我有（一个）姐姐，你呢？— 我有两个姐姐。"] }
+     practice:[{ type:"fill", items:[
+       [["A","你家有{几口人}？"],["B","我家有三口人，你家呢？"],["A","我家有{四口人}。"]],
+       [["A","你有姐姐吗？"],["B","我有{一个}姐姐，你呢？"],["A","我有两个姐姐。"]] ] }] },
   ],
   5: [
    { id:"time1", zh:"时间的表达（1）", vi:"Cách diễn đạt thời gian (1) – ngày, tháng, thứ",
@@ -3941,7 +3959,10 @@ const GRAMMAR = {
        { c:["妹妹","[很]","高兴"], end:"。", vi:"Em gái rất vui." },
        { c:["她","[上午十点半]","上课"], end:"。", vi:"Cô ấy 10 giờ rưỡi sáng lên lớp." },
        { c:["我","[也]","有课"], end:"。", vi:"Tôi cũng có tiết học." } ] }],
-     notes:["Hoàn thành hội thoại: 我们（几）点见？— 我们下午（三点）见吧。","你上午去上课，是吗？— 对，我（上午）有课。 / 我们（下午）去超市吧。— 对不起，我（下午）有课。"] },
+     practice:[{ type:"fill", items:[
+       [["A","我们{几}点见？"],["B","我们下午{三点}见吧。"]],
+       [["A","你上午去上课，是吗？"],["B","对，我{上午}有课。"]],
+       [["A","我们{下午}去超市吧。"],["B","对不起，我{下午}有课。"]] ] }] },
    { id:"ne2", zh:"语气助词“呢”（2）", vi:"Trợ từ ngữ khí “呢” (2) – xác nhận",
      desc:"“呢” ở cuối câu trần thuật biểu thị xác nhận một sự thực (đấy, mà).",
      forms:[{ slots:[["S","Chủ ngữ"],["T","Trạng ngữ"],["V","Vị ngữ"],["kw","呢"]], ex:[
@@ -3985,7 +4006,9 @@ const GRAMMAR = {
        { c:["我们","七点","[在]电影院外边","见",""], end:"。", vi:"Chúng ta 7 giờ gặp ở bên ngoài rạp chiếu phim." },
        { c:["安妮","下午","[在]家里","学","中文"], end:"。", vi:"Buổi chiều Annie học tiếng Trung ở nhà." },
        { c:["陈天中","明天中午","[在]学校","吃","午饭"], end:"。", vi:"Trưa mai Trần Thiên Trung ăn trưa ở trường." } ] }],
-     notes:["Hoàn thành hội thoại: 你们今天下午两点（在哪儿）上课？— 在学校。","你们（现在）在超市买什么呢？— 买菜呢。"] },
+     practice:[{ type:"fill", items:[
+       [["A","你们今天下午两点{在哪儿}上课？"],["B","在学校。"]],
+       [["A","你们{现在}在超市买什么呢？"],["B","买菜呢。"]] ] }] },
    { id:"di", zh:"表示序数的“第”", vi:"“第” biểu thị số thứ tự",
      desc:"“第” đặt trước số từ để chỉ số thứ tự (thứ nhất, thứ hai…).",
      forms:[{ slots:[["kw","第"],["Nu","Số từ"],["M","(Lượng từ)"],["N","(Danh từ)"]], ex:[
@@ -4004,7 +4027,114 @@ const GRAMMAR = {
        { c:["三[块]","","","3元"], vi:"sān kuài" },
        { c:["三[块]","二","","3.2元"], vi:"sān kuài èr (lược 毛)" },
        { c:["六[块]","[零]","两[分]","6.02元"], vi:"liù kuài líng liǎng fēn" },
-       { c:["二百零二[块]","两[毛]","","202.2元"], vi:"èrbǎi líng èr kuài liǎng máo" } ] }] }
+       { c:["二百零二[块]","两[毛]","","202.2元"], vi:"èrbǎi líng èr kuài liǎng máo" } ] }] },
+   { id:"adjwei", zh:"形容词谓语句", vi:"Câu vị ngữ tính từ",
+     desc:"Tính từ có thể trực tiếp làm vị ngữ, KHÔNG cần 是. Trước tính từ thường có phó từ chỉ mức độ (很, 真, 太…) hoặc phó từ phủ định (不).",
+     forms:[{ slots:[["S","Chủ ngữ"],["kw","Phó từ (很/真/不)"],["A","Tính từ"]], ex:[
+       { c:["这儿的水果","[真]","不少"], end:"！", vi:"Trái cây ở đây thật nhiều!" },
+       { c:["我的房间","[不]","大"], end:"。", vi:"Phòng của tôi không lớn." },
+       { c:["那个苹果","","好吃"], end:"。", vi:"Quả táo kia ngon." },
+       { c:["这儿的苹果","[真]","便宜"], end:"！", vi:"Táo ở đây thật rẻ!" } ] }] },
+   { id:"zenmeyang", zh:"疑问代词“怎么样”", vi:"Đại từ nghi vấn “怎么样”",
+     desc:"“怎么样” đặt ở cuối câu để hỏi ý kiến hoặc hỏi thăm tình hình (… thế nào?).",
+     forms:[{ slots:[["S","Người / vật được hỏi"],["kw","怎么样"]], ex:[
+       { c:["这个杯子","[怎么样]"], end:"？", vi:"Cái cốc này thế nào?" },
+       { c:["这本书","[怎么样]"], end:"？", vi:"Quyển sách này thế nào?" },
+       { c:["这个菜","[怎么样]"], end:"？", vi:"Món này thế nào?" },
+       { c:["今天天气","[怎么样]"], end:"？", vi:"Hôm nay thời tiết thế nào?" } ] }],
+     practice:[{ type:"read", items:[
+       [["A","这个杯子怎么样？"],["B","我很喜欢，也不贵。"]],
+       [["A","这本书怎么样？"],["B","很好看。"]],
+       [["A","这个菜怎么样？"],["B","这个菜不太好吃，我不喜欢。"]] ] }] }
+  ],
+  11: [
+   { id:"zhengfan", zh:"正反问", vi:"Câu hỏi chính phản",
+     desc:"Đặt dạng khẳng định và phủ định của động từ / tính từ (X) cạnh nhau: X + 不/没 + X. Động từ dùng 不 hoặc 没 (việc đã xảy ra); tính từ chỉ dùng 不. Câu hỏi chính phản KHÔNG thêm 吗.",
+     forms:[{ slots:[["S","Chủ ngữ"],["V","X (động từ / tính từ)"],["kw","不 / 没"],["V","X"],["O","(Tân ngữ)"]], ex:[
+       { c:["它","是","[不]","是","在超市后边"], end:"？", vi:"Nó có phải ở phía sau siêu thị không?" },
+       { c:["你","去","[没]","去","学校"], end:"？", vi:"Bạn có đến trường không (đã đến chưa)?" },
+       { c:["这件衣服","好看","[不]","好看",""], end:"？", vi:"Chiếc áo này có đẹp không?" },
+       { c:["你","知道","[不]","知道",""], end:"？", vi:"Bạn có biết không?" } ] }],
+     practice:[{ type:"read", items:[
+       [["A","他去哪儿了？你知道不知道？"],["B","我不知道。"]],
+       [["A","昨天你去没去书店？"],["B","我没去。"]],
+       [["A","这件衣服贵不贵？"],["B","不贵。"]] ] }] },
+   { id:"zhengzai", zh:"时间副词“在/正在”", vi:"Phó từ chỉ thời gian “在/正在”",
+     desc:"“在/正在” đứng trước động từ, biểu thị hành động đang diễn ra. Có 3 cách nói: 在/正在 + động từ; 在/正在 + động từ + 呢; động từ + 呢. Trả lời phủ định dùng 没(有).",
+     forms:[
+      { cap:"在 / 正在 + động từ (+ 呢)", slots:[["S","Chủ ngữ"],["kw","在 / 正在"],["V","Động từ"],["O","Tân ngữ"],["kw","(呢)"]], ex:[
+        { c:["你还","[在]","读","大学",""], end:"吗？", vi:"Bạn vẫn đang học đại học à?" },
+        { c:["学生们","[在/正在]","上","课","[呢]"], end:"。", vi:"Các học sinh đang lên lớp." },
+        { c:["我","[正在]","看","电视",""], end:"。", vi:"Tôi đang xem tivi." },
+        { c:["我","[在]","学习","","[呢]"], end:"。", vi:"Tôi đang học bài." } ] },
+      { cap:"Động từ + 呢", slots:[["S","Chủ ngữ"],["V","Động từ"],["O","Tân ngữ"],["kw","呢"]], ex:[
+        { c:["我们","读","书","[呢]"], end:"。", vi:"Chúng tôi đang đọc sách." },
+        { c:["我","买","水果","[呢]"], end:"。", vi:"Tôi đang mua trái cây." } ] },
+      { cap:"Phủ định: 没(有) + động từ", slots:[["S","Chủ ngữ"],["kw","没(有)"],["V","Động từ"],["O","Tân ngữ"]], ex:[
+        { c:["我","[没]","买","菜"], end:"。", vi:"Tôi không mua rau." } ] } ],
+     practice:[{ type:"read", items:[
+       [["A","你在做什么呢？"],["B","我正在看电视。"]],
+       [["A","我去看电影，你去不去？"],["B","我在学习呢，不想去。"]],
+       [["A","你在买菜吗？"],["B","我没买菜，买水果呢。"]] ] }] },
+   { id:"yao", zh:"能愿动词“要”", vi:"Động từ năng nguyện “要”",
+     desc:"“要” đứng trước động từ, biểu thị muốn làm hoặc dự định làm việc gì.",
+     forms:[{ slots:[["S","Chủ ngữ"],["T","(Thời gian)"],["kw","要"],["V","Cụm động từ"],["O","Tân ngữ"]], ex:[
+       { c:["他","今天","[要]","和小朋友玩",""], end:"。", vi:"Hôm nay cậu ấy muốn chơi với các bạn nhỏ." },
+       { c:["妈妈","","[要]","去","超市"], end:"。", vi:"Mẹ muốn đi siêu thị." },
+       { c:["白家月","","[要]","在家里学","中文"], end:"。", vi:"Bạch Gia Nguyệt muốn học tiếng Trung ở nhà." } ] }] }
+  ],
+  12: [
+   { id:"feizhuwei", zh:"非主谓句", vi:"Câu phi chủ vị",
+     desc:"Câu chỉ gồm một từ hoặc cụm từ, không chia rõ chủ ngữ và vị ngữ; rất hay dùng trong văn nói (nói về thời tiết, chào hỏi, cảm thán…).",
+     forms:[{ slots:[["V","Từ / cụm từ"],["kw","(了)"]], ex:[
+       { c:["下雨","[了]"], end:"。", vi:"Mưa rồi." },
+       { c:["下雪","[了]"], end:"。", vi:"Tuyết rơi rồi." },
+       { c:["上课","[了]"], end:"。", vi:"Vào học rồi." },
+       { c:["真漂亮",""], end:"！", vi:"Đẹp quá!" },
+       { c:["对不起",""], end:"！", vi:"Xin lỗi!" },
+       { c:["没关系",""], end:"！", vi:"Không sao!" } ] }] },
+   { id:"le1", zh:"语气助词“了（1）”", vi:"Trợ từ ngữ khí “了” (1)",
+     desc:"“了” ở cuối câu (hoặc chỗ ngắt giữa câu) biểu thị có sự thay đổi, xuất hiện tình huống mới (… rồi). Trả lời phủ định dùng 没 và bỏ 了 ở cuối câu.",
+     forms:[
+      { cap:"Khẳng định", slots:[["S","(Chủ ngữ)"],["V","Vị ngữ"],["kw","了"]], ex:[
+        { c:["","下雨","[了]"], end:"。", vi:"Mưa rồi." },
+        { c:["","十二点","[了]"], end:"，吃午饭吧。", vi:"12 giờ rồi, ăn trưa thôi." },
+        { c:["弟弟","起床","[了]"], end:"吗？", vi:"Em trai dậy chưa?" },
+        { c:["天","冷","[了]"], end:"。", vi:"Trời lạnh rồi." } ] },
+      { cap:"Phủ định: 没 + động từ, không dùng 了", slots:[["S","(Chủ ngữ)"],["kw","没"],["V","Động từ"]], ex:[
+        { c:["","[没]","起床"], end:"呢。", vi:"Chưa dậy." },
+        { c:["我","[没]","去"], end:"。", vi:"Tôi không đi." } ] } ],
+     practice:[{ type:"read", items:[
+       [["A","弟弟起床了吗？"],["B","没起床呢。"]] ] }] },
+   { id:"taile", zh:"“太……了！”格式", vi:"Cấu trúc “太……了!”",
+     desc:"“太 + tính từ + 了” dùng để cảm thán, mức độ rất cao (… quá!).",
+     forms:[{ slots:[["S","(Chủ ngữ)"],["kw","太"],["A","Tính từ"],["kw","了"]], ex:[
+       { c:["","[太]","冷","[了]"], end:"！", vi:"Lạnh quá!" },
+       { c:["这个杯子","[太]","小","[了]"], end:"。", vi:"Cái cốc này nhỏ quá." },
+       { c:["我们今天","[太]","高兴","[了]"], end:"！", vi:"Hôm nay chúng tôi vui quá!" },
+       { c:["这儿的苹果","[太]","贵","[了]"], end:"！", vi:"Táo ở đây đắt quá!" } ] }] }
+  ],
+  13: [
+   { id:"keyi", zh:"能愿动词“可以”", vi:"Động từ năng nguyện “可以”",
+     desc:"“可以” đứng trước động từ, biểu thị có thể, có khả năng, hoặc được phép làm gì.",
+     forms:[{ slots:[["S","Chủ ngữ"],["kw","可以"],["V","Động từ"],["O","Tân ngữ"]], ex:[
+       { c:["我","[可以]","再问","您一个问题"], end:"吗？", vi:"Tôi có thể hỏi ngài thêm một câu không?" },
+       { c:["你们","[可以]","看","这本书"], end:"。", vi:"Các bạn có thể xem quyển sách này." },
+       { c:["我","[可以]","坐",""], end:"吗？", vi:"Tôi ngồi được không?" } ] }],
+     practice:[{ type:"read", items:[
+       [["A","我可以坐吗？"],["B","可以，请坐！"]] ] }] },
+   { id:"yixia", zh:"“动词+一下”结构", vi:"Cấu trúc “động từ + 一下”",
+     desc:"“Động từ + 一下” biểu thị làm một lần hoặc làm thử, hành động diễn ra trong thời gian ngắn (… một chút, … thử).",
+     forms:[{ slots:[["X","Phần trước"],["V","Động từ"],["kw","一下"],["X","Phần sau"]], ex:[
+       { c:["你可以打电话","问","[一下]",""], end:"。", vi:"Bạn có thể gọi điện hỏi thử." },
+       { c:["请","休息","[一下]",""], end:"。", vi:"Mời nghỉ ngơi một chút." },
+       { c:["你","看","[一下]","吧"], end:"。", vi:"Bạn xem thử đi." } ] }] },
+   { id:"shuangbin1", zh:"双宾语句（1）", vi:"Câu có hai tân ngữ (1)",
+     desc:"Một động từ mang hai tân ngữ: tân ngữ 1 chỉ người (nhận), tân ngữ 2 chỉ vật / việc. Quyển này học hai động từ 给 và 问.",
+     forms:[{ slots:[["S","Chủ ngữ"],["kw","给 / 问"],["O","Tân ngữ 1 (người)"],["N","Tân ngữ 2 (vật / việc)"]], ex:[
+       { c:["请","[给]","我","一杯牛奶"], end:"。", vi:"Cho tôi một ly sữa." },
+       { c:["白家月","[给]","安妮","一个苹果"], end:"。", vi:"Bạch Gia Nguyệt cho Annie một quả táo." },
+       { c:["我","[问]","老师","两个问题"], end:"。", vi:"Tôi hỏi giáo viên hai câu hỏi." } ] }] }
   ]
  }
 };
@@ -4057,8 +4187,18 @@ const Grammar = {
       <p class="gr-desc">${esc(p.desc)}</p>
       ${p.table ? `<div class="gr-tab"><b>${esc(p.table.title)}</b><div class="gr-tcells">${p.table.cells.map(([h, py, vi]) => `<button class="gr-tc" data-say="${esc(h.split("/")[0])}"><small>${esc(py)}</small><span class="han">${esc(h)}</span><em>${esc(vi)}</em></button>`).join("")}</div></div>` : ""}
       ${(p.forms || []).map((f, k) => this.form(f, p.id, k)).join("")}
-      ${p.notes && p.notes.length ? `<div class="gr-note"><b>Luyện tập</b><small> – phần trong ngoặc là gợi ý đáp án</small>${p.notes.map(x => `<p class="han-mix">${esc(x)}</p>`).join("")}</div>` : ""}
+      ${p.notes && p.notes.length ? `<div class="gr-note"><b>Ghi nhớ</b>${p.notes.map(x => `<p>${esc(x)}</p>`).join("")}</div>` : ""}
+      ${p.practice && p.practice.length ? `<div class="gr-prac"><h4>Luyện tập</h4>${p.practice.map(b => this.prac(b)).join("")}</div>` : ""}
     </article>`;
+  },
+  /* luyện tập: hội thoại – mỗi câu thoại 1 dòng, các câu thoại cùng 1 câu thẳng hàng; {đáp án} = ô trống bấm để hiện */
+  prac(b){
+    const fill = b.type === "fill";
+    const line = t => String(t).split(/(\{[^}]*\})/).filter(Boolean).map(x => /^\{.*\}$/.test(x)
+      ? `<button type="button" class="gr-blank" style="--w:${[...x.slice(1, -1)].length + 1.5}em" data-ans="${esc(x.slice(1, -1))}" aria-label="Hiện đáp án"><span>${esc(x.slice(1, -1))}</span></button>` : esc(x)).join("");
+    return `<div class="gr-pblock"><div class="gr-ptitle">${fill ? "Hoàn thành hội thoại" : "Đọc hội thoại"}</div>
+      ${fill ? `<div class="gr-phint">Nhấp vào ô trống để hiện đáp án.</div>` : ""}
+      <div class="gr-dlg">${b.items.map((it, i) => it.map(([who, t], j) => `<span class="gr-dno">${j ? "" : `(${i + 1})`}</span><span class="gr-who">${esc(who)}：</span><span class="gr-say">${line(t)}${!fill ? ` <button class="say-sm" data-say="${esc(t)}" aria-label="Nghe">${ICON.sound}</button>` : ""}</span>`).join("") + `<i class="gr-gap"></i>`).join("")}</div></div>`;
   },
   legend(){ return `<div class="gr-legend">${Object.entries(GR_ROLE).map(([k, r]) => `<span class="gr-chip sm r-${k}" style="--rc:${r.c}">${r.vi}</span>`).join("")}</div>`; },
   body(lv, list){
@@ -4067,6 +4207,7 @@ const Grammar = {
   pyBtn(){ return `<button class="btn" id="grPy" aria-pressed="${this.showPy}">${this.showPy ? "Ẩn" : "Hiện"} phiên âm</button>`; },
   bindCommon(root, rerender){
     root.querySelectorAll("[data-say]").forEach(b => b.onclick = () => speak(b.dataset.say));
+    root.querySelectorAll(".gr-blank").forEach(b => b.onclick = () => b.classList.toggle("show"));
     const py = root.querySelector("#grPy"); if(py) py.onclick = () => { this.showPy = !this.showPy; rerender(); };
   },
   /* mỗi điểm ngữ pháp là 1 tab – chỉ hiện điểm đang chọn */
