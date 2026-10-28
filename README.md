@@ -1,3 +1,7 @@
+> **Trang web chạy tại: https://weiwei236.github.io/weiweizhongwen/** (GitHub Pages, nhánh `gh-pages`).
+> Link cũ weiweizhongwen.netlify.app chỉ chuyển hướng sang link mới.
+> **Chỉ push lên nhánh `gh-pages`. KHÔNG push `main`** (mỗi lần push main = 1 lần deploy Netlify, tốn 15 credit).
+
 # 薇薇中文 · Weiwei HSK
 Trang luyện HSK cho học viên: flashcard, luyện dịch, phát âm có chấm thanh điệu, bài tập HSK, trang trại xu và bảng theo dõi cho giáo viên.
 

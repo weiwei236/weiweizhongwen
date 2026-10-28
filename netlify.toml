@@ -1,3 +1,13 @@
+# Trang đã chuyển sang GitHub Pages: https://weiwei236.github.io/weiweizhongwen/
+# Netlify chỉ còn chuyển hướng link cũ sang link mới.
+# LƯU Ý: KHÔNG push lên nhánh main nữa (mỗi lần push = 1 lần deploy Netlify = 15 credit).
+#        Mọi cập nhật trang web push lên nhánh gh-pages.
 [build]
   publish = "."
   command = ""
+
+[[redirects]]
+  from = "/*"
+  to = "https://weiwei236.github.io/weiweizhongwen/:splat"
+  status = 301
+  force = true
