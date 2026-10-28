@@ -4104,8 +4104,7 @@ const Grammar = {
       ${this.legend()}
       <div class="seg gr-filter" role="group" aria-label="Chọn bài">${[["all", "全部"], ...ls.map(x => [String(x), "第" + x + "课"])].map(([v, l]) => `<button data-f="${v}" aria-pressed="${String(this.filter) === v}">${l}</button>`).join("")}</div>
       ${this.tabs(all, cur, this.filter === "all")}
-      ${cur ? this.point(cur.p, lv, cur.n) : `<div class="empty"><span class="han">语</span>Chưa có ngữ pháp cho mục này.</div>`}
-      <p class="muted gr-foot">Các bài khác sẽ được giáo viên bổ sung dần.</p></div>`;
+      ${cur ? this.point(cur.p, lv, cur.n) : `<div class="empty"><span class="han">语</span>Chưa có ngữ pháp cho mục này.</div>`}</div>`;
     $("#grBack").onclick = () => enterApp();
     B.querySelectorAll("[data-f]").forEach(b => b.onclick = () => { this.filter = b.dataset.f; this.sel = null; this.render(); });
     B.querySelectorAll("[data-pt]").forEach(b => b.onclick = () => { this.sel = b.dataset.pt; const y = window.scrollY; this.render(); window.scrollTo(0, y); });
