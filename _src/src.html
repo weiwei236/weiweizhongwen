@@ -423,6 +423,21 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .ra-ed details summary{cursor:pointer;font-weight:600;color:var(--accent)}
 .ra-vt .inp{padding:7px 8px;font-size:15px;min-width:70px}table.ra-vt{min-width:940px}
 .ra-pyc{display:flex;gap:4px}
+.ra-prevhost{position:relative}.ra-prev{padding-top:16px}.ra-prev-t{margin:0 0 8px;text-align:center;font-size:20px}
+.ra-rb{cursor:pointer;border-radius:4px;transition:background .12s}.ra-rb:hover,.ra-rb:focus{background:#FFE6DF;outline:none}
+.ra-rb.fixed rt,.py-fixed rt{color:#D2432F;font-weight:700}
+.ra-pyinfo{font-size:13px;margin-top:6px}
+.ra-pypop{position:absolute;z-index:5;width:270px;background:#fff;border:1.5px solid #D2432F;border-radius:12px;box-shadow:var(--shadow);padding:10px;display:grid;gap:8px;font-family:var(--f-body)}
+.ra-pypop>b{font-size:26px}.ra-pypop .inp{font-size:18px;padding:7px 10px}
+.ra-tones{display:flex;flex-wrap:wrap;gap:3px}.ra-tones button{border:1px solid var(--line);background:var(--surface-2);border-radius:6px;width:28px;height:28px;font-size:15px;cursor:pointer}
+.ra-imgs{display:grid;gap:10px}
+.ra-img{display:grid;grid-template-columns:160px minmax(0,1fr);gap:12px;align-items:start;border:1.5px solid var(--line);border-radius:12px;padding:10px;background:var(--surface)}
+.ra-img img{width:160px;height:110px;object-fit:cover;border-radius:8px;background:var(--surface-2)}
+.ra-img-f{display:grid;gap:8px}
+@media (max-width:560px){.ra-img{grid-template-columns:minmax(0,1fr)}.ra-img img{width:100%;height:auto}}
+.rd-fig{margin:6px auto 14px;text-align:center;max-width:560px}
+.rd-fig img{max-width:100%;max-height:380px;border-radius:12px;box-shadow:var(--shadow);background:var(--surface-2)}
+.rd-fig figcaption{font-family:var(--f-body);font-size:14px;color:var(--muted);margin-top:6px}
 .rd-audio{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--leaf-soft);border-radius:12px;padding:8px 14px;font-weight:600;color:var(--accent)}
 .rd-audio span svg{width:18px;height:18px;vertical-align:-3px;margin-right:6px}.rd-audio audio{flex:1;min-width:220px;max-width:100%;height:40px}
 .ra-audio{display:grid;gap:8px}.ra-audio p{margin:0}
@@ -3783,12 +3798,25 @@ const QTYPE = { tf: "Phán đoán đúng / sai", mc: "Chọn đáp án đúng", 
 function pyArr(s){ try{ return window.pinyinPro ? pinyinPro.pinyin(s, { type: "array" }) : []; }catch(e){ return []; } }
 function pyLine(s){ try{ return window.pinyinPro ? pinyinPro.pinyin(s) : ""; }catch(e){ return ""; } }
 /* chữ Hán kèm phiên âm phía trên (ruby). Ký tự không phải chữ Hán giữ nguyên. */
-function rubyHTML(text){
+function rubyHTML(text, fix, pre, edit){
+  /* fix: { "pre:vị trí:chữ": "pinyin" } – phiên âm giáo viên sửa tay, chỉ áp dụng khi đúng chữ ở đúng vị trí */
   const chars = [...text], arr = pyArr(text), ok = arr.length === chars.length;
-  return chars.map((c, i) => /[一-鿿]/.test(c) && ok ? `<ruby>${esc(c)}<rt>${esc(arr[i])}</rt></ruby>` : esc(c)).join("");
+  return chars.map((c, i) => { if(!/[一-鿿]/.test(c)) return esc(c);
+    const k = `${pre}:${i}:${c}`, f = fix && fix[k], py = f || (ok ? arr[i] : "");
+    if(!py && !edit) return esc(c);
+    return `<ruby${edit ? ` class="ra-rb${f ? " fixed" : ""}" data-pk="${esc(k)}" data-auto="${esc(ok ? arr[i] : "")}" tabindex="0"` : f ? ` class="py-fixed"` : ""}>${esc(c)}<rt>${esc(py || "?")}</rt></ruby>`; }).join("");
 }
 /* File nghe của bài đọc: tải lên Google Drive của giáo viên (qua Apps Script) hoặc dán link mp3 / link Google Drive */
 function driveId(u){ const m = /drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:[^#]*&)?id=)([\w-]{20,})/.exec(u || "") || /docs\.google\.com\/uc\?(?:[^#]*&)?id=([\w-]{20,})/.exec(u || ""); return m ? m[1] : ""; }
+function imgSrc(im){ return im && im.id ? `https://drive.google.com/thumbnail?id=${encodeURIComponent(im.id)}&sz=w1600` : (im && im.url) || ""; }
+/* thu nhỏ ảnh trước khi tải lên (cạnh dài tối đa 1400px, JPEG) */
+function shrinkImage(file, max = 1400){
+  return new Promise(res => { const u = URL.createObjectURL(file), im = new Image();
+    im.onload = () => { const k = Math.min(1, max / Math.max(im.width, im.height)), c = document.createElement("canvas");
+      c.width = Math.round(im.width * k); c.height = Math.round(im.height * k); const g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, c.width, c.height); g.drawImage(im, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(u); res(c.toDataURL("image/jpeg", .86).split(",")[1]); };
+    im.onerror = () => { URL.revokeObjectURL(u); res(""); }; im.src = u; });
+}
 function audioSrc(a){ return a && a.id ? `https://drive.google.com/uc?export=download&id=${encodeURIComponent(a.id)}` : (a && a.url) || ""; }
 /* nếu trình duyệt không phát trực tiếp được từ Drive thì xin máy chủ gửi dữ liệu file về rồi phát */
 function audioFallback(el, a){
@@ -3799,6 +3827,7 @@ function audioFallback(el, a){
     el.src = URL.createObjectURL(new Blob([u8], { type: r.mime || "audio/mpeg" }));
   };
 }
+function paraList(d){ return String(d.text || "").split(/\n+/).map(x => x.trim()).filter(Boolean); }
 const Reading = {
   list: rawGet("ww_readings", []), loading: null, les: null, cur: null, st: null, showPy: false, showTr: false,
   forLesson(lv, n){ return this.list.filter(r => r.level === lv && +r.lesson === +n).sort((a, b) => (a.order || 0) - (b.order || 0) || String(a.title).localeCompare(String(b.title))); },
@@ -3856,13 +3885,18 @@ const Reading = {
       return `<div class="rd-qbox" id="rdq${i}"><div class="ex-num">${qn}.${mark}</div><div class="rd-qbody"><small class="rd-type">${QTYPE[q.type]}</small>${body}
         ${sub && sc.wrong.includes(i) ? `<div class="ex-why"><b>Đáp án: ${q.type === "tf" ? TF_LABEL[q.ans ? 1 : 0] : q.type === "mc" ? "ABCD"[q.ans] + ". " + esc(q.opts[q.ans]) : esc(q.ans)}</b>${q.why ? "<br>" + esc(q.why) : ""}</div>` : ""}</div></div>`;
     }).join("");
+    const imgs = r.images || [];
+    const figs = at => imgs.map((im, j) => [im, j]).filter(([im]) => { const a = +im.at || 0; return at === -1 ? (a === -1 || a >= paras.length) : a === at; })
+      .map(([im, j]) => `<figure class="rd-fig"><img data-ri="${j}" alt="${esc(im.cap || "Hình minh hoạ")}" loading="lazy">${im.cap ? `<figcaption>${esc(im.cap)}</figcaption>` : ""}</figure>`).join("");
     W.innerHTML = `<div class="rd rd-one">
       <div class="toolbar"><button class="btn" id="rdBack">${ICON.left}Danh sách bài đọc</button>
         <div class="grp"><button class="btn" id="rdPy" aria-pressed="${this.showPy}">${this.showPy ? "Ẩn" : "Hiện"} phiên âm</button>${r.trans ? `<button class="btn" id="rdTr" aria-pressed="${this.showTr}">${this.showTr ? "Ẩn" : "Hiện"} bản dịch</button>` : ""}${r.audio ? "" : `<button class="btn" id="rdSay">${ICON.sound}Nghe bài</button>`}</div></div>
       ${r.audio ? `<div class="rd-audio"><span>${ICON.sound}Nghe bài</span><span id="rdAudioSlot"></span></div>` : ""}
       <article class="rd-paper">
-        <h2 class="han rd-title">${this.showPy && !r.pyManual ? rubyHTML(r.title) : esc(r.title)}</h2>
-        <div class="rd-text han ${this.showPy ? "" : "hide-py"}">${paras.map((p, k) => `<p>${r.pyManual || !this.showPy ? esc(p) : rubyHTML(p)}</p>${r.pyManual && this.showPy && manual[k] ? `<p class="rd-pyline">${esc(manual[k])}</p>` : ""}`).join("")}</div>
+        <h2 class="han rd-title">${this.showPy && !r.pyManual ? rubyHTML(r.title, r.pyFix, "t") : esc(r.title)}</h2>
+        ${figs(0)}
+        <div class="rd-text han ${this.showPy ? "" : "hide-py"}">${paras.map((p, k) => `<p>${r.pyManual || !this.showPy ? esc(p) : rubyHTML(p, r.pyFix, k)}</p>${r.pyManual && this.showPy && manual[k] ? `<p class="rd-pyline">${esc(manual[k])}</p>` : ""}${k < paras.length - 1 ? figs(k + 1) : ""}`).join("")}</div>
+        ${figs(-1)}
         ${r.trans && this.showTr ? `<div class="rd-trans"><b>Bản dịch</b>${String(r.trans).split(/\n+/).map(x => `<p>${esc(x)}</p>`).join("")}</div>` : ""}
       </article>
       ${r.vocab.length ? `<section class="rd-sec"><h3>Từ vựng bổ sung</h3><div class="tbl-wrap"><table class="syl rd-vocab"><thead><tr><th>STT</th><th>Chữ Hán</th><th>Phiên âm</th><th>Từ loại</th><th>Nghĩa</th><th>Ví dụ</th></tr></thead><tbody>
@@ -3876,6 +3910,7 @@ const Reading = {
     $("#rdBack").onclick = () => { this.cur = null; this.render(); };
     $("#rdPy").onclick = () => { this.showPy = !this.showPy; this.renderOne(); };
     const tr = $("#rdTr"); if(tr) tr.onclick = () => { this.showTr = !this.showTr; this.renderOne(); };
+    W.querySelectorAll("img[data-ri]").forEach(el => { const im = imgs[+el.dataset.ri]; audioFallback(el, im); el.src = imgSrc(im); });
     const say = $("#rdSay"); if(say) say.onclick = () => speak(paras.join("。"));
     const slot = $("#rdAudioSlot");
     if(slot){ /* giữ nguyên trình phát cũ khi bật/tắt phiên âm để không bị dừng giữa chừng */
@@ -3903,7 +3938,7 @@ const Reading = {
 const RdAdmin = {
   draft: null, msg: "",
   lessonOpts(){ const o = []; for(const [lv, L] of Object.entries(LEVELS)) for(const [n, les] of Object.entries(L.lessons)) o.push([lv, n, `${L.name} · Bài ${n} – ${les.zh}`]); return o; },
-  blank(){ const [lv, n] = this.lessonOpts().slice(-1)[0] || ["hsk1", 1]; return { id: "", level: lv, lesson: +n, title: "", text: "", trans: "", pyManual: "", vocab: [], questions: [], fillExtra: "" }; },
+  blank(){ const [lv, n] = this.lessonOpts().slice(-1)[0] || ["hsk1", 1]; return { id: "", level: lv, lesson: +n, title: "", text: "", trans: "", pyManual: "", vocab: [], questions: [], fillExtra: "", images: [], pyFix: {} }; },
   async render(){
     const B = $("#tBody");
     if(this.draft) return this.renderEditor();
@@ -3934,10 +3969,22 @@ const RdAdmin = {
       <div class="grid2"><label>Thuộc bài<select class="inp" id="raLes">${this.lessonOpts().map(([lv, n, l]) => `<option value="${lv}|${n}" ${d.level === lv && +d.lesson === +n ? "selected" : ""}>${esc(l)}</option>`).join("")}</select></label>
         <label>Tiêu đề bài đọc<input class="inp han" id="raTitle" value="${esc(d.title)}" placeholder="VD: 我的大学生活"></label></div>
       <div class="grid2 ra-text"><label>Nội dung (chữ Hán, mỗi đoạn một dòng)<textarea class="inp han" id="raText" rows="8">${esc(d.text)}</textarea></label>
-        <div><span class="ra-lab">Xem trước (phiên âm tự động)</span><div class="rd-paper ra-prev han" id="raPrev"></div></div></div>
+        <div><span class="ra-lab">Xem trước – <b>bấm vào chữ có phiên âm sai để sửa</b></span><div class="rd-paper ra-prev han" id="raPrev"></div>
+          <div class="ra-pyinfo muted" id="raPyInfo"></div></div></div>
       <details ${d.pyManual ? "open" : ""}><summary>Phiên âm thủ công (tuỳ chọn – dùng khi phiên âm tự động bị sai chữ đa âm)</summary>
         <label>Mỗi dòng là phiên âm của một đoạn tương ứng. Có nội dung ở đây thì trang hiện dòng phiên âm này thay cho phiên âm tự động.<textarea class="inp" id="raPy" rows="3">${esc(d.pyManual)}</textarea></label></details>
       <label>Bản dịch tiếng Việt (tuỳ chọn – học viên bấm “Hiện bản dịch” mới thấy)<textarea class="inp" id="raTr" rows="3">${esc(d.trans)}</textarea></label>
+
+      <h3>Hình minh hoạ (tuỳ chọn)</h3>
+      <div class="ra-imgs">
+        ${(d.images || []).map((im, k) => `<div class="ra-img" data-im="${k}"><img data-pi="${k}" alt="">
+          <div class="ra-img-f"><label>Chú thích<input class="inp" data-imf="cap" value="${esc(im.cap || "")}" placeholder="VD: 王一飞在西安读大学"></label>
+            <label>Vị trí<select class="inp" data-imf="at">${[[0, "Đầu bài (dưới tiêu đề)"], ...paraList(d).slice(0, -1).map((x, i) => [i + 1, `Sau đoạn ${i + 1}`]), [-1, "Cuối bài"]].map(([v, l]) => `<option value="${v}" ${(+im.at || 0) === v || (v === -1 && +im.at >= paraList(d).length) ? "selected" : ""}>${l}</option>`).join("")}</select></label>
+            <span class="t-acts"><button type="button" class="btn sm" data-imup="${k}" ${k ? "" : "disabled"}>↑</button><button type="button" class="btn sm" data-imup="${k + 1}" ${k < d.images.length - 1 ? "" : "disabled"}>↓</button><button type="button" class="btn sm bad" data-imdel="${k}">Xoá hình</button></span></div></div>`).join("")}
+        <div class="ra-au-row"><label class="btn ra-au-up">⬆ Tải hình lên (jpg, png…)<input type="file" id="raImgFile" accept="image/*" multiple hidden></label>
+          <span class="muted">hoặc</span><input class="inp" id="raImgLink" placeholder="Dán link hình ảnh hoặc link Google Drive"><button type="button" class="btn" id="raImgLinkOk">Dùng link</button></div>
+        <p class="muted" id="raImgMsg" hidden></p>
+      </div>
 
       <h3>File nghe (tuỳ chọn)</h3>
       <div class="ra-audio">
@@ -3966,12 +4013,38 @@ const RdAdmin = {
     </form>`;
     Teacher.bindTop(); this.bindEditor(); this.preview();
   },
-  preview(){ const p = $("#raPrev"); if(p) p.innerHTML = String(this.draft.text || "").split(/\n+/).filter(x => x.trim()).map(x => `<p>${rubyHTML(x.trim())}</p>`).join("") || `<p class="t-dim">Gõ nội dung để xem trước.</p>`; },
+  preview(){ const p = $("#raPrev"), d = this.draft; if(!p) return;
+    const fix = d.pyFix || (d.pyFix = {}), paras = paraList(d);
+    p.innerHTML = (d.title ? `<h4 class="ra-prev-t">${rubyHTML(d.title, fix, "t", true)}</h4>` : "") + (paras.map((x, k) => `<p>${rubyHTML(x, fix, k, true)}</p>`).join("") || `<p class="t-dim">Gõ nội dung để xem trước.</p>`);
+    const n = Object.keys(fix).length, info = $("#raPyInfo");
+    if(info) info.innerHTML = n ? `Đã sửa phiên âm ${n} chữ (tô đỏ). <button type="button" class="linkbtn" id="raPyReset">Bỏ hết, dùng lại phiên âm tự động</button>` : "Phiên âm tự động có thể sai ở chữ đa âm (như 了, 还, 得, 长…). Bấm vào chữ để sửa.";
+    const rs = $("#raPyReset"); if(rs) rs.onclick = () => { d.pyFix = {}; this.preview(); };
+    p.querySelectorAll(".ra-rb").forEach(rb => { rb.onclick = () => this.pyPop(rb); rb.onkeydown = e => { if(e.key === "Enter") this.pyPop(rb); }; });
+  },
+  pyPop(rb){
+    const d = this.draft, k = rb.dataset.pk, old = $("#raPyPop"); if(old) old.remove();
+    const pop = document.createElement("div"); pop.id = "raPyPop"; pop.className = "ra-pypop";
+    pop.innerHTML = `<b class="han">${esc(rb.firstChild.textContent)}</b><input class="inp" value="${esc(d.pyFix[k] || rb.dataset.auto)}" aria-label="Phiên âm" spellcheck="false">
+      <div class="ra-tones">${["ā","á","ǎ","à","ē","é","ě","è","ī","í","ǐ","ì","ō","ó","ǒ","ò","ū","ú","ǔ","ù","ǖ","ǘ","ǚ","ǜ","ü"].map(t => `<button type="button" data-t="${t}">${t}</button>`).join("")}</div>
+      <div class="t-acts"><button type="button" class="btn sm primary" data-a="ok">Lưu</button>${d.pyFix[k] ? `<button type="button" class="btn sm" data-a="auto">Dùng tự động (${esc(rb.dataset.auto)})</button>` : ""}<button type="button" class="btn sm" data-a="x">Đóng</button></div>`;
+    const host = $("#raPrev").parentElement; host.classList.add("ra-prevhost"); host.appendChild(pop);
+    const hr = host.getBoundingClientRect(), rr = rb.getBoundingClientRect();
+    pop.style.left = Math.max(0, Math.min(rr.left - hr.left - 20, host.clientWidth - 274)) + "px"; pop.style.top = (rr.bottom - hr.top + 6) + "px";
+    const inp = pop.querySelector("input"); inp.focus(); inp.select();
+    const done = v => { if(v === null) {} else if(!v || v === rb.dataset.auto) delete d.pyFix[k]; else d.pyFix[k] = v; pop.remove(); this.preview(); };
+    pop.querySelectorAll("[data-t]").forEach(b => b.onmousedown = e => { e.preventDefault(); const s0 = inp.selectionStart, s1 = inp.selectionEnd; inp.value = inp.value.slice(0, s0) + b.dataset.t + inp.value.slice(s1); inp.setSelectionRange(s0 + 1, s0 + 1); });
+    pop.querySelector('[data-a="ok"]').onclick = () => done(inp.value.trim());
+    const au = pop.querySelector('[data-a="auto"]'); if(au) au.onclick = () => done("");
+    pop.querySelector('[data-a="x"]').onclick = () => done(null);
+    inp.onkeydown = e => { if(e.key === "Enter"){ e.preventDefault(); done(inp.value.trim()); } if(e.key === "Escape") done(null); };
+  },
   sync(){ /* đọc giá trị trong form vào bản nháp (không vẽ lại để giữ con trỏ) */
     const d = this.draft, f = $("#raForm"); if(!f) return;
     const [lv, n] = $("#raLes").value.split("|"); d.level = lv; d.lesson = +n;
     d.title = $("#raTitle").value.trim(); d.text = $("#raText").value; d.pyManual = $("#raPy").value; d.trans = $("#raTr").value;
     const ex = $("#raExtra"); if(ex) d.fillExtra = ex.value;
+    f.querySelectorAll(".ra-img[data-im]").forEach(box => { const im = (d.images || [])[+box.dataset.im]; if(!im) return;
+      box.querySelectorAll("[data-imf]").forEach(i => im[i.dataset.imf] = i.dataset.imf === "at" ? +i.value : i.value.trim()); });
     f.querySelectorAll("tr[data-vi]").forEach(tr => { const v = d.vocab[+tr.dataset.vi]; if(!v) return; tr.querySelectorAll("[data-v]").forEach(i => v[i.dataset.v] = i.value.trim()); });
     f.querySelectorAll(".ra-q").forEach(box => { const q = d.questions[+box.dataset.qi]; if(!q) return;
       box.querySelectorAll("[data-f]").forEach(i => {
@@ -3981,7 +4054,7 @@ const RdAdmin = {
   },
   bindEditor(){
     const f = $("#raForm"), d = this.draft;
-    f.oninput = e => { this.sync(); if(e.target.id === "raText") this.preview(); };
+    f.oninput = e => { this.sync(); if(e.target.id === "raText" || e.target.id === "raTitle") this.preview(); };
     f.onchange = () => this.sync();
     const re = () => this.renderEditor(); /* các nút đã sync trước khi thay đổi mảng */
     $("#raAddV").onclick = () => { this.sync(); d.vocab.push({ h: "", p: "", pos: "dt", vi: "", ex: "" }); this.renderEditor(); const rows = f.ownerDocument.querySelectorAll("tr[data-vi] input[data-v=h]"); rows[rows.length - 1].focus(); };
@@ -3993,6 +4066,22 @@ const RdAdmin = {
     f.querySelectorAll("[data-qdel]").forEach(b => b.onclick = () => { this.sync(); d.questions.splice(+b.dataset.qdel, 1); re(); });
     f.querySelectorAll("[data-vup]").forEach(b => b.onclick = () => { this.sync(); const i = +b.dataset.vup; [d.vocab[i - 1], d.vocab[i]] = [d.vocab[i], d.vocab[i - 1]]; re(); });
     f.querySelectorAll("[data-qup]").forEach(b => b.onclick = () => { this.sync(); const i = +b.dataset.qup; [d.questions[i - 1], d.questions[i]] = [d.questions[i], d.questions[i - 1]]; re(); });
+    f.querySelectorAll("img[data-pi]").forEach(el => { const im = d.images[+el.dataset.pi]; audioFallback(el, im); el.src = imgSrc(im); });
+    const imMsg = t => { const m = $("#raImgMsg"); m.textContent = t; m.hidden = !t; };
+    f.querySelectorAll("[data-imdel]").forEach(b => b.onclick = () => { this.sync(); d.images.splice(+b.dataset.imdel, 1); re(); });
+    f.querySelectorAll("[data-imup]").forEach(b => b.onclick = () => { this.sync(); const i = +b.dataset.imup; [d.images[i - 1], d.images[i]] = [d.images[i], d.images[i - 1]]; re(); });
+    $("#raImgLinkOk").onclick = () => { this.sync(); const u = $("#raImgLink").value.trim();
+      if(!/^https?:\/\//.test(u)) return imMsg("Link phải bắt đầu bằng http:// hoặc https://");
+      const id = driveId(u); (d.images || (d.images = [])).push(id ? { id, url: u, cap: "", at: 0 } : { url: u, cap: "", at: 0 }); re(); };
+    $("#raImgFile").onchange = async e => {
+      const files = [...e.target.files]; if(!files.length) return; this.sync(); d.images = d.images || [];
+      for(const [n, file] of files.entries()){
+        imMsg(`Đang tải hình ${n + 1}/${files.length} lên Google Drive… (đừng đóng trang)`);
+        const data = await shrinkImage(file); if(!data){ imMsg(`Không đọc được hình “${file.name}”.`); continue; }
+        const r = await Auth.call("uploadAudio", { key: Teacher.key, name: file.name.replace(/\.\w+$/, "") + ".jpg", mime: "image/jpeg", data }, 180000);
+        if(!r.ok) return imMsg(r.error === "unknown_action" ? "Máy chủ chưa có chức năng tải file – hãy cập nhật mã Apps Script mới và chạy hàm capQuyenDrive." : r.error === "unauthorized" ? "Phiên giáo viên hết hạn, hãy đăng nhập lại khu giáo viên." : r.error === "network" ? "Mạng chậm hoặc mất kết nối, hãy thử lại." : "Không tải lên được: " + r.error + " (nếu báo lỗi quyền Drive, hãy chạy hàm capQuyenDrive trong Apps Script).");
+        d.images.push({ id: r.id, url: r.url, cap: "", at: 0 }); }
+      re(); imMsg("Đã tải lên. Nhớ bấm “Lưu bài đọc” để lưu."); };
     const prev = $("#raAuPrev"); if(prev){ audioFallback(prev, d.audio); prev.src = audioSrc(d.audio); }
     const auMsg = t => { const m = $("#raAuMsg"); m.textContent = t; m.hidden = !t; };
     const ad = $("#raAuDel"); if(ad) ad.onclick = () => { this.sync(); delete d.audio; re(); };
@@ -4018,6 +4107,8 @@ const RdAdmin = {
     f.onsubmit = async e => {
       e.preventDefault(); this.sync();
       const prob = this.validate(); if(prob) return this.err(prob);
+      { const fx = {}, ps = { t: [...d.title], ...Object.fromEntries(paraList(d).map((x, k) => [k, [...x]])) };
+        Object.entries(d.pyFix || {}).forEach(([k, v]) => { const [a, i, c] = k.split(":"); if(ps[a] && ps[a][+i] === c) fx[k] = v; }); d.pyFix = fx; }
       const out = { ...d, questions: d.questions.map(q => q.type === "mc" ? { ...q, opts: q.opts.filter(Boolean) } : q), vocab: d.vocab.filter(v => v.h) };
       const btn = $("#raSave"); btn.disabled = true; btn.textContent = "Đang lưu…";
       const r = await Auth.call("saveReading", { key: Teacher.key, reading: out });
