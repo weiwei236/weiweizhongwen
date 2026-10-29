@@ -168,6 +168,19 @@ function doPost(e) {
       return json_({ ok: true, events: events, accounts: accounts });
     }
 
+    /* xoá dữ liệu một học viên: nhật ký hoạt động (và tuỳ chọn cả tài khoản, bài kiểm tra) */
+    if (act === 'deleteStudent') {
+      if (!teacherOk_(b.key)) return json_({ ok: false, error: 'unauthorized' });
+      const sid = String(b.sid || '').toLowerCase(); if (!sid) return json_({ ok: false, error: 'missing' });
+      let removed = filterRows_(sheet_(EVENTS, EV_HEAD), EV_HEAD.length, r => String(r[2]).toLowerCase() !== sid);
+      if (b.account) {
+        const r = findRow_(ac, sid); if (r) ac.deleteRow(r);
+        removed += filterRows_(sheet_(ATT, A_HEAD), A_HEAD.length, r => String(r[2]).toLowerCase() !== sid);
+        removed += filterRows_(sheet_(TEV, E_HEAD), E_HEAD.length, r => String(r[2]).toLowerCase() !== sid);
+      }
+      return json_({ ok: true, removed: removed });
+    }
+
     if (act === 'resetpw') {
       if (!teacherOk_(b.key)) return json_({ ok: false, error: 'unauthorized' });
       const r = findRow_(ac, b.u); if (!r) return json_({ ok: false, error: 'no_user' });
@@ -258,6 +271,15 @@ const TESTS = 'Tests', ATT = 'TestAttempts', TEV = 'TestEvents';
 const T_HEAD = ['Mã', 'Tên bài kiểm tra', 'Đang mở', 'Công bố điểm', 'Mật khẩu', 'Cập nhật', 'Đề (JSON)'];
 const A_HEAD = ['Khoá', 'Mã bài', 'Tên đăng nhập', 'Họ tên', 'Bắt đầu', 'Lưu gần nhất', 'Nộp bài', 'Bài làm (JSON)', 'Máy chấm (JSON)', 'GV chấm (JSON)', 'Tổng điểm', 'Nộp muộn', 'Số cảnh báo'];
 const E_HEAD = ['Thời gian', 'Mã bài', 'Tên đăng nhập', 'Họ tên', 'Loại', 'Chi tiết'];
+/* giữ lại các dòng thoả điều kiện, ghi lại một lượt (nhanh hơn xoá từng dòng); trả về số dòng đã xoá */
+function filterRows_(sh, n, keep) {
+  const rows = rowsOf_(sh, n); if (!rows.length) return 0;
+  const kept = rows.filter(keep); if (kept.length === rows.length) return 0;
+  sh.getRange(2, 1, rows.length, n).clearContent();
+  if (kept.length) sh.getRange(2, 1, kept.length, n).setValues(kept);
+  if (sh.getMaxRows() > kept.length + 50) sh.deleteRows(kept.length + 2, sh.getMaxRows() - kept.length - 1);
+  return rows.length - kept.length;
+}
 function rowsOf_(sh, n) { const m = sh.getLastRow() - 1; return m < 1 ? [] : sh.getRange(2, 1, m, n).getValues(); }
 function testRow_(id) { const sh = sheet_(TESTS, T_HEAD), rows = rowsOf_(sh, T_HEAD.length);
   for (let i = 0; i < rows.length; i++) if (String(rows[i][0]) === String(id)) return { sh: sh, r: i + 2, row: rows[i] }; return { sh: sh, r: 0, row: null }; }
@@ -352,9 +374,16 @@ function testAction_(act, b, ac) {
     if (b.pass != null) tr.sh.getRange(tr.r, 5).setValue(str_(b.pass, 40));
     return { ok: true };
   }
+  if (act === 'testClearEvents') {
+    const removed = filterRows_(sheet_(TEV, E_HEAD), E_HEAD.length, r => r[1] !== b.id);
+    const sh = sheet_(ATT, A_HEAD), rows = rowsOf_(sh, A_HEAD.length);
+    rows.forEach((r, i) => { if (r[1] === b.id && r[12]) sh.getRange(i + 2, 13).setValue(0); });
+    return { ok: true, removed: removed };
+  }
   if (act === 'testGrade' || act === 'testReset') {
     const at = attRow_(b.id, b.user); if (!at.r) return { ok: false, error: 'no_attempt' };
-    if (act === 'testReset') { at.sh.deleteRow(at.r); return { ok: true }; }
+    if (act === 'testReset') { at.sh.deleteRow(at.r);
+      filterRows_(sheet_(TEV, E_HEAD), E_HEAD.length, r => !(r[1] === b.id && String(r[2]).toLowerCase() === String(b.user).toLowerCase())); return { ok: true }; }
     const manual = b.manual || {}, auto = pj_(at.row[8], {});
     at.sh.getRange(at.r, 10, 1, 2).setValues([[JSON.stringify(manual), totalOf_(auto, manual)]]);
     return { ok: true, total: totalOf_(auto, manual) };

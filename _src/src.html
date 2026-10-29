@@ -555,6 +555,9 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .kt-admin{display:grid;gap:12px}.kt-passrow{display:flex;gap:10px;align-items:end;flex-wrap:wrap}.kt-passrow label{display:grid;gap:4px;font-weight:600;font-size:14px}
 .kt-log{list-style:none;margin:0;padding:0;display:grid;gap:4px;max-height:360px;overflow:auto;font-size:14px}.kt-log li{padding:4px 8px;border-radius:8px;background:var(--surface-2)}.kt-log li.w{background:#FDECE8}.kt-log time{color:var(--muted);font-variant-numeric:tabular-nums}
 .kt-note{font-size:13px;margin-top:8px}
+.kt-arow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.kt-abar{flex:1;min-width:120px;height:8px;border-radius:4px;background:var(--surface-2);overflow:hidden}.kt-abar b{display:block;height:100%;background:var(--accent);transition:width .3s linear}
+.kt-atime{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.t-del{border:1.5px dashed #E8B4A8;border-radius:12px;padding:10px 14px;margin:12px 0;display:grid;gap:6px}.t-del h3{margin:0}.t-del p{margin:0}
 .ka-aud{display:grid;gap:12px}.ka-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}.ka-grid label{display:grid;gap:4px;font-weight:600;font-size:13.5px}
 .ka-gaps{display:flex;gap:6px}.ka-gaps .inp{width:64px;padding:7px}
 .ka-now{font-size:15px;display:grid;gap:6px}.ka-now .han{font-size:20px}.ka-bar{display:block;height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden}.ka-bar b{display:block;height:100%;background:var(--accent)}
@@ -3248,6 +3251,8 @@ const Teacher = {
       </div>
       ${s.acc ? `<form class="t-reset" id="tReset" novalidate><h3>Đặt lại mật khẩu</h3><p class="muted">Dùng khi học viên quên mật khẩu. Học viên sẽ bị đăng xuất khỏi mọi thiết bị và đăng nhập lại bằng mật khẩu mới.</p>
         <div class="t-reset-row"><label class="sr" for="tNewPw">Mật khẩu mới</label><input id="tNewPw" class="inp" placeholder="Mật khẩu mới (ít nhất 6 ký tự)" autocomplete="off"><button class="btn" type="submit">Đặt lại</button></div><p id="tResetMsg" class="muted" hidden></p></form>` : ""}
+      <section class="t-del"><h3>Xoá dữ liệu</h3><p class="muted">Dùng cho tài khoản thử hoặc học viên đã nghỉ, giúp bảng theo dõi nhẹ hơn. Không khôi phục lại được.</p>
+        <div class="t-acts"><button class="btn bad" id="tDelLog">Xoá nhật ký hoạt động (${s.events.length})</button>${s.acc ? `<button class="btn bad" id="tDelAcc">Xoá tài khoản và toàn bộ dữ liệu</button>` : ""}</div><p class="muted" id="tDelMsg" hidden></p></section>
       <h3>Nhật ký hoạt động gần đây</h3>
       <ol class="t-log">${[...s.events].reverse().slice(0, 30).map(e => `<li><time>${this.fmt(e.t)}</time><span>${TYPE_LABEL[e.type] || e.type}</span><em>${esc(this.brief(e))}</em></li>`).join("")}</ol>
     </div>`;
@@ -3255,6 +3260,12 @@ const Teacher = {
       if(pw.length < 6){ msg.textContent = "Mật khẩu mới cần ít nhất 6 ký tự."; return; }
       msg.textContent = "Đang đặt lại…"; const r = await Auth.call("resetpw", { key: this.key, u: s.acc.username, password: pw });
       msg.textContent = r.ok ? `Đã đặt lại. Hãy báo học viên đăng nhập bằng tên “${s.acc.username}” và mật khẩu mới.` : "Không đặt lại được: " + (AUTH_ERR[r.error] || r.error); };
+    const del = (btn, account) => btn.onclick = async () => { if(!btn.dataset.armed){ btn.dataset.armed = 1; btn.textContent = account ? "Bấm lần nữa – xoá hẳn tài khoản" : "Bấm lần nữa để xoá"; return; }
+      btn.disabled = true; const m = $("#tDelMsg"); m.hidden = false; m.textContent = "Đang xoá…";
+      const r = await Auth.call("deleteStudent", { key: this.key, sid: s.sid, account: !!account }, 60000);
+      if(!r.ok){ m.textContent = "Chưa xoá được: " + (r.error === "unknown_action" ? "máy chủ cần cập nhật mã Apps Script mới." : r.error); btn.disabled = false; return; }
+      this.sel = null; toast(account ? `Đã xoá tài khoản @${esc(s.sid)}.` : `Đã xoá ${r.removed || 0} dòng nhật ký của ${esc(s.name || s.sid)}.`); this.load(); };
+    del($("#tDelLog"), false); const da = $("#tDelAcc"); if(da) del(da, true);
     $("#tClose").onclick = () => { this.sel = null; $("#tDetail").innerHTML = ""; document.querySelectorAll(".t-table tbody tr").forEach(tr => tr.classList.remove("sel")); };
     if(!keep) $("#tDetail").scrollIntoView({ behavior: "smooth", block: "start" });
   },
@@ -4814,7 +4825,12 @@ const KT = {
   part(p, sec){
     const L6 = "ABCDEF";
     let h = `<div class="ex-part">${p.zh ? `<h4 class="zh">${esc(p.zh)}</h4>` : ""}<p class="ex-instr"><i></i>${esc(p.vi)}</p>`;
-    if(p.audio) h += `<div class="ex-audio"><span class="ex-audio-ic">${ICON.sound}</span><div class="ex-audio-body"><b>Audio phần này</b><audio controls controlsList="nodownload" preload="metadata" data-aud="${esc(p.audio)}"></audio></div></div>`;
+    if(p.audio){ const ak = "pa_" + this.T.sections.indexOf(sec) + "_" + p.no, st = this.ans[ak] || {};
+      h += `<div class="ex-audio kt-aud" data-ak="${ak}"><span class="ex-audio-ic">${ICON.sound}</span><div class="ex-audio-body"><b>Audio ${esc(p.zh || "phần này")}</b>
+        <audio preload="auto" data-aud="${esc(p.audio)}"></audio>
+        <div class="kt-arow"><button type="button" class="btn primary kt-aplay" ${st.done ? "disabled" : ""}>${st.done ? "Đã phát xong" : st.t ? `▶ Phát tiếp (từ ${ktFmt(st.t * 1000)})` : "▶ Phát audio"}</button>
+          <i class="kt-abar"><b style="width:0%"></b></i><span class="kt-atime">${st.done ? "Hết" : ""}</span></div>
+        <small>Audio chỉ phát <b>1 lần</b>, không dừng và không tua lại được. Đeo tai nghe và sẵn sàng rồi hãy bấm phát.</small></div></div>`; }
     if(p.type === "poolpics") h += `<div class="ex-pool kt-pool6">${p.pool.map((src, k) => `<figure><span>${L6[k]}</span><img src="${ktImg(src)}" alt="Hình ${L6[k]}"></figure>`).join("")}</div>`;
     if(p.type === "pooltext") h += `<div class="ex-pooltext ${p.inline ? "inline" : ""}">${p.pool.map((t, k) => `<div><b>${L6[k]}</b> <span class="zh">${esc(t)}</span></div>`).join("")}</div>`;
     if(p.example){ const e = p.example; let o = "";
@@ -4837,13 +4853,33 @@ const KT = {
       h += `<div class="ex-q ${row ? "row" : ""} kt-q" id="ktq${n}"><div class="ex-num">${n}.</div><div class="ex-q-body">${body}${opts}</div></div>`; });
     return h + `</div>`;
   },
+  /* audio phần nghe: chỉ phát 1 lần, không dừng, không tua; tải lại trang thì phát tiếp từ chỗ đã nghe tới */
+  audioOnce(box){
+    const el = box.querySelector("audio"), btn = box.querySelector(".kt-aplay"), bar = box.querySelector(".kt-abar b"), tm = box.querySelector(".kt-atime"), ak = box.dataset.ak;
+    const src = el.dataset.aud; el.removeAttribute("data-aud");
+    if(src.startsWith("drive:")){ const a = { id: src.slice(6) }; audioFallback(el, a); el.src = audioSrc(a); } else { const id = driveId(src); if(id){ audioFallback(el, { id }); el.src = audioSrc({ id }); } else el.src = src; }
+    const st = () => this.ans[ak] || (this.ans[ak] = { t: 0, done: false });
+    let max = st().t || 0, lastSave = 0, playing = false;
+    const show = () => { const d = el.duration || 0; bar.style.width = d ? Math.min(100, el.currentTime / d * 100) + "%" : "0%"; tm.textContent = d ? `${ktFmt(el.currentTime * 1000)} / ${ktFmt(d * 1000)}` : ""; };
+    el.addEventListener("loadedmetadata", show);
+    el.addEventListener("timeupdate", () => { if(el.currentTime > max) max = el.currentTime; show();
+      if(Date.now() - lastSave > 3000){ lastSave = Date.now(); st().t = Math.floor(max); this.persist(); } });
+    el.addEventListener("seeking", () => { if(Math.abs(el.currentTime - max) > 1.5) el.currentTime = max; });
+    el.addEventListener("pause", () => { if(playing && !el.ended) el.play().catch(() => {}); });
+    el.addEventListener("ended", () => { playing = false; st().t = Math.floor(el.duration || max); st().done = true; this.persist(); btn.disabled = true; btn.textContent = "Đã phát xong"; tm.textContent = "Hết"; });
+    btn.onclick = async () => { if(st().done || playing) return;
+      document.querySelectorAll(".kt-aud audio").forEach(a => { if(a !== el && !a.paused) a.pause(); });
+      btn.disabled = true; btn.textContent = "Đang tải…";
+      try{ if(el.readyState < 1) await new Promise((r, j) => { el.addEventListener("loadedmetadata", r, { once: true }); el.addEventListener("error", j, { once: true }); setTimeout(r, 15000); });
+        el.currentTime = max; playing = true; await el.play(); btn.textContent = "Đang phát…"; }
+      catch(e){ playing = false; btn.disabled = false; btn.textContent = "▶ Thử phát lại"; tm.textContent = "Chưa tải được audio, kiểm tra mạng rồi bấm lại."; } };
+  },
   orderUI(q){ const n = q.n, seq = String(this.ans["o" + n] || "").split(",").filter(x => x !== "").map(Number);
     return `<div class="kt-order" data-on="${n}"><div class="kt-ans han">${seq.length ? seq.map((k, j) => `<button type="button" class="kt-tile on" data-pos="${j}">${esc(q.tiles[k])}</button>`).join("") : `<span class="muted">Bấm các từ bên dưới theo đúng thứ tự…</span>`}<span class="kt-end">${seq.length === q.tiles.length ? "。" : ""}</span></div>
       <div class="kt-tiles han">${q.tiles.map((t, k) => `<button type="button" class="kt-tile" data-k="${k}" ${seq.includes(k) ? "disabled" : ""}>${esc(t)}</button>`).join("")}</div></div>`; },
   bind(){
     const B = $("#ktBody"), qmap = {}; ktQs(this.T).forEach(x => qmap[x.q.n] = x.q);
-    B.querySelectorAll("audio[data-aud]").forEach(el => { const s = el.dataset.aud; el.removeAttribute("data-aud");
-      if(s.startsWith("drive:")){ const a = { id: s.slice(6) }; audioFallback(el, a); el.src = audioSrc(a); } else { const id = driveId(s); if(id){ audioFallback(el, { id }); el.src = audioSrc({ id }); } else el.src = s; } });
+    B.querySelectorAll(".kt-aud").forEach(box => { if(box.dataset.bound) return; box.dataset.bound = 1; this.audioOnce(box); });
     B.querySelectorAll(".ex-opt[data-n]").forEach(b => b.onclick = () => { const n = +b.dataset.n; this.ans[n] = b.dataset.l;
       B.querySelectorAll(`.ex-opt[data-n="${n}"]`).forEach(x => x.classList.toggle("picked", x === b)); this.persist(); });
     B.querySelectorAll(".kt-txt").forEach(i => i.oninput = () => { this.ans[i.dataset.tn] = i.value; this.persist(); });
@@ -4965,7 +5001,7 @@ const KTA = {
             <td><div class="t-acts">${a.submit ? `<button class="btn sm" data-grade="${esc(a.u)}">Chấm / xem bài</button>` : ""}<button class="btn sm bad" data-reset="${esc(a.u)}">Cho làm lại</button></div></td></tr>`; }).join("")}</tbody></table></div>` : `<p class="muted">Chưa có học viên nào bắt đầu làm bài.</p>`}
       </div>
       <div id="kaAudio"></div><div id="kaGrade"></div>
-      <div class="panel"><h3>Nhật ký cảnh báo</h3>${evs.length ? `<ul class="kt-log">${evs.map(e => `<li class="${KT_WARN.has(e.type) ? "w" : ""}"><time>${new Date(e.t).toLocaleTimeString("vi-VN")}</time> <b>${esc(e.name || e.u)}</b> – ${esc(KT_EV[e.type] || e.type)}${e.detail && !/^Bắt đầu|^Mở lại|^Nộp/.test(e.detail) ? ` <small>(${esc(e.detail)})</small>` : ""}</li>`).join("")}</ul>` : `<p class="muted">Chưa có hoạt động nào.</p>`}
+      <div class="panel"><div class="t-top"><h3>Nhật ký cảnh báo</h3>${evs.length ? `<button class="btn sm bad" id="kaClearLog">Xoá nhật ký của bài này</button>` : ""}</div>${evs.length ? `<ul class="kt-log">${evs.map(e => `<li class="${KT_WARN.has(e.type) ? "w" : ""}"><time>${new Date(e.t).toLocaleTimeString("vi-VN")}</time> <b>${esc(e.name || e.u)}</b> – ${esc(KT_EV[e.type] || e.type)}${e.detail && !/^Bắt đầu|^Mở lại|^Nộp/.test(e.detail) ? ` <small>(${esc(e.detail)})</small>` : ""}</li>`).join("")}</ul>` : `<p class="muted">Chưa có hoạt động nào.</p>`}
         <p class="muted kt-note">Trang ghi lại khi học viên rời khỏi trang làm bài (chuyển tab, mở ứng dụng khác, thu nhỏ trình duyệt), thoát toàn màn hình, sao chép / dán, bấm chuột phải hay dùng phím tắt. Trang <b>không</b> thể thấy học viên dùng điện thoại hay máy khác bên cạnh.</p></div>` : ""}
       <div class="panel"><h3>Nhập đề từ file</h3><p class="muted">Chọn file đề <code>.json</code> (Claude gửi riêng cho bạn). Nhập lại đề cùng mã sẽ ghi đè nội dung, giữ nguyên mật khẩu và bài làm.</p>
         <label class="btn">⬆ Chọn file đề (.json)<input type="file" id="kaImport" accept=".json,application/json" hidden></label>${t ? ` <button class="btn" id="kaExport">Tải đề hiện tại (.json)</button>` : ""}</div>`;
@@ -4987,8 +5023,10 @@ const KTA = {
     $("#kaAud").onclick = () => { this.audioOpen = true; KTAudio.render($("#kaAudio"), t); $("#kaAudio").scrollIntoView({ behavior: "smooth" }); };
     $("#kaEdit").onclick = () => { this.editing = JSON.parse(JSON.stringify(t.test)); this.renderEditor(); };
     $("#kaNotif").onclick = async () => { try{ const p = await Notification.requestPermission(); toast(p === "granted" ? "Đã bật thông báo." : "Trình duyệt chưa cho phép thông báo."); }catch(e){ toast("Trình duyệt này không hỗ trợ thông báo."); } };
+    const cl = $("#kaClearLog"); if(cl) cl.onclick = () => { if(!cl.dataset.armed){ cl.dataset.armed = 1; cl.textContent = "Bấm lần nữa để xoá hẳn"; return; }
+      call("testClearEvents", { id: t.id }, "Đã xoá nhật ký cảnh báo của bài kiểm tra."); };
     B.querySelectorAll("[data-reset]").forEach(b => b.onclick = () => { if(!b.dataset.armed){ b.dataset.armed = 1; b.textContent = "Bấm lần nữa – xoá bài làm"; return; }
-      call("testReset", { id: t.id, user: b.dataset.reset }, "Đã xoá bài làm, học viên có thể làm lại (cần mật khẩu)."); });
+      call("testReset", { id: t.id, user: b.dataset.reset }, "Đã xoá bài làm và nhật ký của học viên này. Học viên có thể làm lại (cần mật khẩu)."); });
     B.querySelectorAll("[data-grade]").forEach(b => b.onclick = () => this.grade(b.dataset.grade));
   },
   grade(u, keep){
