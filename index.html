@@ -3065,6 +3065,14 @@ document.addEventListener("visibilitychange", () => {
 setTimeout(() => Track.flush(), 3000);
 
 /* ---------- Bảng theo dõi giáo viên ---------- */
+/* chấm lại bài tập HSK đã nộp theo đáp án hiện tại (khi giáo viên sửa đáp án sau) */
+function examRegrade(d, lesson){
+  const m = /^(hsk\d)-(\d+)$/.exec(lesson || ""), les = m && LEVELS[m[1]] && LEVELS[m[1]].lessons[m[2]], A = les && les.test && les.test.answers;
+  if(!A || typeof d.ans !== "string" || d.ans.length !== A.length) return d;
+  const wrong = []; let right = 0, total = 0, pending = 0;
+  for(let i = 0; i < A.length; i++){ if(A[i] === "?"){ pending++; continue; } total++; if(d.ans[i] === A[i]) right++; else wrong.push(i + 1); }
+  return { ...d, right, total, wrong, pending };
+}
 const TYPE_LABEL = { coins: "Nhận xu", harvest: "Thu hoạch", login: "Đăng nhập", session: "Vào học", flash: "Flashcard", quiz: "Kiểm tra từ vựng", trans: "Luyện dịch", speak: "Luyện phát âm", exam: "Bài tập HSK" };
 const TRANS_LABEL = { zhvi: "Trung → Việt", sort: "Sắp xếp", type: "Gõ chữ" };
 const Teacher = {
@@ -3131,7 +3139,7 @@ const Teacher = {
       if(e.type === "quiz") s.quiz.push({ ...d, t: e.t, lesson: e.lesson });
       if(e.type === "trans"){ const k = e.lesson + "|" + d.mode; const b = s.trans[k]; if(!b || d.right / d.total > b.right / b.total) s.trans[k] = { ...d, lesson: e.lesson }; }
       if(e.type === "speak") s.speak.push({ ...d, t: e.t, lesson: e.lesson });
-      if(e.type === "exam") s.exam.push({ ...d, t: e.t, lesson: e.lesson });
+      if(e.type === "exam") s.exam.push({ ...examRegrade(d, e.lesson), t: e.t, lesson: e.lesson });
       if(e.type === "coins"){ s.coins = d.balance; s.earned += d.amount || 0; }
       if(e.type === "harvest") s.harvest = Math.max(s.harvest + 1, d.harvested || 0);
     }
