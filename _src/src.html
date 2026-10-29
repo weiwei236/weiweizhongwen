@@ -555,6 +555,10 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .kt-admin{display:grid;gap:12px}.kt-passrow{display:flex;gap:10px;align-items:end;flex-wrap:wrap}.kt-passrow label{display:grid;gap:4px;font-weight:600;font-size:14px}
 .kt-log{list-style:none;margin:0;padding:0;display:grid;gap:4px;max-height:360px;overflow:auto;font-size:14px}.kt-log li{padding:4px 8px;border-radius:8px;background:var(--surface-2)}.kt-log li.w{background:#FDECE8}.kt-log time{color:var(--muted);font-variant-numeric:tabular-nums}
 .kt-note{font-size:13px;margin-top:8px}
+.ka-aud{display:grid;gap:12px}.ka-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}.ka-grid label{display:grid;gap:4px;font-weight:600;font-size:13.5px}
+.ka-gaps{display:flex;gap:6px}.ka-gaps .inp{width:64px;padding:7px}
+.ka-now{font-size:15px;display:grid;gap:6px}.ka-now .han{font-size:20px}.ka-bar{display:block;height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden}.ka-bar b{display:block;height:100%;background:var(--accent)}
+.ka-files{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}.ka-file{display:grid;gap:6px;border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--surface)}.ka-file small{color:var(--muted)}.ka-file audio{width:100%}
 .toast.warn{border-color:#C2513A;background:#FFF1EE}
 .ke{display:grid;gap:12px}.ke label{display:grid;gap:4px;font-weight:600;font-size:13.5px}.ke h3{margin:10px 0 0;color:#D2432F}
 .ke-part{display:grid;gap:8px;border:1.5px solid var(--line);border-radius:12px;padding:12px;background:#FFFDF8}
@@ -4810,7 +4814,7 @@ const KT = {
   part(p, sec){
     const L6 = "ABCDEF";
     let h = `<div class="ex-part">${p.zh ? `<h4 class="zh">${esc(p.zh)}</h4>` : ""}<p class="ex-instr"><i></i>${esc(p.vi)}</p>`;
-    if(p.audio) h += `<div class="ex-audio"><span class="ex-audio-ic">${ICON.sound}</span><div class="ex-audio-body"><b>Audio phần này</b><audio controls controlsList="nodownload" preload="metadata" src="${esc(ktImg(p.audio))}"></audio></div></div>`;
+    if(p.audio) h += `<div class="ex-audio"><span class="ex-audio-ic">${ICON.sound}</span><div class="ex-audio-body"><b>Audio phần này</b><audio controls controlsList="nodownload" preload="metadata" data-aud="${esc(p.audio)}"></audio></div></div>`;
     if(p.type === "poolpics") h += `<div class="ex-pool kt-pool6">${p.pool.map((src, k) => `<figure><span>${L6[k]}</span><img src="${ktImg(src)}" alt="Hình ${L6[k]}"></figure>`).join("")}</div>`;
     if(p.type === "pooltext") h += `<div class="ex-pooltext ${p.inline ? "inline" : ""}">${p.pool.map((t, k) => `<div><b>${L6[k]}</b> <span class="zh">${esc(t)}</span></div>`).join("")}</div>`;
     if(p.example){ const e = p.example; let o = "";
@@ -4838,6 +4842,8 @@ const KT = {
       <div class="kt-tiles han">${q.tiles.map((t, k) => `<button type="button" class="kt-tile" data-k="${k}" ${seq.includes(k) ? "disabled" : ""}>${esc(t)}</button>`).join("")}</div></div>`; },
   bind(){
     const B = $("#ktBody"), qmap = {}; ktQs(this.T).forEach(x => qmap[x.q.n] = x.q);
+    B.querySelectorAll("audio[data-aud]").forEach(el => { const s = el.dataset.aud; el.removeAttribute("data-aud");
+      if(s.startsWith("drive:")){ const a = { id: s.slice(6) }; audioFallback(el, a); el.src = audioSrc(a); } else { const id = driveId(s); if(id){ audioFallback(el, { id }); el.src = audioSrc({ id }); } else el.src = s; } });
     B.querySelectorAll(".ex-opt[data-n]").forEach(b => b.onclick = () => { const n = +b.dataset.n; this.ans[n] = b.dataset.l;
       B.querySelectorAll(`.ex-opt[data-n="${n}"]`).forEach(x => x.classList.toggle("picked", x === b)); this.persist(); });
     B.querySelectorAll(".kt-txt").forEach(i => i.oninput = () => { this.ans[i.dataset.tn] = i.value; this.persist(); });
@@ -4931,7 +4937,7 @@ const KTA = {
     this.seen = warns.length;
     this.draw(); this.startPoll();
   },
-  startPoll(){ clearInterval(this.poll); this.poll = setInterval(() => { if(Teacher.view !== "kt" || $("#scrTeacher").hidden || this.editing || this.gradeU) return; this.render(true); }, 15000); },
+  startPoll(){ clearInterval(this.poll); this.poll = setInterval(() => { if(Teacher.view !== "kt" || $("#scrTeacher").hidden || this.editing || this.gradeU || ($("#kaAudio") && $("#kaAudio").innerHTML)) return; this.render(true); }, 15000); },
   alert(nw){ const last = nw[nw.length - 1]; toast(`⚠ <b>${esc(last.name || last.u)}</b>: ${esc(KT_EV[last.type] || last.type)}${nw.length > 1 ? ` (+${nw.length - 1} cảnh báo khác)` : ""}`, "warn");
     try{ const c = new (window.AudioContext || window.webkitAudioContext)(), o = c.createOscillator(), g = c.createGain(); o.frequency.value = 880; g.gain.value = .15; o.connect(g); g.connect(c.destination); o.start(); setTimeout(() => { o.stop(); c.close(); }, 350); }catch(e){}
     try{ if(window.Notification && Notification.permission === "granted") new Notification("Cảnh báo bài kiểm tra", { body: `${last.name || last.u}: ${KT_EV[last.type] || last.type}` }); }catch(e){} },
@@ -4947,7 +4953,7 @@ const KTA = {
       ${tests.length > 1 ? `<div class="seg">${tests.map(x => `<button data-sel="${esc(x.id)}" aria-pressed="${x.id === this.sel}">${esc(x.title)}</button>`).join("")}</div>` : ""}
       ${t ? `<div class="panel kt-admin">
         <div class="t-top"><div><h2>${esc(t.title)}</h2><p class="muted">${nq} câu · ${mins} phút · ${t.open ? "<b class='ok-t'>Đang mở</b>" : "Đang đóng"} · ${t.released ? "Đã công bố điểm" : "Chưa công bố điểm"}</p></div>
-          <div class="t-acts"><button class="btn ${t.open ? "bad" : "primary"}" id="kaOpen">${t.open ? "Đóng bài kiểm tra" : "Mở bài kiểm tra"}</button><button class="btn" id="kaRel">${t.released ? "Ẩn điểm" : "Công bố điểm"}</button><button class="btn" id="kaEdit">Sửa nội dung đề</button></div></div>
+          <div class="t-acts"><button class="btn ${t.open ? "bad" : "primary"}" id="kaOpen">${t.open ? "Đóng bài kiểm tra" : "Mở bài kiểm tra"}</button><button class="btn" id="kaRel">${t.released ? "Ẩn điểm" : "Công bố điểm"}</button><button class="btn" id="kaEdit">Sửa nội dung đề</button><button class="btn" id="kaAud">${ICON.sound}Tạo audio phần Nghe</button></div></div>
         <form class="kt-passrow" id="kaPassF"><label>Mật khẩu bài kiểm tra<input class="inp" id="kaPass" value="${esc(t.pass)}" placeholder="VD: weiwei2026" autocomplete="off"></label><button class="btn">Lưu mật khẩu</button>
           <span class="muted">${t.pass ? "" : "Chưa đặt mật khẩu – học viên chưa vào làm được."}</span></form>
         <div class="kt-notif"><button class="btn sm" id="kaNotif">Bật thông báo cảnh báo trên máy này</button> <small class="muted">Khi có học viên rời trang, trang này sẽ kêu "bíp" và hiện thông báo.</small></div>
@@ -4958,7 +4964,7 @@ const KTA = {
           return `<tr><td><b>${esc(a.name || a.u)}</b><small>@${esc(a.u)}</small></td><td>${st}</td><td>${answered(a)}/${nq}</td><td>${a.warns ? `<b class="no-t">${a.warns}</b>` : "0"}</td><td>${a.submit ? `${a.total === "" ? "—" : a.total}` : "—"}</td>
             <td><div class="t-acts">${a.submit ? `<button class="btn sm" data-grade="${esc(a.u)}">Chấm / xem bài</button>` : ""}<button class="btn sm bad" data-reset="${esc(a.u)}">Cho làm lại</button></div></td></tr>`; }).join("")}</tbody></table></div>` : `<p class="muted">Chưa có học viên nào bắt đầu làm bài.</p>`}
       </div>
-      <div id="kaGrade"></div>
+      <div id="kaAudio"></div><div id="kaGrade"></div>
       <div class="panel"><h3>Nhật ký cảnh báo</h3>${evs.length ? `<ul class="kt-log">${evs.map(e => `<li class="${KT_WARN.has(e.type) ? "w" : ""}"><time>${new Date(e.t).toLocaleTimeString("vi-VN")}</time> <b>${esc(e.name || e.u)}</b> – ${esc(KT_EV[e.type] || e.type)}${e.detail && !/^Bắt đầu|^Mở lại|^Nộp/.test(e.detail) ? ` <small>(${esc(e.detail)})</small>` : ""}</li>`).join("")}</ul>` : `<p class="muted">Chưa có hoạt động nào.</p>`}
         <p class="muted kt-note">Trang ghi lại khi học viên rời khỏi trang làm bài (chuyển tab, mở ứng dụng khác, thu nhỏ trình duyệt), thoát toàn màn hình, sao chép / dán, bấm chuột phải hay dùng phím tắt. Trang <b>không</b> thể thấy học viên dùng điện thoại hay máy khác bên cạnh.</p></div>` : ""}
       <div class="panel"><h3>Nhập đề từ file</h3><p class="muted">Chọn file đề <code>.json</code> (Claude gửi riêng cho bạn). Nhập lại đề cùng mã sẽ ghi đè nội dung, giữ nguyên mật khẩu và bài làm.</p>
@@ -4978,6 +4984,7 @@ const KTA = {
     $("#kaOpen").onclick = () => { if(!t.open && !t.pass){ this.msg = "Hãy đặt mật khẩu trước khi mở bài."; return this.draw(); } call("testMeta", { id: t.id, open: !t.open }, t.open ? "Đã đóng bài kiểm tra." : "Đã mở bài kiểm tra. Đọc mật khẩu cho học viên để bắt đầu."); };
     $("#kaRel").onclick = () => call("testMeta", { id: t.id, released: !t.released }, t.released ? "Đã ẩn điểm." : "Đã công bố điểm – học viên xem được kết quả và đáp án.");
     $("#kaPassF").onsubmit = e => { e.preventDefault(); call("testMeta", { id: t.id, pass: $("#kaPass").value.trim() }, "Đã lưu mật khẩu."); };
+    $("#kaAud").onclick = () => { this.audioOpen = true; KTAudio.render($("#kaAudio"), t); $("#kaAudio").scrollIntoView({ behavior: "smooth" }); };
     $("#kaEdit").onclick = () => { this.editing = JSON.parse(JSON.stringify(t.test)); this.renderEditor(); };
     $("#kaNotif").onclick = async () => { try{ const p = await Notification.requestPermission(); toast(p === "granted" ? "Đã bật thông báo." : "Trình duyệt chưa cho phép thông báo."); }catch(e){ toast("Trình duyệt này không hỗ trợ thông báo."); } };
     B.querySelectorAll("[data-reset]").forEach(b => b.onclick = () => { if(!b.dataset.armed){ b.dataset.armed = 1; b.textContent = "Bấm lần nữa – xoá bài làm"; return; }
@@ -5042,6 +5049,140 @@ const KTA = {
       const r = await Auth.call("testDef", { key: Teacher.key, test: T }); b.disabled = false; b.textContent = "Lưu đề";
       if(!r.ok){ const e = $("#keErr"); e.textContent = "Chưa lưu được: " + r.error; e.hidden = false; return; }
       this.editing = null; this.msg = "Đã lưu nội dung đề."; this.render(); };
+  }
+};
+
+/* ---------- Tạo audio phần Nghe bằng giọng AI của trình duyệt (khu giáo viên) ----------
+   Trang đọc toàn bộ kịch bản theo khuôn đề HSK (mở đầu, từng phần, ví dụ, mỗi câu 2 lần, khoảng nghỉ),
+   đồng thời ghi lại âm thanh của máy (qua chia sẻ màn hình + âm thanh) rồi xuất ra 4 file MP3 theo 4 phần. */
+function zhNum(n){ const d = "零一二三四五六七八九"; if(n <= 10) return n === 10 ? "十" : d[n]; if(n < 20) return "十" + d[n % 10]; return d[Math.floor(n / 10)] + "十" + (n % 10 ? d[n % 10] : ""); }
+function ktScript(T, cfg){
+  const sec = T.sections.find(s => s.audio); if(!sec) return [];
+  const lv = { hsk1: "一", hsk2: "二", hsk3: "三", hsk4: "四" }[T.level] || "一";
+  const nq = sec.parts.reduce((a, p) => a + p.qs.length, 0), out = [], N = "nar", F = "f", M = "m";
+  const L = (role, text, after) => out.push({ role, text, after });
+  const twice = (items, after) => { items.forEach(x => L(x[0], x[1], 0.6)); out[out.length - 1].after = 3; items.forEach(x => L(x[0], x[1], 0.6)); out[out.length - 1].after = after; };
+  out.push({ mark: 0 });
+  for(let i = 0; i < 3; i++) L(N, `大家好！欢迎参加薇薇中文HSK${lv}级测试。`, i < 2 ? 2 : 3);
+  L(N, `HSK${lv}级听力测试分${zhNum(sec.parts.length)}部分，共${zhNum(nq)}题。`, 2);
+  L(N, "请大家注意，听力测试现在开始。", 3);
+  sec.parts.forEach((p, pi) => {
+    if(pi) out.push({ mark: pi });
+    const gap = +cfg.gaps[pi] || 10;
+    L(N, `第${zhNum(p.no)}部分。`, 1); L(N, `一共${zhNum(p.qs.length)}个题，每题听两次。`, 2); L(N, "例如：", 1);
+    const turns = (txt, first) => String(txt).split(/……/).map(s => s.trim()).filter(Boolean).map((s, k) => [k % 2 ? (first === F ? M : F) : first, s]);
+    const lines = (q, k, ex) => {
+      if(p.type === "poolpics" && sec.audio) return turns(q.script, k % 2 ? M : F);
+      const s = String(q.script || ""), i = s.indexOf("问：");
+      if(i > 0) return [[k % 2 ? M : F, s.slice(0, i)], [N, s.slice(i)]];
+      return [[k % 2 ? M : F, s]];
+    };
+    if(p.example && p.example.script) twice(lines(p.example, 0, true), 3);
+    p.qs.forEach((q, k) => { L(N, k ? `第${zhNum(q.n)}题。` : `现在开始第${zhNum(q.n)}题。`, 1); twice(lines(q, k + 1), gap); });
+  });
+  L(N, "听力测试现在结束。", 1); L(N, "请大家开始做阅读、书写和翻译部分。", 2);
+  return out;
+}
+const KTAudio = {
+  stop: false, run: false,
+  voices(){ return speechSynthesis.getVoices().filter(v => /^zh(-CN|_CN)?/i.test(v.lang) || /Chinese \(Mainland\)|中文/.test(v.name)); },
+  pick(list, re){ return (list.find(v => re.test(v.name)) || list[0] || {}).name || ""; },
+  say(text, vname, rate){ return new Promise(res => { const u = new SpeechSynthesisUtterance(text), v = speechSynthesis.getVoices().find(x => x.name === vname);
+    u.lang = "zh-CN"; if(v) u.voice = v; u.rate = rate; let done = false; const fin = () => { if(!done){ done = true; res(); } };
+    u.onend = fin; u.onerror = fin; setTimeout(fin, 4000 + text.length * 450); speechSynthesis.speak(u); }); },
+  wait(s){ return new Promise(r => setTimeout(r, s * 1000)); },
+  render(box, t){
+    const vs = this.voices(), opts = sel => vs.map(v => `<option ${v.name === sel ? "selected" : ""}>${esc(v.name)}</option>`).join("");
+    const dN = this.pick(vs, /Xiaoxiao.*Natural/i) || this.pick(vs, /Xiaoxiao|Tingting|Huihui/i), dF = this.pick(vs, /Xiaoyi.*Natural|Xiaochen|Xiaohan|Meijia/i) || dN, dM = this.pick(vs, /Yunxi.*Natural|Yunjian.*Natural|Yunyang|Kangkang|Yunxi/i) || dN;
+    box.innerHTML = `<div class="panel ka-aud"><div class="t-top"><h3>Tạo audio phần Nghe</h3><button class="btn" id="kauClose">Đóng</button></div>
+      ${vs.length ? "" : `<p class="err">Trình duyệt này chưa có giọng đọc tiếng Trung. Hãy mở trang bằng Microsoft Edge (có giọng Xiaoxiao, Yunxi…).</p>`}
+      <p class="muted">Trang sẽ đọc toàn bộ kịch bản (mở đầu, 4 phần, ví dụ, mỗi câu 2 lần, khoảng nghỉ) và ghi lại thành file. Trong lúc ghi, <b>giữ nguyên tab này, không chuyển tab, không mở âm thanh khác</b>. Thời gian ghi khoảng 10–12 phút.</p>
+      <div class="ka-grid">
+        <label>Giọng người dẫn 旁白<select class="inp" id="kauN">${opts(dN)}</select></label>
+        <label>Giọng nữ 女<select class="inp" id="kauF">${opts(dF)}</select></label>
+        <label>Giọng nam 男<select class="inp" id="kauM">${opts(dM)}</select></label>
+        <label>Tốc độ đọc<select class="inp" id="kauR"><option value="0.8">Chậm</option><option value="0.9" selected>Vừa (đề HSK)</option><option value="1">Bình thường</option></select></label>
+        <label>Nghỉ sau mỗi câu (giây) – Phần 1 / 2 / 3 / 4<span class="ka-gaps">${[8, 10, 10, 12].map((g, i) => `<input class="inp" type="number" min="3" max="30" value="${g}" data-gap="${i}">`).join("")}</span></label>
+      </div>
+      <div class="t-acts"><button class="btn" id="kauTest">Nghe thử 3 giọng</button><button class="btn" id="kauPlay">Phát thử toàn bộ (không ghi)</button><button class="btn primary" id="kauRec">● Ghi thành file</button><button class="btn bad" id="kauStop" hidden>Dừng</button></div>
+      <div class="ka-now" id="kauNow"></div><div id="kauOut"></div>
+      <details class="muted"><summary>Khi bấm “Ghi thành file”, trình duyệt hỏi chia sẻ – chọn thế nào?</summary>
+        <ol><li>Chọn thẻ <b>“Toàn bộ màn hình”</b> (Entire screen).</li><li>Bật công tắc <b>“Chia sẻ âm thanh hệ thống”</b> (Share system audio) ở góc dưới.</li><li>Bấm <b>Chia sẻ</b>. Trang chỉ ghi âm thanh, không lưu hình.</li></ol>
+        <p>Nếu file ghi ra không có tiếng, thử lại và chọn thẻ <b>“Tab này”</b> + bật “Chia sẻ âm thanh tab”.</p></details></div>`;
+    const cfg = () => ({ n: $("#kauN").value, f: $("#kauF").value, m: $("#kauM").value, rate: +$("#kauR").value, gaps: [...box.querySelectorAll("[data-gap]")].map(i => +i.value) });
+    $("#kauClose").onclick = () => { this.stop = true; speechSynthesis.cancel(); box.innerHTML = ""; };
+    $("#kauTest").onclick = async () => { const c = cfg(); await this.say("我是旁白。听力测试现在开始。", c.n, c.rate); await this.say("我是女生。你好！", c.f, c.rate); await this.say("我是男生。很高兴认识你。", c.m, c.rate); };
+    $("#kauPlay").onclick = () => this.play(t, cfg(), null);
+    $("#kauRec").onclick = () => this.record(t, cfg());
+    $("#kauStop").onclick = () => { this.stop = true; speechSynthesis.cancel(); };
+    speechSynthesis.onvoiceschanged = () => { if(!vs.length && this.voices().length) this.render(box, t); };
+  },
+  async play(t, c, rec){
+    if(this.run) return; this.run = true; this.stop = false; $("#kauStop").hidden = false; ["#kauPlay", "#kauRec", "#kauTest"].forEach(s => $(s).disabled = true);
+    const S = ktScript(t.test, c), now = $("#kauNow"), voice = { nar: c.n, f: c.f, m: c.m }, who = { nar: "旁白", f: "女", m: "男" };
+    const lines = S.filter(x => !x.mark).length; let i = 0;
+    for(const x of S){ if(this.stop) break;
+      if(x.mark != null){ if(rec) rec.marks[x.mark] = rec.len(); continue; }
+      i++; now.innerHTML = `<b>${i}/${lines}</b> · ${who[x.role]}：<span class="han">${esc(x.text)}</span><i class="ka-bar"><b style="width:${i / lines * 100}%"></b></i>`;
+      await this.say(x.text, voice[x.role], c.rate); if(this.stop) break; await this.wait(x.after); }
+    this.run = false; $("#kauStop").hidden = true; ["#kauPlay", "#kauRec", "#kauTest"].forEach(s => $(s).disabled = false);
+    now.innerHTML = this.stop ? "Đã dừng." : "Đã đọc xong toàn bộ kịch bản.";
+    return !this.stop;
+  },
+  async record(t, c){
+    let stream; const out = $("#kauOut");
+    try{ stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }, systemAudio: "include", selfBrowserSurface: "include" }); }
+    catch(e){ out.innerHTML = `<p class="err">Chưa bắt đầu ghi: bạn chưa cho phép chia sẻ màn hình.</p>`; return; }
+    const at = stream.getAudioTracks(); stream.getVideoTracks().forEach(v => v.stop());
+    if(!at.length){ stream.getTracks().forEach(x => x.stop()); out.innerHTML = `<p class="err">Chưa có âm thanh: khi chia sẻ, nhớ bật “Chia sẻ âm thanh hệ thống” (hoặc “Chia sẻ âm thanh tab”).</p>`; return; }
+    const ctx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 44100 }), src = ctx.createMediaStreamSource(new MediaStream(at));
+    const proc = ctx.createScriptProcessor(4096, 1, 1), mute = ctx.createGain(); mute.gain.value = 0; const chunks = []; let n = 0, peak = 0;
+    proc.onaudioprocess = e => { const d = new Float32Array(e.inputBuffer.getChannelData(0)); chunks.push(d); n += d.length; for(let k = 0; k < d.length; k += 64) peak = Math.max(peak, Math.abs(d[k])); };
+    src.connect(proc); proc.connect(mute); mute.connect(ctx.destination);
+    const rec = { marks: {}, len: () => n };
+    out.innerHTML = `<p class="muted">Đang ghi… giữ nguyên tab này.</p>`;
+    await this.wait(1);
+    const ok = await this.play(t, c, rec); await this.wait(1.5);
+    src.disconnect(); proc.disconnect(); at.forEach(x => x.stop()); ctx.close();
+    if(!ok){ out.innerHTML = `<p class="muted">Đã dừng, không lưu file.</p>`; return; }
+    if(peak < 0.01){ out.innerHTML = `<p class="err">File ghi được không có tiếng. Hãy ghi lại và khi chia sẻ chọn “Toàn bộ màn hình” + bật “Chia sẻ âm thanh hệ thống” (hoặc thử “Tab này” + “Chia sẻ âm thanh tab”).</p>`; return; }
+    const pcm = new Float32Array(n); let o = 0; chunks.forEach(d => { pcm.set(d, o); o += d.length; });
+    const nParts = Object.keys(rec.marks).length, cuts = [...Array(nParts).keys()].map(k => rec.marks[k]).concat([n]);
+    out.innerHTML = `<p class="muted">Đang chuyển sang MP3…</p>`;
+    const files = [];
+    for(let k = 0; k < nParts; k++){ const blob = await this.mp3(pcm.subarray(cuts[k], cuts[k + 1]), 44100); files.push({ name: `nghe-${k + 1}.mp3`, blob, dur: (cuts[k + 1] - cuts[k]) / 44100 }); }
+    const full = await this.mp3(pcm, 44100); files.push({ name: "nghe-toan-bo.mp3", blob: full, dur: n / 44100 });
+    this.files = files; this.showFiles(t, out);
+  },
+  async lame(){ if(window.lamejs) return true;
+    for(const u of ["https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js", "https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"]){
+      const ok = await new Promise(r => { const s = document.createElement("script"); s.src = u; s.onload = () => r(!!window.lamejs); s.onerror = () => r(false); document.head.appendChild(s); }); if(ok) return true; }
+    return false; },
+  async mp3(f32, rate){
+    const i16 = new Int16Array(f32.length); for(let k = 0; k < f32.length; k++){ const v = Math.max(-1, Math.min(1, f32[k])); i16[k] = v < 0 ? v * 0x8000 : v * 0x7FFF; }
+    if(await this.lame()){ const enc = new lamejs.Mp3Encoder(1, rate, 64), parts = [];
+      for(let k = 0; k < i16.length; k += 1152 * 40){ for(let j = k; j < Math.min(k + 1152 * 40, i16.length); j += 1152){ const b = enc.encodeBuffer(i16.subarray(j, j + 1152)); if(b.length) parts.push(b); } await new Promise(r => setTimeout(r, 0)); }
+      const end = enc.flush(); if(end.length) parts.push(end); return new Blob(parts, { type: "audio/mpeg" }); }
+    /* không tải được bộ mã hoá MP3 → xuất WAV */
+    const buf = new ArrayBuffer(44 + i16.length * 2), dv = new DataView(buf), w = (o, s) => [...s].forEach((c, i) => dv.setUint8(o + i, c.charCodeAt(0)));
+    w(0, "RIFF"); dv.setUint32(4, 36 + i16.length * 2, true); w(8, "WAVE"); w(12, "fmt "); dv.setUint32(16, 16, true); dv.setUint16(20, 1, true); dv.setUint16(22, 1, true); dv.setUint32(24, rate, true); dv.setUint32(28, rate * 2, true); dv.setUint16(32, 2, true); dv.setUint16(34, 16, true); w(36, "data"); dv.setUint32(40, i16.length * 2, true);
+    new Int16Array(buf, 44).set(i16); return new Blob([buf], { type: "audio/wav" });
+  },
+  showFiles(t, out){
+    const fmt = s => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, "0")}`;
+    out.innerHTML = `<h4>Đã tạo xong</h4><div class="ka-files">${this.files.map((f, i) => `<div class="ka-file"><b>${f.name}</b><small>${fmt(f.dur)} · ${(f.blob.size / 1048576).toFixed(1)} MB</small><audio controls src="${URL.createObjectURL(f.blob)}"></audio><a class="btn sm" download="${f.name.replace(/mp3$/, f.blob.type === "audio/wav" ? "wav" : "mp3")}" href="${URL.createObjectURL(f.blob)}">Tải về</a></div>`).join("")}</div>
+      <div class="t-acts"><button class="btn primary" id="kauAttach">Gắn 4 file vào đề (tải lên Google Drive)</button></div><p class="muted" id="kauMsg"></p>`;
+    $("#kauAttach").onclick = async () => {
+      const msg = $("#kauMsg"), b = $("#kauAttach"); b.disabled = true; const T = JSON.parse(JSON.stringify(t.test)), sec = T.sections.find(s => s.audio);
+      for(let k = 0; k < sec.parts.length && k < this.files.length - 1; k++){
+        msg.textContent = `Đang tải ${this.files[k].name} lên Google Drive… (${k + 1}/${sec.parts.length})`;
+        const data = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(String(fr.result).split(",")[1]); fr.readAsDataURL(this.files[k].blob); });
+        const r = await Auth.call("uploadAudio", { key: Teacher.key, name: `${t.id}-${this.files[k].name}`, mime: this.files[k].blob.type, data }, 240000);
+        if(!r.ok){ msg.textContent = "Không tải lên được: " + r.error + ". Bạn có thể bấm “Tải về” rồi dán link vào phần Sửa nội dung đề."; b.disabled = false; return; }
+        sec.parts[k].audio = "drive:" + r.id; }
+      msg.textContent = "Đang lưu đề…"; const r = await Auth.call("testDef", { key: Teacher.key, test: T });
+      msg.textContent = r.ok ? "Đã gắn audio vào 4 phần nghe. Học viên vào làm bài sẽ nghe các file này." : "Chưa lưu được đề: " + r.error;
+      if(r.ok){ KTA.msg = "Đã gắn audio phần Nghe vào đề."; } };
   }
 };
 
