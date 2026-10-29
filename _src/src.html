@@ -5144,23 +5144,32 @@ const KTAudio = {
     catch(e){ out.innerHTML = `<p class="err">Chưa bắt đầu ghi: bạn chưa cho phép chia sẻ màn hình.</p>`; return; }
     const at = stream.getAudioTracks(); stream.getVideoTracks().forEach(v => v.stop());
     if(!at.length){ stream.getTracks().forEach(x => x.stop()); out.innerHTML = `<p class="err">Chưa có âm thanh: khi chia sẻ, nhớ bật “Chia sẻ âm thanh hệ thống” (hoặc “Chia sẻ âm thanh tab”).</p>`; return; }
-    const ctx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 44100 }), src = ctx.createMediaStreamSource(new MediaStream(at));
-    const proc = ctx.createScriptProcessor(4096, 1, 1), mute = ctx.createGain(); mute.gain.value = 0; const chunks = []; let n = 0, peak = 0;
-    proc.onaudioprocess = e => { const d = new Float32Array(e.inputBuffer.getChannelData(0)); chunks.push(d); n += d.length; for(let k = 0; k < d.length; k += 64) peak = Math.max(peak, Math.abs(d[k])); };
-    src.connect(proc); proc.connect(mute); mute.connect(ctx.destination);
-    const rec = { marks: {}, len: () => n };
+    /* ghi bằng bộ ghi có sẵn của trình duyệt (chạy riêng, không bị giật khi trang bận), xong mới giải mã để cắt phần và đổi sang MP3 */
+    const mime = ["audio/webm;codecs=opus", "audio/webm", "audio/ogg;codecs=opus", "audio/mp4"].find(m => window.MediaRecorder && MediaRecorder.isTypeSupported(m)) || "";
+    let mr; try{ mr = new MediaRecorder(new MediaStream(at), mime ? { mimeType: mime, audioBitsPerSecond: 160000 } : undefined); }
+    catch(e){ at.forEach(x => x.stop()); out.innerHTML = `<p class="err">Trình duyệt không ghi được âm thanh (${esc(e.message)}).</p>`; return; }
+    const chunks = []; mr.ondataavailable = e => { if(e.data && e.data.size) chunks.push(e.data); };
+    const stopped = new Promise(r => mr.onstop = r);
+    let t0 = 0; const rec = { marks: {}, len: () => (performance.now() - t0) / 1000 };
+    mr.start(1000); t0 = performance.now();
     out.innerHTML = `<p class="muted">Đang ghi… giữ nguyên tab này.</p>`;
     await this.wait(1);
     const ok = await this.play(t, c, rec); await this.wait(1.5);
-    src.disconnect(); proc.disconnect(); at.forEach(x => x.stop()); ctx.close();
+    mr.stop(); await stopped; at.forEach(x => x.stop());
     if(!ok){ out.innerHTML = `<p class="muted">Đã dừng, không lưu file.</p>`; return; }
+    out.innerHTML = `<p class="muted">Đang xử lý âm thanh…</p>`;
+    let buf; try{ const ctx = new (window.AudioContext || window.webkitAudioContext)(); buf = await ctx.decodeAudioData(await new Blob(chunks, { type: mime || "audio/webm" }).arrayBuffer()); ctx.close(); }
+    catch(e){ out.innerHTML = `<p class="err">Không xử lý được bản ghi (${esc(e.message || e)}). Hãy thử ghi lại.</p>`; return; }
+    const rate = buf.sampleRate, n = buf.length, pcm = new Float32Array(n), chs = buf.numberOfChannels;
+    for(let ch = 0; ch < chs; ch++){ const d = buf.getChannelData(ch); for(let k = 0; k < n; k++) pcm[k] += d[k] / chs; }
+    let peak = 0; for(let k = 0; k < n; k += 32) peak = Math.max(peak, Math.abs(pcm[k]));
     if(peak < 0.01){ out.innerHTML = `<p class="err">File ghi được không có tiếng. Hãy ghi lại và khi chia sẻ chọn “Toàn bộ màn hình” + bật “Chia sẻ âm thanh hệ thống” (hoặc thử “Tab này” + “Chia sẻ âm thanh tab”).</p>`; return; }
-    const pcm = new Float32Array(n); let o = 0; chunks.forEach(d => { pcm.set(d, o); o += d.length; });
-    const nParts = Object.keys(rec.marks).length, cuts = [...Array(nParts).keys()].map(k => rec.marks[k]).concat([n]);
+    if(peak > 0.98){ const g = 0.95 / peak; for(let k = 0; k < n; k++) pcm[k] *= g; }
+    const nParts = Object.keys(rec.marks).length, cuts = [...Array(nParts).keys()].map(k => Math.min(n, Math.round(rec.marks[k] * rate))).concat([n]);
     out.innerHTML = `<p class="muted">Đang chuyển sang MP3…</p>`;
     const files = [];
-    for(let k = 0; k < nParts; k++){ const blob = await this.mp3(pcm.subarray(cuts[k], cuts[k + 1]), 44100); files.push({ name: `nghe-${k + 1}.mp3`, blob, dur: (cuts[k + 1] - cuts[k]) / 44100 }); }
-    const full = await this.mp3(pcm, 44100); files.push({ name: "nghe-toan-bo.mp3", blob: full, dur: n / 44100 });
+    for(let k = 0; k < nParts; k++){ const blob = await this.mp3(pcm.subarray(cuts[k], cuts[k + 1]), rate); files.push({ name: `nghe-${k + 1}.mp3`, blob, dur: (cuts[k + 1] - cuts[k]) / rate }); }
+    const full = await this.mp3(pcm, rate); files.push({ name: "nghe-toan-bo.mp3", blob: full, dur: n / rate });
     this.files = files; this.showFiles(t, out);
   },
   async lame(){ if(window.lamejs) return true;
@@ -5169,7 +5178,7 @@ const KTAudio = {
     return false; },
   async mp3(f32, rate){
     const i16 = new Int16Array(f32.length); for(let k = 0; k < f32.length; k++){ const v = Math.max(-1, Math.min(1, f32[k])); i16[k] = v < 0 ? v * 0x8000 : v * 0x7FFF; }
-    if(await this.lame()){ const enc = new lamejs.Mp3Encoder(1, rate, 64), parts = [];
+    if(await this.lame()){ const enc = new lamejs.Mp3Encoder(1, rate, 96), parts = [];
       for(let k = 0; k < i16.length; k += 1152 * 40){ for(let j = k; j < Math.min(k + 1152 * 40, i16.length); j += 1152){ const b = enc.encodeBuffer(i16.subarray(j, j + 1152)); if(b.length) parts.push(b); } await new Promise(r => setTimeout(r, 0)); }
       const end = enc.flush(); if(end.length) parts.push(end); return new Blob(parts, { type: "audio/mpeg" }); }
     /* không tải được bộ mã hoá MP3 → xuất WAV */
