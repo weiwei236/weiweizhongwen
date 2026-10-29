@@ -5087,9 +5087,18 @@ const KTAudio = {
   stop: false, run: false,
   voices(){ return speechSynthesis.getVoices().filter(v => /^zh(-CN|_CN)?/i.test(v.lang) || /Chinese \(Mainland\)|中文/.test(v.name)); },
   pick(list, re){ return (list.find(v => re.test(v.name)) || list[0] || {}).name || ""; },
-  say(text, vname, rate){ return new Promise(res => { const u = new SpeechSynthesisUtterance(text), v = speechSynthesis.getVoices().find(x => x.name === vname);
-    u.lang = "zh-CN"; if(v) u.voice = v; u.rate = rate; let done = false; const fin = () => { if(!done){ done = true; res(); } };
-    u.onend = fin; u.onerror = fin; setTimeout(fin, 4000 + text.length * 450); speechSynthesis.speak(u); }); },
+  /* đọc 1 câu, chờ đọc xong hẳn; giọng "Online" lấy âm thanh qua mạng nên đôi khi bị lỗi giữa chừng → tự đọc lại câu đó (tối đa 2 lần) */
+  say(text, vname, rate, tries = 0){ return new Promise(res => {
+    const u = new SpeechSynthesisUtterance(text), v = speechSynthesis.getVoices().find(x => x.name === vname), t0 = Date.now();
+    u.lang = "zh-CN"; if(v) u.voice = v; u.rate = rate; this._u = u; /* giữ tham chiếu để trình duyệt không xoá giữa chừng */
+    let done = false, keep = setInterval(() => { if(speechSynthesis.paused) speechSynthesis.resume(); }, 1000);
+    const fin = again => { if(done) return; done = true; clearInterval(keep); clearTimeout(guard);
+      if(again && !this.stop && tries < 2){ speechSynthesis.cancel(); setTimeout(() => this.say(text, vname, rate, tries + 1).then(res), 400); } else res(); };
+    const minMs = [...text].filter(c => /[一-鿿]/.test(c)).length * 110 / rate;
+    u.onend = () => fin(Date.now() - t0 < minMs);           /* kết thúc quá sớm = bị ngắt → đọc lại */
+    u.onerror = e => fin(!["interrupted", "canceled"].includes(e.error));
+    const guard = setTimeout(() => fin(false), 8000 + text.length * 600);
+    setTimeout(() => speechSynthesis.speak(u), 150); }); },
   wait(s){ return new Promise(r => setTimeout(r, s * 1000)); },
   render(box, t){
     const vs = this.voices(), opts = sel => vs.map(v => `<option ${v.name === sel ? "selected" : ""}>${esc(v.name)}</option>`).join("");
