@@ -510,6 +510,60 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .gr-foot{text-align:center}
 .gr-btn svg{width:18px;height:18px}
 @media (max-width:560px){.gr-hero{padding:10px}.gr-hero .xiaoyu{width:70px}.gr-pt{padding:14px 12px}.gr-tbl td{font-size:20px}}
+/* bài kiểm tra */
+.kt-page{display:grid;gap:16px;padding:18px 0 40px;grid-template-columns:minmax(0,1fr)}.kt-page>*{min-width:0}
+.kt-hero{display:flex;gap:14px;align-items:center;background:linear-gradient(120deg,#FFF1EC,#FDF8EE);border:1.5px solid #F3C9BE;border-radius:18px;padding:14px 18px}
+.kt-hero>.han{font-size:40px;color:#D2432F}.kt-hero h2{margin:0}.kt-hero p{margin:4px 0 0}
+.kt-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow);display:grid;gap:10px}
+.kt-card h3{margin:0}.kt-card p{margin:0}
+.kt-item-h{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.kt-chip{font-size:12.5px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--surface-2);color:var(--muted)}
+.kt-chip.open{background:color-mix(in srgb,var(--good) 15%,transparent);color:var(--good)}.kt-chip.doing{background:#FFF3D6;color:var(--warn)}.kt-chip.done{background:#E7F1FB;color:#2F6FD6}
+.kt-pass{display:flex;gap:10px;align-items:end;flex-wrap:wrap}.kt-pass label{display:grid;gap:4px;font-weight:600;font-size:14px;flex:1;min-width:200px}.kt-pass .err{flex-basis:100%}
+.kt-done{text-align:center;justify-items:center}.kt-done>.han{font-size:48px;color:#D2432F}
+.kt-run{max-width:960px;margin:0 auto;padding:0 0 40px}
+.kt-bar{position:sticky;top:0;z-index:20;background:#FFFDF8;border:1.5px solid #E7C9A0;border-radius:0 0 14px 14px;padding:10px 14px;box-shadow:0 6px 18px rgba(23,51,42,.12);display:grid;gap:8px}
+.kt-bar-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.kt-bar-t{flex:1;min-width:180px;font-weight:700}.kt-bar-t .han{color:#D2432F;margin-right:4px}
+.kt-time{display:flex;align-items:baseline;gap:6px;background:#17332A;color:#fff;border-radius:10px;padding:4px 12px}.kt-time span{font-size:12px;opacity:.8}.kt-time b{font-size:24px;font-variant-numeric:tabular-nums;letter-spacing:1px}
+.kt-time.low{background:#C2513A;animation:ktblink 1s step-end infinite}@keyframes ktblink{50%{opacity:.75}}
+.kt-prog{font-size:14px}.kt-prog small{display:block;color:var(--muted);font-size:11.5px}
+.kt-nav{display:flex;gap:10px 14px;flex-wrap:wrap}
+.kt-navg{display:flex;gap:6px;align-items:center}.kt-navg small{font-weight:700;color:var(--muted);font-size:12px;width:30px}.kt-navg>div{display:flex;flex-wrap:wrap;gap:3px}
+.kt-dot{width:26px;height:26px;border-radius:6px;border:1.5px solid var(--line);background:#fff;font-size:11.5px;font-weight:700;color:var(--muted);cursor:pointer;padding:0}
+.kt-dot.on{background:var(--accent);border-color:var(--accent);color:#fff}.kt-dot:hover{border-color:var(--accent)}
+.kt-rules{background:#FFF6DA;border:1.5px solid #F2C14E;border-radius:12px;padding:10px 14px;font-size:14px;margin:14px 0}
+.kt-q{scroll-margin-top:170px}.kt-q.flash{animation:flashq 1.2s}
+.kt-play{font-size:13.5px;padding:6px 12px;justify-self:start}.kt-play svg{width:16px;height:16px}
+.kt-word,.kt-vi{font-size:16px}.kt-word b{font-size:24px;color:#D2432F}.kt-vi{font-weight:600}
+.kt-txt{font-size:22px;font-family:var(--f-song,"SimSun","Songti SC",serif)}
+.kt-order{display:grid;gap:10px}
+.kt-ans{min-height:52px;border:2px dashed var(--line);border-radius:12px;padding:6px 8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;background:#FFFDF6}
+.kt-tiles{display:flex;flex-wrap:wrap;gap:8px}
+.kt-tile{border:2px solid var(--line);background:#fff;border-radius:10px;padding:6px 14px;font-size:22px;cursor:pointer;font-family:inherit}
+.kt-tile:hover:not([disabled]){border-color:var(--accent)}.kt-tile[disabled]{opacity:.3;cursor:default}.kt-tile.on{border-color:var(--accent);background:var(--leaf-soft)}
+.kt-end{font-size:22px}
+.kt-pool6{grid-template-columns:repeat(3,minmax(0,1fr))}
+.kt-navbtn{display:none}.kt-q .ex-letter[disabled]{opacity:.3}
+@media (max-width:560px){.kt-navbtn{display:inline-flex}.kt-bar:not(.open) .kt-nav{display:none}.kt-time b{font-size:20px}.kt-pool6{grid-template-columns:repeat(2,minmax(0,1fr))}.kt-navg small{width:auto}.kt-q{scroll-margin-top:230px}}
+.kt-lock{-webkit-user-select:none;user-select:none}.kt-lock input,.kt-lock textarea{-webkit-user-select:text;user-select:text}
+.kt-warn{position:fixed;inset:0;z-index:100;background:rgba(23,51,42,.55);display:grid;place-items:center;padding:16px}
+.kt-warn-box{background:#fff;border-radius:16px;border:2px solid #C2513A;padding:20px 22px;max-width:420px;display:grid;gap:10px;text-align:center}.kt-warn-box b{color:#C2513A;font-size:18px}.kt-warn-box p{margin:0}
+.kt-report{gap:12px}.kt-score .big{font-size:44px;font-weight:700;color:var(--accent)}.kt-score small{color:var(--muted);margin-left:6px}
+.kt-secs{display:flex;gap:14px;flex-wrap:wrap}
+.kt-rtab td{vertical-align:top}.kt-rtab tr.ok td:last-child{color:var(--good);font-weight:700}.kt-rtab tr.no td:last-child{color:var(--bad);font-weight:700}.kt-rtab tr.pend td:last-child{color:var(--warn)}
+.kt-sc{width:70px;padding:5px 8px;display:inline-block}
+.kt-admin{display:grid;gap:12px}.kt-passrow{display:flex;gap:10px;align-items:end;flex-wrap:wrap}.kt-passrow label{display:grid;gap:4px;font-weight:600;font-size:14px}
+.kt-log{list-style:none;margin:0;padding:0;display:grid;gap:4px;max-height:360px;overflow:auto;font-size:14px}.kt-log li{padding:4px 8px;border-radius:8px;background:var(--surface-2)}.kt-log li.w{background:#FDECE8}.kt-log time{color:var(--muted);font-variant-numeric:tabular-nums}
+.kt-note{font-size:13px;margin-top:8px}
+.toast.warn{border-color:#C2513A;background:#FFF1EE}
+.ke{display:grid;gap:12px}.ke label{display:grid;gap:4px;font-weight:600;font-size:13.5px}.ke h3{margin:10px 0 0;color:#D2432F}
+.ke-part{display:grid;gap:8px;border:1.5px solid var(--line);border-radius:12px;padding:12px;background:#FFFDF8}
+.ke-q{display:grid;grid-template-columns:36px minmax(0,1fr);gap:8px;border-top:1px dashed var(--line);padding-top:8px}.ke-n{font-size:18px;color:#D2432F}.ke-f{display:grid;gap:6px}
+.ke-pool,.ke-opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}
+.ke-img{display:grid;gap:4px}.ke-img img{width:100%;height:90px;object-fit:cover;border-radius:8px;background:var(--surface-2)}.ke-img .inp{font-size:12px;padding:5px 7px}
+.ke-inl{display:flex!important;align-items:center;gap:8px}.ke-ans{width:auto}
+.inp.sm{max-width:120px}
 /* bảng theo dõi giáo viên */
 .t-wrap{max-width:1180px;margin:0 auto;display:grid;gap:16px}
 .t-wrap>*{min-width:0}
@@ -737,6 +791,7 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 
 <section id="scrTeacher" class="screen" hidden><div class="t-wrap" id="tBody"></div></section>
 
+<section id="scrTest" class="screen" hidden><div class="wrap" id="ktBody"></div></section>
 <section id="scrGrammar" class="screen" hidden><div class="wrap" id="grBody"></div></section>
 <section id="scrFarm" class="screen farm-screen" hidden><div class="fm-wrap" id="fmBody"></div></section>
 
@@ -2838,7 +2893,7 @@ function avatarSVG(c0,opt={}){
 const Profile={ get(){return store.get("ww_profile",null);}, set(p){store.set("ww_profile",p);}, clear(){try{localStorage.removeItem("ww_profile");}catch(e){}} };
 const GT_LEVELS=[["so","Sơ cấp"],["trung","Trung cấp"]];
 function levelLabel(p){ return p.cls==="gt"?"Lớp Giao tiếp · "+(p.level==="trung"?"Trung cấp":"Sơ cấp"):"Lớp HSK · "+(LEVELS[p.level]?LEVELS[p.level].name:"HSK 1"); }
-function showScreen(id){ ["scrWelcome","scrAuth","scrLogin","scrAvatar","scrTeacher","scrFarm","scrGrammar","app"].forEach(x=>{ $("#"+x).hidden=x!==id; }); window.scrollTo(0,0); if(id!=="app") stopAnyRecording(); }
+function showScreen(id){ ["scrWelcome","scrAuth","scrLogin","scrAvatar","scrTeacher","scrFarm","scrGrammar","scrTest","app"].forEach(x=>{ $("#"+x).hidden=x!==id; }); window.scrollTo(0,0); if(id!=="app") stopAnyRecording(); }
 
 function openWelcome(){
   const p=Profile.get();
@@ -2946,9 +3001,10 @@ function renderHello(){
   $("#hello").innerHTML=`<div class="me">${avatarSVG(p.avatar,{label:"Nhân vật của "+p.name})}</div>
     <div><h2><span class="han">你好，</span>${esc(p.name)}！</h2><p>${esc(levelLabel(p))}${Auth.get()?` · <span class="acc-ok">Tài khoản ${esc(p.username||"")}</span>`:(Auth.on()?` · <button class="linkbtn" id="hiReg">Học thử – đăng ký để lưu tiến độ</button>`:"")}</p>
     ${p.cls==="gt"?`<p class="note">Nội dung lớp Giao tiếp đang được cập nhật. Trong lúc chờ, bạn có thể luyện HSK 1.</p>`:""}</div>
-    <div class="acts"><button class="btn farm-btn" id="hiFarm">${ICON_SPROUT}Trang trại · ${coinSVG()}<b class="coin-count">${Farm.coins()}</b></button><button class="btn gr-btn" id="hiGr">${ICON.book}Ngữ pháp</button><button class="btn" id="hiAv">Đổi nhân vật</button><button class="btn" id="hiInfo">Sửa thông tin</button><button class="btn" id="hiOut">Đăng xuất</button></div>`;
+    <div class="acts"><button class="btn farm-btn" id="hiFarm">${ICON_SPROUT}Trang trại · ${coinSVG()}<b class="coin-count">${Farm.coins()}</b></button><button class="btn gr-btn" id="hiGr">${ICON.book}Ngữ pháp</button><button class="btn kt-btn" id="hiKt">${ICON.quiz}Kiểm tra</button><button class="btn" id="hiAv">Đổi nhân vật</button><button class="btn" id="hiInfo">Sửa thông tin</button><button class="btn" id="hiOut">Đăng xuất</button></div>`;
   $("#hiFarm").onclick=()=>Farm.open();
   $("#hiGr").onclick=()=>Grammar.open();
+  $("#hiKt").onclick=()=>KT.open();
   const hr=$("#hiReg"); if(hr) hr.onclick=()=>openAuth("register");
   $("#hiAv").onclick=openAvatar;
   $("#hiInfo").onclick=()=>openLogin(Profile.get());
@@ -3116,17 +3172,18 @@ const Teacher = {
   },
   topbar(title, sub){
     return `<div class="t-top"><div><h2>${esc(title)}</h2><p class="muted">${sub}</p></div>
-      <div class="t-acts"><div class="seg t-view" role="group" aria-label="Khu giáo viên">${[["hv", "Học viên"], ["read", "Bài đọc"]].map(([v, l]) => `<button type="button" data-tv="${v}" aria-pressed="${this.view === v}">${l}</button>`).join("")}</div>
+      <div class="t-acts"><div class="seg t-view" role="group" aria-label="Khu giáo viên">${[["hv", "Học viên"], ["read", "Bài đọc"], ["kt", "Kiểm tra"]].map(([v, l]) => `<button type="button" data-tv="${v}" aria-pressed="${this.view === v}">${l}</button>`).join("")}</div>
         <button class="btn" id="tReload">${ICON.redo}Tải lại</button><button class="btn" id="tOut">Đăng xuất</button><button class="btn" id="tHome">${ICON.left}Về trang học</button></div></div>`;
   },
   bindTop(){
-    $("#tReload").onclick = () => { if(this.view === "read"){ RdAdmin.draft = null; RdAdmin.render(); } else this.load(); };
+    $("#tReload").onclick = () => { if(this.view === "read"){ RdAdmin.draft = null; RdAdmin.render(); } else if(this.view === "kt"){ KTA.editing = null; KTA.render(); } else this.load(); };
     $("#tHome").onclick = () => { RdAdmin.draft = null; const p = Profile.get(); if(p && p.avatar) enterApp(); else openWelcome(); };
     $("#tOut").onclick = () => { try{ sessionStorage.removeItem("ww_tkey"); }catch(e){} this.key = ""; RdAdmin.draft = null; this.renderLogin(); };
-    document.querySelectorAll("#tBody [data-tv]").forEach(b => b.onclick = () => { if(this.view === b.dataset.tv) return; this.view = b.dataset.tv; this.view === "read" ? RdAdmin.render() : this.render(); });
+    document.querySelectorAll("#tBody [data-tv]").forEach(b => b.onclick = () => { if(this.view === b.dataset.tv) return; this.view = b.dataset.tv; this.view === "read" ? RdAdmin.render() : this.view === "kt" ? KTA.render() : this.render(); });
   },
   render(){
     if(this.view === "read") return RdAdmin.render();
+    if(this.view === "kt") return KTA.render();
     const f = this.filter, q = f.q.trim().toLowerCase();
     const list = this.students.filter(s => (f.cls === "all" || s.cls === f.cls) && (!q || [s.name, s.acc && s.acc.username, s.acc && s.acc.phone].some(v => (v || "").toLowerCase().includes(q))));
     const week = Date.now() - 7 * 86400000;
@@ -4652,6 +4709,343 @@ const Grammar = {
     B.querySelectorAll("[data-f]").forEach(b => b.onclick = () => { this.filter = b.dataset.f; this.sel = null; this.render(); });
     B.querySelectorAll("[data-pt]").forEach(b => b.onclick = () => { this.sel = b.dataset.pt; const y = window.scrollY; this.render(); window.scrollTo(0, y); });
     this.bindCommon(B, () => { const y = window.scrollY; this.render(); window.scrollTo(0, y); });
+  }
+};
+
+/* ======================= BÀI KIỂM TRA 测试 =======================
+   Đề + đáp án chỉ lưu trên Google Sheet của giáo viên (sheet "Tests"), KHÔNG nằm trong mã trang web.
+   Học viên đăng nhập → chọn bài → nhập mật khẩu giáo viên đưa → máy chủ trả đề (đã bỏ đáp án) + giờ kết thúc.
+   Trong lúc làm bài, trang ghi lại các hành vi đáng ngờ (rời trang, chuyển cửa sổ, sao chép/dán…) và gửi về khu giáo viên. */
+const KT_EV = { start: "Bắt đầu làm bài", resume: "Mở lại bài đang làm", submit: "Nộp bài", hidden: "Rời khỏi trang / chuyển tab", blur: "Chuyển sang cửa sổ hoặc ứng dụng khác",
+  copy: "Sao chép nội dung", cut: "Cắt nội dung", paste: "Dán nội dung vào bài", menu: "Bấm chuột phải", key: "Dùng phím tắt", fsexit: "Thoát chế độ toàn màn hình", unload: "Đóng hoặc tải lại trang", print: "Chụp / in màn hình" };
+const KT_WARN = new Set(["hidden", "blur", "copy", "cut", "paste", "menu", "key", "fsexit", "unload", "print"]);
+function ktImg(src){ if(!src) return ""; if(src.startsWith("ex:")) return (typeof EX_IMG !== "undefined" && EX_IMG[src.slice(3)]) || ""; if(src.startsWith("drive:")) return imgSrc({ id: src.slice(6) }); return src; }
+function ktFmt(ms){ ms = Math.max(0, ms); const s = Math.floor(ms / 1000); return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); }
+function ktQs(T){ const out = []; (T.sections || []).forEach((sec, si) => (sec.parts || []).forEach(p => (p.qs || []).forEach(q => out.push({ q, p, sec, si })))); return out; }
+const KT_SEC = ["Nghe", "Đọc", "Viết", "Dịch"];
+
+const KT = {
+  list: [], T: null, id: "", ans: {}, plays: {}, endsAt: 0, skew: 0, tick: null, dirty: false, saveT: null, evq: [], evT: null, warnN: 0, running: false, armed: false,
+  local(){ return "kt_" + this.id + "_" + ((Auth.get() || {}).u || ""); },
+  async open(){
+    showScreen("scrTest"); const B = $("#ktBody");
+    if(!Auth.on()) { B.innerHTML = this.shell(`<p class="muted">Trang chưa được nối với máy chủ nên chưa dùng được bài kiểm tra.</p>`); return this.bindShell(); }
+    if(!Auth.get()) { B.innerHTML = this.shell(`<div class="kt-card"><h3>Cần đăng nhập</h3><p>Bài kiểm tra chỉ làm được bằng tài khoản học viên, để giáo viên nhận được bài làm của bạn.</p><button class="btn primary" id="ktLogin">Đăng nhập / Đăng ký</button></div>`);
+      this.bindShell(); $("#ktLogin").onclick = () => openAuth("login"); return; }
+    B.innerHTML = this.shell(`<p class="muted">Đang tải danh sách bài kiểm tra…</p>`); this.bindShell();
+    const a = Auth.get(), r = await Auth.call("testList", { u: a.u, token: a.token });
+    if(!r.ok){ B.innerHTML = this.shell(`<p class="err">${r.error === "unknown_action" ? "Máy chủ chưa có chức năng bài kiểm tra – giáo viên cần cập nhật mã Apps Script." : "Không tải được danh sách. Kiểm tra mạng rồi thử lại."}</p>`); return this.bindShell(); }
+    this.list = r.tests || []; this.renderList();
+  },
+  shell(inner){ return `<div class="kt-page"><div class="kt-top"><button class="btn" id="ktBack">${ICON.left}Về trang học</button></div>
+    <div class="kt-hero"><span class="han">测试</span><div><h2>Bài kiểm tra</h2><p class="muted">Mỗi bài chỉ làm được một lần. Khi giáo viên cho phép, bạn sẽ được cung cấp mật khẩu để bắt đầu.</p></div></div>${inner}</div>`; },
+  bindShell(){ const b = $("#ktBack"); if(b) b.onclick = () => enterApp(); },
+  renderList(){
+    const B = $("#ktBody");
+    B.innerHTML = this.shell(this.list.length ? `<div class="kt-list">${this.list.map(t => { const m = t.mine, st = m && m.submitted ? "done" : m && m.started ? "doing" : t.open ? "open" : "closed";
+      return `<div class="kt-card kt-item" data-id="${esc(t.id)}"><div class="kt-item-h"><h3>${esc(t.title)}</h3><span class="kt-chip ${st}">${{ done: "Đã nộp bài", doing: "Đang làm dở", open: "Đang mở", closed: "Chưa mở" }[st]}</span></div>
+        <p class="muted">Thời gian: ${t.minutes} phút · 4 kỹ năng Nghe – Đọc – Viết – Dịch</p>
+        ${st === "done" ? `<button class="btn" data-res="${esc(t.id)}">${t.released ? "Xem kết quả" : "Kết quả chưa được công bố"}</button>`
+          : st === "doing" ? `<button class="btn primary" data-go="${esc(t.id)}">Tiếp tục làm bài</button>`
+          : t.open ? `<form class="kt-pass" data-id="${esc(t.id)}"><label>Mật khẩu bài kiểm tra<input class="inp" type="password" autocomplete="off" placeholder="Giáo viên sẽ đọc mật khẩu khi bắt đầu"></label><button class="btn primary">Bắt đầu làm bài</button><p class="err" hidden></p></form>`
+          : `<p class="muted">Bài kiểm tra chưa mở. Chờ giáo viên thông báo nhé.</p>`}</div>`; }).join("")}</div>` : `<div class="kt-card"><p class="muted">Hiện chưa có bài kiểm tra nào.</p></div>`);
+    this.bindShell();
+    B.querySelectorAll("[data-go]").forEach(b => b.onclick = () => this.start(b.dataset.go, ""));
+    B.querySelectorAll("[data-res]").forEach(b => b.onclick = () => this.result(b.dataset.res));
+    B.querySelectorAll(".kt-pass").forEach(f => f.onsubmit = e => { e.preventDefault(); this.start(f.dataset.id, f.querySelector("input").value, f); });
+  },
+  async start(id, pass, form){
+    const a = Auth.get(), btn = form ? form.querySelector("button") : null; if(btn){ btn.disabled = true; btn.textContent = "Đang mở đề…"; }
+    const r = await Auth.call("testStart", { id, pass, u: a.u, token: a.token }, 45000);
+    if(btn){ btn.disabled = false; btn.textContent = "Bắt đầu làm bài"; }
+    if(!r.ok){ const msg = { bad_pass: "Mật khẩu chưa đúng.", closed: "Bài kiểm tra chưa mở hoặc đã đóng.", auth: "Phiên đăng nhập đã hết, hãy đăng nhập lại.", network: "Mạng chậm hoặc mất kết nối, hãy thử lại." }[r.error] || ("Có lỗi: " + r.error);
+      if(form){ const e = form.querySelector(".err"); e.textContent = msg; e.hidden = false; } else toast(msg); return; }
+    if(r.submitted) return this.result(id);
+    this.id = id; this.T = r.test; this.endsAt = r.endsAt; this.skew = r.now - Date.now();
+    const loc = rawGet(this.local(), {}); this.ans = Object.assign({}, r.answers || {}, loc.ans || {}); this.plays = loc.plays || {};
+    this.warnN = 0; this.armed = false;
+    try{ if(document.documentElement.requestFullscreen && !document.fullscreenElement) await document.documentElement.requestFullscreen(); }catch(e){}
+    this.running = true; this.guard(true); this.render();
+    clearInterval(this.tick); this.tick = setInterval(() => this.onTick(), 1000); this.onTick();
+  },
+  left(){ return this.endsAt - (Date.now() + this.skew); },
+  onTick(){
+    const el = $("#ktTimer"); if(!el || !this.running) return;
+    const l = this.left(); el.textContent = ktFmt(l); el.parentElement.classList.toggle("low", l < 5 * 60000);
+    if(l <= 0) this.submit(true);
+    if(this.dirty && !this.saveT) this.saveT = setTimeout(() => this.save(), 2500);
+  },
+  persist(){ rawSet(this.local(), { ans: this.ans, plays: this.plays }); this.dirty = true; this.updateBar(); },
+  async save(){
+    this.saveT = null; if(!this.running || !this.dirty) return; this.dirty = false;
+    const a = Auth.get(), r = await Auth.call("testSave", { id: this.id, u: a.u, token: a.token, answers: this.ans });
+    const s = $("#ktSaved"); if(s) s.textContent = r.ok ? "Đã lưu " + new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }) : "Chưa lưu được – đang thử lại";
+    if(!r.ok) this.dirty = true;
+  },
+  done(n){ const v = this.ans[n]; return v != null && String(v).trim() !== ""; },
+  updateBar(){
+    const all = ktQs(this.T), d = all.filter(x => this.done(x.q.n)).length;
+    const c = $("#ktCount"); if(c) c.textContent = `${d}/${all.length}`;
+    document.querySelectorAll(".kt-dot").forEach(b => b.classList.toggle("on", this.done(+b.dataset.n)));
+  },
+  /* ---------- giao diện làm bài ---------- */
+  render(){
+    const T = this.T, all = ktQs(T), B = $("#ktBody");
+    const nav = T.sections.map((sec, si) => `<div class="kt-navg"><small>${KT_SEC[si] || sec.vi}</small><div>${all.filter(x => x.si === si).map(x => `<button type="button" class="kt-dot" data-n="${x.q.n}" title="Câu ${x.q.n}">${x.q.n}</button>`).join("")}</div></div>`).join("");
+    B.innerHTML = `<div class="kt-run exam">
+      <div class="kt-bar"><div class="kt-bar-top"><div class="kt-bar-t"><b class="han">测试</b> ${esc(T.title)}</div>
+        <div class="kt-time"><span>Còn lại</span><b id="ktTimer">--:--</b></div><div class="kt-prog">Đã làm <b id="ktCount">0/0</b><small id="ktSaved"></small></div><button type="button" class="btn sm kt-navbtn" id="ktNavBtn">Danh sách câu ▾</button></div>
+        <div class="kt-nav">${nav}</div></div>
+      <div class="kt-rules"><b>Lưu ý:</b> Không rời khỏi trang, không mở tab hoặc ứng dụng khác, không sao chép / dán. Mọi lần rời trang đều được ghi lại và gửi cho giáo viên. Bài được lưu tự động; hết giờ bài sẽ tự nộp.</div>
+      ${T.sections.map(sec => `<section class="ex-sec"><h3 class="zh">${esc(sec.zh)}<small>${esc(sec.vi)}</small></h3>${sec.parts.map(p => this.part(p, sec)).join("")}</section>`).join("")}
+      <div class="ex-submit" id="ktSubWrap"></div></div>`;
+    this.subBtn(); this.bind(); this.updateBar();
+  },
+  subBtn(){
+    const left = ktQs(this.T).filter(x => !this.done(x.q.n)).length, w = $("#ktSubWrap");
+    w.innerHTML = `${this.armed ? `<p class="ex-warn">${left ? `Bạn còn ${left} câu chưa làm. ` : ""}Sau khi nộp sẽ không sửa được nữa. Bấm “Xác nhận nộp bài” để nộp.</p>` : ""}
+      <button class="btn primary big" id="ktSubmit">${ICON.check}${this.armed ? "Xác nhận nộp bài" : "Nộp bài"}</button>`;
+    $("#ktSubmit").onclick = () => { if(!this.armed){ this.armed = true; this.subBtn(); return; } this.submit(false); };
+  },
+  st(n, L){ return this.ans[n] === L ? "picked" : ""; },
+  lines(lines){ return (lines || []).map(([who, t]) => `<div class="ex-line">${who ? `<span class="ex-who">${esc(who)}${who === "★" ? "" : "："}</span>` : ""}<span>${esc(t)}</span></div>`).join(""); },
+  audioBtn(key, script, limit){ const used = this.plays[key] || 0, left = limit ? Math.max(0, limit - used) : null;
+    return `<button type="button" class="btn kt-play" data-play="${esc(key)}" data-s="${esc(script || "")}" ${limit && !left ? "disabled" : ""}>${ICON.sound}${limit ? (left ? `Nghe (còn ${left} lần)` : "Đã nghe 2 lần") : "Nghe ví dụ"}</button>`; },
+  part(p, sec){
+    const L6 = "ABCDEF";
+    let h = `<div class="ex-part">${p.zh ? `<h4 class="zh">${esc(p.zh)}</h4>` : ""}<p class="ex-instr"><i></i>${esc(p.vi)}</p>`;
+    if(p.audio) h += `<div class="ex-audio"><span class="ex-audio-ic">${ICON.sound}</span><div class="ex-audio-body"><b>Audio phần này</b><audio controls controlsList="nodownload" preload="metadata" src="${esc(ktImg(p.audio))}"></audio></div></div>`;
+    if(p.type === "poolpics") h += `<div class="ex-pool kt-pool6">${p.pool.map((src, k) => `<figure><span>${L6[k]}</span><img src="${ktImg(src)}" alt="Hình ${L6[k]}"></figure>`).join("")}</div>`;
+    if(p.type === "pooltext") h += `<div class="ex-pooltext ${p.inline ? "inline" : ""}">${p.pool.map((t, k) => `<div><b>${L6[k]}</b> <span class="zh">${esc(t)}</span></div>`).join("")}</div>`;
+    if(p.example){ const e = p.example; let o = "";
+      if(p.type === "pics3") o = `<div class="ex-pics3">${e.imgs.map((src, k) => `<div class="ex-pic ${"ABC"[k] === e.ans ? "is-ex" : ""}"><img src="${ktImg(src)}" alt=""><span>${"ABC"[k]}${"ABC"[k] === e.ans ? " ✓" : ""}</span></div>`).join("")}</div>`;
+      else if(p.type === "choice") o = `<div class="ex-choice">${e.opts.map(([z, v], k) => `<div class="ex-copt ${"ABC"[k] === e.ans ? "is-ex" : ""}"><b>${"ABC"[k]}</b> <span class="zh">${esc(z)}</span>${"ABC"[k] === e.ans ? " ✓" : ""}<small>${esc(v || "")}</small></div>`).join("")}</div>`;
+      else o = `<div class="ex-box is-ex">${esc(e.ans)}</div>`;
+      h += `<div class="ex-example"><span class="ex-tag">Ví dụ</span><div class="ex-ex-body">${sec.audio && e.script && !p.audio ? this.audioBtn("ex" + sec.zh + p.no, e.script, 0) : ""}<div class="zh">${this.lines(e.lines)}</div><div class="ex-gloss">${esc(e.gloss || "")}</div>${o}</div></div>`; }
+    const letters = (p.pool ? L6.slice(0, p.pool.length) : "ABC").split("");
+    p.qs.forEach(q => { const n = q.n; let body = "", opts = "";
+      if(sec.audio && !p.audio) body += this.audioBtn("q" + n, q.script, 2);
+      if(q.text) body += `<div class="zh ex-q-text">${esc(q.text)}</div>`;
+      if(q.lines) body += `<div class="zh ex-q-text">${this.lines(q.lines)}</div>`;
+      if(p.type === "pics3") opts = `<div class="ex-pics3">${q.imgs.map((src, k) => { const L = "ABC"[k]; return `<button type="button" class="ex-opt ex-pic ${this.st(n, L)}" data-n="${n}" data-l="${L}"><img src="${ktImg(src)}" alt="Câu ${n} hình ${L}"><span>${L}</span></button>`; }).join("")}</div>`;
+      else if(p.type === "choice") opts = `<div class="ex-choice">${q.opts.map((t, k) => { const L = "ABC"[k]; return `<button type="button" class="ex-opt ex-copt ${this.st(n, L)}" data-n="${n}" data-l="${L}"><b>${L}</b> <span class="zh">${esc(t)}</span></button>`; }).join("")}</div>`;
+      else if(p.type === "poolpics" || p.type === "pooltext") opts = `<div class="ex-letters">${letters.map((L, k) => `<button type="button" class="ex-opt ex-letter ${this.st(n, L)}" data-n="${n}" data-l="${L}" ${p.example && p.example.ans === L ? "disabled title='Đã dùng cho ví dụ'" : ""}>${L}</button>`).join("")}</div>`;
+      else if(p.type === "order") opts = this.orderUI(q);
+      else if(p.type === "compose") body += `<div class="kt-word">Từ cho sẵn: <b class="han">${esc(q.word)}</b>${q.note ? ` <small>(${esc(q.note)})</small>` : ""}</div>`, opts = `<input class="inp kt-txt han" data-tn="${n}" value="${esc(this.ans[n] || "")}" placeholder="Gõ câu bằng chữ Hán…" autocomplete="off" spellcheck="false">`;
+      else if(p.type === "translate") body += `<div class="kt-vi">${esc(q.vi)}</div>`, opts = `<input class="inp kt-txt han" data-tn="${n}" value="${esc(this.ans[n] || "")}" placeholder="Gõ câu tiếng Trung…" autocomplete="off" spellcheck="false">`;
+      const row = p.type === "poolpics" || p.type === "pooltext";
+      h += `<div class="ex-q ${row ? "row" : ""} kt-q" id="ktq${n}"><div class="ex-num">${n}.</div><div class="ex-q-body">${body}${opts}</div></div>`; });
+    return h + `</div>`;
+  },
+  orderUI(q){ const n = q.n, seq = String(this.ans["o" + n] || "").split(",").filter(x => x !== "").map(Number);
+    return `<div class="kt-order" data-on="${n}"><div class="kt-ans han">${seq.length ? seq.map((k, j) => `<button type="button" class="kt-tile on" data-pos="${j}">${esc(q.tiles[k])}</button>`).join("") : `<span class="muted">Bấm các từ bên dưới theo đúng thứ tự…</span>`}<span class="kt-end">${seq.length === q.tiles.length ? "。" : ""}</span></div>
+      <div class="kt-tiles han">${q.tiles.map((t, k) => `<button type="button" class="kt-tile" data-k="${k}" ${seq.includes(k) ? "disabled" : ""}>${esc(t)}</button>`).join("")}</div></div>`; },
+  bind(){
+    const B = $("#ktBody"), qmap = {}; ktQs(this.T).forEach(x => qmap[x.q.n] = x.q);
+    B.querySelectorAll(".ex-opt[data-n]").forEach(b => b.onclick = () => { const n = +b.dataset.n; this.ans[n] = b.dataset.l;
+      B.querySelectorAll(`.ex-opt[data-n="${n}"]`).forEach(x => x.classList.toggle("picked", x === b)); this.persist(); });
+    B.querySelectorAll(".kt-txt").forEach(i => i.oninput = () => { this.ans[i.dataset.tn] = i.value; this.persist(); });
+    B.querySelectorAll(".kt-order").forEach(box => box.onclick = e => { const t = e.target.closest(".kt-tile"); if(!t || t.disabled) return;
+      const n = +box.dataset.on, q = qmap[n]; let seq = String(this.ans["o" + n] || "").split(",").filter(x => x !== "").map(Number);
+      if(t.dataset.k != null) seq.push(+t.dataset.k); else seq.splice(+t.dataset.pos, 1);
+      this.ans["o" + n] = seq.join(","); this.ans[n] = seq.length === q.tiles.length ? seq.map(k => q.tiles[k]).join("") : ""; this.persist();
+      box.outerHTML = this.orderUI(q); this.bind(); });
+    B.querySelectorAll("[data-play]").forEach(b => b.onclick = () => { const k = b.dataset.play, lim = k.startsWith("q") ? 2 : 0;
+      if(lim && (this.plays[k] || 0) >= lim) return; if(lim){ this.plays[k] = (this.plays[k] || 0) + 1; this.persist(); }
+      speak(b.dataset.s.replace(/……/g, "。")); b.outerHTML = this.audioBtn(k, b.dataset.s, lim); this.bind(); });
+    const nb = $("#ktNavBtn"); if(nb) nb.onclick = () => $(".kt-bar").classList.toggle("open");
+    B.querySelectorAll(".kt-dot").forEach(b => b.onclick = () => { const bar = $(".kt-bar"); if(bar) bar.classList.remove("open"); const q = $("#ktq" + b.dataset.n); if(q){ q.scrollIntoView({ behavior: "smooth", block: "center" }); q.classList.add("flash"); setTimeout(() => q.classList.remove("flash"), 1200); } });
+  },
+  async submit(auto){
+    if(!this.running) return; this.running = false; clearInterval(this.tick); clearTimeout(this.saveT);
+    const B = $("#ktBody"); B.innerHTML = this.shell(`<div class="kt-card"><p>Đang nộp bài…</p></div>`);
+    const a = Auth.get(); let r;
+    for(let i = 0; i < 4; i++){ r = await Auth.call("testSubmit", { id: this.id, u: a.u, token: a.token, answers: this.ans, auto }, 45000); if(r.ok || r.error !== "network") break; await new Promise(z => setTimeout(z, 2500)); }
+    this.flushEv(); this.guard(false); try{ if(document.fullscreenElement) document.exitFullscreen(); }catch(e){}
+    if(!r.ok && r.error !== "submitted"){ this.running = true; B.innerHTML = this.shell(`<div class="kt-card"><p class="err">Chưa nộp được bài (${esc(r.error)}). Bài làm vẫn được lưu trên máy này. Kiểm tra mạng rồi bấm thử lại.</p><button class="btn primary" id="ktRetry">Nộp lại</button></div>`); this.bindShell(); $("#ktRetry").onclick = () => this.submit(auto); return; }
+    try{ localStorage.removeItem(this.local()); }catch(e){}
+    B.innerHTML = this.shell(`<div class="kt-card kt-done"><span class="han">交卷</span><h3>${auto ? "Hết giờ – bài đã được nộp tự động" : "Đã nộp bài"}</h3><p>Cảm ơn bạn! Kết quả sẽ hiện ở đây sau khi giáo viên chấm và công bố điểm.</p><button class="btn" id="ktList">Về danh sách bài kiểm tra</button></div>`);
+    this.bindShell(); $("#ktList").onclick = () => this.open();
+  },
+  async result(id){
+    const a = Auth.get(), B = $("#ktBody"); B.innerHTML = this.shell(`<p class="muted">Đang tải kết quả…</p>`); this.bindShell();
+    const r = await Auth.call("testResult", { id, u: a.u, token: a.token });
+    if(!r.ok || !r.released){ B.innerHTML = this.shell(`<div class="kt-card"><h3>Bạn đã nộp bài</h3><p class="muted">Giáo viên chưa công bố điểm. Bạn quay lại sau nhé.</p><button class="btn" id="ktList">Về danh sách</button></div>`); this.bindShell(); $("#ktList").onclick = () => this.open(); return; }
+    B.innerHTML = this.shell(ktReport(r.test, r.answers, r.auto, r.manual, false)); this.bindShell();
+  },
+  /* ---------- chống gian lận ---------- */
+  ev(type, detail){ if(!this.running) return; this.evq.push({ t: Date.now(), type, detail: detail || "" });
+    if(KT_WARN.has(type) && type !== "unload") this.warn(type);
+    clearTimeout(this.evT); this.evT = setTimeout(() => this.flushEv(), 1200); },
+  flushEv(){ if(!this.evq.length) return; const a = Auth.get(), events = this.evq.splice(0); if(!a) return;
+    Auth.call("testEvent", { id: this.id, u: a.u, token: a.token, events }); },
+  warn(type){ this.warnN++; let o = $("#ktWarn"); if(!o){ o = document.createElement("div"); o.id = "ktWarn"; o.className = "kt-warn"; document.body.appendChild(o); }
+    o.innerHTML = `<div class="kt-warn-box"><b>⚠ Cảnh báo (lần ${this.warnN})</b><p>${esc(KT_EV[type] || type)}. Hành động này đã được ghi lại và gửi cho giáo viên.</p><button class="btn primary">Tiếp tục làm bài</button></div>`;
+    o.hidden = false; o.querySelector("button").onclick = () => { o.hidden = true; try{ if(document.documentElement.requestFullscreen && !document.fullscreenElement) document.documentElement.requestFullscreen(); }catch(e){} }; },
+  guard(on){
+    const H = this._h || (this._h = {
+      vis: () => { if(document.hidden){ this._hid = true; this.ev("hidden"); this.flushEv(); } },
+      blur: () => setTimeout(() => { if(!document.hidden && !document.hasFocus()) this.ev("blur"); }, 300),
+      copy: e => { e.preventDefault(); this.ev("copy"); }, cut: e => { e.preventDefault(); this.ev("cut"); },
+      paste: e => { e.preventDefault(); this.ev("paste"); }, menu: e => { e.preventDefault(); this.ev("menu"); },
+      key: e => { const k = (e.key || "").toLowerCase();
+        if(k === "printscreen") return this.ev("print");
+        if(k === "f12" || ((e.ctrlKey || e.metaKey) && ["c", "v", "x", "p", "s", "u", "a"].includes(k)) || ((e.ctrlKey || e.metaKey) && e.shiftKey && ["i", "j", "c"].includes(k))){ e.preventDefault(); this.ev("key", (e.ctrlKey ? "Ctrl+" : e.metaKey ? "Cmd+" : "") + (e.shiftKey ? "Shift+" : "") + e.key); } },
+      fs: () => { if(!document.fullscreenElement && this.running) this.ev("fsexit"); },
+      unload: () => { if(!this.running) return; const a = Auth.get(); this.evq.push({ t: Date.now(), type: "unload", detail: "" });
+        try{ navigator.sendBeacon(TEACHER_API, new Blob([JSON.stringify({ action: "testEvent", id: this.id, u: a.u, token: a.token, events: this.evq.splice(0) })], { type: "text/plain;charset=utf-8" })); }catch(e){}
+        try{ navigator.sendBeacon(TEACHER_API, new Blob([JSON.stringify({ action: "testSave", id: this.id, u: a.u, token: a.token, answers: this.ans })], { type: "text/plain;charset=utf-8" })); }catch(e){} }
+    });
+    const f = on ? "addEventListener" : "removeEventListener";
+    document[f]("visibilitychange", H.vis); window[f]("blur", H.blur); document[f]("copy", H.copy); document[f]("cut", H.cut); document[f]("paste", H.paste);
+    document[f]("contextmenu", H.menu); document[f]("keydown", H.key); document[f]("fullscreenchange", H.fs); window[f]("pagehide", H.unload);
+    document.body.classList.toggle("kt-lock", on);
+  }
+};
+
+/* bảng kết quả (dùng chung cho học viên khi đã công bố và cho giáo viên khi chấm) */
+function ktReport(T, ans, auto, manual, teacher){
+  const all = ktQs(T); let tot = 0, max = 0; const secSum = T.sections.map(() => [0, 0]);
+  const rows = all.map(({ q, p, si }) => { const pts = +p.pts || 1, m = manual[q.n], a = auto[q.n], sc = m != null && m !== "" ? +m : a == null ? null : +a;
+    tot += sc || 0; max += pts; secSum[si][0] += sc || 0; secSum[si][1] += pts;
+    const key = p.type === "order" ? q.ans : p.type === "translate" ? (q.ans || [])[0] : p.type === "compose" ? q.sample : q.ans;
+    const yours = p.type === "order" ? (ans[q.n] || "") : (ans[q.n] || "");
+    const open = p.type === "compose" || p.type === "translate";
+    return `<tr class="${sc == null ? "pend" : sc >= pts ? "ok" : sc > 0 ? "mid" : "no"}"><td>${q.n}</td><td>${KT_SEC[si]}</td>
+      <td class="han">${esc(p.type === "translate" ? q.vi : p.type === "compose" ? "Từ: " + q.word : "")}${open ? "<br>" : ""}<b>${esc(yours || "—")}</b></td><td class="han">${esc(key || "")}</td>
+      <td>${teacher ? `<input class="inp kt-sc" type="number" step="0.5" min="0" max="${pts}" data-n="${q.n}" value="${m != null && m !== "" ? m : a == null ? "" : a}" placeholder="?">` : (sc == null ? "Chờ chấm" : sc)} / ${pts}</td></tr>`; }).join("");
+  return `<div class="kt-card kt-report"><div class="kt-score"><span class="big">${Math.round(tot * 10) / 10}</span><small>/ ${max} điểm</small></div>
+    <div class="kt-secs">${T.sections.map((s, i) => `<span>${KT_SEC[i]}: <b>${Math.round(secSum[i][0] * 10) / 10}</b>/${secSum[i][1]}</span>`).join("")}</div>
+    <div class="tbl-wrap"><table class="syl kt-rtab"><thead><tr><th>Câu</th><th>Phần</th><th>Bài làm</th><th>Đáp án</th><th>Điểm</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+}
+
+/* ---------- Khu giáo viên: quản lý bài kiểm tra ---------- */
+const KTA = {
+  data: null, sel: null, editing: null, seen: 0, poll: null, gradeU: null, msg: "",
+  async render(quiet){
+    const B = $("#tBody"); if(Teacher.view !== "kt") return;
+    if(!quiet){ B.innerHTML = Teacher.topbar("Bài kiểm tra", "Đang tải…") + `<div class="panel"><p class="muted">Đang tải…</p></div>`; Teacher.bindTop(); }
+    if(this.editing) return this.renderEditor();
+    const r = await Auth.call("testAdmin", { key: Teacher.key }, 45000);
+    if(Teacher.view !== "kt" || this.editing) return;
+    if(!r.ok){ B.innerHTML = Teacher.topbar("Bài kiểm tra", "") + `<div class="panel"><p class="err">${r.error === "unknown_action" ? "Máy chủ chưa có chức năng bài kiểm tra – hãy dán mã Apps Script mới rồi triển khai Phiên bản mới." : r.error === "unauthorized" ? "Phiên giáo viên hết hạn, hãy đăng nhập lại." : "Không tải được: " + esc(r.error)}</p></div>`; Teacher.bindTop(); return; }
+    const old = this.data; this.data = r; this.skew = r.now - Date.now();
+    const warns = r.events.filter(e => KT_WARN.has(e.type));
+    if(old && warns.length > this.seen){ const nw = warns.slice(this.seen); this.alert(nw); }
+    this.seen = warns.length;
+    this.draw(); this.startPoll();
+  },
+  startPoll(){ clearInterval(this.poll); this.poll = setInterval(() => { if(Teacher.view !== "kt" || $("#scrTeacher").hidden || this.editing || this.gradeU) return; this.render(true); }, 15000); },
+  alert(nw){ const last = nw[nw.length - 1]; toast(`⚠ <b>${esc(last.name || last.u)}</b>: ${esc(KT_EV[last.type] || last.type)}${nw.length > 1 ? ` (+${nw.length - 1} cảnh báo khác)` : ""}`, "warn");
+    try{ const c = new (window.AudioContext || window.webkitAudioContext)(), o = c.createOscillator(), g = c.createGain(); o.frequency.value = 880; g.gain.value = .15; o.connect(g); g.connect(c.destination); o.start(); setTimeout(() => { o.stop(); c.close(); }, 350); }catch(e){}
+    try{ if(window.Notification && Notification.permission === "granted") new Notification("Cảnh báo bài kiểm tra", { body: `${last.name || last.u}: ${KT_EV[last.type] || last.type}` }); }catch(e){} },
+  draw(){
+    const B = $("#tBody"), r = this.data, now = Date.now() + this.skew;
+    const tests = r.tests; if(!this.sel || !tests.find(t => t.id === this.sel)) this.sel = tests[0] && tests[0].id;
+    const t = tests.find(x => x.id === this.sel), T = t && t.test, mins = T ? +T.minutes || 60 : 60, nq = T ? ktQs(T).length : 0;
+    const atts = r.attempts.filter(a => a.id === this.sel).sort((a, b) => b.start - a.start);
+    const evs = r.events.filter(e => e.id === this.sel).slice(-80).reverse();
+    const answered = a => T ? ktQs(T).filter(x => { const v = a.answers[x.q.n]; return v != null && String(v).trim() !== ""; }).length : 0;
+    B.innerHTML = Teacher.topbar("Bài kiểm tra", `Tự cập nhật mỗi 15 giây · ${new Date(now).toLocaleTimeString("vi-VN")}`) + `
+      ${this.msg ? `<div class="fm-note">${esc(this.msg)}</div>` : ""}
+      ${tests.length > 1 ? `<div class="seg">${tests.map(x => `<button data-sel="${esc(x.id)}" aria-pressed="${x.id === this.sel}">${esc(x.title)}</button>`).join("")}</div>` : ""}
+      ${t ? `<div class="panel kt-admin">
+        <div class="t-top"><div><h2>${esc(t.title)}</h2><p class="muted">${nq} câu · ${mins} phút · ${t.open ? "<b class='ok-t'>Đang mở</b>" : "Đang đóng"} · ${t.released ? "Đã công bố điểm" : "Chưa công bố điểm"}</p></div>
+          <div class="t-acts"><button class="btn ${t.open ? "bad" : "primary"}" id="kaOpen">${t.open ? "Đóng bài kiểm tra" : "Mở bài kiểm tra"}</button><button class="btn" id="kaRel">${t.released ? "Ẩn điểm" : "Công bố điểm"}</button><button class="btn" id="kaEdit">Sửa nội dung đề</button></div></div>
+        <form class="kt-passrow" id="kaPassF"><label>Mật khẩu bài kiểm tra<input class="inp" id="kaPass" value="${esc(t.pass)}" placeholder="VD: weiwei2026" autocomplete="off"></label><button class="btn">Lưu mật khẩu</button>
+          <span class="muted">${t.pass ? "" : "Chưa đặt mật khẩu – học viên chưa vào làm được."}</span></form>
+        <div class="kt-notif"><button class="btn sm" id="kaNotif">Bật thông báo cảnh báo trên máy này</button> <small class="muted">Khi có học viên rời trang, trang này sẽ kêu "bíp" và hiện thông báo.</small></div>
+      </div>
+      <div class="panel"><h3>Học viên (${atts.length})</h3>
+        ${atts.length ? `<div class="tbl-wrap"><table class="t-table kt-mon"><thead><tr><th>Học viên</th><th>Trạng thái</th><th>Đã làm</th><th>Cảnh báo</th><th>Điểm</th><th></th></tr></thead><tbody>
+        ${atts.map(a => { const left = a.start + mins * 60000 - now, st = a.submit ? `Đã nộp ${new Date(a.submit).toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })}${a.late ? " <b class='no-t'>(muộn)</b>" : ""}` : left > 0 ? `<b class="ok-t">Đang làm</b> · còn ${ktFmt(left)}` : `<b class="no-t">Hết giờ, chưa nộp</b>`;
+          return `<tr><td><b>${esc(a.name || a.u)}</b><small>@${esc(a.u)}</small></td><td>${st}</td><td>${answered(a)}/${nq}</td><td>${a.warns ? `<b class="no-t">${a.warns}</b>` : "0"}</td><td>${a.submit ? `${a.total === "" ? "—" : a.total}` : "—"}</td>
+            <td><div class="t-acts">${a.submit ? `<button class="btn sm" data-grade="${esc(a.u)}">Chấm / xem bài</button>` : ""}<button class="btn sm bad" data-reset="${esc(a.u)}">Cho làm lại</button></div></td></tr>`; }).join("")}</tbody></table></div>` : `<p class="muted">Chưa có học viên nào bắt đầu làm bài.</p>`}
+      </div>
+      <div id="kaGrade"></div>
+      <div class="panel"><h3>Nhật ký cảnh báo</h3>${evs.length ? `<ul class="kt-log">${evs.map(e => `<li class="${KT_WARN.has(e.type) ? "w" : ""}"><time>${new Date(e.t).toLocaleTimeString("vi-VN")}</time> <b>${esc(e.name || e.u)}</b> – ${esc(KT_EV[e.type] || e.type)}${e.detail && !/^Bắt đầu|^Mở lại|^Nộp/.test(e.detail) ? ` <small>(${esc(e.detail)})</small>` : ""}</li>`).join("")}</ul>` : `<p class="muted">Chưa có hoạt động nào.</p>`}
+        <p class="muted kt-note">Trang ghi lại khi học viên rời khỏi trang làm bài (chuyển tab, mở ứng dụng khác, thu nhỏ trình duyệt), thoát toàn màn hình, sao chép / dán, bấm chuột phải hay dùng phím tắt. Trang <b>không</b> thể thấy học viên dùng điện thoại hay máy khác bên cạnh.</p></div>` : ""}
+      <div class="panel"><h3>Nhập đề từ file</h3><p class="muted">Chọn file đề <code>.json</code> (Claude gửi riêng cho bạn). Nhập lại đề cùng mã sẽ ghi đè nội dung, giữ nguyên mật khẩu và bài làm.</p>
+        <label class="btn">⬆ Chọn file đề (.json)<input type="file" id="kaImport" accept=".json,application/json" hidden></label>${t ? ` <button class="btn" id="kaExport">Tải đề hiện tại (.json)</button>` : ""}</div>`;
+    this.msg = ""; Teacher.bindTop(); this.bind(t);
+    if(this.gradeU) this.grade(this.gradeU, true);
+  },
+  bind(t){
+    const B = $("#tBody"), call = async (act, body, okMsg) => { const r = await Auth.call(act, Object.assign({ key: Teacher.key }, body)); this.msg = r.ok ? okMsg : "Có lỗi: " + r.error; this.render(); };
+    B.querySelectorAll("[data-sel]").forEach(b => b.onclick = () => { this.sel = b.dataset.sel; this.draw(); });
+    const imp = $("#kaImport"); if(imp) imp.onchange = async e => { const f = e.target.files[0]; if(!f) return; let T;
+      try{ T = JSON.parse(await f.text()); }catch(err){ this.msg = "File không đúng định dạng JSON."; return this.draw(); }
+      if(!T.id || !T.sections){ this.msg = "File không phải đề kiểm tra."; return this.draw(); }
+      this.sel = T.id; call("testDef", { test: T }, `Đã nhập đề “${T.title}”.`); };
+    if(!t) return;
+    const ex = $("#kaExport"); if(ex) ex.onclick = () => { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([JSON.stringify(t.test, null, 1)], { type: "application/json" })); a.download = t.id + ".json"; a.click(); };
+    $("#kaOpen").onclick = () => { if(!t.open && !t.pass){ this.msg = "Hãy đặt mật khẩu trước khi mở bài."; return this.draw(); } call("testMeta", { id: t.id, open: !t.open }, t.open ? "Đã đóng bài kiểm tra." : "Đã mở bài kiểm tra. Đọc mật khẩu cho học viên để bắt đầu."); };
+    $("#kaRel").onclick = () => call("testMeta", { id: t.id, released: !t.released }, t.released ? "Đã ẩn điểm." : "Đã công bố điểm – học viên xem được kết quả và đáp án.");
+    $("#kaPassF").onsubmit = e => { e.preventDefault(); call("testMeta", { id: t.id, pass: $("#kaPass").value.trim() }, "Đã lưu mật khẩu."); };
+    $("#kaEdit").onclick = () => { this.editing = JSON.parse(JSON.stringify(t.test)); this.renderEditor(); };
+    $("#kaNotif").onclick = async () => { try{ const p = await Notification.requestPermission(); toast(p === "granted" ? "Đã bật thông báo." : "Trình duyệt chưa cho phép thông báo."); }catch(e){ toast("Trình duyệt này không hỗ trợ thông báo."); } };
+    B.querySelectorAll("[data-reset]").forEach(b => b.onclick = () => { if(!b.dataset.armed){ b.dataset.armed = 1; b.textContent = "Bấm lần nữa – xoá bài làm"; return; }
+      call("testReset", { id: t.id, user: b.dataset.reset }, "Đã xoá bài làm, học viên có thể làm lại (cần mật khẩu)."); });
+    B.querySelectorAll("[data-grade]").forEach(b => b.onclick = () => this.grade(b.dataset.grade));
+  },
+  grade(u, keep){
+    const t = this.data.tests.find(x => x.id === this.sel), a = this.data.attempts.find(x => x.id === this.sel && x.u === u); if(!t || !a) return;
+    this.gradeU = u; const box = $("#kaGrade");
+    box.innerHTML = `<div class="panel"><div class="t-top"><h3>Bài làm của ${esc(a.name || a.u)}</h3><div class="t-acts"><button class="btn primary" id="kaSave">Lưu điểm</button><button class="btn" id="kaClose">Đóng</button></div></div>
+      <p class="muted">Ô điểm trống = chờ chấm. Máy đã chấm sẵn trắc nghiệm, sắp xếp và các câu dịch trùng đáp án mẫu; bạn sửa được mọi ô.</p>${ktReport(t.test, a.answers, a.auto, a.manual, true)}</div>`;
+    if(!keep) box.scrollIntoView({ behavior: "smooth", block: "start" });
+    $("#kaClose").onclick = () => { this.gradeU = null; box.innerHTML = ""; };
+    $("#kaSave").onclick = async () => { const manual = {};
+      box.querySelectorAll(".kt-sc").forEach(i => { const n = i.dataset.n, v = i.value.trim(), au = a.auto[n]; if(v !== "" && (au == null || +v !== +au)) manual[n] = +v; });
+      const r = await Auth.call("testGrade", { key: Teacher.key, id: t.id, user: u, manual }); this.gradeU = null;
+      this.msg = r.ok ? `Đã lưu điểm cho ${a.name || a.u}: ${r.total} điểm.` : "Có lỗi: " + r.error; this.render(); };
+  },
+  /* ---------- sửa nội dung đề ---------- */
+  renderEditor(){
+    const T = this.editing, B = $("#tBody"), L6 = "ABCDEF";
+    const img = (path, src) => `<span class="ke-img"><img src="${ktImg(src)}" alt=""><input class="inp" data-k="${path}" value="${esc(src)}"><label class="btn sm">Đổi hình<input type="file" accept="image/*" hidden data-up="${path}"></label></span>`;
+    const inp = (path, v, cls = "") => `<input class="inp ${cls}" data-k="${path}" value="${esc(v == null ? "" : v)}">`;
+    const ansSel = (path, v, n) => `<select class="inp ke-ans" data-k="${path}">${L6.slice(0, n).split("").map(L => `<option ${v === L ? "selected" : ""}>${L}</option>`).join("")}</select>`;
+    const linesTxt = l => (l || []).map(([w, t]) => (w ? w + "：" : "") + t).join("\n");
+    let h = Teacher.topbar("Sửa nội dung đề", "Sửa xong bấm “Lưu đề”. Đề đã lưu áp dụng cho học viên vào làm sau đó.") + `<div class="panel ke">
+      <div class="grid2"><label>Tên bài kiểm tra${inp("title", T.title)}</label><label>Thời gian (phút)${inp("minutes", T.minutes)}</label></div>`;
+    T.sections.forEach((sec, si) => { h += `<h3 class="han">${esc(sec.zh)} ${esc(sec.vi)}</h3>`;
+      sec.parts.forEach((p, pi) => { const P = `sections.${si}.parts.${pi}`;
+        h += `<div class="ke-part"><b>${esc(p.zh || "")}</b><label>Hướng dẫn${inp(P + ".vi", p.vi)}</label><label>Điểm mỗi câu${inp(P + ".pts", p.pts, "sm")}</label>`;
+        if(sec.audio) h += `<label>File nghe cho cả phần (tuỳ chọn – để trống thì trang tự đọc lời đoạn nghe, mỗi câu nghe 2 lần)${inp(P + ".audio", p.audio || "")}</label>`;
+        if(p.type === "poolpics") h += `<div class="ke-pool">${p.pool.map((s, k) => `<div><b>${L6[k]}</b>${img(P + ".pool." + k, s)}</div>`).join("")}</div>`;
+        if(p.type === "pooltext") h += `<div class="ke-pool">${p.pool.map((s, k) => `<label><b>${L6[k]}</b>${inp(P + ".pool." + k, s, "han")}</label>`).join("")}</div>`;
+        p.qs.forEach((q, qi) => { const Q = `${P}.qs.${qi}`;
+          h += `<div class="ke-q"><b class="ke-n">${q.n}</b><div class="ke-f">`;
+          if(q.script != null) h += `<label>Lời đoạn nghe${inp(Q + ".script", q.script, "han")}</label>`;
+          if(q.text != null) h += `<label>Câu${inp(Q + ".text", q.text, "han")}</label>`;
+          if(q.lines) h += `<label>Các dòng (mỗi dòng một câu, dạng “男：…”, “★：…”)<textarea class="inp han" rows="2" data-lines="${Q}.lines">${esc(linesTxt(q.lines))}</textarea></label>`;
+          if(q.imgs) h += `<div class="ke-pool">${q.imgs.map((s, k) => `<div><b>${"ABC"[k]}</b>${img(Q + ".imgs." + k, s)}</div>`).join("")}</div>`;
+          if(q.opts) h += `<div class="ke-opts">${q.opts.map((o, k) => `<label><b>${"ABC"[k]}</b>${inp(Q + ".opts." + k, o, "han")}</label>`).join("")}</div>`;
+          if(["pics3", "choice", "poolpics", "pooltext"].includes(p.type)) h += `<label class="ke-inl">Đáp án ${ansSel(Q + ".ans", q.ans, p.pool ? p.pool.length : 3)}</label>`;
+          if(p.type === "order") h += `<label>Các thẻ từ (cách nhau bằng dấu /)<input class="inp han" data-tiles="${Q}" value="${esc(q.tiles.join(" / "))}"></label><label>Đáp án${inp(Q + ".ans", q.ans, "han")}</label><label>Đáp án khác cũng đúng (mỗi dòng một câu)<textarea class="inp han" rows="1" data-arr="${Q}.alt">${esc((q.alt || []).join("\n"))}</textarea></label>`;
+          if(p.type === "compose") h += `<label>Từ cho sẵn${inp(Q + ".word", q.word, "han")}</label><label>Ghi chú${inp(Q + ".note", q.note)}</label><label>Câu mẫu${inp(Q + ".sample", q.sample, "han")}</label>`;
+          if(p.type === "translate") h += `<label>Câu tiếng Việt${inp(Q + ".vi", q.vi)}</label><label>Các đáp án được chấp nhận (mỗi dòng một câu)<textarea class="inp han" rows="3" data-arr="${Q}.ans">${esc((q.ans || []).join("\n"))}</textarea></label>`;
+          h += `</div></div>`; });
+        h += `</div>`; }); });
+    h += `<p class="err" id="keErr" hidden></p><div class="login-acts"><button class="btn" id="keCancel">Huỷ</button><button class="btn primary big" id="keSave">Lưu đề</button></div></div>`;
+    B.innerHTML = h; Teacher.bindTop();
+    const setP = (path, v) => { const ks = path.split("."); let o = T; ks.slice(0, -1).forEach(k => o = o[k]); o[ks[ks.length - 1]] = v; };
+    const sync = () => {
+      B.querySelectorAll("[data-k]").forEach(i => { let v = i.value; if(/\.(pts|minutes)$/.test(i.dataset.k) || i.dataset.k === "minutes") v = +v || 0; if(/\.audio$/.test(i.dataset.k) && !v){ const ks = i.dataset.k.split("."); let o = T; ks.slice(0, -1).forEach(k => o = o[k]); delete o.audio; return; } setP(i.dataset.k, v); });
+      B.querySelectorAll("[data-lines]").forEach(i => setP(i.dataset.lines, i.value.split("\n").map(x => x.trim()).filter(Boolean).map(x => { const m = /^(.{1,4}?)[：:](.*)$/.exec(x); return m ? [m[1] === "" ? "" : m[1], m[2].trim()] : ["", x]; })));
+      B.querySelectorAll("[data-arr]").forEach(i => setP(i.dataset.arr, i.value.split("\n").map(x => x.trim()).filter(Boolean)));
+      B.querySelectorAll("[data-tiles]").forEach(i => setP(i.dataset.tiles + ".tiles", i.value.split("/").map(x => x.trim()).filter(Boolean)));
+    };
+    B.querySelectorAll("[data-up]").forEach(f => f.onchange = async () => { const file = f.files[0]; if(!file) return; sync(); const lab = f.parentElement; lab.firstChild.textContent = "Đang tải…";
+      const data = await shrinkImage(file, 1000); const r = data ? await Auth.call("uploadAudio", { key: Teacher.key, name: file.name.replace(/\.\w+$/, "") + ".jpg", mime: "image/jpeg", data }, 180000) : { ok: false, error: "Không đọc được hình" };
+      if(!r.ok){ lab.firstChild.textContent = "Đổi hình"; return toast("Không tải được hình: " + r.error); }
+      setP(f.dataset.up, "drive:" + r.id); this.renderEditor(); });
+    $("#keCancel").onclick = () => { this.editing = null; this.render(); };
+    $("#keSave").onclick = async () => { sync(); const b = $("#keSave"); b.disabled = true; b.textContent = "Đang lưu…";
+      const r = await Auth.call("testDef", { key: Teacher.key, test: T }); b.disabled = false; b.textContent = "Lưu đề";
+      if(!r.ok){ const e = $("#keErr"); e.textContent = "Chưa lưu được: " + r.error; e.hidden = false; return; }
+      this.editing = null; this.msg = "Đã lưu nội dung đề."; this.render(); };
   }
 };
 

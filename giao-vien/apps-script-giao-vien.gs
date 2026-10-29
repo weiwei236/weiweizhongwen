@@ -20,6 +20,7 @@
  * Trang tính được tạo tự động:
  *   Accounts – mỗi học viên một dòng (tên đăng nhập, SĐT, họ tên, lớp, trình độ, mật khẩu đã mã hoá, dữ liệu học tập).
  *   Events   – nhật ký hoạt động học tập (dùng cho bảng theo dõi của giáo viên).
+ *   Tests, TestAttempts, TestEvents – bài kiểm tra (đề + mật khẩu, bài làm của học viên, nhật ký cảnh báo gian lận).
  *   Readings – các bài đọc giáo viên soạn trên trang web (chỉ giáo viên có mật khẩu mới thêm/sửa/xoá được).
  * Mật khẩu KHÔNG được lưu dạng chữ thường, chỉ lưu bản mã hoá (SHA-256 + muối).
  */
@@ -224,6 +225,9 @@ function doPost(e) {
       } catch (err) { return json_({ ok: false, error: 'not_found' }); }
     }
 
+    /* ---- Bài kiểm tra ---- */
+    if (act.indexOf('test') === 0) { const out = testAction_(act, b, ac); if (out) return json_(out); }
+
     return json_({ ok: false, error: 'unknown_action' });
   } catch (err) {
     return json_({ ok: false, error: String(err) });
@@ -244,4 +248,116 @@ function capQuyenDrive() { audioFolder_(); }
 function doGet(e) {
   if (!teacherOk_(e.parameter.key || '')) return json_({ ok: false, error: 'unauthorized' });
   return doPost({ postData: { contents: JSON.stringify({ action: 'teacher', key: e.parameter.key }) } });
+}
+
+
+/* ======================= BÀI KIỂM TRA =======================
+   Đề (kèm đáp án) chỉ nằm ở Google Sheet này, không nằm trong mã trang web, nên học viên không xem trước được.
+   Học viên phải đăng nhập + nhập đúng mật khẩu bài kiểm tra mới nhận được đề (đã bỏ đáp án). */
+const TESTS = 'Tests', ATT = 'TestAttempts', TEV = 'TestEvents';
+const T_HEAD = ['Mã', 'Tên bài kiểm tra', 'Đang mở', 'Công bố điểm', 'Mật khẩu', 'Cập nhật', 'Đề (JSON)'];
+const A_HEAD = ['Khoá', 'Mã bài', 'Tên đăng nhập', 'Họ tên', 'Bắt đầu', 'Lưu gần nhất', 'Nộp bài', 'Bài làm (JSON)', 'Máy chấm (JSON)', 'GV chấm (JSON)', 'Tổng điểm', 'Nộp muộn', 'Số cảnh báo'];
+const E_HEAD = ['Thời gian', 'Mã bài', 'Tên đăng nhập', 'Họ tên', 'Loại', 'Chi tiết'];
+function rowsOf_(sh, n) { const m = sh.getLastRow() - 1; return m < 1 ? [] : sh.getRange(2, 1, m, n).getValues(); }
+function testRow_(id) { const sh = sheet_(TESTS, T_HEAD), rows = rowsOf_(sh, T_HEAD.length);
+  for (let i = 0; i < rows.length; i++) if (String(rows[i][0]) === String(id)) return { sh: sh, r: i + 2, row: rows[i] }; return { sh: sh, r: 0, row: null }; }
+function testDef_(row) { try { return JSON.parse(row[6]); } catch (e) { return null; } }
+function attRow_(id, u) { const sh = sheet_(ATT, A_HEAD), rows = rowsOf_(sh, A_HEAD.length), k = id + '|' + String(u).toLowerCase();
+  for (let i = 0; i < rows.length; i++) if (rows[i][0] === k) return { sh: sh, r: i + 2, row: rows[i] }; return { sh: sh, r: 0, row: null, key: k }; }
+function pj_(v, d) { try { return v ? JSON.parse(v) : d; } catch (e) { return d; } }
+function eachQ_(T, fn) { (T.sections || []).forEach(sec => (sec.parts || []).forEach(p => (p.qs || []).forEach(q => fn(q, p, sec)))); }
+function normZh_(s) { return String(s || '').replace(/[\s，。？！、,.?!：:；;“”"'（）()]/g, '').replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 65248)); }
+/* máy chấm: trắc nghiệm & sắp xếp chấm hẳn; dịch đúng mẫu thì cho đủ điểm, sai để trống chờ giáo viên; đặt câu chờ giáo viên */
+function gradeTest_(T, ans) {
+  const auto = {}; let max = 0;
+  eachQ_(T, (q, p) => { const pts = Number(p.pts) || 1, a = ans[q.n]; max += pts;
+    if (p.type === 'order') auto[q.n] = a && [q.ans].concat(q.alt || []).some(x => normZh_(x) === normZh_(a)) ? pts : 0;
+    else if (p.type === 'translate') auto[q.n] = a && (q.ans || []).some(x => normZh_(x) === normZh_(a)) ? pts : null;
+    else if (p.type === 'compose') auto[q.n] = null;
+    else auto[q.n] = a === q.ans ? pts : 0; });
+  return { auto: auto, max: max };
+}
+function totalOf_(auto, manual) { let t = 0; Object.keys(auto).forEach(n => { const m = manual[n]; t += Number(m != null && m !== '' ? m : (auto[n] || 0)) || 0; }); return Math.round(t * 10) / 10; }
+function publicTest_(T) { const c = JSON.parse(JSON.stringify(T)); eachQ_(c, q => { delete q.ans; delete q.alt; delete q.sample; }); return c; }
+function testAction_(act, b, ac) {
+  const now = new Date();
+  if (act === 'testList') {
+    const user = b.u && b.token ? (authRow_(ac, b.u, b.token) ? String(b.u).toLowerCase() : '') : '';
+    const atts = user ? rowsOf_(sheet_(ATT, A_HEAD), A_HEAD.length).filter(r => String(r[2]).toLowerCase() === user) : [];
+    return { ok: true, tests: rowsOf_(sheet_(TESTS, T_HEAD), T_HEAD.length).map(r => { const T = testDef_(r) || {}, a = atts.filter(x => x[1] === r[0])[0];
+      return { id: r[0], title: r[1], open: r[2] === true, released: r[3] === true, minutes: T.minutes || 60, level: T.level || '',
+        mine: a ? { started: a[4] ? new Date(a[4]).getTime() : 0, submitted: a[6] ? new Date(a[6]).getTime() : 0 } : null }; }) };
+  }
+  if (act === 'testStart' || act === 'testSave' || act === 'testSubmit' || act === 'testEvent' || act === 'testResult') {
+    const r = authRow_(ac, b.u, b.token); if (!r) return { ok: false, error: 'auth' };
+    const name = String(ac.getRange(r, C.name).getValue()), u = String(ac.getRange(r, C.user).getValue()).toLowerCase();
+    const tr = testRow_(b.id); if (!tr.r) return { ok: false, error: 'no_test' };
+    const T = testDef_(tr.row), mins = Number(T.minutes) || 60; let at = attRow_(b.id, u);
+    if (act === 'testEvent') {
+      const ev = (Array.isArray(b.events) ? b.events : []).slice(0, 30), sh = sheet_(TEV, E_HEAD);
+      if (ev.length) sh.getRange(sh.getLastRow() + 1, 1, ev.length, E_HEAD.length).setValues(ev.map(x => [new Date(x.t || now), b.id, u, name, str_(x.type, 30), str_(x.detail, 300)]));
+      if (at.r) at.sh.getRange(at.r, 13).setValue((Number(at.row[12]) || 0) + ev.length);
+      return { ok: true };
+    }
+    if (act === 'testResult') {
+      if (!at.r || !at.row[6]) return { ok: false, error: 'not_submitted' };
+      if (tr.row[3] !== true) return { ok: true, released: false };
+      const auto = pj_(at.row[8], {}), manual = pj_(at.row[9], {});
+      return { ok: true, released: true, test: T, answers: pj_(at.row[7], {}), auto: auto, manual: manual, total: at.row[10], max: gradeTest_(T, {}).max };
+    }
+    if (act === 'testStart') {
+      if (at.r && at.row[6]) return { ok: true, submitted: true, released: tr.row[3] === true };
+      if (!at.r) {
+        if (tr.row[2] !== true) return { ok: false, error: 'closed' };
+        if (String(b.pass || '').trim() !== String(tr.row[4]).trim() || !String(tr.row[4]).trim()) return { ok: false, error: 'bad_pass' };
+        at.sh.appendRow([at.key, b.id, u, name, now, now, '', '{}', '', '', '', '', 0]); at = attRow_(b.id, u);
+        sheet_(TEV, E_HEAD).appendRow([now, b.id, u, name, 'start', 'Bắt đầu làm bài']);
+      } else sheet_(TEV, E_HEAD).appendRow([now, b.id, u, name, 'resume', 'Mở lại bài đang làm']);
+      const start = new Date(at.row[4]).getTime();
+      return { ok: true, test: publicTest_(T), answers: pj_(at.row[7], {}), start: start, now: now.getTime(), endsAt: start + mins * 60000 };
+    }
+    if (!at.r) return { ok: false, error: 'not_started' };
+    if (at.row[6]) return { ok: false, error: 'submitted' };
+    const ans = b.answers && typeof b.answers === 'object' ? b.answers : {}, js = JSON.stringify(ans);
+    if (js.length > MAX_DATA) return { ok: false, error: 'too_large' };
+    const late = now.getTime() > new Date(at.row[4]).getTime() + mins * 60000 + 90000;
+    if (act === 'testSave') { if (late) return { ok: false, error: 'time_up' }; at.sh.getRange(at.r, 6, 1, 3).setValues([[now, '', js]]); return { ok: true }; }
+    const g = gradeTest_(T, ans);
+    at.sh.getRange(at.r, 6, 1, 7).setValues([[now, now, js, JSON.stringify(g.auto), '{}', totalOf_(g.auto, {}), late ? 'Có' : '']]);
+    sheet_(TEV, E_HEAD).appendRow([now, b.id, u, name, 'submit', late ? 'Nộp bài (muộn)' : (b.auto ? 'Hết giờ – tự nộp' : 'Nộp bài')]);
+    return { ok: true, submitted: true };
+  }
+  /* ---- phần giáo viên ---- */
+  if (!teacherOk_(b.key)) return { ok: false, error: 'unauthorized' };
+  if (act === 'testAdmin') {
+    const ev = rowsOf_(sheet_(TEV, E_HEAD), E_HEAD.length);
+    return { ok: true, now: now.getTime(),
+      tests: rowsOf_(sheet_(TESTS, T_HEAD), T_HEAD.length).map(r => ({ id: r[0], title: r[1], open: r[2] === true, released: r[3] === true, pass: String(r[4]), test: testDef_(r) })),
+      attempts: rowsOf_(sheet_(ATT, A_HEAD), A_HEAD.length).map(r => ({ id: r[1], u: r[2], name: r[3], start: r[4] ? new Date(r[4]).getTime() : 0, last: r[5] ? new Date(r[5]).getTime() : 0,
+        submit: r[6] ? new Date(r[6]).getTime() : 0, answers: pj_(r[7], {}), auto: pj_(r[8], {}), manual: pj_(r[9], {}), total: r[10], late: r[11] === 'Có', warns: Number(r[12]) || 0 })),
+      events: ev.slice(-600).map(r => ({ t: new Date(r[0]).getTime(), id: r[1], u: r[2], name: r[3], type: r[4], detail: r[5] })) };
+  }
+  if (act === 'testDef') {
+    const T = b.test || {}; if (!T.id || !T.sections) return { ok: false, error: 'missing' };
+    const js = JSON.stringify(T); if (js.length > MAX_DATA) return { ok: false, error: 'too_large' };
+    const tr = testRow_(T.id);
+    if (tr.r) tr.sh.getRange(tr.r, 2).setValue(str_(T.title, 200)), tr.sh.getRange(tr.r, 6, 1, 2).setValues([[now, js]]);
+    else tr.sh.appendRow([T.id, str_(T.title, 200), false, false, '', now, js]);
+    return { ok: true };
+  }
+  if (act === 'testMeta') {
+    const tr = testRow_(b.id); if (!tr.r) return { ok: false, error: 'no_test' };
+    if (b.open != null) tr.sh.getRange(tr.r, 3).setValue(!!b.open);
+    if (b.released != null) tr.sh.getRange(tr.r, 4).setValue(!!b.released);
+    if (b.pass != null) tr.sh.getRange(tr.r, 5).setValue(str_(b.pass, 40));
+    return { ok: true };
+  }
+  if (act === 'testGrade' || act === 'testReset') {
+    const at = attRow_(b.id, b.user); if (!at.r) return { ok: false, error: 'no_attempt' };
+    if (act === 'testReset') { at.sh.deleteRow(at.r); return { ok: true }; }
+    const manual = b.manual || {}, auto = pj_(at.row[8], {});
+    at.sh.getRange(at.r, 10, 1, 2).setValues([[JSON.stringify(manual), totalOf_(auto, manual)]]);
+    return { ok: true, total: totalOf_(auto, manual) };
+  }
+  return null;
 }
