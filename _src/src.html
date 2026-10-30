@@ -887,6 +887,127 @@ const L10_SPEAK_SENT = [
 ];
 
 /* ---------- HSK1 · Bài 9: 我明天上午在学校学习 ---------- */
+const L7_VOCAB = [
+ {h:"现在",p:"xiànzài",pos:"dt",vi:"bây giờ, hiện tại",ex:["现在几点？","Xiànzài jǐ diǎn?","Bây giờ là mấy giờ?"]},
+ {h:"点",p:"diǎn",pos:"lg",vi:"giờ",ex:["现在八点。","Xiànzài bā diǎn.","Bây giờ là tám giờ."]},
+ {h:"早上",p:"zǎoshang",pos:"dt",vi:"buổi sáng, sáng sớm",ex:["我早上七点吃早饭。","Wǒ zǎoshang qī diǎn chī zǎofàn.","Buổi sáng tôi ăn sáng lúc bảy giờ."]},
+ {h:"上午",p:"shàngwǔ",pos:"dt",vi:"buổi sáng",ex:["我上午有课。","Wǒ shàngwǔ yǒu kè.","Buổi sáng tôi có tiết học."]},
+ {h:"分",p:"fēn",pos:"lg",vi:"phút",ex:["现在九点十分。","Xiànzài jiǔ diǎn shí fēn.","Bây giờ là chín giờ mười phút."]},
+ {h:"课",p:"kè",pos:"dt",vi:"tiết học, giờ học",ex:["今天下午我没有课。","Jīntiān xiàwǔ wǒ méiyǒu kè.","Chiều nay tôi không có tiết học."]},
+ {h:"下午",p:"xiàwǔ",pos:"dt",vi:"buổi chiều",ex:["我们下午三点见吧。","Wǒmen xiàwǔ sān diǎn jiàn ba.","Chúng ta gặp nhau lúc ba giờ chiều nhé."]},
+ {h:"见",p:"jiàn",pos:"dong",vi:"gặp, gặp mặt",ex:["明天见！","Míngtiān jiàn!","Ngày mai gặp nhé!"]},
+ {h:"吧",p:"ba",pos:"tro",vi:"nhé (dùng ở cuối câu để đưa ra đề nghị, gợi ý, thương lượng hoặc yêu cầu)",ex:["我们去吃饭吧。","Wǒmen qù chī fàn ba.","Chúng ta đi ăn cơm nhé."]},
+ {h:"电影院",p:"diànyǐngyuàn",pos:"dt",vi:"rạp chiếu phim, rạp chiếu bóng",ex:["我们在电影院见吧。","Wǒmen zài diànyǐngyuàn jiàn ba.","Chúng ta gặp nhau ở rạp chiếu phim nhé."]},
+ {h:"看",p:"kàn",pos:"dong",vi:"xem, nhìn, đọc",ex:["我想看书。","Wǒ xiǎng kàn shū.","Tôi muốn đọc sách."]},
+ {h:"电影",p:"diànyǐng",pos:"dt",vi:"phim, điện ảnh",ex:["晚上我们去看电影吧。","Wǎnshang wǒmen qù kàn diànyǐng ba.","Buổi tối chúng ta đi xem phim nhé."]},
+ {h:"事",p:"shì",pos:"dt",vi:"việc, sự việc",ex:["晚上我有事。","Wǎnshang wǒ yǒu shì.","Buổi tối tôi có việc."]},
+ {h:"上课",p:"shàngkè",pos:"dong",vi:"lên lớp, đi học",ex:["我八点上课。","Wǒ bā diǎn shàngkè.","Tôi vào học lúc tám giờ."]},
+ {h:"呢",p:"ne",pos:"tro",vi:"đặt ở cuối câu, dùng để nhấn mạnh hoặc duy trì ngữ khí trong câu trần thuật và câu hỏi",ex:["我明天还上课呢。","Wǒ míngtiān hái shàngkè ne.","Ngày mai tôi vẫn còn đi học đấy."]},
+ {h:"半",p:"bàn",pos:"so",vi:"một nửa, rưỡi",ex:["现在六点半。","Xiànzài liù diǎn bàn.","Bây giờ là sáu giờ rưỡi."]},
+ {h:"下课",p:"xiàkè",pos:"dong",vi:"tan học",ex:["我们十一点下课。","Wǒmen shíyī diǎn xiàkè.","Chúng tôi tan học lúc mười một giờ."]},
+ {h:"在",p:"zài",pos:"dong",vi:"ở, tại",ex:["妈妈在家。","Māma zài jiā.","Mẹ ở nhà."]},
+ {h:"家",p:"jiā",pos:"dt",vi:"nhà",ex:["我家在西安。","Wǒ jiā zài Xī'ān.","Nhà tôi ở Tây An."]},
+ {h:"里",p:"li / lǐ",pos:"dt",vi:"trong, bên trong",ex:["爸爸在家里。","Bàba zài jiā li.","Bố ở trong nhà."]},
+ {h:"晚上",p:"wǎnshang",pos:"dt",vi:"buổi tối",ex:["晚上你在家吗？","Wǎnshang nǐ zài jiā ma?","Buổi tối bạn có ở nhà không?"]},
+ {h:"医院",p:"yīyuàn",pos:"dt",vi:"bệnh viện",ex:["妈妈在医院。","Māma zài yīyuàn.","Mẹ đang ở bệnh viện."]},
+ {h:"上班",p:"shàngbān",pos:"dong",vi:"đi làm, vào ca",ex:["爸爸早上八点上班。","Bàba zǎoshang bā diǎn shàngbān.","Bố đi làm lúc tám giờ sáng."]},
+ {h:"店",p:"diàn",pos:"dt",vi:"cửa hàng, cửa tiệm",ex:["这个店的菜很好吃。","Zhège diàn de cài hěn hǎochī.","Món ăn của cửa hàng này rất ngon."]},
+ {h:"菜",p:"cài",pos:"dt",vi:"thức ăn, món ăn, rau",ex:["妹妹会做菜。","Mèimei huì zuò cài.","Em gái biết nấu ăn."]},
+ {h:"分钟",p:"fēnzhōng",pos:"lg",vi:"phút",ex:["我们十分钟后见吧。","Wǒmen shí fēnzhōng hòu jiàn ba.","Mười phút nữa chúng ta gặp nhé."]},
+ {h:"后",p:"hòu",pos:"dt",vi:"sau, sau đó",ex:["下课后我去超市。","Xiàkè hòu wǒ qù chāoshì.","Tan học xong tôi đi siêu thị."]}
+];
+const L7_ZHVI = [
+ {zh:"现在几点？",py:"Xiànzài jǐ diǎn?",vi:"Bây giờ là mấy giờ?"},
+ {zh:"我晚上六点半下班。",py:"Wǒ wǎnshang liù diǎn bàn xiàbān.",vi:"Tôi tan làm lúc sáu giờ rưỡi tối."},
+ {zh:"我们下午三点在电影院见吧。",py:"Wǒmen xiàwǔ sān diǎn zài diànyǐngyuàn jiàn ba.",vi:"Chúng ta gặp nhau ở rạp chiếu phim lúc ba giờ chiều nhé."},
+ {zh:"她上午十点半上课。",py:"Tā shàngwǔ shí diǎn bàn shàngkè.",vi:"Cô ấy vào học lúc mười giờ rưỡi sáng."},
+ {zh:"李文晚上还有事呢。",py:"Lǐ Wén wǎnshang hái yǒu shì ne.",vi:"Buổi tối Lý Văn vẫn còn có việc đấy."},
+ {zh:"妈妈在医院，爸爸在家里。",py:"Māma zài yīyuàn, bàba zài jiā li.",vi:"Mẹ ở bệnh viện, bố ở trong nhà."},
+ {zh:"我们十分钟后见吧。",py:"Wǒmen shí fēnzhōng hòu jiàn ba.",vi:"Mười phút nữa chúng ta gặp nhé."},
+ {zh:"今天下午我没有课。",py:"Jīntiān xiàwǔ wǒ méiyǒu kè.",vi:"Chiều nay tôi không có tiết học."},
+ {zh:"妹妹会做两个菜呢。",py:"Mèimei huì zuò liǎng ge cài ne.",vi:"Em gái biết nấu hai món đấy."},
+ {zh:"现在九点零五分，我们下课吧。",py:"Xiànzài jiǔ diǎn líng wǔ fēn, wǒmen xiàkè ba.",vi:"Bây giờ là chín giờ năm phút, chúng ta tan học nhé."}
+];
+const L7_VIZH = [
+ {vi:"Bây giờ là mấy giờ?",ans:["现在","几","点"],extra:["分","什么"],alt:["现在几点了"],py:"Xiànzài jǐ diǎn?"},
+ {vi:"Tôi tan làm lúc sáu giờ rưỡi tối.",ans:["我","晚上","六","点","半","下班"],extra:["上班","分"],alt:["晚上六点半我下班","我晚上六点半下班"],py:"Wǒ wǎnshang liù diǎn bàn xiàbān."},
+ {vi:"Chúng ta gặp nhau lúc ba giờ chiều nhé.",ans:["我们","下午","三","点","见","吧"],extra:["上午","呢"],alt:["下午三点我们见吧"],py:"Wǒmen xiàwǔ sān diǎn jiàn ba."},
+ {vi:"Buổi tối tôi có việc.",ans:["晚上","我","有","事"],extra:["没","吧"],alt:["我晚上有事"],py:"Wǎnshang wǒ yǒu shì."},
+ {vi:"Buổi sáng tôi có tiết học.",ans:["我","上午","有","课"],extra:["下午","上"],alt:["上午我有课"],py:"Wǒ shàngwǔ yǒu kè."},
+ {vi:"Bố đi làm lúc tám giờ sáng.",ans:["爸爸","早上","八","点","上班"],extra:["下班","分"],alt:["早上八点爸爸上班","爸爸上午八点上班"],py:"Bàba zǎoshang bā diǎn shàngbān."},
+ {vi:"Chúng ta đi rạp chiếu phim xem phim nhé.",ans:["我们","去","电影院","看","电影","吧"],extra:["呢","店"],alt:[],py:"Wǒmen qù diànyǐngyuàn kàn diànyǐng ba."},
+ {vi:"Mẹ đang ở bệnh viện.",ans:["妈妈","在","医院"],extra:["家","里"],alt:[],py:"Māma zài yīyuàn."},
+ {vi:"Tan học xong tôi đi siêu thị mua rau.",ans:["下课","后","我","去","超市","买","菜"],extra:["上课","吧"],alt:["我下课后去超市买菜"],py:"Xiàkè hòu wǒ qù chāoshì mǎi cài."},
+ {vi:"Ngày mai tôi vẫn còn đi học đấy.",ans:["我","明天","还","上课","呢"],extra:["吧","下课"],alt:["明天我还上课呢"],py:"Wǒ míngtiān hái shàngkè ne."}
+];
+const L7_SPEAK_SENT = [
+ {h:"我晚上六点半下班。",p:"Wǒ wǎnshang liù diǎn bàn xiàbān.",vi:"Tôi tan làm lúc sáu giờ rưỡi tối."},
+ {h:"现在几点？",p:"Xiànzài jǐ diǎn?",vi:"Bây giờ là mấy giờ?"},
+ {h:"我们下午三点见吧。",p:"Wǒmen xiàwǔ sān diǎn jiàn ba.",vi:"Chúng ta gặp nhau lúc ba giờ chiều nhé."},
+ {h:"她上午十点半上课。",p:"Tā shàngwǔ shí diǎn bàn shàngkè.",vi:"Cô ấy vào học lúc mười giờ rưỡi sáng."},
+ {h:"我明天下午两点还上课呢。",p:"Wǒ míngtiān xiàwǔ liǎng diǎn hái shàngkè ne.",vi:"Hai giờ chiều mai tôi vẫn còn lên lớp đấy."},
+ {h:"我们去西安饭店吃晚饭吧。",p:"Wǒmen qù Xī'ān Fàndiàn chī wǎnfàn ba.",vi:"Chúng ta đi nhà hàng Tây An ăn tối nhé."}
+];
+
+const L8_VOCAB = [
+ {h:"房间",p:"fángjiān",pos:"dt",vi:"căn phòng",ex:["我的房间很小。","Wǒ de fángjiān hěn xiǎo.","Phòng của tôi rất nhỏ."]},
+ {h:"外",p:"wài",pos:"dt",vi:"ngoài, bên ngoài",ex:["我们去书店外吧。","Wǒmen qù shūdiàn wài ba.","Chúng ta ra ngoài hiệu sách đi."]},
+ {h:"只",p:"zhī",pos:"lg",vi:"con (chim, chó, hổ...)",ex:["我家有一只小猫。","Wǒ jiā yǒu yì zhī xiǎo māo.","Nhà tôi có một con mèo nhỏ."]},
+ {h:"小",p:"xiǎo",pos:"tt",vi:"nhỏ, bé",ex:["这个房间很小。","Zhège fángjiān hěn xiǎo.","Căn phòng này rất nhỏ."]},
+ {h:"猫",p:"māo",pos:"dt",vi:"mèo",ex:["我很喜欢猫。","Wǒ hěn xǐhuan māo.","Tôi rất thích mèo."]},
+ {h:"没",p:"méi",pos:"pho",vi:"không, chưa",ex:["我没看见你的手机。","Wǒ méi kànjiàn nǐ de shǒujī.","Tôi không nhìn thấy điện thoại của bạn."]},
+ {h:"看见",p:"kànjiàn",pos:"dong",vi:"nhìn thấy, trông thấy",ex:["你看见小猫了吗？","Nǐ kànjiàn xiǎo māo le ma?","Bạn có nhìn thấy con mèo nhỏ không?"]},
+ {h:"桌子",p:"zhuōzi",pos:"dt",vi:"bàn, cái bàn",ex:["桌子上有一本书。","Zhuōzi shang yǒu yì běn shū.","Trên bàn có một quyển sách."]},
+ {h:"下",p:"xià",pos:"dt",vi:"dưới, bên dưới",ex:["小猫在桌子下。","Xiǎo māo zài zhuōzi xià.","Con mèo nhỏ ở dưới bàn."]},
+ {h:"漂亮",p:"piàoliang",pos:"tt",vi:"đẹp, xinh đẹp",ex:["你的房间很漂亮。","Nǐ de fángjiān hěn piàoliang.","Phòng của bạn rất đẹp."]},
+ {h:"在",p:"zài",pos:"gioi",vi:"ở, tại",ex:["我在学校吃午饭。","Wǒ zài xuéxiào chī wǔfàn.","Tôi ăn trưa ở trường."]},
+ {h:"学校",p:"xuéxiào",pos:"dt",vi:"trường học",ex:["我们的学校很大。","Wǒmen de xuéxiào hěn dà.","Trường của chúng tôi rất lớn."]},
+ {h:"书店",p:"shūdiàn",pos:"dt",vi:"hiệu sách, nhà sách",ex:["我在书店买书。","Wǒ zài shūdiàn mǎi shū.","Tôi mua sách ở hiệu sách."]},
+ {h:"前",p:"qián",pos:"dt",vi:"phía trước",ex:["我们在医院前见吧。","Wǒmen zài yīyuàn qián jiàn ba.","Chúng ta gặp nhau trước bệnh viện nhé."]},
+ {h:"能",p:"néng",pos:"nn",vi:"có thể",ex:["下午两点你能到吗？","Xiàwǔ liǎng diǎn nǐ néng dào ma?","Hai giờ chiều bạn có đến được không?"]},
+ {h:"到",p:"dào",pos:"dong",vi:"đến",ex:["我七点能到。","Wǒ qī diǎn néng dào.","Bảy giờ tôi có thể đến."]},
+ {h:"午饭",p:"wǔfàn",pos:"dt",vi:"bữa trưa",ex:["你在哪儿吃午饭？","Nǐ zài nǎr chī wǔfàn?","Bạn ăn trưa ở đâu?"]},
+ {h:"饭",p:"fàn",pos:"dt",vi:"cơm",ex:["我们去吃饭吧。","Wǒmen qù chī fàn ba.","Chúng ta đi ăn cơm nhé."]},
+ {h:"大",p:"dà",pos:"tt",vi:"lớn, to",ex:["这个医院很大。","Zhège yīyuàn hěn dà.","Bệnh viện này rất lớn."]},
+ {h:"病人",p:"bìngrén",pos:"dt",vi:"bệnh nhân",ex:["医院里病人很多。","Yīyuàn li bìngrén hěn duō.","Trong bệnh viện có rất nhiều bệnh nhân."]},
+ {h:"多",p:"duō",pos:"tt",vi:"nhiều",ex:["书店里人很多。","Shūdiàn li rén hěn duō.","Trong hiệu sách rất đông người."]},
+ {h:"医生",p:"yīshēng",pos:"dt",vi:"bác sĩ",ex:["我妈妈是医生。","Wǒ māma shì yīshēng.","Mẹ tôi là bác sĩ."]},
+ {h:"工作",p:"gōngzuò",pos:"dong",vi:"làm việc",ex:["我爸爸在医院工作。","Wǒ bàba zài yīyuàn gōngzuò.","Bố tôi làm việc ở bệnh viện."]},
+ {h:"胡医生",p:"Hú yīshēng",pos:"rieng",vi:"bác sĩ Hồ",ex:["胡医生工作很忙。","Hú yīshēng gōngzuò hěn máng.","Bác sĩ Hồ làm việc rất bận."]}
+];
+const L8_ZHVI = [
+ {zh:"房间里有一只小猫。",py:"Fángjiān li yǒu yì zhī xiǎo māo.",vi:"Trong phòng có một con mèo nhỏ."},
+ {zh:"小雪的手机在桌子上呢。",py:"Xiǎoxuě de shǒujī zài zhuōzi shang ne.",vi:"Điện thoại của Tiểu Tuyết ở trên bàn đấy."},
+ {zh:"我爸爸也在医院工作。",py:"Wǒ bàba yě zài yīyuàn gōngzuò.",vi:"Bố tôi cũng làm việc ở bệnh viện."},
+ {zh:"我在学校吃午饭。",py:"Wǒ zài xuéxiào chī wǔfàn.",vi:"Tôi ăn trưa ở trường."},
+ {zh:"下午两点你能到吗？",py:"Xiàwǔ liǎng diǎn nǐ néng dào ma?",vi:"Hai giờ chiều bạn có đến được không?"},
+ {zh:"我不能去学校吃午饭。",py:"Wǒ bù néng qù xuéxiào chī wǔfàn.",vi:"Tôi không thể đến trường ăn trưa."},
+ {zh:"这个医院很大，病人很多。",py:"Zhège yīyuàn hěn dà, bìngrén hěn duō.",vi:"Bệnh viện này rất lớn, bệnh nhân rất nhiều."},
+ {zh:"我们在书店前见吧。",py:"Wǒmen zài shūdiàn qián jiàn ba.",vi:"Chúng ta gặp nhau trước hiệu sách nhé."},
+ {zh:"我没看见小猫，它不在桌子下。",py:"Wǒ méi kànjiàn xiǎo māo, tā bú zài zhuōzi xià.",vi:"Tôi không thấy con mèo nhỏ, nó không ở dưới bàn."},
+ {zh:"你在哪儿买菜？",py:"Nǐ zài nǎr mǎi cài?",vi:"Bạn mua rau ở đâu?"}
+];
+const L8_VIZH = [
+ {vi:"Trong phòng có một con mèo nhỏ.",ans:["房间","里","有","一","只","小","猫"],extra:["个","在"],alt:[],py:"Fángjiān li yǒu yì zhī xiǎo māo."},
+ {vi:"Bố tôi làm việc ở bệnh viện.",ans:["我","爸爸","在","医院","工作"],extra:["是","到"],alt:["我的爸爸在医院工作"],py:"Wǒ bàba zài yīyuàn gōngzuò."},
+ {vi:"Tôi ăn trưa ở trường.",ans:["我","在","学校","吃","午饭"],extra:["到","饭店"],alt:[],py:"Wǒ zài xuéxiào chī wǔfàn."},
+ {vi:"Hai giờ chiều bạn có đến được không?",ans:["下午","两","点","你","能","到","吗"],extra:["二","去"],alt:["你下午两点能到吗"],py:"Xiàwǔ liǎng diǎn nǐ néng dào ma?"},
+ {vi:"Tôi không thể đi.",ans:["我","不","能","去"],extra:["没","到"],alt:[],py:"Wǒ bù néng qù."},
+ {vi:"Điện thoại của bạn ở trên bàn.",ans:["你","的","手机","在","桌子","上"],extra:["下","有"],alt:["你的手机在桌子上呢"],py:"Nǐ de shǒujī zài zhuōzi shang."},
+ {vi:"Con mèo nhỏ ở dưới bàn.",ans:["小","猫","在","桌子","下"],extra:["上","有"],alt:[],py:"Xiǎo māo zài zhuōzi xià."},
+ {vi:"Bệnh viện này rất lớn.",ans:["这个","医院","很","大"],extra:["多","小"],alt:[],py:"Zhège yīyuàn hěn dà."},
+ {vi:"Bạn mua rau ở đâu?",ans:["你","在","哪儿","买","菜"],extra:["去","什么"],alt:["你在哪里买菜"],py:"Nǐ zài nǎr mǎi cài?"},
+ {vi:"Tôi không nhìn thấy con mèo nhỏ.",ans:["我","没","看见","小","猫"],extra:["不","只"],alt:[],py:"Wǒ méi kànjiàn xiǎo māo."}
+];
+const L8_SPEAK_SENT = [
+ {h:"我爸爸也在医院工作。",p:"Wǒ bàba yě zài yīyuàn gōngzuò.",vi:"Bố tôi cũng làm việc ở bệnh viện."},
+ {h:"房间里有一只小猫。",p:"Fángjiān li yǒu yì zhī xiǎo māo.",vi:"Trong phòng có một con mèo nhỏ."},
+ {h:"小雪的手机在桌子上呢。",p:"Xiǎoxuě de shǒujī zài zhuōzi shang ne.",vi:"Điện thoại của Tiểu Tuyết ở trên bàn đấy."},
+ {h:"我在学校吃午饭。",p:"Wǒ zài xuéxiào chī wǔfàn.",vi:"Tôi ăn trưa ở trường."},
+ {h:"下午两点你能到吗？",p:"Xiàwǔ liǎng diǎn nǐ néng dào ma?",vi:"Hai giờ chiều bạn có đến được không?"},
+ {h:"这个医院里病人多，医生工作很忙。",p:"Zhège yīyuàn li bìngrén duō, yīshēng gōngzuò hěn máng.",vi:"Bệnh viện này nhiều bệnh nhân, bác sĩ làm việc rất bận."}
+];
+
 const L9_VOCAB = [
  {h:"前边",p:"qiánbian",pos:"dt",vi:"trước, phía trước",ex:["学校前边有一家医院。","Xuéxiào qiánbian yǒu yì jiā yīyuàn.","Phía trước trường có một bệnh viện."]},
  {h:"边",p:"bian / biān",pos:"hau",vi:"phía, bên",ex:["我家在那边。","Wǒ jiā zài nàbiān.","Nhà tôi ở bên kia."]},
@@ -1240,6 +1361,8 @@ const L15_SPEAK_SENT = [
 /* Thêm bài mới: tạo object giống L10 và đặt vào lessons[n] của cấp tương ứng */
 const LEVELS = {
  hsk1:{name:"HSK 1", total:15, lessons:{
+   7:{title:"Bài 7",theme:"",zh:"我晚上六点半下班",vocab:L7_VOCAB,zhvi:L7_ZHVI,vizh:L7_VIZH,sentences:L7_SPEAK_SENT},
+   8:{title:"Bài 8",theme:"",zh:"我爸爸也在医院工作",vocab:L8_VOCAB,zhvi:L8_ZHVI,vizh:L8_VIZH,sentences:L8_SPEAK_SENT},
    9:{title:"Bài 9",theme:"",zh:"我明天上午在学校学习",vocab:L9_VOCAB,zhvi:L9_ZHVI,vizh:L9_VIZH,sentences:L9_SPEAK_SENT},
    10:{title:"Bài 10",theme:"",zh:"这儿的苹果真便宜！",vocab:L10_VOCAB,zhvi:L10_ZHVI,vizh:L10_VIZH,sentences:L10_SPEAK_SENT},
    11:{title:"Bài 11",theme:"",zh:"我读大学呢",vocab:L11_VOCAB,zhvi:L11_ZHVI,vizh:L11_VIZH,sentences:L11_SPEAK_SENT},
@@ -2233,6 +2356,49 @@ const Exam = {
 
 LEVELS.hsk1.lessons[10].test=L10_TEST;
 
+const L8_TEST = {
+  answers: "CBABADCBCBBDCCBABAAA",
+  audio: { page: "https://hoanguchinesestation.com/tai-lieu/audio/audio-sbt-hsk-3-0-1", track: "8-2", main: "audio/8-2.mp3", parts: { 1: "", 2: "", 3: "", 4: "" } },
+  sections: [
+    { zh: "一、听力", vi: "Nghe hiểu", audio: true, parts: [
+      { no: 1, zh: "第一部分", vi: "Câu 1–3: Nghe cụm từ, chọn hình đúng. Mỗi câu nghe hai lần.", type: "pics3",
+        example: { lines: [["", "三个苹果"]], gloss: "ba quả táo", imgs: ["b8_l1_ex_A", "b8_l1_ex_B", "b8_l1_ex_C"], ans: "C" },
+        qs: [{ n: 1, imgs: ["b8_l1_q1_A", "b8_l1_q1_B", "b8_l1_q1_C"] }, { n: 2, imgs: ["b8_l1_q2_A", "b8_l1_q2_B", "b8_l1_q2_C"] }, { n: 3, imgs: ["b8_l1_q3_A", "b8_l1_q3_B", "b8_l1_q3_C"] }] },
+      { no: 2, zh: "第二部分", vi: "Câu 4–5: Nghe câu hỏi, chọn câu trả lời đúng. Mỗi câu nghe hai lần.", type: "choice",
+        example: { lines: [["", "今天天气怎么样？"]], gloss: "Hôm nay thời tiết thế nào?", opts: [["非常热", "rất nóng"], ["很好听", "rất hay"], ["在喝水", "đang uống nước"]], ans: "A" },
+        qs: [{ n: 4, opts: ["去学校", "房间外", "在吃东西"] }, { n: 5, opts: ["我能到", "我吃午饭", "我不能工作"] }] },
+      { no: 3, zh: "第三部分", vi: "Câu 6–8: Nghe hội thoại, chọn hình phù hợp nhất. Mỗi câu nghe hai lần.", type: "poolpics",
+        pool: ["b8_l3_A", "b8_l3_B", "b8_l3_C", "b8_l3_D"],
+        example: { lines: [["女", "你好！"], ["男", "你好！很高兴认识你。"]], gloss: "Chào bạn! — Chào bạn! Rất vui được làm quen với bạn.", ans: "A" },
+        qs: [{ n: 6 }, { n: 7 }, { n: 8 }] },
+      { no: 4, zh: "第四部分", vi: "Câu 9–10: Nghe câu và câu hỏi, chọn đáp án đúng. Mỗi câu nghe hai lần.", type: "choice",
+        example: { lines: [["", "下午我去超市，我想买一些水果。"], ["问", "说话人下午去哪里？"]], gloss: "Chiều nay tôi đi siêu thị, tôi muốn mua ít trái cây. — Hỏi: Chiều nay người nói đi đâu?",
+          opts: [["超市", "siêu thị"], ["医院", "bệnh viện"], ["学校", "trường học"]], ans: "A" },
+        qs: [{ n: 9, opts: ["超市", "饭店", "学校书店"] }, { n: 10, opts: ["去学校", "看电影", "去上班"] }] }
+    ]},
+    { zh: "二、阅读", vi: "Đọc hiểu", parts: [
+      { no: 1, zh: "第一部分", vi: "Câu 11–13: Chọn hình phù hợp nhất với mỗi câu.", type: "poolpics",
+        pool: ["b8_r1_A", "b8_r1_B", "b8_r1_C", "b8_r1_D"],
+        example: { lines: [["", "我很喜欢这本书。"]], gloss: "Tôi rất thích quyển sách này.", ans: "A" },
+        qs: [{ n: 11, text: "你的手机在桌子上呢。" }, { n: 12, text: "我在学校吃午饭。" }, { n: 13, text: "这个医院里病人多，医生工作很忙。" }] },
+      { no: 2, zh: "第二部分", vi: "Câu 14–16: Nối câu hỏi với câu trả lời phù hợp.", type: "pooltext",
+        pool: ["医院。", "我老师。", "饺子和面条儿。", "好的，谢谢！"],
+        example: { lines: [["", "你喝水吗？"]], gloss: "Bạn uống nước không?", ans: "D" },
+        qs: [{ n: 14, text: "桌子上有什么？" }, { n: 15, text: "她是谁？" }, { n: 16, text: "你爸爸在哪儿工作？" }] },
+      { no: 3, zh: "第三部分", vi: "Câu 17–18: Chọn từ thích hợp điền vào chỗ trống.", type: "pooltext", inline: true,
+        pool: ["能", "有", "名字"],
+        example: { lines: [["", "你叫什么（ C ）？"]], gloss: "Bạn tên là gì?", ans: "C" },
+        qs: [{ n: 17, text: "我的房间里（　　）一只小猫。" }, { n: 18, lines: [["男", "我们下午在书店见吧。"], ["女", "好的，我7:00（　　）到。"]] }] },
+      { no: 4, zh: "第四部分", vi: "Câu 19–20: Chọn đáp án đúng.", type: "choice",
+        example: { lines: [["", "请问现在几点了？"], ["★", "说话人想知道什么？"]], gloss: "Xin hỏi bây giờ mấy giờ rồi? — Người nói muốn biết điều gì?",
+          opts: [["时间", "thời gian"], ["名字", "tên"], ["房间号", "số phòng"]], ans: "A" },
+        qs: [{ n: 19, lines: [["", "昨天爸爸在医院工作，哥哥在家里休息，没去书店。"], ["★", "说话人的哥哥昨天："]], opts: ["在家里", "在书店", "在医院工作"] },
+             { n: 20, lines: [["", "我喜欢吃米饭，我女朋友不喜欢。"], ["★", "说话人的女朋友不喜欢吃："]], opts: ["米饭", "包子", "面条儿"] }] }
+    ]}
+  ],
+  explain: {"1": "Đáp án C – hiệu sách với nhiều kệ sách (书店). Tranh A là mọi người ngồi học quanh bàn, tranh B là sạp rau củ. Nghe lại và chú ý từ chỉ nơi chốn.", "2": "Đáp án B – con mèo nằm DƯỚI gầm bàn (桌子下). Tranh A là mèo trong bếp, tranh C là mèo ngồi cạnh bàn. Chú ý phương vị từ 上 (trên) – 下 (dưới).", "3": "Đáp án A – người phụ nữ đang ngồi làm việc, viết giấy tờ (工作). Tranh B là bố con đá bóng, tranh C là người đang ngủ.", "4": "Đáp án B 房间外 (bên ngoài phòng) – câu trả lời chỉ vị trí, phù hợp với câu hỏi “ở đâu?”. A 去学校 là đi đến trường, C 在吃东西 là đang ăn.", "5": "Đáp án A 我能到 (tôi đến được) – trả lời câu hỏi kiểu “… bạn có đến được không? (能到吗？)”. B 我吃午饭 là tôi ăn trưa, C 我不能工作 là tôi không thể làm việc.", "6": "Hội thoại phù hợp với tranh D – người đàn ông đang làm việc bên máy tính (工作).", "7": "Hội thoại phù hợp với tranh C – học sinh đang ăn trưa ở trường (在学校吃午饭).", "8": "Hội thoại phù hợp với tranh B – siêu thị với các kệ hàng (超市). Nghe lại và chú ý từ chỉ nơi chốn.", "9": "Đáp án C 学校书店 (hiệu sách của trường). Chú ý phân biệt 超市 (siêu thị) – 饭店 (nhà hàng) – 书店 (hiệu sách).", "10": "Đáp án B 看电影 (xem phim). A 去学校 là đến trường, C 去上班 là đi làm.", "11": "你的手机在桌子上呢 – “Điện thoại của bạn ở trên bàn đấy”, nên chọn tranh B – chiếc điện thoại đặt trên bàn.", "12": "我在学校吃午饭 – “Tôi ăn trưa ở trường”, nên chọn tranh D – cô gái đang ăn cơm hộp.", "13": "这个医院里病人多，医生工作很忙 – “Bệnh viện này nhiều bệnh nhân, bác sĩ làm việc rất bận”, nên chọn tranh C – các bác sĩ, y tá bên cạnh bệnh nhân.", "14": "桌子上有什么？ hỏi “Trên bàn có gì?”, trả lời bằng đồ vật: C 饺子和面条儿。 (Sủi cảo và mì).", "15": "她是谁？ hỏi “Cô ấy là ai?”, trả lời bằng người: B 我老师。 (Cô giáo tôi).", "16": "你爸爸在哪儿工作？ hỏi “Bố bạn làm việc ở đâu?”, trả lời bằng nơi chốn: A 医院。 (Bệnh viện).", "17": "我的房间里有一只小猫 – “Trong phòng tôi có một con mèo nhỏ”. Nơi chốn + 有 + người/vật → B 有.", "18": "我7:00能到 – “7 giờ tôi đến được”. 能 đứng trước động từ 到, biểu thị có khả năng → A 能.", "19": "哥哥在家里休息，没去书店 – “Anh trai nghỉ ngơi ở nhà, không đi hiệu sách” → A 在家里. C 在医院工作 là việc của bố.", "20": "我喜欢吃米饭，我女朋友不喜欢 – “Tôi thích ăn cơm, bạn gái tôi không thích” → bạn gái không thích A 米饭."}
+};
+LEVELS.hsk1.lessons[8].test=L8_TEST;
 const L9_TEST = {
   answers: "BCABCDCBAB" + "DCBCABBAAB",
   audio: { page: "https://hoanguchinesestation.com/tai-lieu/audio/audio-sbt-hsk-3-0-1", track: "9-2", main: "audio/9-2.mp3", parts: { 1: "", 2: "", 3: "", 4: "" } },
