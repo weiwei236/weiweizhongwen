@@ -335,6 +335,22 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .ex-example .ex-copt.is-ex{border-color:var(--accent)}
 @media (max-width:560px){.ex-choice{grid-template-columns:minmax(0,1fr)}.ex-pics3{gap:6px}.ex-pic{font-size:18px;padding:5px 5px 2px}}
 /* bể hình / bể câu dùng chung */
+.ex-pron .ex-part>h4 small{font-family:var(--f-body);font-size:15px;color:var(--muted);font-weight:600}
+.py-say{border:1px solid var(--line);background:#fff;border-radius:12px;cursor:pointer;font:inherit;color:inherit}
+.py-say:hover{border-color:var(--accent)}
+.py-tbl-wrap{overflow-x:auto}
+.py-tbl{border-collapse:collapse;margin:0 auto;min-width:420px;background:#fff;border-radius:12px;overflow:hidden}
+.py-tbl th{background:#E8875A;color:#fff;font-weight:600;padding:8px 12px;font-size:14px}
+.py-tbl td{border-top:1px solid var(--line);padding:6px 12px;text-align:center;font-size:14px}
+.py-tbl td .py-say{border:0;padding:4px 8px;font-size:16px}.py-tbl td .zh{font-size:20px}
+.py-arr{color:var(--muted);font-size:18px}
+.py-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.py-cards .py-say{display:grid;gap:2px;padding:0 0 8px;overflow:hidden;text-align:center;border-color:#E8B79F}
+.py-cards img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.py-cards small{font-size:14px;color:var(--muted);margin-top:4px}.py-cards .zh{font-size:20px}
+.py-gy{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.py-gy .py-say{display:grid;gap:2px;padding:10px 18px;text-align:center}.py-gy b{font-size:18px}.py-gy .zh{font-size:20px}
+@media (max-width:600px){.py-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .ex-pool{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .ex-pool figure{margin:0;display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px}
 .ex-pool figure span{font-family:"Times New Roman",serif;font-size:28px;font-weight:700;width:28px;text-align:center;color:#17332A}
@@ -887,6 +903,64 @@ const L10_SPEAK_SENT = [
 ];
 
 /* ---------- HSK1 · Bài 9: 我明天上午在学校学习 ---------- */
+const L6_VOCAB = [
+ {h:"手机",p:"shǒujī",pos:"dt",vi:"điện thoại di động",ex:["你的手机号是多少？","Nǐ de shǒujī hào shì duōshao?","Số điện thoại di động của bạn là bao nhiêu?"]},
+ {h:"电话",p:"diànhuà",pos:"dt",vi:"điện thoại (máy cố định)",ex:["你家的电话号是多少？","Nǐ jiā de diànhuà hào shì duōshao?","Số điện thoại nhà bạn là bao nhiêu?"]},
+ {h:"号",p:"hào",pos:"dt",vi:"số",ex:["我的手机号是5362805。","Wǒ de shǒujī hào shì wǔ sān liù èr bā líng wǔ.","Số điện thoại của tôi là 5362805."]},
+ {h:"明天",p:"míngtiān",pos:"dt",vi:"ngày mai",ex:["明天我去超市。","Míngtiān wǒ qù chāoshì.","Ngày mai tôi đi siêu thị."]},
+ {h:"去",p:"qù",pos:"dong",vi:"đi",ex:["你去哪儿？","Nǐ qù nǎr?","Bạn đi đâu?"]},
+ {h:"哪儿",p:"nǎr",pos:"dai",vi:"đâu, chỗ nào, nơi nào",ex:["你明天去哪儿？","Nǐ míngtiān qù nǎr?","Ngày mai bạn đi đâu?"]},
+ {h:"想",p:"xiǎng",pos:"nn",vi:"muốn",ex:["我想去超市。","Wǒ xiǎng qù chāoshì.","Tôi muốn đi siêu thị."]},
+ {h:"超市",p:"chāoshì",pos:"dt",vi:"siêu thị",ex:["超市在那边。","Chāoshì zài nàbiān.","Siêu thị ở bên kia."]},
+ {h:"买",p:"mǎi",pos:"dong",vi:"mua",ex:["你想买什么？","Nǐ xiǎng mǎi shénme?","Bạn muốn mua gì?"]},
+ {h:"东西",p:"dōngxi",pos:"dt",vi:"đồ, đồ đạc",ex:["我去超市买东西。","Wǒ qù chāoshì mǎi dōngxi.","Tôi đi siêu thị mua đồ."]},
+ {h:"些",p:"xiē",pos:"lg",vi:"một ít, một vài",ex:["我想买一些水果。","Wǒ xiǎng mǎi yìxiē shuǐguǒ.","Tôi muốn mua một ít trái cây."]},
+ {h:"牛奶",p:"niúnǎi",pos:"dt",vi:"sữa (bò)",ex:["我想买牛奶。","Wǒ xiǎng mǎi niúnǎi.","Tôi muốn mua sữa."]},
+ {h:"吃",p:"chī",pos:"dong",vi:"ăn",ex:["你想吃什么？","Nǐ xiǎng chī shénme?","Bạn muốn ăn gì?"]},
+ {h:"晚饭",p:"wǎnfàn",pos:"dt",vi:"bữa tối",ex:["我们去西安饭店吃晚饭。","Wǒmen qù Xī'ān Fàndiàn chī wǎnfàn.","Chúng tôi đến nhà hàng Tây An ăn tối."]},
+ {h:"那边",p:"nàbiān",pos:"dai",vi:"bên kia, chỗ đó",ex:["那边的包子很好吃。","Nàbiān de bāozi hěn hǎochī.","Bánh bao bên kia rất ngon."]},
+ {h:"包子",p:"bāozi",pos:"dt",vi:"bánh bao (có nhân)",ex:["我想吃包子。","Wǒ xiǎng chī bāozi.","Tôi muốn ăn bánh bao."]},
+ {h:"非常",p:"fēicháng",pos:"pho",vi:"rất, vô cùng, cực kỳ",ex:["今天非常热。","Jīntiān fēicháng rè.","Hôm nay cực kỳ nóng."]},
+ {h:"好吃",p:"hǎochī",pos:"tt",vi:"ngon",ex:["这儿的包子非常好吃。","Zhèr de bāozi fēicháng hǎochī.","Bánh bao ở đây vô cùng ngon."]},
+ {h:"米饭",p:"mǐfàn",pos:"dt",vi:"cơm (cơm trắng)",ex:["我喜欢吃米饭。","Wǒ xǐhuan chī mǐfàn.","Tôi thích ăn cơm."]},
+ {h:"怎么",p:"zěnme",pos:"dai",vi:"thế nào, bằng cách nào, như thế nào",ex:["我们怎么去？","Wǒmen zěnme qù?","Chúng ta đi bằng gì?"]},
+ {h:"坐",p:"zuò",pos:"dong",vi:"ngồi, đi (xe, tàu...)",ex:["我们坐出租车去吧。","Wǒmen zuò chūzūchē qù ba.","Chúng ta đi taxi nhé."]},
+ {h:"出租车",p:"chūzūchē",pos:"dt",vi:"xe taxi",ex:["她坐出租车去超市。","Tā zuò chūzūchē qù chāoshì.","Cô ấy đi taxi đến siêu thị."]},
+ {h:"西安饭店",p:"Xī'ān Fàndiàn",pos:"rieng",vi:"nhà hàng Tây An",ex:["西安饭店的包子非常好吃。","Xī'ān Fàndiàn de bāozi fēicháng hǎochī.","Bánh bao của nhà hàng Tây An vô cùng ngon."]}
+];
+const L6_ZHVI = [
+ {zh:"你的手机号是多少？",py:"Nǐ de shǒujī hào shì duōshao?",vi:"Số điện thoại di động của bạn là bao nhiêu?"},
+ {zh:"明天你去哪儿？",py:"Míngtiān nǐ qù nǎr?",vi:"Ngày mai bạn đi đâu?"},
+ {zh:"我想去超市买东西。",py:"Wǒ xiǎng qù chāoshì mǎi dōngxi.",vi:"Tôi muốn đi siêu thị mua đồ."},
+ {zh:"我哥哥不想休息。",py:"Wǒ gēge bù xiǎng xiūxi.",vi:"Anh trai tôi không muốn nghỉ ngơi."},
+ {zh:"我们去西安饭店吃晚饭。",py:"Wǒmen qù Xī'ān Fàndiàn chī wǎnfàn.",vi:"Chúng tôi đến nhà hàng Tây An ăn tối."},
+ {zh:"我们坐出租车去西安饭店。",py:"Wǒmen zuò chūzūchē qù Xī'ān Fàndiàn.",vi:"Chúng tôi đi taxi đến nhà hàng Tây An."},
+ {zh:"她怎么去超市？",py:"Tā zěnme qù chāoshì?",vi:"Cô ấy đến siêu thị bằng gì?"},
+ {zh:"那边的包子非常好吃。",py:"Nàbiān de bāozi fēicháng hǎochī.",vi:"Bánh bao bên kia vô cùng ngon."},
+ {zh:"我想买一些牛奶。",py:"Wǒ xiǎng mǎi yìxiē niúnǎi.",vi:"Tôi muốn mua một ít sữa."},
+ {zh:"我喜欢吃米饭，不喜欢吃包子。",py:"Wǒ xǐhuan chī mǐfàn, bù xǐhuan chī bāozi.",vi:"Tôi thích ăn cơm, không thích ăn bánh bao."}
+];
+const L6_VIZH = [
+ {vi:"Số điện thoại di động của bạn là bao nhiêu?",ans:["你","的","手机","号","是","多少"],extra:["电话","几"],alt:["你手机号是多少"],py:"Nǐ de shǒujī hào shì duōshao?"},
+ {vi:"Ngày mai bạn đi đâu?",ans:["明天","你","去","哪儿"],extra:["那边","想"],alt:["你明天去哪儿"],py:"Míngtiān nǐ qù nǎr?"},
+ {vi:"Tôi muốn đi siêu thị mua đồ.",ans:["我","想","去","超市","买","东西"],extra:["吃","些"],alt:[],py:"Wǒ xiǎng qù chāoshì mǎi dōngxi."},
+ {vi:"Anh trai tôi không muốn nghỉ ngơi.",ans:["我","哥哥","不","想","休息"],extra:["没","去"],alt:["我的哥哥不想休息"],py:"Wǒ gēge bù xiǎng xiūxi."},
+ {vi:"Chúng tôi đi taxi đến nhà hàng Tây An.",ans:["我们","坐","出租车","去","西安饭店"],extra:["怎么","吃"],alt:[],py:"Wǒmen zuò chūzūchē qù Xī'ān Fàndiàn."},
+ {vi:"Cô ấy đến siêu thị bằng gì?",ans:["她","怎么","去","超市"],extra:["哪儿","什么"],alt:[],py:"Tā zěnme qù chāoshì?"},
+ {vi:"Chúng tôi đến nhà hàng Tây An ăn tối.",ans:["我们","去","西安饭店","吃","晚饭"],extra:["坐","买"],alt:[],py:"Wǒmen qù Xī'ān Fàndiàn chī wǎnfàn."},
+ {vi:"Bánh bao ở đây vô cùng ngon.",ans:["这儿","的","包子","非常","好吃"],extra:["那边","米饭"],alt:["这儿包子非常好吃"],py:"Zhèr de bāozi fēicháng hǎochī."},
+ {vi:"Tôi muốn mua một ít sữa.",ans:["我","想","买","一","些","牛奶"],extra:["吃","个"],alt:["我想买一些牛奶","我想买些牛奶"],py:"Wǒ xiǎng mǎi yìxiē niúnǎi."},
+ {vi:"Bạn muốn ăn gì?",ans:["你","想","吃","什么"],extra:["怎么","哪儿"],alt:[],py:"Nǐ xiǎng chī shénme?"}
+];
+const L6_SPEAK_SENT = [
+ {h:"你的手机号是多少？",p:"Nǐ de shǒujī hào shì duōshao?",vi:"Số điện thoại di động của bạn là bao nhiêu?"},
+ {h:"我想去超市买东西。",p:"Wǒ xiǎng qù chāoshì mǎi dōngxi.",vi:"Tôi muốn đi siêu thị mua đồ."},
+ {h:"我们去西安饭店吃晚饭。",p:"Wǒmen qù Xī'ān Fàndiàn chī wǎnfàn.",vi:"Chúng tôi đến nhà hàng Tây An ăn tối."},
+ {h:"我们坐出租车去西安饭店。",p:"Wǒmen zuò chūzūchē qù Xī'ān Fàndiàn.",vi:"Chúng tôi đi taxi đến nhà hàng Tây An."},
+ {h:"她怎么去超市？",p:"Tā zěnme qù chāoshì?",vi:"Cô ấy đến siêu thị bằng gì?"},
+ {h:"那边的包子非常好吃。",p:"Nàbiān de bāozi fēicháng hǎochī.",vi:"Bánh bao bên kia vô cùng ngon."}
+];
+
 const L7_VOCAB = [
  {h:"现在",p:"xiànzài",pos:"dt",vi:"bây giờ, hiện tại",ex:["现在几点？","Xiànzài jǐ diǎn?","Bây giờ là mấy giờ?"]},
  {h:"点",p:"diǎn",pos:"lg",vi:"giờ",ex:["现在八点。","Xiànzài bā diǎn.","Bây giờ là tám giờ."]},
@@ -1361,6 +1435,7 @@ const L15_SPEAK_SENT = [
 /* Thêm bài mới: tạo object giống L10 và đặt vào lessons[n] của cấp tương ứng */
 const LEVELS = {
  hsk1:{name:"HSK 1", total:15, lessons:{
+   6:{title:"Bài 6",theme:"",zh:"你的手机号是多少？",vocab:L6_VOCAB,zhvi:L6_ZHVI,vizh:L6_VIZH,sentences:L6_SPEAK_SENT},
    7:{title:"Bài 7",theme:"",zh:"我晚上六点半下班",vocab:L7_VOCAB,zhvi:L7_ZHVI,vizh:L7_VIZH,sentences:L7_SPEAK_SENT},
    8:{title:"Bài 8",theme:"",zh:"我爸爸也在医院工作",vocab:L8_VOCAB,zhvi:L8_ZHVI,vizh:L8_VIZH,sentences:L8_SPEAK_SENT},
    9:{title:"Bài 9",theme:"",zh:"我明天上午在学校学习",vocab:L9_VOCAB,zhvi:L9_ZHVI,vizh:L9_VIZH,sentences:L9_SPEAK_SENT},
@@ -2277,6 +2352,19 @@ const Exam = {
   letterBtns(n, letters){
     return `<div class="ex-letters" role="group" aria-label="Chọn đáp án câu ${n}">${letters.map(L => `<button type="button" class="ex-opt ex-letter ${this.optState(n, L)}" data-n="${n}" data-l="${L}" ${this.st.submitted ? "disabled" : ""}>${L}</button>`).join("")}</div>`;
   },
+  pronBlock(P){
+    const say = (t, inner) => `<button type="button" class="py-say" data-say="${esc(t)}">${inner}</button>`, E = P.erhua, G = P.geyin;
+    return `<section class="ex-sec ex-pron"><h3 class="zh">语音<small>Ngữ âm · bấm vào từ để nghe</small></h3>
+      ${E ? `<div class="ex-part"><h4 class="zh">${esc(E.zh)} <small>${esc(E.vi)}</small></h4><p class="ex-instr"><i></i>${esc(E.desc)}</p>
+        <p class="ex-instr"><i></i>Nghe và đọc theo, sau đó đọc to.</p>
+        <div class="py-tbl-wrap"><table class="py-tbl"><thead><tr><th>Từ gốc</th><th>Từ loại</th><th></th><th>儿化</th><th>Từ loại</th></tr></thead><tbody>
+          ${E.table.map(r => `<tr><td>${say(r[0], `<span class="zh">${esc(r[0])}</span> ${esc(r[1])}`)}</td><td>${esc(r[2])}</td><td class="py-arr">→</td><td>${say(r[3], `<span class="zh">${esc(r[3])}</span> <b>${esc(r[4])}</b>`)}</td><td>${esc(r[5])}</td></tr>`).join("")}</tbody></table></div>
+        <p class="ex-instr"><i></i>Nhìn hình, nghe và đọc theo, sau đó đọc to. Chú ý cách đọc âm 儿化.</p>
+        <div class="py-cards">${E.pics.map(c => say(c[2].replace(/[（）]/g, ""), `<img src="${this.img(c[0])}" alt="${esc(c[2])}"><small>${esc(c[1])}</small><span class="zh">${esc(c[2])}</span>`)).join("")}</div></div>` : ""}
+      ${G ? `<div class="ex-part"><h4 class="zh">${esc(G.zh)} <small>${esc(G.vi)}</small></h4><p class="ex-instr"><i></i>${esc(G.desc)}</p>
+        <div class="py-gy">${G.ex.map(e => say(e[1], `<b>${esc(e[0])}</b><span class="zh">${esc(e[1])}</span>`)).join("")}</div></div>` : ""}
+    </section>`;
+  },
   partBlock(p, sec){
     let h = `<div class="ex-part"><h4 class="zh">${p.zh}</h4><p class="ex-instr"><i></i>${esc(p.vi)}</p>`;
     if(sec.audio) h += this.audioBlock(p.no);
@@ -2305,6 +2393,7 @@ const Exam = {
       <div class="ex-head"><div class="ex-title"><span class="zh">模拟测练</span><small>Bài tập HSK · Bài ${S.lesson}</small></div>
         <div class="ex-progress"><b>${done}/${tot}</b> câu đã chọn</div></div>
       <div id="exResult"></div>`;
+    if(T.pron) h += this.pronBlock(T.pron);
     T.sections.forEach(sec => {
       h += `<section class="ex-sec"><h3 class="zh">${sec.zh}<small>${sec.vi}</small></h3>`;
       sec.parts.forEach(p => h += this.partBlock(p, sec));
@@ -2317,6 +2406,7 @@ const Exam = {
     W.innerHTML = h;
     if(this.st.submitted) this.showResult(false);
     W.querySelectorAll("audio").forEach(a => a.addEventListener("error", () => { a.hidden = true; a.parentElement.querySelector(".ex-audio-fb").hidden = false; }));
+    W.querySelectorAll(".py-say").forEach(b => b.onclick = () => speak(b.dataset.say));
     W.querySelectorAll(".ex-opt").forEach(b => b.onclick = () => {
       if(this.st.submitted) return;
       const n = +b.dataset.n; this.st.ans[n] = b.dataset.l; this.st.armed = false; this.save();
@@ -2399,6 +2489,101 @@ const L8_TEST = {
   explain: {"1": "Đáp án C – hiệu sách với nhiều kệ sách (书店). Tranh A là mọi người ngồi học quanh bàn, tranh B là sạp rau củ. Nghe lại và chú ý từ chỉ nơi chốn.", "2": "Đáp án B – con mèo nằm DƯỚI gầm bàn (桌子下). Tranh A là mèo trong bếp, tranh C là mèo ngồi cạnh bàn. Chú ý phương vị từ 上 (trên) – 下 (dưới).", "3": "Đáp án A – người phụ nữ đang ngồi làm việc, viết giấy tờ (工作). Tranh B là bố con đá bóng, tranh C là người đang ngủ.", "4": "Đáp án B 房间外 (bên ngoài phòng) – câu trả lời chỉ vị trí, phù hợp với câu hỏi “ở đâu?”. A 去学校 là đi đến trường, C 在吃东西 là đang ăn.", "5": "Đáp án A 我能到 (tôi đến được) – trả lời câu hỏi kiểu “… bạn có đến được không? (能到吗？)”. B 我吃午饭 là tôi ăn trưa, C 我不能工作 là tôi không thể làm việc.", "6": "Hội thoại phù hợp với tranh D – người đàn ông đang làm việc bên máy tính (工作).", "7": "Hội thoại phù hợp với tranh C – học sinh đang ăn trưa ở trường (在学校吃午饭).", "8": "Hội thoại phù hợp với tranh B – siêu thị với các kệ hàng (超市). Nghe lại và chú ý từ chỉ nơi chốn.", "9": "Đáp án C 学校书店 (hiệu sách của trường). Chú ý phân biệt 超市 (siêu thị) – 饭店 (nhà hàng) – 书店 (hiệu sách).", "10": "Đáp án B 看电影 (xem phim). A 去学校 là đến trường, C 去上班 là đi làm.", "11": "你的手机在桌子上呢 – “Điện thoại của bạn ở trên bàn đấy”, nên chọn tranh B – chiếc điện thoại đặt trên bàn.", "12": "我在学校吃午饭 – “Tôi ăn trưa ở trường”, nên chọn tranh D – cô gái đang ăn cơm hộp.", "13": "这个医院里病人多，医生工作很忙 – “Bệnh viện này nhiều bệnh nhân, bác sĩ làm việc rất bận”, nên chọn tranh C – các bác sĩ, y tá bên cạnh bệnh nhân.", "14": "桌子上有什么？ hỏi “Trên bàn có gì?”, trả lời bằng đồ vật: C 饺子和面条儿。 (Sủi cảo và mì).", "15": "她是谁？ hỏi “Cô ấy là ai?”, trả lời bằng người: B 我老师。 (Cô giáo tôi).", "16": "你爸爸在哪儿工作？ hỏi “Bố bạn làm việc ở đâu?”, trả lời bằng nơi chốn: A 医院。 (Bệnh viện).", "17": "我的房间里有一只小猫 – “Trong phòng tôi có một con mèo nhỏ”. Nơi chốn + 有 + người/vật → B 有.", "18": "我7:00能到 – “7 giờ tôi đến được”. 能 đứng trước động từ 到, biểu thị có khả năng → A 能.", "19": "哥哥在家里休息，没去书店 – “Anh trai nghỉ ngơi ở nhà, không đi hiệu sách” → A 在家里. C 在医院工作 là việc của bố.", "20": "我喜欢吃米饭，我女朋友不喜欢 – “Tôi thích ăn cơm, bạn gái tôi không thích” → bạn gái không thích A 米饭."}
 };
 LEVELS.hsk1.lessons[8].test=L8_TEST;
+const L6_TEST = {
+  answers: "BBCACCBDACCBDCABBAAB",
+  audio: { page: "https://hoanguchinesestation.com/tai-lieu/audio/audio-sbt-hsk-3-0-1", track: "6-3", main: "audio/6-3.mp3", parts: { 1: "", 2: "", 3: "", 4: "" } },
+  sections: [
+    { zh: "一、听力", vi: "Nghe hiểu", audio: true, parts: [
+      { no: 1, zh: "第一部分", vi: "Câu 1–3: Nghe cụm từ, chọn hình đúng. Mỗi câu nghe hai lần.", type: "pics3",
+        example: { lines: [["", "三个苹果"]], gloss: "ba quả táo", imgs: ["b6_l1_ex_A", "b6_l1_ex_B", "b6_l1_ex_C"], ans: "C" },
+        qs: [{ n: 1, imgs: ["b6_l1_q1_A", "b6_l1_q1_B", "b6_l1_q1_C"] }, { n: 2, imgs: ["b6_l1_q2_A", "b6_l1_q2_B", "b6_l1_q2_C"] }, { n: 3, imgs: ["b6_l1_q3_A", "b6_l1_q3_B", "b6_l1_q3_C"] }] },
+      { no: 2, zh: "第二部分", vi: "Câu 4–5: Nghe câu hỏi, chọn câu trả lời đúng. Mỗi câu nghe hai lần.", type: "choice",
+        example: { lines: [["", "今天天气怎么样？"]], gloss: "Hôm nay thời tiết thế nào?", opts: [["非常热", "rất nóng"], ["很好听", "rất hay"], ["在喝水", "đang uống nước"]], ans: "A" },
+        qs: [{ n: 4, opts: ["超市", "做饭", "东西"] }, { n: 5, opts: ["去", "西安饭店", "坐出租车"] }] },
+      { no: 3, zh: "第三部分", vi: "Câu 6–8: Nghe hội thoại, chọn hình phù hợp nhất. Mỗi câu nghe hai lần.", type: "poolpics",
+        pool: ["b6_l3_A", "b6_l3_B", "b6_l3_C", "b6_l3_D"],
+        example: { lines: [["女", "你好！"], ["男", "你好！很高兴认识你。"]], gloss: "Chào bạn! — Chào bạn! Rất vui được làm quen với bạn.", ans: "A" },
+        qs: [{ n: 6 }, { n: 7 }, { n: 8 }] },
+      { no: 4, zh: "第四部分", vi: "Câu 9–10: Nghe câu và câu hỏi, chọn đáp án đúng. Mỗi câu nghe hai lần.", type: "choice",
+        example: { lines: [["", "下午我去超市，我想买一些水果。"], ["问", "说话人下午去哪里？"]], gloss: "Chiều nay tôi đi siêu thị, tôi muốn mua ít trái cây. — Hỏi: Chiều nay người nói đi đâu?",
+          opts: [["超市", "siêu thị"], ["医院", "bệnh viện"], ["学校", "trường học"]], ans: "A" },
+        qs: [{ n: 9, opts: ["5362805", "5398205", "5326085"] }, { n: 10, opts: ["包子", "饺子", "面条儿"] }] }
+    ]},
+    { zh: "二、阅读", vi: "Đọc hiểu", parts: [
+      { no: 1, zh: "第一部分", vi: "Câu 11–13: Chọn hình phù hợp nhất với mỗi câu.", type: "poolpics",
+        pool: ["b6_r1_A", "b6_r1_B", "b6_r1_C", "b6_r1_D"],
+        example: { lines: [["", "我很喜欢这本书。"]], gloss: "Tôi rất thích quyển sách này.", ans: "A" },
+        qs: [{ n: 11, text: "我有一个新电脑。" }, { n: 12, text: "今天星期二。" }, { n: 13, text: "我想去超市买东西。" }] },
+      { no: 2, zh: "第二部分", vi: "Câu 14–16: Nối câu hỏi với câu trả lời phù hợp.", type: "pooltext",
+        pool: ["坐出租车。", "真好看！", "包子。", "好的，谢谢！"],
+        example: { lines: [["", "你喝水吗？"]], gloss: "Bạn uống nước không?", ans: "D" },
+        qs: [{ n: 14, text: "你吃什么？" }, { n: 15, text: "我们怎么去？" }, { n: 16, text: "这是老师的新电脑。" }] },
+      { no: 3, zh: "第三部分", vi: "Câu 17–18: Chọn từ thích hợp điền vào chỗ trống.", type: "pooltext", inline: true,
+        pool: ["有", "牛奶", "名字"],
+        example: { lines: [["", "你叫什么（ C ）？"]], gloss: "Bạn tên là gì?", ans: "C" },
+        qs: [{ n: 17, text: "我想买（　　）。" }, { n: 18, lines: [["男", "我的手机号是+86 13552721160。"], ["女", "我（　　）你的手机号，你的电话号呢？"]] }] },
+      { no: 4, zh: "第四部分", vi: "Câu 19–20: Chọn đáp án đúng.", type: "choice",
+        example: { lines: [["", "请问现在几点了？"], ["★", "说话人想知道什么？"]], gloss: "Xin hỏi bây giờ mấy giờ rồi? — Người nói muốn biết điều gì?",
+          opts: [["时间", "thời gian"], ["名字", "tên"], ["房间号", "số phòng"]], ans: "A" },
+        qs: [{ n: 19, lines: [["", "我家有三口人：爸爸、妈妈和我。"], ["★", "说话人家里有几口人？"]], opts: ["三口人", "四口人", "六口人"] },
+             { n: 20, lines: [["", "明天星期天，我休息，想去超市买牛奶。"], ["★", "说话人想买什么？"]], opts: ["菜", "牛奶", "饺子"] }] }
+    ]}
+  ],
+  pron: {
+    erhua: { zh: "儿化", vi: "Âm cuốn lưỡi “儿”",
+      desc: "Một số từ thêm đuôi “儿” để thể hiện sắc thái “nhỏ bé, đáng yêu”; đôi khi làm thay đổi nghĩa hoặc từ loại. Có từ viết thẳng “儿” và thêm “r” sau phiên âm (这儿 zhèr, 那儿 nàr, 面条儿 miàntiáor). Có từ không viết “儿” nhưng khẩu ngữ quen đọc cuốn lưỡi (茶馆 cháguǎnr, 饭馆 fànguǎnr, 名牌 míngpáir, 照片 zhàopiānr).",
+      table: [["这","zhè","Đại từ","这儿","zhèr","Đại từ"],["哪","nǎ","Đại từ","哪儿","nǎr","Đại từ"],["画","huà","Động từ","画儿","huàr","Danh từ"],["盖","gài","Động từ","盖儿","gàir","Danh từ"],["个","gè","Lượng từ","个儿","gèr","Danh từ"],["眼","yǎn","Danh từ","眼儿","yǎnr","Danh từ"]],
+      pics: [["b6_py_mian","miàntiáor","面条儿"],["b6_py_haowan","hǎowánr","好玩儿"],["b6_py_yidian","yìdiǎnr","一点儿"],["b6_py_fanguan","fànguǎnr","饭馆（儿）"],["b6_py_nar","nàr","那儿"],["b6_py_zher","zhèr","这儿"],["b6_py_wan","wánr","玩（儿）"],["b6_py_ge","gēr","歌（儿）"]] },
+    geyin: { zh: "拼写规则——隔音符号", vi: "Quy tắc viết phiên âm – dấu cách âm ( ’ )",
+      desc: "Khi âm tiết bắt đầu bằng “a, o, e” đứng liền sau một âm tiết khác, để tránh nhầm ranh giới giữa hai âm tiết, phải dùng dấu cách âm ( ’ ) ngăn cách hai âm tiết.",
+      ex: [["shí’èr","十二"],["Xī’ān","西安"],["Tiān’ān Mén","天安门"]] }
+  },
+  explain: {"1": "Đáp án B – điện thoại di động (手机). Tranh A là điện thoại bàn (电话), tranh C là ô tô.", "2": "Đáp án B – một cốc sữa (一杯牛奶). Tranh A là ba cốc sữa, tranh C là nước ép. Chú ý nghe số lượng.", "3": "Đáp án C – người đàn ông đang ăn mì (吃面条儿). Tranh A là ăn bữa sáng với bánh mì và cà phê, tranh B là hai người đang nấu ăn.", "4": "Đáp án A 超市 (siêu thị) – câu trả lời chỉ nơi chốn, phù hợp câu hỏi “đi đâu? (去哪儿)”. B 做饭 là nấu cơm, C 东西 là đồ đạc.", "5": "Đáp án C 坐出租车 (đi taxi) – trả lời câu hỏi cách thức “đi bằng gì? (怎么去)”. A 去 là đi, B 西安饭店 là tên nhà hàng.", "6": "Hội thoại phù hợp với tranh C – hai người đang xem điện thoại. Nghe lại và chú ý từ 手机 / 号.", "7": "Hội thoại phù hợp với tranh B – nhà hàng (饭店). Nghe lại và chú ý nơi người nói muốn đến.", "8": "Hội thoại phù hợp với tranh D – cô giáo đứng trước bảng (老师).", "9": "Đáp án A 5362805. Nghe kỹ từng chữ số: số điện thoại đọc từng số một, số 1 thường đọc là “yāo”.", "10": "Đáp án C 面条儿 (mì). Chú ý phân biệt 包子 (bánh bao) – 饺子 (sủi cảo) – 面条儿 (mì, có âm 儿化).", "11": "我有一个新电脑 – “Tôi có một chiếc máy tính mới”, nên chọn tranh C – máy tính xách tay.", "12": "今天星期二 – “Hôm nay thứ Ba”, nên chọn tranh B – tờ giấy ghi 星期二.", "13": "我想去超市买东西 – “Tôi muốn đi siêu thị mua đồ”, nên chọn tranh D – siêu thị.", "14": "你吃什么？ hỏi “Bạn ăn gì?”, trả lời bằng món ăn: C 包子。 (Bánh bao).", "15": "我们怎么去？ hỏi cách thức “Chúng ta đi bằng gì?”, trả lời A 坐出租车。 (Đi taxi).", "16": "这是老师的新电脑 – “Đây là máy tính mới của cô giáo”, đáp lại bằng lời khen: B 真好看！ (Đẹp thật!).", "17": "我想买牛奶 – “Tôi muốn mua sữa”. Sau 买 cần đồ vật → B 牛奶.", "18": "我有你的手机号 – “Tôi có số di động của bạn rồi, còn số điện thoại bàn của bạn?” → A 有.", "19": "我家有三口人：爸爸、妈妈和我 – nhà có bố, mẹ và tôi → A 三口人.", "20": "想去超市买牛奶 – “muốn đi siêu thị mua sữa” → B 牛奶."}
+};
+LEVELS.hsk1.lessons[6].test=L6_TEST;
+const L7_TEST = {
+  answers: "CACBCCDBACDCBCABBABA",
+  audio: { page: "https://hoanguchinesestation.com/tai-lieu/audio/audio-sbt-hsk-3-0-1", track: "7-2", main: "audio/7-2.mp3", parts: { 1: "", 2: "", 3: "", 4: "" } },
+  sections: [
+    { zh: "一、听力", vi: "Nghe hiểu", audio: true, parts: [
+      { no: 1, zh: "第一部分", vi: "Câu 1–3: Nghe cụm từ, chọn hình đúng. Mỗi câu nghe hai lần.", type: "pics3",
+        example: { lines: [["", "三个苹果"]], gloss: "ba quả táo", imgs: ["b7_l1_ex_A", "b7_l1_ex_B", "b7_l1_ex_C"], ans: "C" },
+        qs: [{ n: 1, imgs: ["b7_l1_q1_A", "b7_l1_q1_B", "b7_l1_q1_C"] }, { n: 2, imgs: ["b7_l1_q2_A", "b7_l1_q2_B", "b7_l1_q2_C"] }, { n: 3, imgs: ["b7_l1_q3_A", "b7_l1_q3_B", "b7_l1_q3_C"] }] },
+      { no: 2, zh: "第二部分", vi: "Câu 4–5: Nghe câu hỏi, chọn câu trả lời đúng. Mỗi câu nghe hai lần.", type: "choice",
+        example: { lines: [["", "今天天气怎么样？"]], gloss: "Hôm nay thời tiết thế nào?", opts: [["非常热", "rất nóng"], ["很好听", "rất hay"], ["在喝水", "đang uống nước"]], ans: "A" },
+        qs: [{ n: 4, opts: ["10:00", "12:00", "12号"] }, { n: 5, opts: ["8月", "三分钟", "7:10"] }] },
+      { no: 3, zh: "第三部分", vi: "Câu 6–8: Nghe hội thoại, chọn hình phù hợp nhất. Mỗi câu nghe hai lần.", type: "poolpics",
+        pool: ["b7_l3_A", "b7_l3_B", "b7_l3_C", "b7_l3_D"],
+        example: { lines: [["女", "你好！"], ["男", "你好！很高兴认识你。"]], gloss: "Chào bạn! — Chào bạn! Rất vui được làm quen với bạn.", ans: "A" },
+        qs: [{ n: 6 }, { n: 7 }, { n: 8 }] },
+      { no: 4, zh: "第四部分", vi: "Câu 9–10: Nghe câu và câu hỏi, chọn đáp án đúng. Mỗi câu nghe hai lần.", type: "choice",
+        example: { lines: [["", "下午我去超市，我想买一些水果。"], ["问", "说话人下午去哪里？"]], gloss: "Chiều nay tôi đi siêu thị, tôi muốn mua ít trái cây. — Hỏi: Chiều nay người nói đi đâu?",
+          opts: [["超市", "siêu thị"], ["医院", "bệnh viện"], ["学校", "trường học"]], ans: "A" },
+        qs: [{ n: 9, opts: ["上课", "上班", "看电影"] }, { n: 10, opts: ["饭店", "菜店", "超市"] }] }
+    ]},
+    { zh: "二、阅读", vi: "Đọc hiểu", parts: [
+      { no: 1, zh: "第一部分", vi: "Câu 11–13: Chọn hình phù hợp nhất với mỗi câu.", type: "poolpics",
+        pool: ["b7_r1_A", "b7_r1_B", "b7_r1_C", "b7_r1_D"],
+        example: { lines: [["", "我很喜欢这本书。"]], gloss: "Tôi rất thích quyển sách này.", ans: "A" },
+        qs: [{ n: 11, text: "我在上课呢。" }, { n: 12, text: "我下午有事，晚上7:00见吧。" }, { n: 13, text: "今天不上班，我去超市买东西。" }] },
+      { no: 2, zh: "第二部分", vi: "Câu 14–16: Nối câu hỏi với câu trả lời phù hợp.", type: "pooltext",
+        pool: ["早上七点半。", "对不起，我有课。", "电影院。", "好的，谢谢！"],
+        example: { lines: [["", "你喝水吗？"]], gloss: "Bạn uống nước không?", ans: "D" },
+        qs: [{ n: 14, text: "我们在哪儿见？" }, { n: 15, text: "现在几点？" }, { n: 16, text: "我们下午去超市吧。" }] },
+      { no: 3, zh: "第三部分", vi: "Câu 17–18: Chọn từ thích hợp điền vào chỗ trống.", type: "pooltext", inline: true,
+        pool: ["医院", "中午", "名字"],
+        example: { lines: [["", "你叫什么（ C ）？"]], gloss: "Bạn tên là gì?", ans: "C" },
+        qs: [{ n: 17, text: "我们（　　）12:00下课。" }, { n: 18, lines: [["男", "你现在在哪儿？"], ["女", "我在（　　）呢。"]] }] },
+      { no: 4, zh: "第四部分", vi: "Câu 19–20: Chọn đáp án đúng.", type: "choice",
+        example: { lines: [["", "请问现在几点了？"], ["★", "说话人想知道什么？"]], gloss: "Xin hỏi bây giờ mấy giờ rồi? — Người nói muốn biết điều gì?",
+          opts: [["时间", "thời gian"], ["名字", "tên"], ["房间号", "số phòng"]], ans: "A" },
+        qs: [{ n: 19, lines: [["", "我今天早上八点半上课，十点十分下课。"], ["★", "说话人今天几点下课？"]], opts: ["8:30", "10:10", "10:20"] },
+             { n: 20, lines: [["", "妈妈今天休息，下午想去菜店买些菜。"], ["★", "妈妈下午想去菜店买："]], opts: ["菜", "饺子", "牛奶"] }] }
+    ]}
+  ],
+  explain: {"1": "Đáp án C – đồng hồ chỉ đúng 8 giờ (八点). Tranh A khoảng 4 giờ 50, tranh B khoảng 7 giờ 40. Chú ý nghe số giờ và số phút.", "2": "Đáp án A – thầy giáo đứng lớp, học sinh giơ tay: đang lên lớp (上课). Tranh B là đá bóng, tranh C là người đàn ông ngồi đọc sách ở nhà.", "3": "Đáp án C – người phụ nữ đang chọn rau quả: mua rau, mua thức ăn (买菜). Tranh A là người hát, tranh B là cậu bé ngồi viết bài.", "4": "Đáp án B 12:00 – câu trả lời chỉ giờ, phù hợp với câu hỏi “mấy giờ?”. Chú ý C 12号 là ngày 12 (hoặc số 12), không phải giờ.", "5": "Đáp án C 7:10 (bảy giờ mười phút) – nhớ 十分 không được lược 分. A 8月 là tháng 8, B 三分钟 là ba phút (khoảng thời gian, không phải thời điểm).", "6": "Hội thoại nói về món ăn – bánh bao (包子), nên chọn tranh C.", "7": "Hội thoại nói về việc đi taxi (出租车), nên chọn tranh D – chiếc taxi trên đường.", "8": "Hội thoại nói về giờ giấc (几点 / 点 / 分), nên chọn tranh B – chiếc đồng hồ báo thức bên quyển sách.", "9": "Đáp án A 上课 (lên lớp). Chú ý phân biệt 上课 (vào học) – 上班 (đi làm) – 看电影 (xem phim).", "10": "Đáp án C 超市 (siêu thị). Chú ý phân biệt 饭店 (nhà hàng) – 菜店 (cửa hàng rau) – 超市 (siêu thị).", "11": "我在上课呢 – “Tôi đang lên lớp đấy”, nên chọn tranh D – cô giáo đang giảng bài trong lớp học.", "12": "我下午有事，晚上7:00见吧 – “Chiều nay tôi có việc, 7 giờ tối gặp nhé”, nên chọn tranh C – đồng hồ chỉ 7 giờ.", "13": "今天不上班，我去超市买东西 – “Hôm nay không đi làm, tôi đi siêu thị mua đồ”, nên chọn tranh B – cô gái đang chọn hàng trong cửa hàng.", "14": "我们在哪儿见？ hỏi “Chúng ta gặp ở đâu?”, trả lời bằng nơi chốn: C 电影院。 (Rạp chiếu phim).", "15": "现在几点？ hỏi “Bây giờ mấy giờ?”, trả lời bằng giờ: A 早上七点半。 (Bảy giờ rưỡi sáng).", "16": "我们下午去超市吧 là lời rủ “Chiều nay chúng ta đi siêu thị nhé”, đáp lại từ chối: B 对不起，我有课。 (Xin lỗi, tôi có tiết học).", "17": "我们中午12:00下课 – “Chúng tôi tan học lúc 12 giờ trưa”. Từ chỉ buổi đứng trước giờ → B 中午.", "18": "你现在在哪儿？ hỏi “Bây giờ bạn ở đâu?”, trả lời 我在医院呢 – “Tôi đang ở bệnh viện” → A 医院 (nơi chốn).", "19": "我十点十分下课 – “Tôi tan học lúc 10 giờ 10” → B 10:10. Chú ý A 8:30 là giờ vào học.", "20": "妈妈下午想去菜店买些菜 – “Chiều mẹ muốn đến cửa hàng mua ít rau” → A 菜."}
+};
+LEVELS.hsk1.lessons[7].test=L7_TEST;
 const L9_TEST = {
   answers: "BCABCDCBAB" + "DCBCABBAAB",
   audio: { page: "https://hoanguchinesestation.com/tai-lieu/audio/audio-sbt-hsk-3-0-1", track: "9-2", main: "audio/9-2.mp3", parts: { 1: "", 2: "", 3: "", 4: "" } },
