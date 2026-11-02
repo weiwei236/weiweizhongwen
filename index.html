@@ -832,7 +832,7 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
       <label class="voice" for="voiceSel">Giọng đọc
         <select id="voiceSel"><option>Đang tải giọng…</option></select></label>
       <label class="voice" for="rateSel">Tốc độ
-        <select id="rateSel"><option value="0.7">Chậm</option><option value="0.85">Vừa</option><option value="1">Bình thường</option></select></label>
+        <select id="rateSel"><option value="0.7">Chậm</option><option value="0.85">Vừa</option><option value="1">Bình thường</option><option value="1.25">Nhanh</option></select></label>
       <div class="levels" role="tablist" aria-label="Cấp độ" id="levels"></div>
     </div>
   </div>
@@ -1508,7 +1508,7 @@ function rankVoice(v){
 }
 /* Giọng online: phát file âm thanh từ máy chủ nên MÁY NÀO CŨNG NGHE GIỐNG NHAU (không phụ thuộc giọng cài trong máy).
    Giọng của máy (Microsoft/Google/Apple…) vẫn chọn được ở nhóm thứ hai; nếu giọng online lỗi sẽ tự chuyển sang giọng máy. */
-const ONLINE_VOICES=[{id:"g:zh-CN",tl:"zh-CN",label:"Phổ thông (chuẩn, mọi máy)"},{id:"g:zh-TW",tl:"zh-TW",label:"Đài Loan (chuẩn, mọi máy)"}];
+const ONLINE_VOICES=[{id:"g:zh-CN",tl:"zh-CN",label:"Phổ thông"},{id:"g:zh-TW",tl:"zh-TW",label:"Đài Loan"}];
 let VOICE_ID=store.get("ww_voice2","g:zh-CN"), ONLINE_FAIL=false;
 const onlineVoice=()=>ONLINE_FAIL?null:ONLINE_VOICES.find(v=>v.id===VOICE_ID)||null;
 function pickVoice(){
@@ -1550,7 +1550,7 @@ function speakOnline(text,v){
     a.onended=()=>setTimeout(next,i<chunks.length?180:0);
     a.onerror=()=>{ if(tok!==TTS_TOKEN)return; if(i===1){ONLINE_FAIL=true; speakDevice(chunks.slice(0).join(""));} };
     a.src=`https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${v.tl}&total=1&idx=0&textlen=${q.length}&q=${encodeURIComponent(q)}`;
-    try{a.playbackRate=RATE<1?Math.max(.6,RATE+.05):1; a.preservesPitch=true;}catch(e){}
+    try{a.playbackRate=RATE<1?Math.max(.6,RATE+.05):RATE; a.preservesPitch=true;}catch(e){}
     const pr=a.play(); if(pr&&pr.catch)pr.catch(err=>{ if(tok===TTS_TOKEN&&i===1&&err&&err.name!=="AbortError"&&err.name!=="NotAllowedError"){ONLINE_FAIL=true;speakDevice(chunks.join(""));} });
   };
   next();
