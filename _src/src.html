@@ -5,7 +5,6 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600&family=LXGW+WenKai+TC:wght@400;700&family=Noto+Serif+SC:wght@400;700&display=swap">
 <!-- Font Khải thư giản thể (LXGW WenKai) cho máy không có KaiTi (Mac, điện thoại) – tránh chữ kiểu Đài Loan -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" onerror="this.onerror=null;this.href='https://unpkg.com/lxgw-wenkai-webfont@1.7.0/style.css'">
-<meta name="referrer" content="no-referrer">
 <script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.26.0/dist/index.js"></script>
 <style>
 /* Layout: logo band on top → lesson rail → one working panel (flashcard / dịch / phát âm). Bamboo-leaf greens, paper-light ground. */
@@ -1536,7 +1535,17 @@ function ttsChunks(text){
   parts.forEach(p=>{ while(p.length>120){out.push(p.slice(0,120));p=p.slice(120);} if(out.length&&(out[out.length-1]+p).length<=120&&!/[。？！.?!]$/.test(out[out.length-1]))out[out.length-1]+=p; else out.push(p); });
   return out;
 }
-const TTS_AUDIO=typeof Audio!=="undefined"?new Audio():null; let TTS_TOKEN=0;
+/* Phát giọng online trong một khung ẩn có chính sách "không gửi referrer" riêng,
+   để không ảnh hưởng tới file nghe / hình ảnh Google Drive của trang (Drive cần referrer). */
+let TTS_TOKEN=0, TTS_MAIN=null;
+const TTS_AUDIO=(()=>{ try{
+  const f=document.createElement("iframe"); f.hidden=true; f.setAttribute("aria-hidden","true"); f.tabIndex=-1;
+  f.srcdoc='<!doctype html><meta name="referrer" content="no-referrer">'; document.documentElement.appendChild(f);
+  let a=null; const get=()=>{ const W=f.contentWindow, D=f.contentDocument;
+    if(TTS_MAIN) return TTS_MAIN;
+    if(!a || a.ownerDocument!==D){ a=W&&W.Audio&&D&&D.querySelector("meta")?new W.Audio():(TTS_MAIN=new Audio()); } return a; };
+  return new Proxy({}, { get:(t,k)=>{ const o=get(), v=o[k]; return typeof v==="function"?v.bind(o):v; }, set:(t,k,v)=>{ get()[k]=v; return true; } });
+}catch(e){ return typeof Audio!=="undefined"?new Audio():null; } })();
 function stopSpeak(){ TTS_TOKEN++; if(TTS_AUDIO){try{TTS_AUDIO.pause();}catch(e){}} if("speechSynthesis" in window) try{speechSynthesis.cancel();}catch(e){} }
 function speakOnline(text,v){
   const chunks=ttsChunks(text), tok=++TTS_TOKEN, a=TTS_AUDIO; let i=0;
@@ -1548,7 +1557,9 @@ function speakOnline(text,v){
     a.onerror=()=>{ if(tok!==TTS_TOKEN)return; if(i===1){ONLINE_FAIL=true; speakDevice(chunks.slice(0).join(""));} };
     a.src=`https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${v.tl}&total=1&idx=0&textlen=${q.length}&q=${encodeURIComponent(q)}`;
     try{a.playbackRate=RATE<1?Math.max(.6,RATE+.05):RATE; a.preservesPitch=true;}catch(e){}
-    const pr=a.play(); if(pr&&pr.catch)pr.catch(err=>{ if(tok===TTS_TOKEN&&i===1&&err&&err.name!=="AbortError"&&err.name!=="NotAllowedError"){ONLINE_FAIL=true;speakDevice(chunks.join(""));} });
+    const pr=a.play(); if(pr&&pr.catch)pr.catch(err=>{ if(tok!==TTS_TOKEN||!err||err.name==="AbortError")return;
+      if(err.name==="NotAllowedError"&&!TTS_MAIN){ TTS_MAIN=new Audio(); i--; next(); return; } /* trình duyệt chặn phát trong khung ẩn → phát trực tiếp */
+      if(i===1){ONLINE_FAIL=true;speakDevice(chunks.join(""));} });
   };
   next();
 }
