@@ -3,6 +3,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600&family=LXGW+WenKai+TC:wght@400;700&family=Noto+Serif+SC:wght@400;700&display=swap">
+<!-- Font Khải thư giản thể (LXGW WenKai) cho máy không có KaiTi (Mac, điện thoại) – tránh chữ kiểu Đài Loan -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" onerror="this.onerror=null;this.href='https://unpkg.com/lxgw-wenkai-webfont@1.7.0/style.css'">
+<meta name="referrer" content="no-referrer">
 <script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.26.0/dist/index.js"></script>
 <style>
 /* Layout: logo band on top → lesson rail → one working panel (flashcard / dịch / phát âm). Bamboo-leaf greens, paper-light ground. */
@@ -12,7 +15,7 @@
   --good:#2C9A58; --bad:#C2513A; --warn:#B98A1F; --shadow:0 1px 2px rgba(23,51,42,.06),0 8px 24px rgba(23,51,42,.07);
   --f-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
   --f-py:"Noto Sans","Segoe UI","Helvetica Neue",Arial,sans-serif;
-  --f-han:"Kaiti SC","STKaiti","KaiTi","楷体","BiauKai","LXGW WenKai TC","Songti SC",serif;
+  --f-han:"KaiTi","楷体","STKaiti","Kaiti SC","LXGW WenKai","LXGW WenKai TC","Noto Serif SC",serif;
 }
 /* Luôn dùng nền sáng trắng / xanh nhạt, kể cả khi máy đặt chế độ tối */
 :root,:root[data-theme="dark"]{color-scheme:light}
@@ -36,7 +39,7 @@ header.top{background:var(--surface);border-bottom:1px solid var(--line)}
 .brand b.han{font-size:24px;font-weight:700;letter-spacing:.06em;color:var(--accent)}
 .top-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .voice{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)}
-.voice select{font:inherit;font-size:13px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 8px;max-width:210px}
+.voice select{font:inherit;font-size:13px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 8px;max-width:230px}
 .type-in{width:100%;font-family:var(--f-han);font-size:28px;padding:12px 14px;border:2px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink)}
 .type-in:focus{outline:none;border-color:var(--accent)}
 .diff .g{color:var(--good)} .diff .r{color:var(--bad);text-decoration:underline wavy}
@@ -1500,29 +1503,62 @@ function rankVoice(v){
   if(v.localService===false)s+=5;
   return s;
 }
+/* Giọng online: phát file âm thanh từ máy chủ nên MÁY NÀO CŨNG NGHE GIỐNG NHAU (không phụ thuộc giọng cài trong máy).
+   Giọng của máy (Microsoft/Google/Apple…) vẫn chọn được ở nhóm thứ hai; nếu giọng online lỗi sẽ tự chuyển sang giọng máy. */
+const ONLINE_VOICES=[{id:"g:zh-CN",tl:"zh-CN",label:"Phổ thông (chuẩn, mọi máy)"},{id:"g:zh-TW",tl:"zh-TW",label:"Đài Loan (chuẩn, mọi máy)"}];
+let VOICE_ID=store.get("ww_voice2","g:zh-CN"), ONLINE_FAIL=false;
+const onlineVoice=()=>ONLINE_FAIL?null:ONLINE_VOICES.find(v=>v.id===VOICE_ID)||null;
 function pickVoice(){
-  if(!("speechSynthesis" in window))return fillVoiceSel();
-  const vs=speechSynthesis.getVoices();
+  const vs="speechSynthesis" in window?speechSynthesis.getVoices():[];
   ZH_VOICES=vs.filter(v=>/^zh|cmn/i.test(v.lang)).sort((a,b)=>rankVoice(b)-rankVoice(a));
-  const saved=store.get("ww_voice",null);
-  zhVoice=ZH_VOICES.find(v=>v.name===saved)||ZH_VOICES[0]||null;
+  zhVoice=ZH_VOICES.find(v=>"d:"+v.name===VOICE_ID)||ZH_VOICES[0]||null;
+  if(VOICE_ID.startsWith("d:")&&!ZH_VOICES.some(v=>"d:"+v.name===VOICE_ID)&&ZH_VOICES.length) VOICE_ID="g:zh-CN";
   fillVoiceSel();
 }
 function fillVoiceSel(){
   const sel=$("#voiceSel"); if(!sel)return;
-  if(!ZH_VOICES.length){sel.innerHTML='<option>Máy chưa có giọng tiếng Trung</option>';sel.disabled=true;return;}
   sel.disabled=false;
-  sel.innerHTML=ZH_VOICES.map(v=>`<option value="${esc(v.name)}" ${zhVoice&&v.name===zhVoice.name?"selected":""}>${esc(v.name.replace(/Microsoft |\(.*?\)|- Chinese.*$/g,"").trim()||v.name)}${rankVoice(v)>=80?" ★":""}</option>`).join("");
+  const opt=(id,label)=>`<option value="${esc(id)}" ${id===VOICE_ID?"selected":""}>${esc(label)}</option>`;
+  sel.innerHTML=`<optgroup label="Giọng chuẩn – giống nhau trên mọi máy">${ONLINE_VOICES.map(v=>opt(v.id,v.label)).join("")}</optgroup>`+
+    (ZH_VOICES.length?`<optgroup label="Giọng có sẵn trên máy này">${ZH_VOICES.map(v=>opt("d:"+v.name,(v.name.replace(/Microsoft |\(.*?\)|- Chinese.*$/g,"").trim()||v.name)+(/TW|Taiwan|臺灣|台灣/i.test(v.lang+" "+v.name)?" – Đài Loan":/HK|yue|Cantonese|粤|粵/i.test(v.lang+" "+v.name)?" – Quảng Đông":""))).join("")}</optgroup>`:"");
 }
 function initVoiceUI(){
   const sel=$("#voiceSel"), rs=$("#rateSel");
   rs.value=String(RATE); if(!rs.value){rs.value="0.85";RATE=.85;}
   rs.onchange=()=>{RATE=+rs.value;store.set("ww_rate",RATE);speak("这件衣服怎么样？");};
-  sel.onchange=()=>{zhVoice=ZH_VOICES.find(v=>v.name===sel.value)||zhVoice;store.set("ww_voice",sel.value);speak("你好，欢迎来到薇薇中文。");};
-  if("speechSynthesis" in window){pickVoice(); speechSynthesis.onvoiceschanged=pickVoice; setTimeout(pickVoice,800);} else fillVoiceSel();
+  sel.onchange=()=>{VOICE_ID=sel.value;ONLINE_FAIL=false;store.set("ww_voice2",VOICE_ID);zhVoice=ZH_VOICES.find(v=>"d:"+v.name===VOICE_ID)||zhVoice;speak("你好，欢迎来到薇薇中文。");};
+  fillVoiceSel();
+  if("speechSynthesis" in window){pickVoice(); speechSynthesis.onvoiceschanged=pickVoice; setTimeout(pickVoice,800);}
+}
+/* Chia câu dài thành các đoạn ≤ 120 ký tự (giới hạn của máy chủ đọc) theo dấu câu */
+function ttsChunks(text){
+  const parts=String(text).replace(/\s+/g," ").trim().split(/(?<=[，。？！、；：,.?!;:])/).map(x=>x.trim()).filter(Boolean), out=[];
+  parts.forEach(p=>{ while(p.length>120){out.push(p.slice(0,120));p=p.slice(120);} if(out.length&&(out[out.length-1]+p).length<=120&&!/[。？！.?!]$/.test(out[out.length-1]))out[out.length-1]+=p; else out.push(p); });
+  return out;
+}
+const TTS_AUDIO=typeof Audio!=="undefined"?new Audio():null; let TTS_TOKEN=0;
+function stopSpeak(){ TTS_TOKEN++; if(TTS_AUDIO){try{TTS_AUDIO.pause();}catch(e){}} if("speechSynthesis" in window) try{speechSynthesis.cancel();}catch(e){} }
+function speakOnline(text,v){
+  const chunks=ttsChunks(text), tok=++TTS_TOKEN, a=TTS_AUDIO; let i=0;
+  if(!chunks.length)return;
+  const next=()=>{
+    if(tok!==TTS_TOKEN||i>=chunks.length)return;
+    const q=chunks[i++];
+    a.onended=()=>setTimeout(next,i<chunks.length?180:0);
+    a.onerror=()=>{ if(tok!==TTS_TOKEN)return; if(i===1){ONLINE_FAIL=true; speakDevice(chunks.slice(0).join(""));} };
+    a.src=`https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${v.tl}&total=1&idx=0&textlen=${q.length}&q=${encodeURIComponent(q)}`;
+    try{a.playbackRate=RATE<1?Math.max(.6,RATE+.05):1; a.preservesPitch=true;}catch(e){}
+    const pr=a.play(); if(pr&&pr.catch)pr.catch(err=>{ if(tok===TTS_TOKEN&&i===1&&err&&err.name!=="AbortError"&&err.name!=="NotAllowedError"){ONLINE_FAIL=true;speakDevice(chunks.join(""));} });
+  };
+  next();
 }
 /* Đọc từng cụm theo dấu câu để ngắt nghỉ rõ ràng; từ đơn đọc chậm hơn một chút */
 function speak(text){
+  stopSpeak();
+  const ov=onlineVoice(); if(ov&&TTS_AUDIO){ speakOnline(text,ov); return; }
+  speakDevice(text);
+}
+function speakDevice(text){
   if(!("speechSynthesis" in window))return;
   try{
     speechSynthesis.cancel();
@@ -2074,7 +2110,7 @@ const Speak = {
     let mic;
     try{ mic=await getMic(); }
     catch(e){ status.innerHTML=`<span class="no-t">Không mở được micro.</span> Hãy cho phép trình duyệt dùng micro (biểu tượng ổ khoá cạnh thanh địa chỉ) rồi thử lại.`; return; }
-    if("speechSynthesis" in window) speechSynthesis.cancel();
+    stopSpeak();
     const stream=mic.stream, an=mic.an;
     const chunks=[], mr=new MediaRecorder(stream); mr.ondataavailable=e=>e.data.size&&chunks.push(e.data);
     const buf=new Float32Array(an.fftSize), frames=[], pcm=[], sr=mic.ac.sampleRate, t0=performance.now(), bars=[...document.querySelectorAll("#viz i")];
