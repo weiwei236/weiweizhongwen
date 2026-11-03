@@ -835,6 +835,31 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .sh-x{margin-left:auto;border:0;background:none;font-size:22px;color:var(--muted);cursor:pointer}
 .sh-go{width:100%;justify-content:center}
 .sh-ok{color:var(--good);font-weight:700}.sh-ok .han{font-size:20px}.sh-bad{color:var(--bad);font-weight:600}.sh-bad b{color:var(--ink)}
+.gm-card.race{background:linear-gradient(140deg,#1F4FA8,#21836A)}.gm-art.race{font-size:56px}
+.rc-wrap{position:relative;display:grid;gap:10px}
+.rc-q{text-align:center;display:grid;gap:4px;min-height:120px;align-content:center}.rc-q small{color:var(--muted);font-weight:600}
+.rc-qq.han{font-size:34px;line-height:1.3}.rc-qq.vi{font-size:26px;font-weight:700}.rc-hint{color:var(--muted);font-size:14px}
+.rc-opts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:4px}
+.rc-opts>span{background:var(--surface-2);border-radius:10px;padding:5px 6px;font-size:15px;display:flex;gap:6px;align-items:center;justify-content:center;min-width:0}
+.rc-opts b{color:var(--accent)}.rc-opts .han{font-size:20px}
+.rc-road{position:relative;height:440px;border-radius:18px;overflow:hidden;background:#5A5F66;touch-action:manipulation;user-select:none;--spd:.55s;
+  box-shadow:inset 14px 0 0 #3D8B37,inset -14px 0 0 #3D8B37,inset 20px 0 0 #fff,inset -20px 0 0 #fff}
+.rc-lines{position:absolute;inset:0;background:repeating-linear-gradient(180deg,rgba(255,255,255,.75) 0 40px,transparent 40px 80px) 25% 0/4px 100% no-repeat,repeating-linear-gradient(180deg,rgba(255,255,255,.75) 0 40px,transparent 40px 80px) 50% 0/4px 100% no-repeat,repeating-linear-gradient(180deg,rgba(255,255,255,.75) 0 40px,transparent 40px 80px) 75% 0/4px 100% no-repeat;animation:rcRoad var(--spd) linear infinite}
+@keyframes rcRoad{to{background-position:25% 80px,50% 80px,75% 80px}}
+.rc-lane{position:absolute;top:0;bottom:0;width:25%}.rc-lane[data-l="0"]{left:0}.rc-lane[data-l="1"]{left:25%}.rc-lane[data-l="2"]{left:50%}.rc-lane[data-l="3"]{left:75%}
+.rc-gate{position:absolute;left:0;right:0;top:0;height:70px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:0 24px;will-change:transform}
+.rc-door{background:repeating-linear-gradient(45deg,#F2C531 0 12px,#222 12px 24px);border-radius:8px;display:grid;place-items:center;align-content:center;color:#17332A;box-shadow:0 4px 0 rgba(0,0,0,.3);overflow:hidden;padding:2px}
+.rc-door b{background:#fff;border-radius:6px;padding:0 8px;font-size:18px}.rc-door span{background:#fff;border-radius:6px;padding:0 6px;margin-top:2px;font-size:13px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rc-door span.han{font-size:17px}
+.rc-door.ok{background:#2C9A58;box-shadow:0 0 0 4px #fff,0 0 18px #2C9A58}.rc-door.bad{background:#E0394A;animation:fnShake .4s}
+.rc-car{position:absolute;bottom:24px;left:calc(37.5% - 30px);width:60px;height:100px;transition:left .18s ease-out;filter:drop-shadow(0 6px 6px rgba(0,0,0,.4))}
+.rc-car svg{width:100%;height:100%}.rc-car.boost{animation:rcBoost .6s}.rc-car.crash{animation:rcCrash .7s}
+@keyframes rcBoost{50%{transform:translateY(-26px) scale(1.06)}}
+@keyframes rcCrash{20%{transform:rotate(-25deg)}40%{transform:rotate(20deg)}60%{transform:rotate(-12deg)}100%{transform:none}}
+.rc-road.shake{animation:fnShake .35s}
+.rc-flag{position:absolute;inset:0;display:grid;place-items:center;font-size:120px}
+.rc-ctl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.rc-go{justify-content:center;font-size:20px;font-weight:800}.rc-go.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.rc-road .fn-pop{position:absolute}
+@media (max-width:600px){.rc-road{height:360px}.rc-qq.han{font-size:28px}.rc-qq.vi{font-size:21px}.rc-opts{grid-template-columns:repeat(2,minmax(0,1fr))}.rc-gate{padding:0 22px;gap:4px}.rc-door span{display:none}}
 </style>
 
 </head>
@@ -3361,6 +3386,8 @@ const Games = {
       <div class="gm-cards">
         <button class="gm-card fruit" data-g="fruit"><span class="gm-art">${FN_FRUITS.map((f, i) => i < 3 ? `<i style="--i:${i}">${fnFruitSVG(f)}</i>` : "").join("")}</span>
           <b>Chém trái cây</b><small>Đọc đề, chém quả có đáp án đúng. Mỗi câu 3 giây, có 5 mạng.</small><em>Chơi ngay ▸</em></button>
+        <button class="gm-card race" data-g="race"><span class="gm-art race">🏎️🚧</span>
+          <b>Đua xe vượt chướng ngại</b><small>Mỗi chướng ngại là một câu hỏi A B C D: điền chỗ trống, chọn nghĩa, phiên âm hoặc chữ Hán. Lái vào làn đúng để vượt qua, có 3 mạng.</small><em>Xuất phát ▸</em></button>
         <button class="gm-card shop" data-g="shop"><span class="gm-art shop"><img src="${shopImg()}" alt=""></span>
           <b>Quán ăn Tiểu Ngữ</b><small>Đọc order bằng chữ Hán, chọn đúng món, số lượng, cỡ to/nhỏ, nóng/đá trước khi khách hết kiên nhẫn.</small><em>Mở quán ▸</em></button>
         <button class="gm-card cloth" data-g="cloth"><span class="gm-art shop"><img src="${STORES.cloth.img()}" alt=""></span>
@@ -3370,7 +3397,7 @@ const Games = {
     const save = () => { let x = +$("#gmA").value, y = +$("#gmB").value; if(x > y) [x, y] = [y, x]; store.set("ww_game_range_" + S.level, [x, y]); this.menu(); };
     $("#gmA").onchange = save; $("#gmB").onchange = save;
     $("#gmAll").onclick = () => { store.set("ww_game_range_" + S.level, [ids[0], ids[ids.length - 1]]); this.menu(); };
-    W.querySelectorAll("[data-g]").forEach(btn => btn.onclick = () => btn.dataset.g === "fruit" ? Fruit.start() : Shop.start(btn.dataset.g === "cloth" ? "cloth" : "food"));
+    W.querySelectorAll("[data-g]").forEach(btn => btn.onclick = () => btn.dataset.g === "fruit" ? Fruit.start() : btn.dataset.g === "race" ? Race.start() : Shop.start(btn.dataset.g === "cloth" ? "cloth" : "food"));
   },
   over(box, html, again){
     box.insertAdjacentHTML("beforeend", `<div class="gm-over"><div class="gm-over-in">${html}
@@ -3658,6 +3685,98 @@ const Shop = {
     if(this.round >= 5) Games.reward(C.key, pct, `${C.title} (${this.served}/${this.round} khách)`);
   }
 };
+
+/* ---------- 🏎️ Đua xe vượt chướng ngại vật ---------- */
+const Race = {
+  N: 15,
+  start(){
+    Games.stop(); this.pool = Games.words();
+    if(this.pool.length < 4){ toast("Phạm vi bài đã chọn có ít hơn 4 từ, hãy chọn thêm bài.", "warn"); return Games.menu(); }
+    this.over = false; this.lives = 3; this.score = 0; this.right = 0; this.k = 0; this.lane = 1; this.miss = []; this.bag = []; this.t0 = performance.now(); this.streak = 0;
+    const W = $("#work");
+    W.innerHTML = `<div class="gm"><div class="rc-wrap" id="rcWrap">
+      <div class="fn-hud"><span class="fn-lives" id="rcLives"></span><span>Chướng ngại <b id="rcK">1</b>/${this.N}</span><span class="fn-score">Điểm <b id="rcScore">0</b></span><button class="btn sm fn-quit" id="rcQuit">Thoát</button></div>
+      <div class="rc-q" id="rcQ"></div>
+      <div class="rc-road" id="rcRoad"><div class="rc-lines"></div>${[0, 1, 2, 3].map(i => `<div class="rc-lane" data-l="${i}"></div>`).join("")}
+        <div class="rc-gate" id="rcGate">${"ABCD".split("").map(L => `<div class="rc-door" data-L="${L}"><b>${L}</b></div>`).join("")}</div>
+        <div class="rc-car" id="rcCar">${raceCarSVG()}</div><div class="rc-flag" id="rcFlag" hidden>🏁</div></div>
+      <div class="rc-ctl">${"ABCD".split("").map((L, i) => `<button class="btn rc-go" data-l="${i}">${L}</button>`).join("")}</div>
+      <p class="fn-tip">Lái xe vào làn có đáp án đúng trước khi tới chướng ngại: bấm phím ← → hoặc A B C D, chạm vào làn đường, hay bấm các nút bên dưới.</p></div></div>`;
+    $("#rcQuit").onclick = () => { Games.stop(); Games.menu(); };
+    const road = this.road = $("#rcRoad");
+    road.onpointerdown = e => { const r = road.getBoundingClientRect(); this.steer(Math.min(3, Math.floor((e.clientX - r.left) / r.width * 4))); };
+    W.querySelectorAll(".rc-go").forEach(b => b.onclick = () => this.steer(+b.dataset.l));
+    Games.onKey = e => { if(/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName)) return;
+      const k = e.key.toUpperCase(); if(k === "ARROWLEFT") this.steer(this.lane - 1); else if(k === "ARROWRIGHT") this.steer(this.lane + 1); else if("ABCD".includes(k) && k.length === 1) this.steer("ABCD".indexOf(k)); else return; e.preventDefault(); };
+    document.addEventListener("keydown", Games.onKey);
+    this.drawLives(); this.steer(1); this.next(); $("#rcWrap").scrollIntoView({ behavior: "smooth", block: "start" });
+    const loop = now => { if(!Games.alive(road)) return Games.stop(); this.frame(now); Games.raf = requestAnimationFrame(loop); };
+    Games.raf = requestAnimationFrame(loop);
+  },
+  drawLives(){ $("#rcLives").innerHTML = Array.from({ length: 3 }, (_, i) => `<span class="${i < this.lives ? "on" : ""}">❤</span>`).join(""); },
+  steer(l){ if(l < 0 || l > 3 || this.over) return; this.lane = l; const c = $("#rcCar"); if(c) c.style.left = `calc(${l * 25 + 12.5}% - 30px)`;
+    document.querySelectorAll(".rc-go").forEach(b => b.classList.toggle("on", +b.dataset.l === l)); },
+  pick(){ if(!this.bag.length) this.bag = shuffle(this.pool); return this.bag.pop(); },
+  opts(w, key){ const seen = new Set([key(w)]), out = [w];
+    for(const x of shuffle(this.pool)){ if(out.length >= 4) break; const v = key(x); if(x === w || !v || seen.has(v) || x.vs === w.vs) continue; seen.add(v); out.push(x); }
+    return out; },
+  question(){
+    const w = this.pick(), r = Math.random();
+    const ex = Array.isArray(w.ex) && w.ex[0] && w.ex[0].includes(w.h) && w.ex[0].replace(w.h, "") !== "" ? w.ex : null;
+    let type = r < .3 && ex ? "fill" : r < .55 ? "vi" : r < .75 ? "zh" : "py";
+    const key = { fill: x => x.h, vi: x => x.vs, zh: x => x.h, py: x => x.p }[type];
+    let o = this.opts(w, key); if(o.length < 4){ type = "vi"; o = this.opts(w, x => x.vs); }
+    o = shuffle(o); const ans = "ABCD"[o.indexOf(w)];
+    const ask = type === "fill" ? { t: "Chọn từ điền vào chỗ trống", q: ex[0].replace(w.h, "（　　）"), hint: ex[2] || "" }
+      : type === "vi" ? { t: "Chọn nghĩa đúng của từ", q: w.h, hint: "" } : type === "zh" ? { t: "Chọn chữ Hán đúng", q: w.vs, hint: "" } : { t: "Chọn phiên âm đúng", q: w.h, hint: "" };
+    return { w, type, ans, ask, opts: o.map(x => key(x)), zhOpts: type === "fill" || type === "zh" };
+  },
+  next(){
+    if(this.k >= this.N || this.lives <= 0) return this.end();
+    const q = this.q = this.question(); this.done = false;
+    this.dur = Math.max(5200, 9000 - this.k * 260); this.ts = performance.now();
+    $("#rcK").textContent = this.k + 1;
+    $("#rcQ").innerHTML = `<small>${q.ask.t}</small><div class="rc-qq ${q.type === "zh" ? "vi" : "han"}">${esc(q.ask.q)}</div>${q.ask.hint ? `<div class="rc-hint">${esc(q.ask.hint)}</div>` : ""}
+      <div class="rc-opts">${q.opts.map((t, i) => `<span><b>${"ABCD"[i]}</b><span class="${q.zhOpts ? "han" : ""}">${esc(t)}</span></span>`).join("")}</div>`;
+    const g = $("#rcGate"); g.className = "rc-gate"; g.querySelectorAll(".rc-door").forEach((d, i) => { d.className = "rc-door"; d.innerHTML = `<b>${"ABCD"[i]}</b><span class="${q.zhOpts ? "han" : ""}">${esc(q.opts[i])}</span>`; });
+  },
+  frame(now){
+    if(this.over || !this.q) return;
+    const H = this.road.clientHeight, carY = H - 110, t = (now - this.ts) / this.dur, g = $("#rcGate");
+    this.road.style.setProperty("--spd", (0.55 - Math.min(.3, this.k * .02)) + "s");
+    if(!this.done){ g.style.transform = `translateY(${-70 + (carY - 40 + 70) * Math.min(1, t)}px)`; if(t >= 1) this.hit(); }
+  },
+  hit(){
+    this.done = true; const q = this.q, okL = "ABCD".indexOf(q.ans), doors = $("#rcGate").querySelectorAll(".rc-door");
+    doors[okL].classList.add("ok");
+    if(this.lane === okL){
+      this.right++; this.streak++; const pts = 10 + Math.min(10, (this.streak - 1) * 2); this.score += pts; $("#rcScore").textContent = this.score;
+      $("#rcCar").classList.add("boost"); Games.later(() => $("#rcCar") && $("#rcCar").classList.remove("boost"), 600);
+      this.flash("+" + pts, "ok"); speak(q.w.h); this.k++; Games.later(() => { $("#rcGate").style.transform = "translateY(-120px)"; this.next(); }, 700);
+    } else {
+      doors[this.lane].classList.add("bad"); this.streak = 0; this.lives--; this.drawLives();
+      const w = q.w; if(!this.miss.some(x => x.h === w.h)) this.miss.push(w);
+      $("#rcCar").classList.add("crash"); this.road.classList.add("shake");
+      Games.later(() => { $("#rcCar") && $("#rcCar").classList.remove("crash"); this.road.classList.remove("shake"); }, 700);
+      $("#rcQ").insertAdjacentHTML("beforeend", `<em class="fn-ans">Đâm vào chướng ngại! Đáp án đúng: <b>${q.ans}</b> · <b class="han">${esc(w.h)}</b> ${esc(w.p)} = ${esc(w.vs)}</em>`);
+      this.k++; Games.later(() => { $("#rcGate").style.transform = "translateY(-120px)"; this.next(); }, 2000);
+    }
+  },
+  flash(t, cls){ const p = document.createElement("div"); p.className = "fn-pop " + cls; p.textContent = t; p.style.left = `calc(${this.lane * 25 + 12.5}% - 20px)`; p.style.bottom = "130px"; this.road.appendChild(p); Games.later(() => p.remove(), 900); },
+  end(){
+    this.over = true; cancelAnimationFrame(Games.raf); const fin = this.lives > 0, sec = Math.round((performance.now() - this.t0) / 1000);
+    if(fin){ $("#rcFlag").hidden = false; }
+    Games.over($("#rcWrap"), `<div class="gm-over-t">${fin ? "🏁 Về đích!" : "💥 Xe hỏng rồi!"}</div>
+      <div class="gm-over-s">Vượt đúng <b>${this.right}/${this.k}</b> chướng ngại · <b>${this.score}</b> điểm · thời gian ${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, "0")}</div>
+      ${this.miss.length ? `<div class="gm-miss"><b>Từ cần ôn lại</b>${this.miss.map(w => `<span><b class="han">${esc(w.h)}</b> ${esc(w.p)} – ${esc(w.vs)}</span>`).join("")}</div>` : ""}`, () => { this.over = false; this.start(); });
+    if(this.k >= 8) Games.reward("race", this.right / this.k * 100, `Đua xe (${this.right}/${this.k} câu đúng)`);
+  }
+};
+function raceCarSVG(){
+  return `<svg viewBox="0 0 60 100" aria-hidden="true"><rect x="6" y="14" width="10" height="20" rx="3" fill="#222"/><rect x="44" y="14" width="10" height="20" rx="3" fill="#222"/><rect x="6" y="66" width="10" height="20" rx="3" fill="#222"/><rect x="44" y="66" width="10" height="20" rx="3" fill="#222"/>
+    <path d="M14 20 Q14 4 30 4 Q46 4 46 20 L48 82 Q48 96 30 96 Q12 96 12 82 Z" fill="#E0394A"/><path d="M19 30 Q30 24 41 30 L39 44 Q30 41 21 44 Z" fill="#9FD3F2"/><path d="M21 70 Q30 73 39 70 L40 80 Q30 83 20 80 Z" fill="#9FD3F2"/>
+    <rect x="27" y="4" width="6" height="92" fill="#fff" opacity=".85"/><circle cx="18" cy="9" r="2.5" fill="#FFE27A"/><circle cx="42" cy="9" r="2.5" fill="#FFE27A"/></svg>`;
+}
 
 const Exam = {
   les: null, key: "", st: null,
