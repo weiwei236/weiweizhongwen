@@ -363,6 +363,10 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .ex-pooltext.inline{grid-template-columns:repeat(3,minmax(0,1fr))}
 .ex-pooltext.long{grid-template-columns:minmax(0,1fr)}
 .ex-radpool{grid-template-columns:repeat(4,minmax(0,1fr))}.ex-radpool .zh{font-size:28px}
+.ex-drill-note{margin:0;color:var(--muted);font-size:14px}.ex-dno{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:6px;background:var(--accent);color:#fff;font-size:15px;margin-right:8px;vertical-align:2px}
+.ex-dgrid{display:grid;grid-template-columns:repeat(var(--c),minmax(0,1fr));gap:8px 14px;background:#FFF6F1;border-radius:12px;padding:12px 16px;font-family:var(--f-py);font-size:18px}
+@media (max-width:560px){.ex-dgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.ex-qimg{width:220px;max-width:100%;height:auto;border-radius:10px;display:block}
 .ex-radimg{background:#fff;border:1px dashed var(--line);border-radius:12px;padding:10px 16px;text-align:center}.ex-radimg img{max-width:100%;height:auto;width:620px}
 .ex-radq{height:96px;width:auto;display:block}
 .ex-head-r{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
@@ -3244,7 +3248,7 @@ const Exam = {
   grade(){ const tot = this.total(), r = { right: 0, wrong: [], graded: 0, pending: [] };
     for(let n = 1; n <= tot; n++){ if(!this.graded(n)){ r.pending.push(n); continue; } r.graded++; if(this.st.ans[n] === this.correct(n)) r.right++; else r.wrong.push(n); }
     return r; },
-  img(id){ return (typeof EX_IMG !== "undefined" && EX_IMG[id]) || (/^h2/.test(id) ? `img/hsk2/${id}.jpg` : ""); },
+  img(id){ return (typeof EX_IMG !== "undefined" && EX_IMG[id]) || (/^h2/.test(id) ? `img/hsk2/${id}.jpg` : /^s1/.test(id) ? `img/hsk1/${id}.jpg` : ""); },
   py: store.get("ww_exam_py", false),
   zh(t){ return this.py && /[一-鿿]/.test(t) ? rubyHTML(String(t)) : esc(t); },
   zhLines(lines){ return lines.map(([who, t]) => `<div class="ex-line">${who ? `<span class="ex-who">${esc(who)}${who === "★" ? "" : "："}</span>` : ""}<span>${this.zh(t)}</span></div>`).join(""); },
@@ -3272,7 +3276,7 @@ const Exam = {
       </div></div>`;
   },
   exampleBlock(p){
-    const e = p.example; let opts = "";
+    const e = p.example; let opts = ""; if(!e) return "";
     if(p.type === "pics3") opts = `<div class="ex-pics3">${e.imgs.map((id, k) => `<div class="ex-pic ${"ABC"[k] === e.ans ? "is-ex" : ""}"><img src="${this.img(id)}" alt="Hình ${"ABC"[k]}"><span>${"ABC"[k]}${"ABC"[k] === e.ans ? " ✓" : ""}</span></div>`).join("")}</div>`;
     else if(p.type === "choice") opts = `<div class="ex-choice">${e.opts.map(([z, v], k) => `<div class="ex-copt ${"ABC"[k] === e.ans ? "is-ex" : ""}"><b>${"ABC"[k]}</b> <span class="zh">${this.zh(z)}</span>${"ABC"[k] === e.ans ? " ✓" : ""}<small>${esc(v)}</small></div>`).join("")}</div>`;
     else if(p.type === "write") opts = "";
@@ -3282,6 +3286,15 @@ const Exam = {
   },
   letterBtns(n, letters){
     return `<div class="ex-letters" role="group" aria-label="Chọn đáp án câu ${n}">${letters.map(L => `<button type="button" class="ex-opt ex-letter ${this.optState(n, L)}" data-n="${n}" data-l="${L}" ${this.st.submitted ? "disabled" : ""}>${L}</button>`).join("")}</div>`;
+  },
+  /* 听读练: luyện nghe – đọc phát âm (không chấm điểm, làm theo audio của sách) */
+  drillBlock(T){
+    const A = T.audio || {};
+    return `<section class="ex-sec ex-drill"><h3 class="zh">听读练<small>Luyện nghe – đọc · audio ${esc(T.drillTrack || "")}</small></h3>
+      <p class="ex-drill-note">Phần này luyện phát âm theo audio của sách (track ${esc(T.drillTrack || "")}${A.page ? ` – <a href="${esc(A.page)}" target="_blank" rel="noopener">mở trang audio</a>` : ""}), không chấm điểm. Học viên nghe, viết ra vở rồi đọc to.</p>
+      ${T.drills.map((d, i) => `<div class="ex-part"><h4 class="zh"><span class="ex-dno">${i + 1}</span>${esc(d.zh)}</h4><p class="ex-instr"><i></i>${esc(d.vi)}</p>
+        <div class="ex-dgrid" style="--c:${d.cols || 4}">${d.items.map(x => `<span>${esc(x)}</span>`).join("")}</div></div>`).join("")}
+    </section>`;
   },
   pronBlock(P){
     const say = (t, inner) => `<button type="button" class="py-say" data-say="${esc(t)}">${inner}</button>`, E = P.erhua, G = P.geyin;
@@ -3299,7 +3312,7 @@ const Exam = {
   partBlock(p, sec){
     let h = `<div class="ex-part"><h4 class="zh">${p.zh}</h4><p class="ex-instr"><i></i>${esc(p.vi)}</p>`;
     if(sec.audio) h += this.audioBlock(p.no);
-    const LT = "ABCDEF";
+    const LT = p.nums ? "123456" : "ABCDEF";
     if(p.type === "poolpics") h += `<div class="ex-pool">${p.pool.map((id, k) => `<figure><span>${LT[k]}</span><img src="${this.img(id)}" alt="Hình ${LT[k]}"></figure>`).join("")}</div>`;
     if(p.type === "pooltext") h += `<div class="ex-pooltext ${p.inline ? "inline" : ""} ${p.long ? "long" : ""}">${p.pool.map((t, k) => `<div><b>${LT[k]}</b> <span class="zh">${this.zh(t)}</span></div>`).join("")}</div>`;
     if(p.type === "radical" && p.poolImg) h += `<div class="ex-radimg"><img src="${this.img(p.poolImg)}" alt="${esc(p.pool.map((t, k) => LT[k] + " " + t).join("  "))}"></div>`;
@@ -3312,7 +3325,7 @@ const Exam = {
       if(p.type === "write") body += `<div class="zh ex-q-text">${this.writeLine(q.text, n)}</div>`;
       else if(q.text) body += `<div class="zh ex-q-text">${this.zh(q.text)}</div>`;
       if(q.word) body += `<div class="zh ex-q-text">${this.radWord(q.word)}</div>`;
-      if(p.type === "radical" && q.img) body += `<div class="ex-q-text"><img class="ex-radq" src="${this.img(q.img)}" alt="Câu ${n}"></div>`;
+      if(q.img) body += `<div class="ex-q-text"><img class="${p.type === "radical" ? "ex-radq" : "ex-qimg"}" src="${this.img(q.img)}" alt="Câu ${n}"></div>`;
       if(q.lines) body += `<div class="zh ex-q-text">${this.zhLines(q.lines)}</div>`;
       let opts = "";
       if(p.type === "pics3") opts = `<div class="ex-pics3">${q.imgs.map((id, k) => { const L = "ABC"[k]; return `<button type="button" class="ex-opt ex-pic ${this.optState(n, L)}" data-n="${n}" data-l="${L}" ${this.st.submitted ? "disabled" : ""}><img src="${this.img(id)}" alt="Câu ${n} hình ${L}"><span>${L}</span></button>`; }).join("")}</div>`;
@@ -3332,6 +3345,7 @@ const Exam = {
         <div class="ex-head-r">${T.pinyin ? `<button class="btn sm" id="exPy" aria-pressed="${this.py}">${this.py ? "Ẩn" : "Hiện"} phiên âm</button>` : ""}<div class="ex-progress"><b>${done}/${tot}</b> câu đã làm</div></div></div>
       <div id="exResult"></div>`;
     if(T.pron) h += this.pronBlock(T.pron);
+    if(T.drills) h += this.drillBlock(T);
     T.sections.forEach(sec => {
       h += `<section class="ex-sec"><h3 class="zh">${sec.zh}<small>${sec.vi}</small></h3>`;
       sec.parts.forEach(p => h += this.partBlock(p, sec));
@@ -3384,7 +3398,7 @@ const Exam = {
       <p class="ex-msg">${msg}</p>
       ${g.pending.length ? `<p class="ex-pend">Câu ${g.pending.join(", ")} chưa có đáp án nên chưa được chấm. Điểm trên tính trên ${tot} câu đã có đáp án.</p>` : ""}
       ${wrong.length ? `<div class="ex-wrong"><h4>Các câu sai</h4><ol>${wrong.map(n => { const a = this.st.ans[n];
-        return `<li><a href="#exq${n}" data-go="${n}"><b>Câu ${n}</b></a> <small>${partOf(n)}</small><br>${a ? `Bạn ${/^[A-F]$/.test(a) ? "chọn" : "viết"} <b class="no-t">${esc(a)}</b>` : `<b class="no-t">Bạn chưa làm</b>`}, đáp án đúng là <b class="ok-t">${this.correct(n)}</b>.<div class="ex-why">${esc(T.explain[n] || "")}</div></li>`; }).join("")}</ol></div>` : ""}
+        return `<li><a href="#exq${n}" data-go="${n}"><b>Câu ${n}</b></a> <small>${partOf(n)}</small><br>${a ? `Bạn ${/^[A-F1-6]$/.test(a) ? "chọn" : "viết"} <b class="no-t">${esc(a)}</b>` : `<b class="no-t">Bạn chưa làm</b>`}, đáp án đúng là <b class="ok-t">${this.correct(n)}</b>.<div class="ex-why">${esc(T.explain[n] || "")}</div></li>`; }).join("")}</ol></div>` : ""}
     </div>`;
     $("#exResult").querySelectorAll("[data-go]").forEach(a => a.onclick = e => { e.preventDefault(); const q = $("#exq" + a.dataset.go); if(q){ q.scrollIntoView({ behavior: "smooth", block: "center" }); q.classList.add("flash"); setTimeout(() => q.classList.remove("flash"), 1400); } });
     if(scroll) $("#exResult").scrollIntoView({ behavior: "smooth", block: "start" });
@@ -3488,6 +3502,100 @@ const L6_TEST = {
   explain: {"1": "Đáp án B – điện thoại di động (手机). Tranh A là điện thoại bàn (电话), tranh C là ô tô.", "2": "Đáp án B – một cốc sữa (一杯牛奶). Tranh A là ba cốc sữa, tranh C là nước ép. Chú ý nghe số lượng.", "3": "Đáp án C – người đàn ông đang ăn mì (吃面条儿). Tranh A là ăn bữa sáng với bánh mì và cà phê, tranh B là hai người đang nấu ăn.", "4": "Đáp án A 超市 (siêu thị) – câu trả lời chỉ nơi chốn, phù hợp câu hỏi “đi đâu? (去哪儿)”. B 做饭 là nấu cơm, C 东西 là đồ đạc.", "5": "Đáp án C 坐出租车 (đi taxi) – trả lời câu hỏi cách thức “đi bằng gì? (怎么去)”. A 去 là đi, B 西安饭店 là tên nhà hàng.", "6": "Hội thoại phù hợp với tranh C – hai người đang xem điện thoại. Nghe lại và chú ý từ 手机 / 号.", "7": "Hội thoại phù hợp với tranh B – nhà hàng (饭店). Nghe lại và chú ý nơi người nói muốn đến.", "8": "Hội thoại phù hợp với tranh D – cô giáo đứng trước bảng (老师).", "9": "Đáp án A 5362805. Nghe kỹ từng chữ số: số điện thoại đọc từng số một, số 1 thường đọc là “yāo”.", "10": "Đáp án C 面条儿 (mì). Chú ý phân biệt 包子 (bánh bao) – 饺子 (sủi cảo) – 面条儿 (mì, có âm 儿化).", "11": "我有一个新电脑 – “Tôi có một chiếc máy tính mới”, nên chọn tranh C – máy tính xách tay.", "12": "今天星期二 – “Hôm nay thứ Ba”, nên chọn tranh B – tờ giấy ghi 星期二.", "13": "我想去超市买东西 – “Tôi muốn đi siêu thị mua đồ”, nên chọn tranh D – siêu thị.", "14": "你吃什么？ hỏi “Bạn ăn gì?”, trả lời bằng món ăn: C 包子。 (Bánh bao).", "15": "我们怎么去？ hỏi cách thức “Chúng ta đi bằng gì?”, trả lời A 坐出租车。 (Đi taxi).", "16": "这是老师的新电脑 – “Đây là máy tính mới của cô giáo”, đáp lại bằng lời khen: B 真好看！ (Đẹp thật!).", "17": "我想买牛奶 – “Tôi muốn mua sữa”. Sau 买 cần đồ vật → B 牛奶.", "18": "我有你的手机号 – “Tôi có số di động của bạn rồi, còn số điện thoại bàn của bạn?” → A 有.", "19": "我家有三口人：爸爸、妈妈和我 – nhà có bố, mẹ và tôi → A 三口人.", "20": "想去超市买牛奶 – “muốn đi siêu thị mua sữa” → B 牛奶."}
 };
 LEVELS.hsk1.lessons[6].test=L6_TEST;
+const L1_TEST = {"answers": "???", "audio": {"page": "https://hoanguchinesestation.com/tai-lieu/audio/audio-sbt-hsk-3-0-1", "track": "1-2", "main": "", "parts": {}}, "drillTrack": "1-2", "drills": [{"zh": "听录音，朗读音节。", "vi": "Nghe và đọc to các âm tiết.", "items": ["mō", "mó", "mǒ", "mò", "fū", "fú", "fǔ", "fù", "dī", "dí", "dǐ", "dì", "tāo", "táo", "tǎo", "tào", "lōu", "lóu", "lǒu", "lòu", "hān", "hán", "hǎn", "hàn", "pāng", "páng", "pǎng", "pàng", "gēn", "gén", "gěn", "gèn"], "cols": 4}, {"zh": "听录音，写出听到的声母并大声朗读。", "vi": "Nghe, viết thanh mẫu nghe được rồi đọc to.", "items": ["____ à", "____ ěi", "____ án", "____ ù", "____ ǎi", "____ ěng", "____ ó", "____ ǎo", "____ óng", "____ ěn", "____ ān", "____ ōu", "____ è", "____ ǐ", "____ áng"], "cols": 5}, {"zh": "听录音，写出听到的韵母并大声朗读。", "vi": "Nghe, viết vận mẫu nghe được rồi đọc to.", "items": ["t ____", "h ____", "m ____", "d ____", "f ____", "d ____", "h ____", "g ____", "p ____", "g ____", "k ____", "f ____", "n ____", "l ____", "b ____"], "cols": 5}, {"zh": "听录音，写出听到的声调并大声朗读。", "vi": "Nghe, đánh dấu thanh điệu nghe được rồi đọc to.", "items": ["lao", "neng", "ge", "ba", "fen", "kan", "bai", "li", "gong", "mang", "gou", "hou"], "cols": 4}], "sections": [{"zh": "看图选对话", "vi": "Xem hình, chọn hội thoại đúng", "parts": [{"no": 1, "zh": "看图片，选择正确的对话", "vi": "Câu 1–3: Xem từng hình, chọn hội thoại (1–3) phù hợp với hình.", "type": "pooltext", "long": true, "nums": true, "pool": ["A：你好！　B：你好！", "A：你好！　B：你们好！", "A：谢谢！　B：不客气！"], "qs": [{"n": 1, "img": "s1b1_m_A"}, {"n": 2, "img": "s1b1_m_B"}, {"n": 3, "img": "s1b1_m_C"}]}]}], "explain": {}};
+LEVELS.hsk1.lessons[1].test=L1_TEST;
+const L2_TEST = {"answers": "????", "audio": {"page": "https://hoanguchinesestation.com/tai-lieu/audio/audio-sbt-hsk-3-0-1", "track": "2-2", "main": "", "parts": {}}, "drillTrack": "2-2", "drills": [{"zh": "听录音，写出听到的声母并大声朗读。", "vi": "Nghe, viết thanh mẫu nghe được rồi đọc to.", "items": ["____ ián", "____ īn", "____ iǎng", "____ iào", "____ iè", "____ ǐng", "____ ǐ", "____ ù", "____ ià"], "cols": 3}, {"zh": "听录音，写出听到的韵母并大声朗读。", "vi": "Nghe, viết vận mẫu nghe được rồi đọc to.", "items": ["j ____", "x ____", "q ____", "j ____", "q ____", "x ____", "j ____", "x ____", "j ____", "q ____", "x ____", "q ____", "j ____", "x ____", "q ____"], "cols": 5}, {"zh": "听录音，写出听到的声调并大声朗读。", "vi": "Nghe, đánh dấu thanh điệu nghe được rồi đọc to.", "items": ["xue", "jiao", "qun", "jiu", "xin", "qing", "xia", "jia", "qu", "ji", "xiao", "jie"], "cols": 4}], "sections": [{"zh": "看图选对话", "vi": "Xem hình, chọn hội thoại đúng", "parts": [{"no": 1, "zh": "看图片，选择正确的对话", "vi": "Câu 1–4: Xem từng hình, chọn hội thoại (1–4) phù hợp với hình.", "type": "pooltext", "long": true, "nums": true, "pool": ["A：老师，再见！　B：再见！", "A：对不起。　B：没关系。", "A：很高兴认识你。　B：认识你我也很高兴。", "A：大家好，我叫白家月。　B：白家月，你好。"], "qs": [{"n": 1, "img": "s1b2_m_A"}, {"n": 2, "img": "s1b2_m_B"}, {"n": 3, "img": "s1b2_m_C"}, {"n": 4, "img": "s1b2_m_D"}]}]}], "explain": {}};
+LEVELS.hsk1.lessons[2].test=L2_TEST;
+const L3_TEST = {"answers": "????", "audio": {"page": "https://hoanguchinesestation.com/tai-lieu/audio/audio-sbt-hsk-3-0-1", "track": "3-2", "main": "", "parts": {}}, "drillTrack": "3-2", "drills": [{"zh": "听录音，写出听到的声母并大声朗读。", "vi": "Nghe, viết thanh mẫu nghe được rồi đọc to.", "items": ["____ ān", "____ ī", "____ ǒu", "____ èng", "____ ì", "____ àng", "____ én", "____ uì", "____ ài", "____ uǐ", "____ ì", "____ ōng"], "cols": 4}, {"zh": "听录音，写出听到的韵母并大声朗读。", "vi": "Nghe, viết vận mẫu nghe được rồi đọc to.", "items": ["z ____", "zh ____", "c ____", "z ____", "ch ____", "r ____", "sh ____", "z ____", "r ____", "s ____", "ch ____", "r ____", "zh ____", "c ____", "sh ____"], "cols": 5}, {"zh": "听录音，写出听到的声调并大声朗读。", "vi": "Nghe, đánh dấu thanh điệu nghe được rồi đọc to.", "items": ["che", "ren", "chang", "zao", "shou", "zhen", "sui", "sheng", "ri", "zhong", "shui", "zuo", "chuang", "shu", "si"], "cols": 5}], "sections": [{"zh": "看图选对话", "vi": "Xem hình, chọn hội thoại đúng", "parts": [{"no": 1, "zh": "看图片，选择正确的对话", "vi": "Câu 1–4: Xem từng hình, chọn hội thoại (1–4) phù hợp với hình.", "type": "pooltext", "long": true, "nums": true, "pool": ["A：我是法国人。　B：我也是法国人。", "A：这是我女朋友。　B：你好，很高兴认识你。", "A：王老师是你的中文老师吗？　B：是的。", "A：喂，你工作忙吗？　B：我工作不忙。"], "qs": [{"n": 1, "img": "s1b3_m_A"}, {"n": 2, "img": "s1b3_m_B"}, {"n": 3, "img": "s1b3_m_C"}, {"n": 4, "img": "s1b3_m_D"}]}]}], "explain": {}};
+LEVELS.hsk1.lessons[3].test=L3_TEST;
+const L4_TEST = {
+  answers: "????????????????????",
+  audio: { page: "https://hoanguchinesestation.com/tai-lieu/audio/audio-sbt-hsk-3-0-1", track: "4-3", main: "", parts: { 1: "", 2: "", 3: "", 4: "" } },
+  sections: [
+    { zh: "一、听力", vi: "Nghe hiểu", audio: true, parts: [
+      { no: 1, zh: "第一部分", vi: "Câu 1–3: Nghe cụm từ, chọn hình đúng. Mỗi câu nghe hai lần.", type: "pics3",
+        example: { lines: [["", "三个苹果"]], gloss: "ba quả táo", imgs: ["s1b4_l1_ex_A", "s1b4_l1_ex_B", "s1b4_l1_ex_C"], ans: "C" },
+        qs: [{ n: 1, imgs: ["s1b4_l1_q1_A", "s1b4_l1_q1_B", "s1b4_l1_q1_C"] }, { n: 2, imgs: ["s1b4_l1_q2_A", "s1b4_l1_q2_B", "s1b4_l1_q2_C"] }, { n: 3, imgs: ["s1b4_l1_q3_A", "s1b4_l1_q3_B", "s1b4_l1_q3_C"] }] },
+      { no: 2, zh: "第二部分", vi: "Câu 4–5: Nghe câu hỏi, chọn câu trả lời đúng. Mỗi câu nghe hai lần.", type: "choice",
+        example: { lines: [["", "今天天气怎么样？"]], gloss: "Hôm nay thời tiết thế nào?", opts: [["非常热", "rất nóng"], ["很好听", "rất hay"], ["在喝水", "đang uống nước"]], ans: "A" },
+        qs: [{ n: 4, opts: ["十个人", "20个", "三口人"] }, { n: 5, opts: ["大", "12岁", "两千"] }] },
+      { no: 3, zh: "第三部分", vi: "Câu 6–8: Nghe hội thoại, chọn hình phù hợp nhất. Mỗi câu nghe hai lần.", type: "poolpics",
+        pool: ["s1b4_l3_A", "s1b4_l3_B", "s1b4_l3_C", "s1b4_l3_D"],
+        example: { lines: [["女", "你好！"], ["男", "你好！很高兴认识你。"]], gloss: "Chào bạn! — Chào bạn! Rất vui được làm quen với bạn.", ans: "A" },
+        qs: [{ n: 6 }, { n: 7 }, { n: 8 }] },
+      { no: 4, zh: "第四部分", vi: "Câu 9–10: Nghe câu và câu hỏi, chọn đáp án đúng. Mỗi câu nghe hai lần.", type: "choice",
+        example: { lines: [["", "下午我去超市，我想买一些水果。"], ["问", "说话人下午去哪里？"]], gloss: "Chiều nay tôi đi siêu thị, tôi muốn mua ít trái cây. — Hỏi: Chiều nay người nói đi đâu?",
+          opts: [["超市", "siêu thị"], ["医院", "bệnh viện"], ["学校", "trường học"]], ans: "A" },
+        qs: [{ n: 9, opts: ["中国人", "泰国人", "法国人"] }, { n: 10, opts: ["安妮", "王一飞", "白家月"] }] }
+    ]},
+    { zh: "二、阅读", vi: "Đọc hiểu", parts: [
+      { no: 1, zh: "第一部分", vi: "Câu 11–13: Chọn hình phù hợp nhất với mỗi câu.", type: "poolpics",
+        pool: ["s1b4_r1_A", "s1b4_r1_B", "s1b4_r1_C", "s1b4_r1_D"],
+        example: { lines: [["", "我很喜欢这本书。"]], gloss: "Tôi rất thích quyển sách này.", ans: "A" },
+        qs: [{ n: 11, text: "老师，您好！" }, { n: 12, text: "我家有四口人。" }, { n: 13, text: "我哥哥今年20岁。" }] },
+      { no: 2, zh: "第二部分", vi: "Câu 14–16: Nối câu hỏi với câu trả lời phù hợp.", type: "pooltext",
+        pool: ["好的，谢谢！", "他今年5岁。", "我女朋友。", "是的。"],
+        example: { lines: [["", "你喝水吗？"]], gloss: "Bạn uống nước không?", ans: "A" },
+        qs: [{ n: 14, text: "她是谁？" }, { n: 15, text: "你是法国人吗？" }, { n: 16, text: "您儿子多大？" }] },
+      { no: 3, zh: "第三部分", vi: "Câu 17–18: Chọn từ thích hợp điền vào chỗ trống.", type: "pooltext", inline: true,
+        pool: ["想", "忙", "名字"],
+        example: { lines: [["", "你叫什么（ C ）？"]], gloss: "Bạn tên là gì?", ans: "C" },
+        qs: [{ n: 17, text: "她工作很（　　）。" }, { n: 18, lines: [["男", "你们好吗？"], ["女", "很好，我们很（　　）你。"]] }] },
+      { no: 4, zh: "第四部分", vi: "Câu 19–20: Chọn đáp án đúng.", type: "choice",
+        example: { lines: [["", "请问现在几点了？"], ["★", "说话人想知道什么？"]], gloss: "Xin hỏi bây giờ mấy giờ rồi? — Người nói muốn biết điều gì?",
+          opts: [["时间", "thời gian"], ["名字", "tên"], ["房间号", "số phòng"]], ans: "A" },
+        qs: [{ n: 19, lines: [["", "我家有三口人，爸爸、妈妈和我。"], ["★", "说话人家里有："]], opts: ["姐姐", "三口人", "四口人"] },
+             { n: 20, lines: [["", "她是法国人，我不是。"], ["★", "“她”是："]], opts: ["法国人", "中国人", "泰国人"] }] }
+    ]}
+  ],
+  drillTrack: "4-2", drills: [{"zh": "听录音，选择听到的音节并大声朗读。", "vi": "Nghe, chọn âm tiết nghe được rồi đọc to.", "items": ["(1) pā / bā", "(2) zì / cì", "(3) náng / láng", "(4) jǔ / qǔ", "(5) mén / méng", "(6) rù / lù", "(7) kè / rè", "(8) qǐn / qǐng"], "cols": 4}, {"zh": "听录音，先跟读，再大声朗读。注意三声变调。", "vi": "Nghe và đọc theo, rồi đọc to. Chú ý biến điệu thanh 3.", "items": ["(1) nǐ hǎo", "(2) kěyǐ", "(3) nǎlǐ", "(4) shuǐguǒ", "(5) shǒubiǎo", "(6) suǒyǐ", "(7) pěngchǎng", "(8) hǎojiǔ", "(9) wǎndiǎn", "(10) liǎojiě", "(11) xǐzǎo", "(12) zhǐyǒu"], "cols": 4}, {"zh": "听录音，先跟读，再大声朗读。注意轻声发音。", "vi": "Nghe và đọc theo, rồi đọc to. Chú ý thanh nhẹ.", "items": ["(1) bāozi", "(2) xièxie", "(3) piányi", "(4) dìdi", "(5) piàoliang", "(6) méi guānxi", "(7) duìbuqǐ", "(8) rènshi"], "cols": 4}, {"zh": "听录音，分辨轻声与非轻声，再跟读、朗读。", "vi": "Nghe, phân biệt thanh nhẹ và không thanh nhẹ, rồi đọc theo và đọc to.", "items": ["(1) Sūnzǐ – sūnzi", "(2) dōngxī – dōngxi", "(3) yùnqì – yùnqi", "(4) Lǎozǐ – lǎozi", "(5) dìfāng – dìfang", "(6) mǎmǎhūhū – mǎhu"], "cols": 3}],
+  explain: {"0": "", "2": "", "3": "", "4": "", "5": "", "6": "", "7": "", "8": "", "9": "", "10": "", "11": "", "12": "", "13": "", "14": "", "15": "", "16": "", "17": "", "18": "", "19": "", "20": ""}
+};
+LEVELS.hsk1.lessons[4].test=L4_TEST;
+const L5_TEST = {
+  answers: "????????????????????",
+  audio: { page: "https://hoanguchinesestation.com/tai-lieu/audio/audio-sbt-hsk-3-0-1", track: "5-3", main: "", parts: { 1: "", 2: "", 3: "", 4: "" } },
+  sections: [
+    { zh: "一、听力", vi: "Nghe hiểu", audio: true, parts: [
+      { no: 1, zh: "第一部分", vi: "Câu 1–3: Nghe cụm từ, chọn hình đúng. Mỗi câu nghe hai lần.", type: "pics3",
+        example: { lines: [["", "三个苹果"]], gloss: "ba quả táo", imgs: ["s1b5_l1_ex_A", "s1b5_l1_ex_B", "s1b5_l1_ex_C"], ans: "C" },
+        qs: [{ n: 1, imgs: ["s1b5_l1_q1_A", "s1b5_l1_q1_B", "s1b5_l1_q1_C"] }, { n: 2, imgs: ["s1b5_l1_q2_A", "s1b5_l1_q2_B", "s1b5_l1_q2_C"] }, { n: 3, imgs: ["s1b5_l1_q3_A", "s1b5_l1_q3_B", "s1b5_l1_q3_C"] }] },
+      { no: 2, zh: "第二部分", vi: "Câu 4–5: Nghe câu hỏi, chọn câu trả lời đúng. Mỗi câu nghe hai lần.", type: "choice",
+        example: { lines: [["", "今天天气怎么样？"]], gloss: "Hôm nay thời tiết thế nào?", opts: [["非常热", "rất nóng"], ["很好听", "rất hay"], ["在喝水", "đang uống nước"]], ans: "A" },
+        qs: [{ n: 4, opts: ["我不会", "我吃饺子", "做面条儿"] }, { n: 5, opts: ["休息", "星期四", "五口人"] }] },
+      { no: 3, zh: "第三部分", vi: "Câu 6–8: Nghe hội thoại, chọn hình phù hợp nhất. Mỗi câu nghe hai lần.", type: "poolpics",
+        pool: ["s1b5_l3_A", "s1b5_l3_B", "s1b5_l3_C", "s1b5_l3_D"],
+        example: { lines: [["女", "你好！"], ["男", "你好！很高兴认识你。"]], gloss: "Chào bạn! — Chào bạn! Rất vui được làm quen với bạn.", ans: "A" },
+        qs: [{ n: 6 }, { n: 7 }, { n: 8 }] },
+      { no: 4, zh: "第四部分", vi: "Câu 9–10: Nghe câu và câu hỏi, chọn đáp án đúng. Mỗi câu nghe hai lần.", type: "choice",
+        example: { lines: [["", "下午我去超市，我想买一些水果。"], ["问", "说话人下午去哪里？"]], gloss: "Chiều nay tôi đi siêu thị, tôi muốn mua ít trái cây. — Hỏi: Chiều nay người nói đi đâu?",
+          opts: [["超市", "siêu thị"], ["医院", "bệnh viện"], ["学校", "trường học"]], ans: "A" },
+        qs: [{ n: 9, opts: ["菜", "饺子", "面条儿"] }, { n: 10, opts: ["4号", "10号", "14号"] }] }
+    ]},
+    { zh: "二、阅读", vi: "Đọc hiểu", parts: [
+      { no: 1, zh: "第一部分", vi: "Câu 11–13: Chọn hình phù hợp nhất với mỗi câu.", type: "poolpics",
+        pool: ["s1b5_r1_A", "s1b5_r1_B", "s1b5_r1_C", "s1b5_r1_D"],
+        example: { lines: [["", "我很喜欢这本书。"]], gloss: "Tôi rất thích quyển sách này.", ans: "A" },
+        qs: [{ n: 11, text: "王老师，再见。" }, { n: 12, text: "今天我休息。" }, { n: 13, text: "我有一个儿子，他今年7岁。" }] },
+      { no: 2, zh: "第二部分", vi: "Câu 14–16: Nối câu hỏi với câu trả lời phù hợp.", type: "pooltext",
+        pool: ["好的，谢谢！", "我不会。", "面条儿。", "5月6号。"],
+        example: { lines: [["", "你喝水吗？"]], gloss: "Bạn uống nước không?", ans: "A" },
+        qs: [{ n: 14, text: "你去超市买什么？" }, { n: 15, text: "你会做饭吗？" }, { n: 16, text: "今天几号？" }] },
+      { no: 3, zh: "第三部分", vi: "Câu 17–18: Chọn từ thích hợp điền vào chỗ trống.", type: "pooltext", inline: true,
+        pool: ["几", "好看", "名字"],
+        example: { lines: [["", "你叫什么（ C ）？"]], gloss: "Bạn tên là gì?", ans: "C" },
+        qs: [{ n: 17, text: "今天（　　）号？" }, { n: 18, lines: [["男", "你的新电脑真（　　）！"], ["女", "谢谢，我也很喜欢。"]] }] },
+      { no: 4, zh: "第四部分", vi: "Câu 19–20: Chọn đáp án đúng.", type: "choice",
+        example: { lines: [["", "请问现在几点了？"], ["★", "说话人想知道什么？"]], gloss: "Xin hỏi bây giờ mấy giờ rồi? — Người nói muốn biết điều gì?",
+          opts: [["时间", "thời gian"], ["名字", "tên"], ["房间号", "số phòng"]], ans: "A" },
+        qs: [{ n: 19, lines: [["", "我非常喜欢我的中文名字。"], ["★", "说话人喜欢什么？"]], opts: ["新电脑", "中国菜", "中文名字"] },
+             { n: 20, lines: [["", "今天8号，你几号休息？"], ["★", "说话人想知道什么？"]], opts: ["今天几号", "哪天休息", "星期几上班"] }] }
+    ]}
+  ],
+  drillTrack: "5-2", drills: [{"zh": "听录音，选择听到的音节并大声朗读。", "vi": "Nghe, chọn âm tiết nghe được rồi đọc to.", "items": ["(1) gē / kē", "(2) jiǎng / qiǎng", "(3) cóng / sóng", "(4) nìng / lìng", "(5) jiā / xiā", "(6) zuàn / cuàn", "(7) tōu / gōu", "(8) zhí / shí"], "cols": 4}, {"zh": "听录音，先跟读，再大声朗读。注意“不”的变调。", "vi": "Nghe và đọc theo, rồi đọc to. Chú ý biến điệu của “不”.", "items": ["(1) bùyào", "(2) bù kèqi", "(3) bù hē", "(4) bù lái", "(5) bù lěng", "(6) bù zhīdào", "(7) bù xuéxí", "(8) bù hǎotīng"], "cols": 4}, {"zh": "听录音，先跟读，再大声朗读。注意“一”的变调。", "vi": "Nghe và đọc theo, rồi đọc to. Chú ý biến điệu của “一”.", "items": ["(1) yìtiān", "(2) yì yuán", "(3) yìdiǎnr", "(4) yíbàn", "(5) yì chē", "(6) yì rén", "(7) yì wǎn", "(8) yíxià"], "cols": 4}],
+  explain: {"0": "", "2": "", "3": "", "4": "", "5": "", "6": "", "7": "", "8": "", "9": "", "10": "", "11": "", "12": "", "13": "", "14": "", "15": "", "16": "", "17": "", "18": "", "19": "", "20": ""}
+};
+LEVELS.hsk1.lessons[5].test=L5_TEST;
 const L7_TEST = {
   answers: "CACBCCDBACDCBCABBABA",
   audio: { page: "https://hoanguchinesestation.com/tai-lieu/audio/audio-sbt-hsk-3-0-1", track: "7-2", main: "audio/7-2.mp3", parts: { 1: "", 2: "", 3: "", 4: "" } },
