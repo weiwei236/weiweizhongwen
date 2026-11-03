@@ -3727,14 +3727,14 @@ const Race = {
     const key = { fill: x => x.h, vi: x => x.vs, zh: x => x.h, py: x => x.p }[type];
     let o = this.opts(w, key); if(o.length < 4){ type = "vi"; o = this.opts(w, x => x.vs); }
     o = shuffle(o); const ans = "ABCD"[o.indexOf(w)];
-    const ask = type === "fill" ? { t: "Chọn từ điền vào chỗ trống", q: ex[0].replace(w.h, "（　　）"), hint: ex[2] || "" }
+    const ask = type === "fill" ? { t: "Chọn từ điền vào chỗ trống", q: ex[0].replace(w.h, "（　　）"), hint: "" }
       : type === "vi" ? { t: "Chọn nghĩa đúng của từ", q: w.h, hint: "" } : type === "zh" ? { t: "Chọn chữ Hán đúng", q: w.vs, hint: "" } : { t: "Chọn phiên âm đúng", q: w.h, hint: "" };
     return { w, type, ans, ask, opts: o.map(x => key(x)), zhOpts: type === "fill" || type === "zh" };
   },
   next(){
     if(this.k >= this.N || this.lives <= 0) return this.end();
     const q = this.q = this.question(); this.done = false;
-    this.dur = Math.max(5200, 9000 - this.k * 260); this.ts = performance.now();
+    this.dur = Math.max(4000, 7000 - this.k * 220); this.ts = performance.now();
     $("#rcK").textContent = this.k + 1;
     $("#rcQ").innerHTML = `<small>${q.ask.t}</small><div class="rc-qq ${q.type === "zh" ? "vi" : "han"}">${esc(q.ask.q)}</div>${q.ask.hint ? `<div class="rc-hint">${esc(q.ask.hint)}</div>` : ""}
       <div class="rc-opts">${q.opts.map((t, i) => `<span><b>${"ABCD"[i]}</b><span class="${q.zhOpts ? "han" : ""}">${esc(t)}</span></span>`).join("")}</div>`;
