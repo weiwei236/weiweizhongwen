@@ -755,7 +755,7 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .gm-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
 .gm-card{text-align:left;border:0;border-radius:18px;padding:20px;display:grid;gap:6px;cursor:pointer;color:#fff;box-shadow:var(--shadow);transition:transform .15s}
 .gm-card:hover{transform:translateY(-3px)}
-.gm-card.fruit{background:linear-gradient(140deg,#3B2416,#7A4A2A)}.gm-card.shop{background:linear-gradient(140deg,#C2513A,#E8875A)}
+.gm-card.cloth{background:linear-gradient(140deg,#7A4FC4,#E07AA8)}.gm-card.fruit{background:linear-gradient(140deg,#3B2416,#7A4A2A)}.gm-card.shop{background:linear-gradient(140deg,#C2513A,#E8875A)}
 .gm-card b{font-size:22px}.gm-card small{opacity:.9;font-size:14px;line-height:1.45}.gm-card em{font-style:normal;font-weight:700;margin-top:6px}
 .gm-art{display:flex;gap:6px;height:76px;align-items:center}.gm-art i{width:68px;height:68px;display:block;transform:rotate(calc(var(--i)*20deg - 20deg))}.gm-art svg{width:100%;height:100%}
 .gm-art.shop img{height:76px;width:auto;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.25)}.gm-art.shop .sh-emo{font-size:52px}.gm-art.shop .sh-svg{width:60px;height:60px}
@@ -829,6 +829,7 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .sh-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#fff;border-radius:12px;padding:6px 8px}
 .sh-li .sh-emo{font-size:26px}.sh-li .sh-svg{width:30px;height:30px}.sh-line>b{font-size:18px;font-weight:400}
 .sh-qty{display:inline-flex;align-items:center;gap:4px}.sh-qty button{width:28px;height:28px;border-radius:8px;border:1px solid var(--line);background:#fff;font-size:18px;cursor:pointer}.sh-qty b{min-width:1.2em;text-align:center}
+.sh-seg button i{display:inline-block;width:11px;height:11px;border-radius:50%;border:1px solid rgba(0,0,0,.25);margin-right:3px;vertical-align:-1px}.sh-seg.color{flex-wrap:wrap}.sh-seg button{white-space:nowrap}.sh-seg.color button{padding:3px 7px;font-size:15px}
 .sh-seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}.sh-seg button{border:0;background:#fff;padding:3px 10px;font-size:17px;cursor:pointer}.sh-seg button[aria-pressed="true"]{background:var(--accent);color:#fff}
 .sh-x{margin-left:auto;border:0;background:none;font-size:22px;color:var(--muted);cursor:pointer}
 .sh-go{width:100%;justify-content:center}
@@ -3358,12 +3359,14 @@ const Games = {
           <b>Chém trái cây</b><small>Đọc đề, chém quả có đáp án đúng. Mỗi câu 3 giây, có 5 mạng.</small><em>Chơi ngay ▸</em></button>
         <button class="gm-card shop" data-g="shop"><span class="gm-art shop"><img src="${shopImg()}" alt=""></span>
           <b>Quán ăn Tiểu Ngữ</b><small>Đọc order bằng chữ Hán, chọn đúng món, số lượng, cỡ to/nhỏ, nóng/đá trước khi khách hết kiên nhẫn.</small><em>Mở quán ▸</em></button>
+        <button class="gm-card cloth" data-g="cloth"><span class="gm-art shop"><img src="${STORES.cloth.img()}" alt=""></span>
+          <b>Shop thời trang Tiểu Ngữ</b><small>Đọc yêu cầu bằng chữ Hán, lấy đúng món đồ, số lượng (件/条), màu sắc và size 小号/中号/大号.</small><em>Mở shop ▸</em></button>
       </div>
-      <p class="muted gm-note">Trò Quán ăn dùng thực đơn cố định (饺子, 包子, 牛肉面, 奶茶…), không phụ thuộc phạm vi bài.</p></div>`;
+      <p class="muted gm-note">Trò Quán ăn và Shop thời trang dùng thực đơn, quầy hàng cố định, không phụ thuộc phạm vi bài.</p></div>`;
     const save = () => { let x = +$("#gmA").value, y = +$("#gmB").value; if(x > y) [x, y] = [y, x]; store.set("ww_game_range_" + S.level, [x, y]); this.menu(); };
     $("#gmA").onchange = save; $("#gmB").onchange = save;
     $("#gmAll").onclick = () => { store.set("ww_game_range_" + S.level, [ids[0], ids[ids.length - 1]]); this.menu(); };
-    W.querySelectorAll("[data-g]").forEach(btn => btn.onclick = () => btn.dataset.g === "fruit" ? Fruit.start() : Shop.start());
+    W.querySelectorAll("[data-g]").forEach(btn => btn.onclick = () => btn.dataset.g === "fruit" ? Fruit.start() : Shop.start(btn.dataset.g === "cloth" ? "cloth" : "food"));
   },
   over(box, html, again){
     box.insertAdjacentHTML("beforeend", `<div class="gm-over"><div class="gm-over-in">${html}
@@ -3510,23 +3513,54 @@ const SHOP_IMG_W = 1672, SHOP_IMG_H = 941;
 const SHOP_POS = { kaoya: [160, 435, 425, 578], baozi: [440, 435, 700, 578], mian: [720, 435, 975, 578], niurou: [995, 435, 1260, 578], mifan: [1275, 435, 1530, 578],
   jiaozi: [125, 590, 410, 735], chaofan: [425, 590, 700, 735], kafei: [715, 590, 985, 735], naicha: [1000, 590, 1280, 735], cha: [1290, 590, 1560, 735],
   shui: [95, 745, 395, 890], jiu: [410, 745, 695, 890], niunai: [715, 745, 990, 890], kele: [1005, 745, 1295, 890], baishi: [1305, 745, 1590, 890] };
-function shopImg(){ return Exam.img("s1_shop"); }
-/* ô hình món ăn cắt từ ảnh quầy (dùng trong khay) */
-function shopThumb(id, w = 58){
-  const b = SHOP_POS[id]; if(!b) return shopIcon(id);
-  const k = w / (b[2] - b[0]), h = Math.round((b[3] - b[1]) * .68 * k);
-  return `<span class="sh-thumb" style="width:${w}px;height:${h}px;background-image:url('${shopImg()}');background-size:${SHOP_IMG_W * k}px ${SHOP_IMG_H * k}px;background-position:${-b[0] * k}px ${-b[1] * k}px"></span>`;
-}
-function shopIcon(id){
-  const it = SHOP_MENU.find(x => x.id === id), ic = it.ic;
-  if(ic === "bao") return `<svg class="sh-svg" viewBox="0 0 64 64"><ellipse cx="32" cy="40" rx="24" ry="16" fill="#F6EEDF" stroke="#C9B48E" stroke-width="2"/><path d="M14 38 Q32 6 50 38" fill="#FBF6EC" stroke="#C9B48E" stroke-width="2"/><path d="M26 18 q6 6 12 0 M24 26 q8 6 16 0" stroke="#C9B48E" stroke-width="2" fill="none"/></svg>`;
-  if(ic === "cola" || ic === "pepsi") return `<svg class="sh-svg" viewBox="0 0 64 64"><rect x="20" y="8" width="24" height="50" rx="6" fill="${ic === "cola" ? "#D7263D" : "#1F4FA8"}"/><rect x="20" y="8" width="24" height="7" rx="3" fill="#C9CED6"/><path d="M20 30 q12 ${ic === "cola" ? 8 : -8} 24 0" stroke="#fff" stroke-width="3" fill="none"/><text x="32" y="48" font-size="9" text-anchor="middle" fill="#fff" font-weight="700">${ic === "cola" ? "可乐" : "百事"}</text></svg>`;
-  if(ic === "beefnoodle") return `<span class="sh-emo">🍜<i>🥩</i></span>`;
-  return `<span class="sh-emo">${ic}</span>`;
-}
 const ZH_NUM = ["", "一", "两", "三"];
+/* các thuộc tính khách có thể yêu cầu */
+const SHOP_ATTR = {
+  size: { opts: ["大", "小"], vi: { 大: "cỡ to", 小: "cỡ nhỏ" }, need: "cỡ 大/小" },
+  temp: { opts: ["热", "冰"], vi: { 热: "nóng", 冰: "đá" }, need: "热/冰 (nóng/đá)" },
+  cs: { opts: ["小号", "中号", "大号"], vi: { 小号: "size nhỏ", 中号: "size vừa", 大号: "size lớn" }, need: "size 小号/中号/大号" },
+  color: { opts: ["红色", "白色", "黑色", "蓝色", "绿色", "黄色", "粉色"], vi: { 红色: "màu đỏ", 白色: "màu trắng", 黑色: "màu đen", 蓝色: "màu xanh dương", 绿色: "màu xanh lá", 黄色: "màu vàng", 粉色: "màu hồng" },
+    sw: { 红色: "#E0394A", 白色: "#FFFFFF", 黑色: "#222", 蓝色: "#2F6FD6", 绿色: "#2C9A58", 黄色: "#F2C531", 粉色: "#F48FB1" }, need: "màu sắc" }
+};
+const CLOTH_MENU = [
+  { id: "waiyi", h: "外衣", p: "wàiyī", vi: "áo khoác", m: "件", mv: "chiếc", price: 199 },
+  { id: "chenshan", h: "衬衫", p: "chènshān", vi: "áo sơ mi", m: "件", mv: "chiếc", price: 129 },
+  { id: "txu", h: "T恤", p: "T xù", vi: "áo phông", m: "件", mv: "chiếc", price: 59 },
+  { id: "maoyi", h: "毛衣", p: "máoyī", vi: "áo len", m: "件", mv: "chiếc", price: 159 },
+  { id: "polo", h: "POLO衫", p: "POLO shān", vi: "áo polo", m: "件", mv: "chiếc", price: 99 },
+  { id: "dayi", h: "大衣", p: "dàyī", vi: "áo măng tô", m: "件", mv: "chiếc", price: 399 },
+  { id: "yurong", h: "羽绒服", p: "yǔróngfú", vi: "áo phao", m: "件", mv: "chiếc", price: 499 },
+  { id: "duanku", h: "短裤", p: "duǎnkù", vi: "quần soóc", m: "条", mv: "chiếc", price: 69 },
+  { id: "changku", h: "长裤", p: "chángkù", vi: "quần dài", m: "条", mv: "chiếc", price: 119 },
+  { id: "banshen", h: "半身裙", p: "bànshēnqún", vi: "chân váy", m: "条", mv: "chiếc", price: 109 },
+  { id: "lianyi", h: "连衣裙", p: "liányīqún", vi: "váy liền", m: "条", mv: "chiếc", price: 189 }
+].map(x => ({ ...x, attrs: ["color", "cs"] }));
+SHOP_MENU.forEach(x => x.attrs = [x.size && "size", x.temp && "temp"].filter(Boolean));
+const STORES = {
+  food: { key: "shop", title: "Quán ăn Tiểu Ngữ", emoji: "🍜", menu: SHOP_MENU, img: () => Exam.img("s1_shop"), pos: SHOP_POS, maxQ: { kaoya: 1 },
+    tray: "Khay món", go: "Giao món", thanks: "谢谢！真好吃！", unit: "món", cust: ["👩", "👨", "👵", "👴", "👧", "👦", "🧑‍🎓", "👩‍💼", "👨‍🍳", "🧕"],
+    heads: ["你好，", "老板，", "服务员，", ""], verbs: ["我要", "请给我", "来"],
+    ph: (it, l) => ZH_NUM[l.n] + (l.a.size || "") + it.m + (l.a.temp || "") + it.h,
+    tip: `Bấm vào món trên quầy để thêm vào khay, chỉnh số lượng, cỡ <b class="han">大/小</b>, <b class="han">热/冰</b> (nóng/đá) rồi bấm “Giao món”.`,
+    endT: ok => ok ? "Hết ca bán hàng!" : "Quán đóng cửa – hết lượt!" },
+  cloth: { key: "cloth", title: "Shop thời trang Tiểu Ngữ", emoji: "👗", menu: CLOTH_MENU, img: () => Exam.img("s1_cloth"),
+    pos: { waiyi: [122, 450, 410, 645], chenshan: [418, 450, 693, 645], txu: [705, 450, 970, 645], maoyi: [985, 450, 1260, 645], polo: [1268, 450, 1545, 645],
+      dayi: [90, 662, 355, 885], yurong: [365, 662, 615, 885], duanku: [625, 662, 860, 885], changku: [868, 662, 1110, 885], banshen: [1118, 662, 1360, 885], lianyi: [1365, 662, 1610, 885] },
+    maxQ: {}, tray: "Giỏ hàng", go: "Thanh toán", thanks: "谢谢！我很喜欢！", unit: "món đồ", cust: ["👩", "👨", "👵", "👴", "👧", "👦", "🧑‍🎓", "👩‍💼", "💃", "🧕"],
+    heads: ["你好，", "老板，", "", "请问，"], verbs: ["我想买", "我要", "请给我拿"],
+    ph: (it, l) => ZH_NUM[l.n] + it.m + l.a.cs + "的" + l.a.color + it.h,
+    tip: `Bấm vào món đồ trên quầy để thêm vào giỏ, chọn số lượng (<b class="han">件/条</b>), màu sắc và size <b class="han">小号/中号/大号</b> rồi bấm “Thanh toán”.`,
+    endT: ok => ok ? "Hết ca bán hàng!" : "Cửa hàng đóng cửa – hết lượt!" }
+};
+function shopThumb(cfg, id, w = 58){
+  const b = cfg.pos[id]; if(!b) return "";
+  const k = w / (b[2] - b[0]), h = Math.round((b[3] - b[1]) * .68 * k);
+  return `<span class="sh-thumb" style="width:${w}px;height:${h}px;background-image:url('${cfg.img()}');background-size:${1672 * k}px ${941 * k}px;background-position:${-b[0] * k}px ${-b[1] * k}px"></span>`;
+}
+function shopImg(){ return STORES.food.img(); }
 const Shop = {
-  start(){
+  start(kind){
+    this.cfg = STORES[kind || (this.cfg && this.cfg.key === "cloth" ? "cloth" : "food")] || STORES.food; const C = this.cfg;
     Games.stop(); this.round = 0; this.hearts = 3; this.money = 0; this.served = 0; this.total = 10; this.py = false; this.log = [];
     const W = $("#work");
     W.innerHTML = `<div class="gm"><div class="sh-wrap" id="shWrap">
@@ -3535,39 +3569,38 @@ const Shop = {
         <div class="sh-bubble"><div class="sh-order han" id="shOrder"></div>
           <div class="sh-obtn"><button class="btn sm" id="shSay">${ICON.sound}Nghe</button><button class="btn sm" id="shPy" aria-pressed="false">Hiện phiên âm</button></div></div></div>
       <div class="sh-pat"><i id="shPat"></i><span id="shSec"></span></div></div>
-      <div class="sh-main"><div class="sh-stall" id="shMenu"><img src="${shopImg()}" alt="Quầy hàng Tiểu Ngữ" draggable="false">${SHOP_MENU.filter(it => SHOP_POS[it.id]).map(it => { const b = SHOP_POS[it.id];
-          return `<button class="sh-spot" data-id="${it.id}" style="left:${b[0] / SHOP_IMG_W * 100}%;top:${b[1] / SHOP_IMG_H * 100}%;width:${(b[2] - b[0]) / SHOP_IMG_W * 100}%;height:${(b[3] - b[1]) / SHOP_IMG_H * 100}%" aria-label="${it.h} ${it.p} – ${it.price} 元"><span class="sh-price">${it.price}元</span><span class="sh-badge" hidden></span></button>`; }).join("")}</div>
-        <div class="sh-tray"><div class="sh-tray-h"><b>Khay món</b><button class="btn sm" id="shClear">Xoá hết</button></div><div id="shTray"></div>
-          <button class="btn primary big sh-go" id="shGo">${ICON.check}Giao món</button><div class="sh-msg" id="shMsg"></div></div></div>
-      <p class="fn-tip">Bấm vào món trên quầy để thêm vào khay, chỉnh số lượng, cỡ <b class="han">大/小</b>, <b class="han">热/冰</b> (nóng/đá) rồi bấm “Giao món”.</p></div></div>`;
+      <div class="sh-main"><div class="sh-stall" id="shMenu"><img src="${C.img()}" alt="${esc(C.title)}" draggable="false">${C.menu.filter(it => C.pos[it.id]).map(it => { const b = C.pos[it.id];
+          return `<button class="sh-spot" data-id="${it.id}" style="left:${b[0] / 16.72}%;top:${b[1] / 9.41}%;width:${(b[2] - b[0]) / 16.72}%;height:${(b[3] - b[1]) / 9.41}%" aria-label="${it.h} ${it.p} – ${it.price} 元"><span class="sh-price">${it.price}元</span><span class="sh-badge" hidden></span></button>`; }).join("")}</div>
+        <div class="sh-tray"><div class="sh-tray-h"><b>${C.tray}</b><button class="btn sm" id="shClear">Xoá hết</button></div><div id="shTray"></div>
+          <button class="btn primary big sh-go" id="shGo">${ICON.check}${C.go}</button><div class="sh-msg" id="shMsg"></div></div></div>
+      <p class="fn-tip">${C.tip}</p></div></div>`;
     $("#shQuit").onclick = () => { Games.stop(); Games.menu(); };
     $("#shSay").onclick = () => speak(this.text);
     $("#shPy").onclick = () => { this.py = !this.py; $("#shPy").setAttribute("aria-pressed", this.py); $("#shPy").textContent = this.py ? "Ẩn phiên âm" : "Hiện phiên âm"; this.showOrder(); };
     $("#shClear").onclick = () => { this.tray = []; this.drawTray(); };
     $("#shGo").onclick = () => this.deliver();
-    $("#shMenu").onclick = e => { const b = e.target.closest("[data-id]"); if(!b || this.busy) return; const it = SHOP_MENU.find(x => x.id === b.dataset.id);
-      const same = this.tray.find(l => l.id === it.id && !l.size && !l.temp && !it.size && !it.temp); if(same) same.n = Math.min(9, same.n + 1); else this.tray.push({ id: it.id, n: 1, size: "", temp: "" });
+    $("#shMenu").onclick = e => { const b = e.target.closest("[data-id]"); if(!b || this.busy) return; const it = this.item(b.dataset.id);
+      const same = !it.attrs.length && this.tray.find(l => l.id === it.id); if(same) same.n = Math.min(9, same.n + 1); else this.tray.push({ id: it.id, n: 1, a: {} });
       this.drawTray(); b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop"); speak(it.h); };
-    this.hearts = 3; this.drawHearts(); this.next(); $("#shWrap").scrollIntoView({ behavior: "smooth", block: "start" });
+    this.drawHearts(); this.next(); $("#shWrap").scrollIntoView({ behavior: "smooth", block: "start" });
     const loop = now => { if(!Games.alive($("#shWrap"))) return Games.stop(); this.tick(now); Games.raf = requestAnimationFrame(loop); };
     Games.raf = requestAnimationFrame(loop);
   },
+  item(id){ return this.cfg.menu.find(x => x.id === id); },
   drawHearts(){ $("#shHearts").innerHTML = Array.from({ length: 3 }, (_, i) => `<span class="${i < this.hearts ? "on" : ""}">❤</span>`).join(""); },
   makeOrder(){
-    const k = this.round < 3 ? 1 : this.round < 7 ? 2 : 3, items = shuffle(SHOP_MENU).slice(0, k);
-    const lines = items.map(it => ({ id: it.id, n: 1 + Math.floor(Math.random() * (it.id === "kaoya" ? 1 : 3)), size: it.size ? (Math.random() < .5 ? "大" : "小") : "", temp: it.temp ? (Math.random() < .5 ? "热" : "冰") : "" }));
-    const ph = l => { const it = SHOP_MENU.find(x => x.id === l.id); return ZH_NUM[l.n] + l.size + it.m + l.temp + it.h; };
-    const parts = lines.map(ph), joined = parts.length > 1 ? parts.slice(0, -1).join("、") + "和" + parts[parts.length - 1] : parts[0];
-    const head = ["你好，", "老板，", "服务员，", ""][Math.floor(Math.random() * 4)], verb = ["我要", "请给我", "来"][Math.floor(Math.random() * 3)];
-    const vi = lines.map(l => { const it = SHOP_MENU.find(x => x.id === l.id); return `${l.n} ${it.mv} ${it.vi}${l.size ? (l.size === "大" ? " cỡ to" : " cỡ nhỏ") : ""}${l.temp ? (l.temp === "热" ? " nóng" : " đá") : ""}`; }).join(", ");
-    return { lines, text: head + verb + joined + "。" + (Math.random() < .4 ? "谢谢！" : ""), vi, attrs: lines.reduce((a, l) => a + (l.size ? 1 : 0) + (l.temp ? 1 : 0), 0) };
+    const C = this.cfg, k = this.round < 3 ? 1 : this.round < 7 ? 2 : 3, items = shuffle(C.menu).slice(0, k), pick = a => a[Math.floor(Math.random() * a.length)];
+    const lines = items.map(it => ({ id: it.id, n: 1 + Math.floor(Math.random() * (C.maxQ[it.id] || (C.key === "cloth" ? 2 : 3))), a: Object.fromEntries(it.attrs.map(x => [x, pick(SHOP_ATTR[x].opts)])) }));
+    const parts = lines.map(l => C.ph(this.item(l.id), l)), joined = parts.length > 1 ? parts.slice(0, -1).join("、") + "和" + parts[parts.length - 1] : parts[0];
+    const vi = lines.map(l => { const it = this.item(l.id); return `${l.n} ${it.mv} ${it.vi}` + it.attrs.map(x => " " + SHOP_ATTR[x].vi[l.a[x]]).join(","); }).join("; ");
+    return { lines, text: pick(C.heads) + pick(C.verbs) + joined + "。" + (Math.random() < .4 ? "谢谢！" : ""), vi, attrs: lines.reduce((a, l) => a + Object.keys(l.a).length, 0) };
   },
   next(){
     if(this.round >= this.total || this.hearts <= 0) return this.end();
     const o = this.order = this.makeOrder(); this.text = o.text; this.tray = []; this.busy = false;
-    this.limit = Math.min(45, 14 + o.lines.length * 9 + o.attrs * 3) * 1000; this.t0 = performance.now();
+    this.limit = Math.min(50, 14 + o.lines.length * 9 + o.attrs * 3) * 1000; this.t0 = performance.now();
     $("#shRound").textContent = this.round + 1; $("#shMsg").innerHTML = ""; $("#shGo").disabled = false;
-    $("#shCust").innerHTML = `<span class="sh-face">${["👩", "👨", "👵", "👴", "👧", "👦", "🧑‍🎓", "👩‍💼", "👨‍🍳", "🧕"][Math.floor(Math.random() * 10)]}</span>`;
+    $("#shCust").innerHTML = `<span class="sh-face">${this.cfg.cust[Math.floor(Math.random() * this.cfg.cust.length)]}</span>`;
     $("#shCust").className = "sh-cust in"; this.showOrder(); this.drawTray();
   },
   showOrder(){ $("#shOrder").innerHTML = this.py ? rubyHTML(this.text) : esc(this.text); },
@@ -3577,49 +3610,48 @@ const Shop = {
     $("#shPat").style.transform = `scaleX(${k})`; $("#shPat").className = k < .25 ? "hot" : k < .5 ? "warm" : ""; $("#shSec").textContent = Math.ceil(left / 1000) + " giây";
     if(left <= 0) this.fail("Khách chờ lâu quá nên bỏ đi rồi! 😤");
   },
+  price(arr){ return arr.reduce((a, l) => a + this.item(l.id).price * l.n, 0); },
   drawTray(){
-    const T = $("#shTray"), cnt = {}; this.tray.forEach(l => cnt[l.id] = (cnt[l.id] || 0) + l.n);
+    const C = this.cfg, T = $("#shTray"), cnt = {}; this.tray.forEach(l => cnt[l.id] = (cnt[l.id] || 0) + l.n);
     document.querySelectorAll(".sh-spot").forEach(sp => { const n = cnt[sp.dataset.id] || 0, bd = sp.querySelector(".sh-badge"); bd.hidden = !n; bd.textContent = n; sp.classList.toggle("on", !!n); });
-    if(!this.tray.length){ T.innerHTML = `<p class="muted sh-empty">Khay đang trống – bấm vào món trên quầy.</p>`; return; }
-    T.innerHTML = this.tray.map((l, i) => { const it = SHOP_MENU.find(x => x.id === l.id);
-      return `<div class="sh-line" data-i="${i}"><span class="sh-li">${shopThumb(it.id)}</span><b class="han">${it.h}</b>
+    if(!this.tray.length){ T.innerHTML = `<p class="muted sh-empty">${C.tray} đang trống – bấm vào ${C.unit} trên quầy.</p>`; return; }
+    T.innerHTML = this.tray.map((l, i) => { const it = this.item(l.id);
+      return `<div class="sh-line" data-i="${i}"><span class="sh-li">${shopThumb(C, it.id)}</span><b class="han">${it.h}</b>
         <span class="sh-qty"><button data-a="minus" aria-label="Bớt">−</button><b>${l.n}</b><button data-a="plus" aria-label="Thêm">+</button><small class="han">${it.m}</small></span>
-        ${it.size ? `<span class="sh-seg">${["大", "小"].map(v => `<button data-a="size" data-v="${v}" aria-pressed="${l.size === v}" class="han">${v}</button>`).join("")}</span>` : ""}
-        ${it.temp ? `<span class="sh-seg">${["热", "冰"].map(v => `<button data-a="temp" data-v="${v}" aria-pressed="${l.temp === v}" class="han">${v}</button>`).join("")}</span>` : ""}
-        <span class="sh-sub">${it.price}元 × ${l.n} = ${it.price * l.n}元</span><button class="sh-x" data-a="del" aria-label="Bỏ món">×</button></div>`; }).join("")
-      + `<div class="sh-total">Tổng cộng <b>${this.tray.reduce((a, l) => a + SHOP_MENU.find(x => x.id === l.id).price * l.n, 0)} 元</b></div>`;
+        ${it.attrs.map(x => `<span class="sh-seg ${x}">${SHOP_ATTR[x].opts.map(v => `<button data-a="${x}" data-v="${v}" aria-pressed="${l.a[x] === v}" class="han" title="${SHOP_ATTR[x].vi[v]}">${SHOP_ATTR[x].sw ? `<i style="background:${SHOP_ATTR[x].sw[v]}"></i>` : ""}${v}</button>`).join("")}</span>`).join("")}
+        <span class="sh-sub">${it.price}元 × ${l.n} = ${it.price * l.n}元</span><button class="sh-x" data-a="del" aria-label="Bỏ">×</button></div>`; }).join("")
+      + `<div class="sh-total">Tổng cộng <b>${this.price(this.tray)} 元</b></div>`;
     T.querySelectorAll("button[data-a]").forEach(b => b.onclick = () => { if(this.busy) return; const i = +b.closest(".sh-line").dataset.i, l = this.tray[i], a = b.dataset.a;
-      if(a === "plus") l.n = Math.min(9, l.n + 1); else if(a === "minus"){ l.n--; if(l.n <= 0) this.tray.splice(i, 1); } else if(a === "del") this.tray.splice(i, 1); else l[a] = b.dataset.v;
+      if(a === "plus") l.n = Math.min(9, l.n + 1); else if(a === "minus"){ l.n--; if(l.n <= 0) this.tray.splice(i, 1); } else if(a === "del") this.tray.splice(i, 1); else l.a[a] = b.dataset.v;
       this.drawTray(); });
   },
   deliver(){
-    if(this.busy) return;
-    if(!this.tray.length) return toast("Khay đang trống. Chọn món theo order của khách nhé!", "warn");
-    const miss = this.tray.find(l => { const it = SHOP_MENU.find(x => x.id === l.id); return (it.size && !l.size) || (it.temp && !l.temp); });
-    if(miss){ const it = SHOP_MENU.find(x => x.id === miss.id); return toast(`Món ${it.h} chưa chọn ${it.size && !miss.size ? "cỡ 大/小" : "热/冰 (nóng/đá)"}.`, "warn"); }
-    const key = arr => { const m = {}; arr.forEach(l => { const k = `${l.id}|${l.size}|${l.temp}`; m[k] = (m[k] || 0) + l.n; }); return JSON.stringify(Object.keys(m).sort().map(k => [k, m[k]])); };
+    if(this.busy) return; const C = this.cfg;
+    if(!this.tray.length) return toast(`${C.tray} đang trống. Chọn theo yêu cầu của khách nhé!`, "warn");
+    for(const l of this.tray){ const it = this.item(l.id), x = it.attrs.find(x => !l.a[x]); if(x) return toast(`${it.h} chưa chọn ${SHOP_ATTR[x].need}.`, "warn"); }
+    const key = arr => { const m = {}; arr.forEach(l => { const it = this.item(l.id), k = [l.id, ...it.attrs.map(x => l.a[x])].join("|"); m[k] = (m[k] || 0) + l.n; }); return JSON.stringify(Object.keys(m).sort().map(k => [k, m[k]])); };
     if(key(this.tray) === key(this.order.lines)){
-      const bill = this.order.lines.reduce((a, l) => a + SHOP_MENU.find(x => x.id === l.id).price * l.n, 0), left = this.limit - (performance.now() - this.t0), tip = left > this.limit / 2 ? Math.ceil(bill * .1) : 0;
+      const bill = this.price(this.order.lines), left = this.limit - (performance.now() - this.t0), tip = left > this.limit / 2 ? Math.ceil(bill * .1) : 0;
       this.money += bill + tip; this.served++; this.busy = true; $("#shMoney").textContent = this.money;
-      $("#shCust").className = "sh-cust happy"; $("#shMsg").innerHTML = `<div class="sh-ok">✓ <span class="han">谢谢！真好吃！</span> +${bill} 元${tip ? ` · tiền tip ${tip} 元` : ""}</div>`;
+      $("#shCust").className = "sh-cust happy"; $("#shMsg").innerHTML = `<div class="sh-ok">✓ <span class="han">${C.thanks}</span> +${bill} 元${tip ? ` · tiền tip ${tip} 元` : ""}</div>`;
       speak("谢谢"); this.log.push({ ok: true, o: this.order }); this.round++; $("#shGo").disabled = true;
       Games.later(() => this.next(), 1600);
-    } else this.fail("Sai món rồi! 😣");
+    } else this.fail(C.key === "cloth" ? "Lấy sai đồ rồi! 😣" : "Sai món rồi! 😣");
   },
   fail(msg){
     if(this.busy) return; this.busy = true; this.hearts--; this.drawHearts(); this.round++; $("#shGo").disabled = true;
     this.log.push({ ok: false, o: this.order });
     $("#shCust").className = "sh-cust angry";
-    $("#shMsg").innerHTML = `<div class="sh-bad">${msg}<br>Khách gọi: <b>${esc(this.order.vi)}</b></div>`;
-    Games.later(() => this.next(), 3200);
+    $("#shMsg").innerHTML = `<div class="sh-bad">${msg}<br>Khách cần: <b>${esc(this.order.vi)}</b></div>`;
+    Games.later(() => this.next(), 3400);
   },
   end(){
-    cancelAnimationFrame(Games.raf); this.order = null;
+    cancelAnimationFrame(Games.raf); this.order = null; const C = this.cfg;
     const pct = this.round ? this.served / this.round * 100 : 0;
-    Games.over($("#shWrap"), `<div class="gm-over-t">🍜 ${this.hearts > 0 ? "Hết ca bán hàng!" : "Quán đóng cửa – hết lượt!"}</div>
+    Games.over($("#shWrap"), `<div class="gm-over-t">${C.emoji} ${C.endT(this.hearts > 0)}</div>
       <div class="gm-over-s">Phục vụ đúng <b>${this.served}/${this.round}</b> khách · thu nhập <b>${this.money} 元</b></div>
-      <div class="gm-miss"><b>Các order hôm nay</b>${this.log.map(x => `<span>${x.ok ? "✅" : "❌"} <span class="han">${esc(x.o.text)}</span><br><small>${esc(x.o.vi)}</small></span>`).join("")}</div>`, () => this.start());
-    if(this.round >= 5) Games.reward("shop", pct, `Quán ăn Tiểu Ngữ (${this.served}/${this.round} khách)`);
+      <div class="gm-miss"><b>Các yêu cầu hôm nay</b>${this.log.map(x => `<span>${x.ok ? "✅" : "❌"} <span class="han">${esc(x.o.text)}</span><br><small>${esc(x.o.vi)}</small></span>`).join("")}</div>`, () => this.start(C.key === "cloth" ? "cloth" : "food"));
+    if(this.round >= 5) Games.reward(C.key, pct, `${C.title} (${this.served}/${this.round} khách)`);
   }
 };
 
