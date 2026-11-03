@@ -3367,8 +3367,12 @@ const Games = {
   range(){ const ids = this.ids(); let r = store.get("ww_game_range_" + S.level, null);
     if(!r || !ids.includes(r[0]) || !ids.includes(r[1]) || r[0] > r[1]) r = [S.lesson, S.lesson]; return r; },
   words(){ const [a, b] = this.range(), seen = new Set(), out = [];
-    this.ids().filter(n => n >= a && n <= b).forEach(n => (LEVELS[S.level].lessons[n].vocab || []).forEach(w => {
-      const k = w.h + "|" + w.p; if(seen.has(k)) return; seen.add(k); out.push({ ...w, les: n, vs: Games.short(w.vi) }); }));
+    const ls = this.ids().filter(n => n >= a && n <= b).map(n => LEVELS[S.level].lessons[n]);
+    const sents = [...new Set(ls.flatMap(L => [...(L.vocab || []).map(w => Array.isArray(w.ex) ? w.ex[0] : ""), ...(L.zhvi || []).map(x => x.zh), ...(L.sentences || []).map(x => x.h)]).filter(x => x && /[一-鿿]/.test(x)))];
+    ls.forEach((L, i) => (L.vocab || []).forEach(w => {
+      const k = w.h + "|" + w.p; if(seen.has(k)) return; seen.add(k);
+      const ss = sents.filter(x => x.includes(w.h) && x.replace(w.h, "").replace(/[，。？！、\s]/g, "").length >= 2);
+      out.push({ ...w, les: this.ids().filter(n => n >= a && n <= b)[i], vs: Games.short(w.vi), sents: ss }); }));
     return out; },
   short(vi){ return String(vi).split(/[,;(（]/)[0].trim(); },
   alive(el){ return el && document.body.contains(el); },
@@ -3717,9 +3721,10 @@ const Race = {
     for(const x of shuffle(this.pool)){ if(out.length >= 4) break; const v = key(x); if(x === w || !v || seen.has(v) || x.vs === w.vs) continue; seen.add(v); out.push(x); }
     return out; },
   question(){
-    const w = this.pick(), r = Math.random();
-    const ex = Array.isArray(w.ex) && w.ex[0] && w.ex[0].includes(w.h) && w.ex[0].replace(w.h, "") !== "" ? w.ex : null;
-    let type = r < .3 && ex ? "fill" : r < .55 ? "vi" : r < .75 ? "zh" : "py";
+    let w = this.pick(); const r = Math.random();
+    if(r < .65 && !(w.sents || []).length){ const alt = this.pool.filter(x => (x.sents || []).length); if(alt.length) w = alt[Math.floor(Math.random() * alt.length)]; }
+    const ex = (w.sents || []).length ? [w.sents[Math.floor(Math.random() * w.sents.length)]] : null;
+    let type = r < .65 && ex ? "fill" : r < .8 ? "vi" : r < .92 ? "zh" : "py";
     const key = { fill: x => x.h, vi: x => x.vs, zh: x => x.h, py: x => x.p }[type];
     let o = this.opts(w, key); if(o.length < 4){ type = "vi"; o = this.opts(w, x => x.vs); }
     o = shuffle(o); const ans = "ABCD"[o.indexOf(w)];
