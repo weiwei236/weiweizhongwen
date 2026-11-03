@@ -746,6 +746,85 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 @media (prefers-reduced-motion:reduce){.toast{animation:none}.fm-plot,.fm-seed{transition:none}}
 .farm-btn{background:#FFF6DA;border-color:#F2C14E;color:#6B4A0E}.farm-btn svg{width:16px;height:16px}
 .farm-btn .coin{width:18px;height:18px}
+/* ---- Trò chơi ---- */
+.gm{display:grid;gap:16px}
+.gm-head{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap}
+.gm-head>div:first-child b{font-size:20px;display:block}.gm-head small{color:var(--muted)}
+.gm-range{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px}
+.gm-range select{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.gm-count{color:var(--muted)}.gm-count b{color:var(--ink)}
+.gm-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.gm-card{text-align:left;border:0;border-radius:18px;padding:20px;display:grid;gap:6px;cursor:pointer;color:#fff;box-shadow:var(--shadow);transition:transform .15s}
+.gm-card:hover{transform:translateY(-3px)}
+.gm-card.fruit{background:linear-gradient(140deg,#3B2416,#7A4A2A)}.gm-card.shop{background:linear-gradient(140deg,#C2513A,#E8875A)}
+.gm-card b{font-size:22px}.gm-card small{opacity:.9;font-size:14px;line-height:1.45}.gm-card em{font-style:normal;font-weight:700;margin-top:6px}
+.gm-art{display:flex;gap:6px;height:76px;align-items:center}.gm-art i{width:68px;height:68px;display:block;transform:rotate(calc(var(--i)*20deg - 20deg))}.gm-art svg{width:100%;height:100%}
+.gm-art.shop .sh-emo{font-size:52px}.gm-art.shop .sh-svg{width:60px;height:60px}
+.gm-note{margin:0;font-size:13px}
+.gm-over{position:absolute;inset:0;background:rgba(15,25,20,.72);display:grid;place-items:center;z-index:20;padding:16px;border-radius:18px}
+.gm-over-in{background:var(--surface);border-radius:16px;padding:22px;max-width:560px;width:100%;max-height:100%;overflow:auto;display:grid;gap:12px;text-align:center}
+.gm-over-t{font-size:26px;font-weight:700}.gm-over-s{color:var(--muted)}.gm-over-s b{color:var(--ink);font-size:18px}
+.gm-miss{display:grid;gap:6px;text-align:left;background:var(--surface-2);border-radius:12px;padding:12px;max-height:240px;overflow:auto}.gm-miss>span{font-size:15px}.gm-miss .han{font-size:18px}
+.gm-over-b{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+/* chém trái cây */
+.fn-wrap{position:relative;display:grid;gap:8px}
+.fn-hud{display:flex;align-items:center;gap:16px;flex-wrap:wrap;font-weight:600}.fn-hud .fn-quit{margin-left:auto}
+.fn-lives span,.sh-hearts span{color:#D9D9D9;font-size:20px;margin-right:2px}.fn-lives span.on,.sh-hearts span.on{color:#E0394A}
+.fn-score b{font-size:20px;color:var(--accent)}.fn-combo{color:#D9822B;font-weight:800}
+.fn-prompt{text-align:center;display:grid;gap:2px;min-height:86px;align-content:center}
+.fn-prompt small{color:var(--muted);font-weight:600}.fn-prompt .zh{font-size:46px;line-height:1.1}.fn-prompt .vi{font-size:28px;font-weight:700}
+.fn-ans{font-style:normal;color:var(--bad);font-weight:600}.fn-ans .han{font-size:22px;color:var(--ink)}
+.fn-timer{height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden}.fn-timer i{display:block;height:100%;background:var(--accent);transform-origin:left;transition:background .2s}.fn-timer i.hot{background:#E0394A}
+.fn-arena{position:relative;height:440px;border-radius:18px;overflow:hidden;touch-action:none;user-select:none;cursor:crosshair;
+  background:radial-gradient(ellipse at 50% 120%,#7A4A2A,#3B2416 70%),repeating-linear-gradient(90deg,transparent 0 80px,rgba(0,0,0,.15) 80px 84px)}
+.fn-arena.shake{animation:fnShake .35s}
+@keyframes fnShake{25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-3px)}}
+.fn-arena canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:5}
+.fn-fruit{position:absolute;left:0;top:0;width:96px;height:96px;will-change:transform}
+.fn-fruit svg{width:96px;height:96px;filter:drop-shadow(0 6px 8px rgba(0,0,0,.35))}
+.fn-lab{position:absolute;left:50%;top:50%;translate:-50% -50%;background:rgba(255,255,255,.94);color:#17332A;border-radius:10px;padding:3px 9px;font-size:16px;font-weight:700;white-space:nowrap;max-width:190px;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.fn-lab.han{font-size:24px;font-weight:400}
+.fn-fruit.fn-show .fn-lab{background:#2C9A58;color:#fff;outline:3px solid #fff}
+.fn-half{position:absolute;width:96px;height:96px;pointer-events:none;z-index:3}.fn-half svg{width:96px;height:96px}
+.fn-half.l{clip-path:inset(0 50% 0 0);animation:fnL .95s ease-in forwards}.fn-half.r{clip-path:inset(0 0 0 50%);animation:fnR .95s ease-in forwards}
+@keyframes fnL{from{transform:rotate(var(--a))}to{transform:translate(-70px,260px) rotate(calc(var(--a) - 70deg));opacity:.4}}
+@keyframes fnR{from{transform:rotate(var(--a))}to{transform:translate(70px,260px) rotate(calc(var(--a) + 70deg));opacity:.4}}
+.fn-splat{position:absolute;width:120px;height:120px;border-radius:50%;pointer-events:none;animation:fnSplat .7s forwards;z-index:2}
+@keyframes fnSplat{from{transform:scale(.4);opacity:.95}to{transform:scale(1.5);opacity:0}}
+.fn-pop{position:absolute;font-size:24px;font-weight:800;color:#FFD54F;text-shadow:0 2px 0 #7A4A2A;pointer-events:none;animation:fnPop .9s forwards;z-index:6}
+@keyframes fnPop{to{transform:translateY(-50px);opacity:0}}
+.fn-tip{margin:0;color:var(--muted);font-size:13px;text-align:center}
+@media (max-width:600px){.fn-arena{height:380px}.fn-prompt .zh{font-size:38px}.fn-prompt .vi{font-size:22px}.fn-lab{font-size:14px}.fn-lab.han{font-size:20px}}
+/* quán ăn */
+.sh-wrap{position:relative;display:grid;gap:12px}
+.sh-hud{display:flex;align-items:center;gap:16px;flex-wrap:wrap;font-weight:600}.sh-hud .btn{margin-left:auto}.sh-hud b{color:var(--accent)}
+.sh-top{display:grid;gap:8px}
+.sh-counter{display:flex;align-items:center;gap:14px;background:linear-gradient(180deg,#FFF3E6,#FBE3CC);border-radius:16px;padding:14px;border-bottom:8px solid #C58B5A}
+.sh-cust{font-size:64px;line-height:1;transition:transform .3s}.sh-cust.in{animation:shIn .45s}.sh-cust.happy{transform:translateY(-6px) scale(1.08)}.sh-cust.angry{filter:hue-rotate(-40deg) saturate(1.6);animation:fnShake .4s}
+@keyframes shIn{from{transform:translateX(-80px);opacity:0}}
+.sh-bubble{flex:1;background:#fff;border-radius:16px;padding:12px 16px;position:relative;box-shadow:var(--shadow);display:grid;gap:8px}
+.sh-bubble:before{content:"";position:absolute;left:-10px;top:24px;border:10px solid transparent;border-right-color:#fff;border-left:0}
+.sh-order{font-size:26px;line-height:1.7}.sh-order rt{font-family:var(--f-body);font-size:12px;color:var(--accent)}
+.sh-obtn{display:flex;gap:8px;flex-wrap:wrap}
+.sh-pat{position:relative;height:12px;background:var(--surface-2);border-radius:99px;overflow:hidden}.sh-pat i{position:absolute;inset:0;background:var(--good);transform-origin:left}.sh-pat i.warm{background:#E0A526}.sh-pat i.hot{background:#E0394A}
+.sh-pat span{position:absolute;right:8px;top:-3px;font-size:11px;font-weight:700}
+.sh-main{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:760px){.sh-main{grid-template-columns:minmax(0,1fr)}.sh-tray{order:-1}.sh-top{position:sticky;top:0;z-index:8;background:var(--surface);padding:6px 0}.sh-cust{font-size:40px}.sh-order{font-size:21px}}
+.sh-menu{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.sh-item{border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:8px 4px;display:grid;justify-items:center;gap:2px;cursor:pointer}
+.sh-item:hover{border-color:var(--accent)}.sh-item.pop{animation:shPop .25s}@keyframes shPop{50%{transform:scale(1.08)}}
+.sh-item b{font-size:18px;font-weight:400}.sh-item small{color:var(--muted);font-size:12px}
+.sh-emo{font-size:38px;line-height:1.1;position:relative}.sh-emo i{position:absolute;right:-8px;bottom:-2px;font-size:20px;font-style:normal}.sh-svg{width:44px;height:44px}
+.sh-tray{background:var(--surface-2);border-radius:14px;padding:12px;display:grid;gap:8px}
+.sh-tray-h{display:flex;justify-content:space-between;align-items:center}
+.sh-empty{margin:6px 0;font-size:14px}
+.sh-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#fff;border-radius:12px;padding:6px 8px}
+.sh-li .sh-emo{font-size:26px}.sh-li .sh-svg{width:30px;height:30px}.sh-line>b{font-size:18px;font-weight:400}
+.sh-qty{display:inline-flex;align-items:center;gap:4px}.sh-qty button{width:28px;height:28px;border-radius:8px;border:1px solid var(--line);background:#fff;font-size:18px;cursor:pointer}.sh-qty b{min-width:1.2em;text-align:center}
+.sh-seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}.sh-seg button{border:0;background:#fff;padding:3px 10px;font-size:17px;cursor:pointer}.sh-seg button[aria-pressed="true"]{background:var(--accent);color:#fff}
+.sh-x{margin-left:auto;border:0;background:none;font-size:22px;color:var(--muted);cursor:pointer}
+.sh-go{width:100%;justify-content:center}
+.sh-ok{color:var(--good);font-weight:700}.sh-ok .han{font-size:20px}.sh-bad{color:var(--bad);font-weight:600}.sh-bad b{color:var(--ink)}
 </style>
 
 </head>
@@ -2354,6 +2433,7 @@ function lcs(a,b){
 }
 function diffHtml(said,target){ const k=new Set(lcs(said,target)); return [...said].map((c,i)=>`<span class="${k.has(i)?"g":"r"}">${esc(c)}</span>`).join(""); }
 const ICON = {
+  game:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 11v3M5.5 12.5h3"/><circle cx="16" cy="11.5" r=".8" fill="currentColor"/><circle cx="18" cy="13.5" r=".8" fill="currentColor"/></svg>',
   cards:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="14" height="14" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v12"/></svg>',
   trans:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h8M8 3v2M5.5 5c.8 3 3 5.5 6 7M10.5 5c-.8 3-3 5.5-6 7"/><path d="M13 21l4-9 4 9M14.5 18h5"/></svg>',
   mic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v4M8 21h8"/></svg>',
@@ -2503,6 +2583,7 @@ function renderLesson(){
     <p>${les.vocab.length} từ mới · ${les.zhvi.length+les.vizh.length} câu luyện dịch · ${new Set(les.vocab.map(w=>w.h)).size+les.sentences.length} mục luyện phát âm</p></div>
     <div class="sections" role="tablist" aria-label="Phần luyện tập">
       <button role="tab" data-s="flash" aria-selected="${S.section==="flash"}">${ICON.cards}Flashcard</button>
+      <button role="tab" data-s="game" aria-selected="${S.section==="game"}">${ICON.game}Trò chơi</button>
       <button role="tab" data-s="trans" aria-selected="${S.section==="trans"}">${ICON.trans}Luyện dịch</button>
       <button role="tab" data-s="speak" aria-selected="${S.section==="speak"}">${ICON.mic}Phát âm</button>
       ${Grammar.has(S.level,S.lesson)?`<button role="tab" data-s="gram" aria-selected="${S.section==="gram"}">${ICON.book}Ngữ pháp</button>`:""}
@@ -2514,7 +2595,8 @@ function renderLesson(){
   box.querySelector(".sections").onclick=e=>{const b=e.target.closest("button");if(!b)return;S.section=b.dataset.s;store.set("ww_section",S.section);renderLesson();};
   if(S.section==="exam"&&!les.test) S.section="flash";
   if(S.section==="gram"&&!Grammar.has(S.level,S.lesson)) S.section="flash";
-  if(S.section==="flash") Flash.mount(les); else if(S.section==="trans") Trans.mount(les); else if(S.section==="exam") Exam.mount(les); else if(S.section==="read") Reading.mount(les); else if(S.section==="gram") Grammar.mount(les); else Speak.mount(les);
+  if(typeof Games!=="undefined") Games.stop();
+  if(S.section==="flash") Flash.mount(les); else if(S.section==="game") Games.mount(les); else if(S.section==="trans") Trans.mount(les); else if(S.section==="exam") Exam.mount(les); else if(S.section==="read") Reading.mount(les); else if(S.section==="gram") Grammar.mount(les); else Speak.mount(les);
 }
 function renderAll(){ stopAnyRecording(); renderLevels(); renderRail(); renderLesson(); }
 
@@ -3239,6 +3321,283 @@ const L10_TEST = {
     18: "Với 衣服 (quần áo) ta dùng động từ 穿 (mặc). 能穿 nghĩa là “mặc được”.",
     19: "Người nói không có điện thoại (我没有手机) và muốn đi cửa hàng mua một cái, nên muốn mua B 手机.",
     20: "Câu nói 这件衣服很好看 (chiếc áo này rất đẹp) và không nhắc đến giá, nên chọn A 好看. B và C nói về giá nên không đúng."
+  }
+};
+
+/* ======================= TRÒ CHƠI ÔN TỪ VỰNG =======================
+   Chọn phạm vi Bài … – Bài … rồi chơi: 🍉 Chém trái cây (đúng thì chém, 3 giây/câu, 5 mạng)
+   và 🍜 Quán ăn Tiểu Ngữ (đọc order bằng chữ Hán, chọn đúng món, số lượng, cỡ, nóng/đá). */
+const Games = {
+  les: null, raf: 0, timers: [],
+  mount(les){ this.les = les; this.stop(); this.menu(); },
+  stop(){ cancelAnimationFrame(this.raf); this.raf = 0; this.timers.forEach(clearTimeout); this.timers = []; if(this.onKey){ document.removeEventListener("keydown", this.onKey); this.onKey = null; } },
+  later(fn, ms){ const t = setTimeout(() => { this.timers = this.timers.filter(x => x !== t); fn(); }, ms); this.timers.push(t); return t; },
+  ids(){ return Object.keys(LEVELS[S.level].lessons).map(Number).sort((a, b) => a - b); },
+  range(){ const ids = this.ids(); let r = store.get("ww_game_range_" + S.level, null);
+    if(!r || !ids.includes(r[0]) || !ids.includes(r[1]) || r[0] > r[1]) r = [S.lesson, S.lesson]; return r; },
+  words(){ const [a, b] = this.range(), seen = new Set(), out = [];
+    this.ids().filter(n => n >= a && n <= b).forEach(n => (LEVELS[S.level].lessons[n].vocab || []).forEach(w => {
+      const k = w.h + "|" + w.p; if(seen.has(k)) return; seen.add(k); out.push({ ...w, les: n, vs: Games.short(w.vi) }); }));
+    return out; },
+  short(vi){ return String(vi).split(/[,;(（]/)[0].trim(); },
+  alive(el){ return el && document.body.contains(el); },
+  menu(){
+    const W = $("#work"), ids = this.ids(), [a, b] = this.range(), n = this.words().length;
+    const opt = v => ids.map(i => `<option value="${i}" ${i === v ? "selected" : ""}>Bài ${i}</option>`).join("");
+    W.innerHTML = `<div class="gm">
+      <div class="gm-head"><div><b>Trò chơi ôn từ vựng</b><small>Chọn phạm vi bài muốn ôn, rồi chọn trò chơi.</small></div>
+        <div class="gm-range"><label>Từ <select id="gmA">${opt(a)}</select></label><label>đến <select id="gmB">${opt(b)}</select></label>
+          <span class="gm-count"><b>${n}</b> từ</span><button class="btn sm" id="gmAll">Tất cả các bài</button></div></div>
+      <div class="gm-cards">
+        <button class="gm-card fruit" data-g="fruit"><span class="gm-art">${FN_FRUITS.map((f, i) => i < 3 ? `<i style="--i:${i}">${fnFruitSVG(f)}</i>` : "").join("")}</span>
+          <b>Chém trái cây</b><small>Đọc đề, chém quả có đáp án đúng. Mỗi câu 3 giây, có 5 mạng.</small><em>Chơi ngay ▸</em></button>
+        <button class="gm-card shop" data-g="shop"><span class="gm-art shop">${shopIcon("niurou")}${shopIcon("naicha")}${shopIcon("jiaozi")}</span>
+          <b>Quán ăn Tiểu Ngữ</b><small>Đọc order bằng chữ Hán, chọn đúng món, số lượng, cỡ to/nhỏ, nóng/đá trước khi khách hết kiên nhẫn.</small><em>Mở quán ▸</em></button>
+      </div>
+      <p class="muted gm-note">Trò Quán ăn dùng thực đơn cố định (饺子, 包子, 牛肉面, 奶茶…), không phụ thuộc phạm vi bài.</p></div>`;
+    const save = () => { let x = +$("#gmA").value, y = +$("#gmB").value; if(x > y) [x, y] = [y, x]; store.set("ww_game_range_" + S.level, [x, y]); this.menu(); };
+    $("#gmA").onchange = save; $("#gmB").onchange = save;
+    $("#gmAll").onclick = () => { store.set("ww_game_range_" + S.level, [ids[0], ids[ids.length - 1]]); this.menu(); };
+    W.querySelectorAll("[data-g]").forEach(btn => btn.onclick = () => btn.dataset.g === "fruit" ? Fruit.start() : Shop.start());
+  },
+  over(box, html, again){
+    box.insertAdjacentHTML("beforeend", `<div class="gm-over"><div class="gm-over-in">${html}
+      <div class="gm-over-b"><button class="btn primary" id="gmAgain">${ICON.redo}Chơi lại</button><button class="btn" id="gmBack">Chọn trò khác</button></div></div></div>`);
+    $("#gmAgain").onclick = again; $("#gmBack").onclick = () => { this.stop(); this.menu(); };
+  },
+  reward(game, pct, label){
+    const d = new Date(), key = `game:${game}:${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+    Track.log("game", { game, pct: Math.round(pct), label });
+    if(pct > 0 && Farm.load() && !(Farm.st.done || {})[key]) Farm.earn(pct, label, key);
+  }
+};
+
+/* ---------- 🍉 Chém trái cây ---------- */
+const FN_FRUITS = [
+  { n: "dưa hấu", o: "#2E8B3D", i: "#E8434F", s: "#1E6B2C" }, { n: "cam", o: "#F59A23", i: "#FFC56B", s: "#D97C10" },
+  { n: "táo", o: "#D7263D", i: "#FFF1D6", s: "#A51428" }, { n: "chanh", o: "#E8D53A", i: "#FBF3A6", s: "#C9B417" },
+  { n: "kiwi", o: "#8A6A3B", i: "#8DC63F", s: "#6B4F27" }, { n: "đào", o: "#F48FA0", i: "#FFD8A8", s: "#E06A80" }
+];
+function fnFruitSVG(f, half){
+  const body = half ? `<circle cx="50" cy="50" r="40" fill="${f.o}"/><circle cx="50" cy="50" r="33" fill="${f.i}"/>${[0,60,120,180,240,300].map(a => `<ellipse cx="${50 + 18 * Math.cos(a * Math.PI / 180)}" cy="${50 + 18 * Math.sin(a * Math.PI / 180)}" rx="2.6" ry="4" fill="#3A2A1A" transform="rotate(${a + 90} ${50 + 18 * Math.cos(a * Math.PI / 180)} ${50 + 18 * Math.sin(a * Math.PI / 180)})"/>`).join("")}`
+    : `<circle cx="50" cy="52" r="40" fill="${f.o}"/><path d="M22 40 Q50 18 78 40" stroke="${f.s}" stroke-width="5" fill="none" opacity=".45"/><path d="M18 60 Q50 80 82 60" stroke="${f.s}" stroke-width="5" fill="none" opacity=".35"/><ellipse cx="36" cy="36" rx="10" ry="6" fill="#fff" opacity=".45" transform="rotate(-30 36 36)"/><path d="M50 13 q2 -8 9 -9" stroke="#5B3A1E" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M53 12 q10 -8 18 -1 q-9 6 -18 1z" fill="#4CAF50"/>`;
+  return `<svg viewBox="0 0 100 100" aria-hidden="true">${body}</svg>`;
+}
+const Fruit = {
+  start(){
+    Games.stop(); this.pool = Games.words();
+    if(this.pool.length < 4){ toast("Phạm vi bài đã chọn có ít hơn 4 từ, hãy chọn thêm bài.", "warn"); return Games.menu(); }
+    this.lives = 5; this.score = 0; this.combo = 0; this.best = 0; this.right = 0; this.asked = 0; this.miss = []; this.bag = [];
+    const W = $("#work");
+    W.innerHTML = `<div class="gm"><div class="fn-wrap" id="fnWrap">
+      <div class="fn-hud"><span class="fn-lives" id="fnLives"></span><span class="fn-score">Điểm <b id="fnScore">0</b></span><span class="fn-combo" id="fnCombo"></span><button class="btn sm fn-quit" id="fnQuit">Thoát</button></div>
+      <div class="fn-prompt" id="fnPrompt"></div><div class="fn-timer"><i id="fnBar"></i></div>
+      <div class="fn-arena" id="fnArena"><canvas id="fnTrail"></canvas></div>
+      <p class="fn-tip">Rê chuột hoặc vuốt ngón tay qua quả đúng để chém (bấm vào quả cũng được).</p></div></div>`;
+    $("#fnQuit").onclick = () => { Games.stop(); Games.menu(); };
+    this.arena = $("#fnArena"); this.canvas = $("#fnTrail"); this.trail = [];
+    this.bindBlade(); this.drawLives(); this.next(); $("#fnWrap").scrollIntoView({ behavior: "smooth", block: "start" });
+    const loop = now => { if(!Games.alive(this.arena)) return Games.stop(); this.frame(now); Games.raf = requestAnimationFrame(loop); };
+    Games.raf = requestAnimationFrame(loop);
+  },
+  drawLives(){ $("#fnLives").innerHTML = Array.from({ length: 5 }, (_, i) => `<span class="${i < this.lives ? "on" : ""}">❤</span>`).join(""); },
+  pickWord(){ if(!this.bag.length) this.bag = shuffle(this.pool); return this.bag.pop(); },
+  question(){
+    const w = this.pickWord(), r = Math.random(), type = r < .45 ? "vi" : r < .8 ? "zh" : "py";
+    const key = x => type === "vi" ? x.vs : type === "zh" ? x.h : x.p;
+    const others = shuffle(this.pool.filter(x => x.h !== w.h && key(x) !== key(w) && x.vs !== w.vs)), seen = new Set([key(w)]), opts = [w];
+    for(const x of others){ if(opts.length >= 3) break; if(seen.has(key(x))) continue; seen.add(key(x)); opts.push(x); }
+    return { w, type, ask: type === "zh" ? w.vs : w.h, label: type === "vi" ? "Chém nghĩa đúng" : type === "zh" ? "Chém chữ Hán đúng" : "Chém phiên âm đúng", opts: shuffle(opts).map(x => ({ t: key(x), ok: x === w })) };
+  },
+  next(){
+    if(!Games.alive(this.arena)) return;
+    this.arena.querySelectorAll(".fn-fruit").forEach(e => e.remove());
+    const q = this.q = this.question(); this.asked++; this.done = false; this.t0 = performance.now() + 250;
+    $("#fnPrompt").innerHTML = `<small>${q.label}</small><span class="${q.type === "zh" ? "vi" : "zh han"}">${esc(q.ask)}</span>`;
+    const Wd = this.arena.clientWidth, H = this.arena.clientHeight, N = q.opts.length, slots = shuffle([...Array(N).keys()]);
+    this.fruits = q.opts.map((o, i) => {
+      const f = FN_FRUITS[Math.floor(Math.random() * FN_FRUITS.length)], el = document.createElement("div");
+      el.className = "fn-fruit"; el.innerHTML = fnFruitSVG(f) + `<span class="fn-lab ${q.type === "zh" ? "han" : ""}">${esc(o.t)}</span>`;
+      this.arena.appendChild(el);
+      const x0 = Wd * (slots[i] + .5) / N; return { el, o, f, x0, x1: x0 + (Math.random() * 60 - 30), peak: H * (.62 + Math.random() * .14), delay: i * 90, dead: false };
+    });
+  },
+  frame(now){
+    if(this.lives <= 0 || !this.fruits) return;
+    const H = this.arena.clientHeight, D = 3000, el = now - this.t0, left = Math.max(0, 1 - el / D);
+    $("#fnBar").style.transform = `scaleX(${this.done ? 0 : left})`; $("#fnBar").classList.toggle("hot", left < .34);
+    this.fruits.forEach(f => { if(f.dead) return; const t = Math.min(1, Math.max(0, (el - f.delay) / (D - f.delay)));
+      const x = f.x0 + (f.x1 - f.x0) * t, y = H + 60 - (f.peak + 60) * 4 * t * (1 - t);
+      f.x = x; f.y = y; f.el.style.transform = `translate(${x - 48}px,${y - 48}px) rotate(${(t * 140 - 70) * (f.x1 > f.x0 ? 1 : -1)}deg)`; f.el.querySelector(".fn-lab").style.transform = `rotate(${-(t * 140 - 70) * (f.x1 > f.x0 ? 1 : -1)}deg)`; });
+    if(!this.done && el >= D) this.fail(null);
+    this.drawTrail(now);
+  },
+  bindBlade(){
+    const A = this.arena; let down = false;
+    const pt = e => { const r = A.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+    const test = e => { const [x, y] = pt(e); this.trail.push([x, y, performance.now()]);
+      (this.fruits || []).forEach(f => { if(f.dead || f.x == null) return; if((f.x - x) ** 2 + (f.y - y) ** 2 < 46 ** 2) this.cut(f); }); };
+    A.onpointerdown = e => { down = true; A.setPointerCapture?.(e.pointerId); test(e); };
+    A.onpointermove = e => { if(down || e.pointerType === "mouse" && e.buttons) test(e); else if(e.pointerType === "mouse") { const [x, y] = pt(e); this.trail.push([x, y, performance.now()]); (this.fruits || []).forEach(f => { if(!f.dead && f.x != null && (f.x - x) ** 2 + (f.y - y) ** 2 < 40 ** 2 && this.trail.length > 3 && Math.hypot(x - this.trail[this.trail.length - 4][0], y - this.trail[this.trail.length - 4][1]) > 40) this.cut(f); }); } };
+    A.onpointerup = A.onpointercancel = () => { down = false; };
+  },
+  drawTrail(now){
+    const c = this.canvas, A = this.arena; if(c.width !== A.clientWidth){ c.width = A.clientWidth; c.height = A.clientHeight; }
+    const g = c.getContext("2d"); g.clearRect(0, 0, c.width, c.height); this.trail = this.trail.filter(p => now - p[2] < 160);
+    if(this.trail.length < 2) return; g.lineCap = "round"; g.lineJoin = "round";
+    for(let i = 1; i < this.trail.length; i++){ const a = this.trail[i - 1], b = this.trail[i], k = i / this.trail.length;
+      g.strokeStyle = `rgba(255,255,255,${.85 * k})`; g.lineWidth = 2 + 6 * k; g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.stroke(); }
+  },
+  cut(f){
+    if(this.done || f.dead) return; f.dead = true;
+    const A = this.arena, ang = Math.random() * 40 - 20;
+    ["l", "r"].forEach(s => { const h = document.createElement("div"); h.className = `fn-half ${s}`; h.innerHTML = fnFruitSVG(f.f, true);
+      h.style.left = (f.x - 48) + "px"; h.style.top = (f.y - 48) + "px"; h.style.setProperty("--a", ang + "deg"); A.appendChild(h); Games.later(() => h.remove(), 1000); });
+    const sp = document.createElement("div"); sp.className = "fn-splat"; sp.style.left = (f.x - 60) + "px"; sp.style.top = (f.y - 60) + "px"; sp.style.background = `radial-gradient(circle, ${f.f.i} 0 30%, transparent 62%)`;
+    A.appendChild(sp); Games.later(() => sp.remove(), 700); f.el.remove();
+    if(f.o.ok) this.win(f); else this.fail(f);
+  },
+  pop(text, x, y, cls){ const p = document.createElement("div"); p.className = "fn-pop " + (cls || ""); p.textContent = text; p.style.left = x + "px"; p.style.top = y + "px"; this.arena.appendChild(p); Games.later(() => p.remove(), 900); },
+  win(f){
+    this.done = true; this.right++; this.combo++; this.best = Math.max(this.best, this.combo);
+    const pts = 10 + (this.combo - 1) * 2; this.score += pts; $("#fnScore").textContent = this.score;
+    $("#fnCombo").textContent = this.combo > 1 ? `Combo ×${this.combo}` : ""; this.pop("+" + pts, f.x, f.y - 30, "ok");
+    speak(this.q.w.h); Games.later(() => this.next(), 650);
+  },
+  fail(f){
+    this.done = true; this.combo = 0; $("#fnCombo").textContent = ""; this.lives--; this.drawLives();
+    const w = this.q.w; if(!this.miss.some(x => x.h === w.h)) this.miss.push(w);
+    const right = this.fruits.find(x => x.o.ok); if(right && !right.dead) right.el.classList.add("fn-show");
+    $("#fnPrompt").insertAdjacentHTML("beforeend", `<em class="fn-ans">${f ? "Sai rồi!" : "Hết giờ!"} <b class="han">${esc(w.h)}</b> ${esc(w.p)} = ${esc(w.vs)}</em>`);
+    this.arena.classList.add("shake"); Games.later(() => this.arena.classList.remove("shake"), 400);
+    if(this.lives <= 0) return Games.later(() => this.end(), 900);
+    Games.later(() => this.next(), 1500);
+  },
+  end(){
+    cancelAnimationFrame(Games.raf);
+    const pct = this.asked ? this.right / this.asked * 100 : 0;
+    Games.over($("#fnWrap"), `<div class="gm-over-t">🍉 Hết mạng!</div><div class="gm-over-s"><b>${this.score}</b> điểm · chém đúng <b>${this.right}</b> từ · combo cao nhất ×${this.best}</div>
+      ${this.miss.length ? `<div class="gm-miss"><b>Từ cần ôn lại</b>${this.miss.map(w => `<span><b class="han">${esc(w.h)}</b> ${esc(w.p)} – ${esc(w.vs)}</span>`).join("")}</div>` : ""}`, () => this.start());
+    if(this.right >= 10) Games.reward("fruit", Math.min(100, pct), `Chém trái cây (${this.right} từ đúng)`);
+  }
+};
+
+/* ---------- 🍜 Quán ăn Tiểu Ngữ ---------- */
+const SHOP_MENU = [
+  { id: "jiaozi", h: "饺子", p: "jiǎozi", vi: "sủi cảo", m: "盘", mv: "đĩa", price: 18, ic: "🥟" },
+  { id: "baozi", h: "包子", p: "bāozi", vi: "bánh bao", m: "个", mv: "cái", price: 3, ic: "bao" },
+  { id: "mian", h: "面条", p: "miàntiáo", vi: "mì", m: "碗", mv: "bát", price: 12, size: 1, ic: "🍜" },
+  { id: "niurou", h: "牛肉面", p: "niúròumiàn", vi: "mì bò", m: "碗", mv: "bát", price: 20, size: 1, ic: "beefnoodle" },
+  { id: "mifan", h: "米饭", p: "mǐfàn", vi: "cơm", m: "碗", mv: "bát", price: 2, size: 1, ic: "🍚" },
+  { id: "chaofan", h: "炒饭", p: "chǎofàn", vi: "cơm rang", m: "盘", mv: "đĩa", price: 15, ic: "🍛" },
+  { id: "kaoya", h: "北京烤鸭", p: "Běijīng kǎoyā", vi: "vịt quay Bắc Kinh", m: "只", mv: "con", price: 98, ic: "🦆" },
+  { id: "niunai", h: "牛奶", p: "niúnǎi", vi: "sữa", m: "杯", mv: "cốc", price: 6, size: 1, temp: 1, ic: "🥛" },
+  { id: "kele", h: "可乐", p: "kělè", vi: "Coca", m: "瓶", mv: "chai", price: 5, ic: "cola" },
+  { id: "baishi", h: "百事", p: "Bǎishì", vi: "Pepsi", m: "瓶", mv: "chai", price: 5, ic: "pepsi" },
+  { id: "kafei", h: "咖啡", p: "kāfēi", vi: "cà phê", m: "杯", mv: "cốc", price: 15, size: 1, temp: 1, ic: "☕" },
+  { id: "naicha", h: "奶茶", p: "nǎichá", vi: "trà sữa", m: "杯", mv: "cốc", price: 12, size: 1, temp: 1, ic: "🧋" },
+  { id: "cha", h: "茶", p: "chá", vi: "trà", m: "杯", mv: "cốc", price: 8, temp: 1, ic: "🍵" }
+];
+function shopIcon(id){
+  const it = SHOP_MENU.find(x => x.id === id), ic = it.ic;
+  if(ic === "bao") return `<svg class="sh-svg" viewBox="0 0 64 64"><ellipse cx="32" cy="40" rx="24" ry="16" fill="#F6EEDF" stroke="#C9B48E" stroke-width="2"/><path d="M14 38 Q32 6 50 38" fill="#FBF6EC" stroke="#C9B48E" stroke-width="2"/><path d="M26 18 q6 6 12 0 M24 26 q8 6 16 0" stroke="#C9B48E" stroke-width="2" fill="none"/></svg>`;
+  if(ic === "cola" || ic === "pepsi") return `<svg class="sh-svg" viewBox="0 0 64 64"><rect x="20" y="8" width="24" height="50" rx="6" fill="${ic === "cola" ? "#D7263D" : "#1F4FA8"}"/><rect x="20" y="8" width="24" height="7" rx="3" fill="#C9CED6"/><path d="M20 30 q12 ${ic === "cola" ? 8 : -8} 24 0" stroke="#fff" stroke-width="3" fill="none"/><text x="32" y="48" font-size="9" text-anchor="middle" fill="#fff" font-weight="700">${ic === "cola" ? "可乐" : "百事"}</text></svg>`;
+  if(ic === "beefnoodle") return `<span class="sh-emo">🍜<i>🥩</i></span>`;
+  return `<span class="sh-emo">${ic}</span>`;
+}
+const ZH_NUM = ["", "一", "两", "三"];
+const Shop = {
+  start(){
+    Games.stop(); this.round = 0; this.hearts = 3; this.money = 0; this.served = 0; this.total = 10; this.py = false; this.log = [];
+    const W = $("#work");
+    W.innerHTML = `<div class="gm"><div class="sh-wrap" id="shWrap">
+      <div class="sh-hud"><span class="sh-hearts" id="shHearts"></span><span>Khách <b id="shRound">1</b>/${this.total}</span><span>Thu nhập <b id="shMoney">0</b> 元</span><button class="btn sm" id="shQuit">Thoát</button></div>
+      <div class="sh-top"><div class="sh-counter"><div class="sh-cust" id="shCust"></div>
+        <div class="sh-bubble"><div class="sh-order han" id="shOrder"></div>
+          <div class="sh-obtn"><button class="btn sm" id="shSay">${ICON.sound}Nghe</button><button class="btn sm" id="shPy" aria-pressed="false">Hiện phiên âm</button></div></div></div>
+      <div class="sh-pat"><i id="shPat"></i><span id="shSec"></span></div></div>
+      <div class="sh-main"><div class="sh-menu" id="shMenu">${SHOP_MENU.map(it => `<button class="sh-item" data-id="${it.id}">${shopIcon(it.id)}<b class="han">${it.h}</b><small>${it.price}元</small></button>`).join("")}</div>
+        <div class="sh-tray"><div class="sh-tray-h"><b>Khay món</b><button class="btn sm" id="shClear">Xoá hết</button></div><div id="shTray"></div>
+          <button class="btn primary big sh-go" id="shGo">${ICON.check}Giao món</button><div class="sh-msg" id="shMsg"></div></div></div>
+      <p class="fn-tip">Bấm món trên thực đơn để thêm vào khay, chỉnh số lượng, cỡ <b class="han">大/小</b>, <b class="han">热/冰</b> (nóng/đá) rồi bấm “Giao món”.</p></div></div>`;
+    $("#shQuit").onclick = () => { Games.stop(); Games.menu(); };
+    $("#shSay").onclick = () => speak(this.text);
+    $("#shPy").onclick = () => { this.py = !this.py; $("#shPy").setAttribute("aria-pressed", this.py); $("#shPy").textContent = this.py ? "Ẩn phiên âm" : "Hiện phiên âm"; this.showOrder(); };
+    $("#shClear").onclick = () => { this.tray = []; this.drawTray(); };
+    $("#shGo").onclick = () => this.deliver();
+    $("#shMenu").onclick = e => { const b = e.target.closest("[data-id]"); if(!b || this.busy) return; const it = SHOP_MENU.find(x => x.id === b.dataset.id);
+      const same = this.tray.find(l => l.id === it.id && !l.size && !l.temp && !it.size && !it.temp); if(same) same.n = Math.min(9, same.n + 1); else this.tray.push({ id: it.id, n: 1, size: "", temp: "" });
+      this.drawTray(); b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop"); };
+    this.hearts = 3; this.drawHearts(); this.next(); $("#shWrap").scrollIntoView({ behavior: "smooth", block: "start" });
+    const loop = now => { if(!Games.alive($("#shWrap"))) return Games.stop(); this.tick(now); Games.raf = requestAnimationFrame(loop); };
+    Games.raf = requestAnimationFrame(loop);
+  },
+  drawHearts(){ $("#shHearts").innerHTML = Array.from({ length: 3 }, (_, i) => `<span class="${i < this.hearts ? "on" : ""}">❤</span>`).join(""); },
+  makeOrder(){
+    const k = this.round < 3 ? 1 : this.round < 7 ? 2 : 3, items = shuffle(SHOP_MENU).slice(0, k);
+    const lines = items.map(it => ({ id: it.id, n: 1 + Math.floor(Math.random() * (it.id === "kaoya" ? 1 : 3)), size: it.size ? (Math.random() < .5 ? "大" : "小") : "", temp: it.temp ? (Math.random() < .5 ? "热" : "冰") : "" }));
+    const ph = l => { const it = SHOP_MENU.find(x => x.id === l.id); return ZH_NUM[l.n] + l.size + it.m + l.temp + it.h; };
+    const parts = lines.map(ph), joined = parts.length > 1 ? parts.slice(0, -1).join("、") + "和" + parts[parts.length - 1] : parts[0];
+    const head = ["你好，", "老板，", "服务员，", ""][Math.floor(Math.random() * 4)], verb = ["我要", "请给我", "来"][Math.floor(Math.random() * 3)];
+    const vi = lines.map(l => { const it = SHOP_MENU.find(x => x.id === l.id); return `${l.n} ${it.mv} ${it.vi}${l.size ? (l.size === "大" ? " cỡ to" : " cỡ nhỏ") : ""}${l.temp ? (l.temp === "热" ? " nóng" : " đá") : ""}`; }).join(", ");
+    return { lines, text: head + verb + joined + "。" + (Math.random() < .4 ? "谢谢！" : ""), vi, attrs: lines.reduce((a, l) => a + (l.size ? 1 : 0) + (l.temp ? 1 : 0), 0) };
+  },
+  next(){
+    if(this.round >= this.total || this.hearts <= 0) return this.end();
+    const o = this.order = this.makeOrder(); this.text = o.text; this.tray = []; this.busy = false;
+    this.limit = Math.min(45, 14 + o.lines.length * 9 + o.attrs * 3) * 1000; this.t0 = performance.now();
+    $("#shRound").textContent = this.round + 1; $("#shMsg").innerHTML = ""; $("#shGo").disabled = false;
+    $("#shCust").innerHTML = `<span class="sh-face">${["👩", "👨", "👵", "👴", "👧", "👦", "🧑‍🎓", "👩‍💼", "👨‍🍳", "🧕"][Math.floor(Math.random() * 10)]}</span>`;
+    $("#shCust").className = "sh-cust in"; this.showOrder(); this.drawTray();
+  },
+  showOrder(){ $("#shOrder").innerHTML = this.py ? rubyHTML(this.text) : esc(this.text); },
+  tick(now){
+    if(this.busy || !this.order) return;
+    const left = Math.max(0, this.limit - (now - this.t0)), k = left / this.limit;
+    $("#shPat").style.transform = `scaleX(${k})`; $("#shPat").className = k < .25 ? "hot" : k < .5 ? "warm" : ""; $("#shSec").textContent = Math.ceil(left / 1000) + " giây";
+    if(left <= 0) this.fail("Khách chờ lâu quá nên bỏ đi rồi! 😤");
+  },
+  drawTray(){
+    const T = $("#shTray");
+    if(!this.tray.length){ T.innerHTML = `<p class="muted sh-empty">Khay đang trống – bấm món trên thực đơn.</p>`; return; }
+    T.innerHTML = this.tray.map((l, i) => { const it = SHOP_MENU.find(x => x.id === l.id);
+      return `<div class="sh-line" data-i="${i}"><span class="sh-li">${shopIcon(it.id)}</span><b class="han">${it.h}</b>
+        <span class="sh-qty"><button data-a="minus" aria-label="Bớt">−</button><b>${l.n}</b><button data-a="plus" aria-label="Thêm">+</button><small class="han">${it.m}</small></span>
+        ${it.size ? `<span class="sh-seg">${["大", "小"].map(v => `<button data-a="size" data-v="${v}" aria-pressed="${l.size === v}" class="han">${v}</button>`).join("")}</span>` : ""}
+        ${it.temp ? `<span class="sh-seg">${["热", "冰"].map(v => `<button data-a="temp" data-v="${v}" aria-pressed="${l.temp === v}" class="han">${v}</button>`).join("")}</span>` : ""}
+        <button class="sh-x" data-a="del" aria-label="Bỏ món">×</button></div>`; }).join("");
+    T.querySelectorAll("button[data-a]").forEach(b => b.onclick = () => { if(this.busy) return; const i = +b.closest(".sh-line").dataset.i, l = this.tray[i], a = b.dataset.a;
+      if(a === "plus") l.n = Math.min(9, l.n + 1); else if(a === "minus"){ l.n--; if(l.n <= 0) this.tray.splice(i, 1); } else if(a === "del") this.tray.splice(i, 1); else l[a] = b.dataset.v;
+      this.drawTray(); });
+  },
+  deliver(){
+    if(this.busy) return;
+    if(!this.tray.length) return toast("Khay đang trống. Chọn món theo order của khách nhé!", "warn");
+    const miss = this.tray.find(l => { const it = SHOP_MENU.find(x => x.id === l.id); return (it.size && !l.size) || (it.temp && !l.temp); });
+    if(miss){ const it = SHOP_MENU.find(x => x.id === miss.id); return toast(`Món ${it.h} chưa chọn ${it.size && !miss.size ? "cỡ 大/小" : "热/冰 (nóng/đá)"}.`, "warn"); }
+    const key = arr => { const m = {}; arr.forEach(l => { const k = `${l.id}|${l.size}|${l.temp}`; m[k] = (m[k] || 0) + l.n; }); return JSON.stringify(Object.keys(m).sort().map(k => [k, m[k]])); };
+    if(key(this.tray) === key(this.order.lines)){
+      const bill = this.order.lines.reduce((a, l) => a + SHOP_MENU.find(x => x.id === l.id).price * l.n, 0), left = this.limit - (performance.now() - this.t0), tip = left > this.limit / 2 ? Math.ceil(bill * .1) : 0;
+      this.money += bill + tip; this.served++; this.busy = true; $("#shMoney").textContent = this.money;
+      $("#shCust").className = "sh-cust happy"; $("#shMsg").innerHTML = `<div class="sh-ok">✓ <span class="han">谢谢！真好吃！</span> +${bill} 元${tip ? ` · tiền tip ${tip} 元` : ""}</div>`;
+      speak("谢谢"); this.log.push({ ok: true, o: this.order }); this.round++; $("#shGo").disabled = true;
+      Games.later(() => this.next(), 1600);
+    } else this.fail("Sai món rồi! 😣");
+  },
+  fail(msg){
+    if(this.busy) return; this.busy = true; this.hearts--; this.drawHearts(); this.round++; $("#shGo").disabled = true;
+    this.log.push({ ok: false, o: this.order });
+    $("#shCust").className = "sh-cust angry";
+    $("#shMsg").innerHTML = `<div class="sh-bad">${msg}<br>Khách gọi: <b>${esc(this.order.vi)}</b></div>`;
+    Games.later(() => this.next(), 3200);
+  },
+  end(){
+    cancelAnimationFrame(Games.raf); this.order = null;
+    const pct = this.round ? this.served / this.round * 100 : 0;
+    Games.over($("#shWrap"), `<div class="gm-over-t">🍜 ${this.hearts > 0 ? "Hết ca bán hàng!" : "Quán đóng cửa – hết lượt!"}</div>
+      <div class="gm-over-s">Phục vụ đúng <b>${this.served}/${this.round}</b> khách · thu nhập <b>${this.money} 元</b></div>
+      <div class="gm-miss"><b>Các order hôm nay</b>${this.log.map(x => `<span>${x.ok ? "✅" : "❌"} <span class="han">${esc(x.o.text)}</span><br><small>${esc(x.o.vi)}</small></span>`).join("")}</div>`, () => this.start());
+    if(this.round >= 5) Games.reward("shop", pct, `Quán ăn Tiểu Ngữ (${this.served}/${this.round} khách)`);
   }
 };
 
@@ -4533,7 +4892,7 @@ function examRegrade(d, lesson){
   for(let i = 0; i < A.length; i++){ if(A[i] === "?"){ pending++; continue; } total++; if(d.ans[i] === A[i]) right++; else wrong.push(i + 1); }
   return { ...d, right, total, wrong, pending };
 }
-const TYPE_LABEL = { coins: "Nhận xu", harvest: "Thu hoạch", login: "Đăng nhập", session: "Vào học", flash: "Flashcard", quiz: "Kiểm tra từ vựng", trans: "Luyện dịch", speak: "Luyện phát âm", exam: "Bài tập HSK" };
+const TYPE_LABEL = { coins: "Nhận xu", harvest: "Thu hoạch", login: "Đăng nhập", session: "Vào học", flash: "Flashcard", quiz: "Kiểm tra từ vựng", trans: "Luyện dịch", speak: "Luyện phát âm", exam: "Bài tập HSK", game: "Trò chơi" };
 const TRANS_LABEL = { zhvi: "Trung → Việt", sort: "Sắp xếp", type: "Gõ chữ" };
 const Teacher = {
   view: "hv", key: "", events: [], accounts: [], students: [], sel: null, filter: { cls: "all", q: "" }, loadedAt: null,
