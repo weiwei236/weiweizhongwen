@@ -759,7 +759,7 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .gm-card.fruit{background:linear-gradient(140deg,#3B2416,#7A4A2A)}.gm-card.shop{background:linear-gradient(140deg,#C2513A,#E8875A)}
 .gm-card b{font-size:22px}.gm-card small{opacity:.9;font-size:14px;line-height:1.45}.gm-card em{font-style:normal;font-weight:700;margin-top:6px}
 .gm-art{display:flex;gap:6px;height:76px;align-items:center}.gm-art i{width:68px;height:68px;display:block;transform:rotate(calc(var(--i)*20deg - 20deg))}.gm-art svg{width:100%;height:100%}
-.gm-art.shop .sh-emo{font-size:52px}.gm-art.shop .sh-svg{width:60px;height:60px}
+.gm-art.shop img{height:76px;width:auto;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.25)}.gm-art.shop .sh-emo{font-size:52px}.gm-art.shop .sh-svg{width:60px;height:60px}
 .gm-note{margin:0;font-size:13px}
 .gm-over{position:absolute;inset:0;background:rgba(15,25,20,.72);display:grid;place-items:center;z-index:20;padding:16px;border-radius:18px}
 .gm-over-in{background:var(--surface);border-radius:16px;padding:22px;max-width:560px;width:100%;max-height:100%;overflow:auto;display:grid;gap:12px;text-align:center}
@@ -808,8 +808,17 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .sh-obtn{display:flex;gap:8px;flex-wrap:wrap}
 .sh-pat{position:relative;height:12px;background:var(--surface-2);border-radius:99px;overflow:hidden}.sh-pat i{position:absolute;inset:0;background:var(--good);transform-origin:left}.sh-pat i.warm{background:#E0A526}.sh-pat i.hot{background:#E0394A}
 .sh-pat span{position:absolute;right:8px;top:-3px;font-size:11px;font-weight:700}
-.sh-main{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px;align-items:start}
-@media (max-width:760px){.sh-main{grid-template-columns:minmax(0,1fr)}.sh-tray{order:-1}.sh-top{position:sticky;top:0;z-index:8;background:var(--surface);padding:6px 0}.sh-cust{font-size:40px}.sh-order{font-size:21px}}
+.sh-main{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:14px;align-items:start}
+.sh-stall{position:relative;border-radius:16px;overflow:hidden;box-shadow:var(--shadow);user-select:none}.sh-stall img{display:block;width:100%;height:auto}
+.sh-spot{position:absolute;border:3px solid transparent;border-radius:14px;background:transparent;cursor:pointer;padding:0;transition:background .15s,border-color .15s}
+.sh-spot:hover,.sh-spot:focus-visible{background:rgba(255,255,255,.18);border-color:rgba(255,183,77,.95);outline:0}
+.sh-spot.on{border-color:#2C9A58;background:rgba(44,154,88,.12)}.sh-spot.pop{animation:shPop .25s}
+.sh-price{position:absolute;right:6%;top:6%;background:rgba(194,81,58,.9);color:#fff;font-size:11px;font-weight:700;border-radius:99px;padding:2px 7px;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+@media (max-width:600px){.sh-price{font-size:8px;padding:1px 4px}}
+.sh-sub{font-weight:700;color:var(--accent);margin-left:auto}.sh-sub+.sh-x{margin-left:0}.sh-total{text-align:right;font-weight:600}.sh-total b{font-size:20px;color:#C2513A}
+.sh-badge{position:absolute;left:-6px;top:-6px;min-width:24px;height:24px;border-radius:99px;background:#2C9A58;color:#fff;font-weight:800;font-size:14px;display:grid;place-items:center;box-shadow:0 2px 4px rgba(0,0,0,.25)}
+.sh-thumb{display:block;border-radius:8px;background-repeat:no-repeat}
+@media (max-width:860px){.sh-main{grid-template-columns:minmax(0,1fr)}.sh-tray{order:-1}.sh-badge{min-width:18px;height:18px;font-size:11px}.sh-spot{border-width:2px;border-radius:8px}.sh-top{position:sticky;top:0;z-index:8;background:var(--surface);padding:6px 0}.sh-cust{font-size:40px}.sh-order{font-size:21px}}
 .sh-menu{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
 .sh-item{border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:8px 4px;display:grid;justify-items:center;gap:2px;cursor:pointer}
 .sh-item:hover{border-color:var(--accent)}.sh-item.pop{animation:shPop .25s}@keyframes shPop{50%{transform:scale(1.08)}}
@@ -3351,7 +3360,7 @@ const Games = {
       <div class="gm-cards">
         <button class="gm-card fruit" data-g="fruit"><span class="gm-art">${FN_FRUITS.map((f, i) => i < 3 ? `<i style="--i:${i}">${fnFruitSVG(f)}</i>` : "").join("")}</span>
           <b>Chém trái cây</b><small>Đọc đề, chém quả có đáp án đúng. Mỗi câu 3 giây, có 5 mạng.</small><em>Chơi ngay ▸</em></button>
-        <button class="gm-card shop" data-g="shop"><span class="gm-art shop">${shopIcon("niurou")}${shopIcon("naicha")}${shopIcon("jiaozi")}</span>
+        <button class="gm-card shop" data-g="shop"><span class="gm-art shop"><img src="${shopImg()}" alt=""></span>
           <b>Quán ăn Tiểu Ngữ</b><small>Đọc order bằng chữ Hán, chọn đúng món, số lượng, cỡ to/nhỏ, nóng/đá trước khi khách hết kiên nhẫn.</small><em>Mở quán ▸</em></button>
       </div>
       <p class="muted gm-note">Trò Quán ăn dùng thực đơn cố định (饺子, 包子, 牛肉面, 奶茶…), không phụ thuộc phạm vi bài.</p></div>`;
@@ -3492,12 +3501,26 @@ const SHOP_MENU = [
   { id: "chaofan", h: "炒饭", p: "chǎofàn", vi: "cơm rang", m: "盘", mv: "đĩa", price: 15, ic: "🍛" },
   { id: "kaoya", h: "北京烤鸭", p: "Běijīng kǎoyā", vi: "vịt quay Bắc Kinh", m: "只", mv: "con", price: 98, ic: "🦆" },
   { id: "niunai", h: "牛奶", p: "niúnǎi", vi: "sữa", m: "杯", mv: "cốc", price: 6, size: 1, temp: 1, ic: "🥛" },
+  { id: "shui", h: "水", p: "shuǐ", vi: "nước", m: "杯", mv: "cốc", price: 2, temp: 1, ic: "💧" },
+  { id: "jiu", h: "酒", p: "jiǔ", vi: "rượu", m: "杯", mv: "ly", price: 20, ic: "🍶" },
   { id: "kele", h: "可乐", p: "kělè", vi: "Coca", m: "瓶", mv: "chai", price: 5, ic: "cola" },
   { id: "baishi", h: "百事", p: "Bǎishì", vi: "Pepsi", m: "瓶", mv: "chai", price: 5, ic: "pepsi" },
   { id: "kafei", h: "咖啡", p: "kāfēi", vi: "cà phê", m: "杯", mv: "cốc", price: 15, size: 1, temp: 1, ic: "☕" },
   { id: "naicha", h: "奶茶", p: "nǎichá", vi: "trà sữa", m: "杯", mv: "cốc", price: 12, size: 1, temp: 1, ic: "🧋" },
   { id: "cha", h: "茶", p: "chá", vi: "trà", m: "杯", mv: "cốc", price: 8, temp: 1, ic: "🍵" }
 ];
+/* vị trí từng món trên hình quầy hàng (ảnh 1672×941) */
+const SHOP_IMG_W = 1672, SHOP_IMG_H = 941;
+const SHOP_POS = { kaoya: [160, 435, 425, 578], baozi: [440, 435, 700, 578], mian: [720, 435, 975, 578], niurou: [995, 435, 1260, 578], mifan: [1275, 435, 1530, 578],
+  jiaozi: [125, 590, 410, 735], chaofan: [425, 590, 700, 735], kafei: [715, 590, 985, 735], naicha: [1000, 590, 1280, 735], cha: [1290, 590, 1560, 735],
+  shui: [95, 745, 395, 890], jiu: [410, 745, 695, 890], niunai: [715, 745, 990, 890], kele: [1005, 745, 1295, 890], baishi: [1305, 745, 1590, 890] };
+function shopImg(){ return Exam.img("s1_shop"); }
+/* ô hình món ăn cắt từ ảnh quầy (dùng trong khay) */
+function shopThumb(id, w = 58){
+  const b = SHOP_POS[id]; if(!b) return shopIcon(id);
+  const k = w / (b[2] - b[0]), h = Math.round((b[3] - b[1]) * .68 * k);
+  return `<span class="sh-thumb" style="width:${w}px;height:${h}px;background-image:url('${shopImg()}');background-size:${SHOP_IMG_W * k}px ${SHOP_IMG_H * k}px;background-position:${-b[0] * k}px ${-b[1] * k}px"></span>`;
+}
 function shopIcon(id){
   const it = SHOP_MENU.find(x => x.id === id), ic = it.ic;
   if(ic === "bao") return `<svg class="sh-svg" viewBox="0 0 64 64"><ellipse cx="32" cy="40" rx="24" ry="16" fill="#F6EEDF" stroke="#C9B48E" stroke-width="2"/><path d="M14 38 Q32 6 50 38" fill="#FBF6EC" stroke="#C9B48E" stroke-width="2"/><path d="M26 18 q6 6 12 0 M24 26 q8 6 16 0" stroke="#C9B48E" stroke-width="2" fill="none"/></svg>`;
@@ -3516,10 +3539,11 @@ const Shop = {
         <div class="sh-bubble"><div class="sh-order han" id="shOrder"></div>
           <div class="sh-obtn"><button class="btn sm" id="shSay">${ICON.sound}Nghe</button><button class="btn sm" id="shPy" aria-pressed="false">Hiện phiên âm</button></div></div></div>
       <div class="sh-pat"><i id="shPat"></i><span id="shSec"></span></div></div>
-      <div class="sh-main"><div class="sh-menu" id="shMenu">${SHOP_MENU.map(it => `<button class="sh-item" data-id="${it.id}">${shopIcon(it.id)}<b class="han">${it.h}</b><small>${it.price}元</small></button>`).join("")}</div>
+      <div class="sh-main"><div class="sh-stall" id="shMenu"><img src="${shopImg()}" alt="Quầy hàng Tiểu Ngữ" draggable="false">${SHOP_MENU.filter(it => SHOP_POS[it.id]).map(it => { const b = SHOP_POS[it.id];
+          return `<button class="sh-spot" data-id="${it.id}" style="left:${b[0] / SHOP_IMG_W * 100}%;top:${b[1] / SHOP_IMG_H * 100}%;width:${(b[2] - b[0]) / SHOP_IMG_W * 100}%;height:${(b[3] - b[1]) / SHOP_IMG_H * 100}%" aria-label="${it.h} ${it.p} – ${it.price} 元"><span class="sh-price">${it.price}元</span><span class="sh-badge" hidden></span></button>`; }).join("")}</div>
         <div class="sh-tray"><div class="sh-tray-h"><b>Khay món</b><button class="btn sm" id="shClear">Xoá hết</button></div><div id="shTray"></div>
           <button class="btn primary big sh-go" id="shGo">${ICON.check}Giao món</button><div class="sh-msg" id="shMsg"></div></div></div>
-      <p class="fn-tip">Bấm món trên thực đơn để thêm vào khay, chỉnh số lượng, cỡ <b class="han">大/小</b>, <b class="han">热/冰</b> (nóng/đá) rồi bấm “Giao món”.</p></div></div>`;
+      <p class="fn-tip">Bấm vào món trên quầy để thêm vào khay, chỉnh số lượng, cỡ <b class="han">大/小</b>, <b class="han">热/冰</b> (nóng/đá) rồi bấm “Giao món”.</p></div></div>`;
     $("#shQuit").onclick = () => { Games.stop(); Games.menu(); };
     $("#shSay").onclick = () => speak(this.text);
     $("#shPy").onclick = () => { this.py = !this.py; $("#shPy").setAttribute("aria-pressed", this.py); $("#shPy").textContent = this.py ? "Ẩn phiên âm" : "Hiện phiên âm"; this.showOrder(); };
@@ -3527,7 +3551,7 @@ const Shop = {
     $("#shGo").onclick = () => this.deliver();
     $("#shMenu").onclick = e => { const b = e.target.closest("[data-id]"); if(!b || this.busy) return; const it = SHOP_MENU.find(x => x.id === b.dataset.id);
       const same = this.tray.find(l => l.id === it.id && !l.size && !l.temp && !it.size && !it.temp); if(same) same.n = Math.min(9, same.n + 1); else this.tray.push({ id: it.id, n: 1, size: "", temp: "" });
-      this.drawTray(); b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop"); };
+      this.drawTray(); b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop"); speak(it.h); };
     this.hearts = 3; this.drawHearts(); this.next(); $("#shWrap").scrollIntoView({ behavior: "smooth", block: "start" });
     const loop = now => { if(!Games.alive($("#shWrap"))) return Games.stop(); this.tick(now); Games.raf = requestAnimationFrame(loop); };
     Games.raf = requestAnimationFrame(loop);
@@ -3558,14 +3582,16 @@ const Shop = {
     if(left <= 0) this.fail("Khách chờ lâu quá nên bỏ đi rồi! 😤");
   },
   drawTray(){
-    const T = $("#shTray");
-    if(!this.tray.length){ T.innerHTML = `<p class="muted sh-empty">Khay đang trống – bấm món trên thực đơn.</p>`; return; }
+    const T = $("#shTray"), cnt = {}; this.tray.forEach(l => cnt[l.id] = (cnt[l.id] || 0) + l.n);
+    document.querySelectorAll(".sh-spot").forEach(sp => { const n = cnt[sp.dataset.id] || 0, bd = sp.querySelector(".sh-badge"); bd.hidden = !n; bd.textContent = n; sp.classList.toggle("on", !!n); });
+    if(!this.tray.length){ T.innerHTML = `<p class="muted sh-empty">Khay đang trống – bấm vào món trên quầy.</p>`; return; }
     T.innerHTML = this.tray.map((l, i) => { const it = SHOP_MENU.find(x => x.id === l.id);
-      return `<div class="sh-line" data-i="${i}"><span class="sh-li">${shopIcon(it.id)}</span><b class="han">${it.h}</b>
+      return `<div class="sh-line" data-i="${i}"><span class="sh-li">${shopThumb(it.id)}</span><b class="han">${it.h}</b>
         <span class="sh-qty"><button data-a="minus" aria-label="Bớt">−</button><b>${l.n}</b><button data-a="plus" aria-label="Thêm">+</button><small class="han">${it.m}</small></span>
         ${it.size ? `<span class="sh-seg">${["大", "小"].map(v => `<button data-a="size" data-v="${v}" aria-pressed="${l.size === v}" class="han">${v}</button>`).join("")}</span>` : ""}
         ${it.temp ? `<span class="sh-seg">${["热", "冰"].map(v => `<button data-a="temp" data-v="${v}" aria-pressed="${l.temp === v}" class="han">${v}</button>`).join("")}</span>` : ""}
-        <button class="sh-x" data-a="del" aria-label="Bỏ món">×</button></div>`; }).join("");
+        <span class="sh-sub">${it.price}元 × ${l.n} = ${it.price * l.n}元</span><button class="sh-x" data-a="del" aria-label="Bỏ món">×</button></div>`; }).join("")
+      + `<div class="sh-total">Tổng cộng <b>${this.tray.reduce((a, l) => a + SHOP_MENU.find(x => x.id === l.id).price * l.n, 0)} 元</b></div>`;
     T.querySelectorAll("button[data-a]").forEach(b => b.onclick = () => { if(this.busy) return; const i = +b.closest(".sh-line").dataset.i, l = this.tray[i], a = b.dataset.a;
       if(a === "plus") l.n = Math.min(9, l.n + 1); else if(a === "minus"){ l.n--; if(l.n <= 0) this.tray.splice(i, 1); } else if(a === "del") this.tray.splice(i, 1); else l[a] = b.dataset.v;
       this.drawTray(); });
