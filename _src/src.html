@@ -4539,6 +4539,10 @@ function odNum(n, two){ // [chữ Hán, pinyin]
   if(n < 10) return [odZD[n], odPD[n]];
   if(n < 20) return ["十" + (n % 10 ? odZD[n % 10] : ""), "shí" + (n % 10 ? odPD[n % 10] : "")];
   if(n < 100) return [odZD[n / 10 | 0] + "十" + (n % 10 ? odZD[n % 10] : ""), odPD[n / 10 | 0] + "shí" + (n % 10 ? odPD[n % 10] : "")];
+  if(n >= 10000){ const w = n / 10000 | 0, r = n % 10000, W = odNum(w, true); if(!r) return [W[0] + "万", W[1] + "wàn"];
+    const t = odNum(r); return r < 1000 ? [W[0] + "万零" + (r >= 10 && r < 20 ? "一" + t[0] : t[0]), W[1] + "wàn líng " + (r >= 10 && r < 20 ? "yī" + t[1] : t[1])] : [W[0] + "万" + t[0], W[1] + "wàn " + t[1]]; }
+  if(n >= 1000){ const q = n / 1000 | 0, r = n % 1000, Q = q === 2 ? ["两", "liǎng"] : [odZD[q], odPD[q]]; if(!r) return [Q[0] + "千", Q[1] + "qiān"];
+    const t = odNum(r); return r < 100 ? [Q[0] + "千零" + (r >= 10 && r < 20 ? "一" + t[0] : t[0]), Q[1] + "qiān líng " + (r >= 10 && r < 20 ? "yī" + t[1] : t[1])] : [Q[0] + "千" + t[0], Q[1] + "qiān " + t[1]]; }
   const h = n / 100 | 0, r = n % 100, H = h === 2 ? ["两", "liǎng"] : [odZD[h], odPD[h]];
   if(!r) return [H[0] + "百", H[1] + "bǎi"];
   if(r < 10) return [H[0] + "百零" + odZD[r], H[1] + "bǎi líng " + odPD[r]];
@@ -4946,6 +4950,16 @@ function shFind(raw){ const s = talkNorm(raw).replace(/二(?=[件条双顶副个
     const before = k >= 0 ? s.slice(0, k) : "", m = before.match(/(\d+|[一两三四五六七八九十]+)([件条双顶副个])?[^一两三四五六七八九十\d]{0,4}$/);
     return { d, n: m ? odParseNum(m[1]) || 1 : 1, meas: m ? m[2] || "" : "", hadNum: !!m, color: shColor(s), size: shSize(raw, d) }; }
   return null; }
+/* tìm TẤT CẢ món trong một câu: “一条半身裙还有一件外套” → 2 món */
+function shFindAll(raw){ const s = talkNorm(raw).replace(/二(?=[件条双顶副个])/g, "两"), hits = [], used = [];
+  const all = SH_ITEMS.flatMap(d => d.al.map(a => [a, d])).sort((a, b) => b[0].length - a[0].length);
+  for(const [a, d] of all){ const sl = s.toLowerCase(), al = a.toLowerCase(); let k = sl.indexOf(al);
+    while(k >= 0){ if(!used.some(([x, y]) => k < y && k + a.length > x) && !hits.some(h => h.d === d)){ used.push([k, k + a.length]); hits.push({ d, k, e: k + a.length }); } k = sl.indexOf(al, k + 1); } }
+  hits.sort((x, y) => x.k - y.k);
+  return hits.map((h, i) => { const from = i ? hits[i - 1].e : 0, to = i + 1 < hits.length ? hits[i + 1].k : s.length, before = s.slice(from, h.k), seg = s.slice(from, to);
+    const m = before.match(/(\d+|[一两三四五六七八九十]+)([件条双顶副个])?[^一两三四五六七八九十\d]{0,4}$/);
+    const own = before.split(/还有|还要|和|跟|再|也/).pop() + s.slice(h.k, to).split(/还有|还要|和|跟|再来|再要|也要|[一两三四五六七八九十\d]+[件条双顶副个]/)[0];
+    return { d: h.d, n: m ? odParseNum(m[1]) || 1 : 1, meas: m ? m[2] || "" : "", hadNum: !!m, color: shColor(own), size: shSize(own, h.d) }; }); }
 function shItemTx(it){ const d = SH_ITEMS[it.id], M = SH_M[d.m], one = ["件", "副", "个"].includes(d.m) ? "yí" : "yì";
   let zh = (it.n === 1 ? "一" : odNum(it.n, true)[0]) + d.m, py = (it.n === 1 ? one : odNum(it.n, true)[1]) + " " + M[0], vi = `${it.n} ${M[1]} ${d.vi}`;
   if(it.color){ const C = SH_COL[it.color]; zh += C[0] + "的"; py += " " + C[1] + " de"; vi += " " + C[2]; }
@@ -4982,14 +4996,14 @@ function shBoard(small, ids){ if(ids && ids.length <= 7) small = false; return `
 const SH_STATES = {
   greet: { hint: "Nói món muốn mua: 我想买一件… / 我想买衣服 / 我随便看看.", model: () => ["我想买一件毛衣。", "我想买衣服。", "我随便看看。"],
     ask: () => ["欢迎光临！您想买点儿什么？", "Huānyíng guānglín! Nín xiǎng mǎi diǎnr shénme?", "Chào mừng quý khách! Anh/chị muốn mua gì ạ?"],
-    check(T, n, raw){ const f = shFind(raw); if(f) return T.shStart(f);
+    check(T, n, raw){ const f = shFindAll(raw); if(f.length) return T.shStart(f);
       if(/^(你好|您好|老板好|早上好|下午好|晚上好)$/.test(n)) return { ok: true, stay: true, react: ["您好！您想买点儿什么？", "Nín hǎo! Nín xiǎng mǎi diǎnr shénme?", "Chào anh/chị! Anh/chị muốn mua gì ạ?"] };
       return T.shOff(n).ok ? T.shOff(n) : shCat(n) || { ok: false }; } },
   pick: { hint: "Chọn một món trong bảng: 我想看看那件外套 / 我要一双运动鞋.", model: () => ["我想看看那件外套。", "我要一双运动鞋。"],
     ask: () => ["您喜欢哪个？", "Nín xǐhuan nǎge?", "Anh/chị thích cái nào ạ?"],
-    check(T, n, raw){ const f = shFind(raw); if(f) return T.shStart(f); const o = T.shOff(n); return o.ok ? o : shCat(n) || o; } },
+    check(T, n, raw){ const f = shFindAll(raw); if(f.length) return T.shStart(f); const o = T.shOff(n); return o.ok ? o : shCat(n) || o; } },
   color: { hint: "Chọn màu: 我要…色的.", model: T => [`我要${SH_COL[SH_ITEMS[T.item.id].cols[0]][0]}的。`, `有没有${SH_COL[SH_ITEMS[T.item.id].cols[1] || SH_ITEMS[T.item.id].cols[0]][0]}的？`],
-    ask(T){ const d = SH_ITEMS[T.item.id], c = shColsTx(d); return [`您要什么颜色的？我们有${c[0]}。`, `Nín yào shénme yánsè de? Wǒmen yǒu ${c[1]}.`, `Anh/chị lấy màu gì? Có ${c[2]}.`]; },
+    ask(T){ const d = SH_ITEMS[T.item.id], c = shColsTx(d); return [`${d.h}您要什么颜色的？我们有${c[0]}。`, `${d.p} nín yào shénme yánsè de? Wǒmen yǒu ${c[1]}.`, `${d.vi[0].toUpperCase() + d.vi.slice(1)} anh/chị lấy màu gì? Có ${c[2]}.`]; },
     check(T, n, raw){ const c = shColor(n), d = SH_ITEMS[T.item.id]; if(!c) return { ok: false };
       const z = d.k === "acc" ? null : shSize(raw, d); if(z != null) T.item.size = z;
       if(!d.cols.includes(c)){ const L = shColsTx(d); return { ok: true, soft: "", stay: true, react: [`不好意思，没有${SH_COL[c][0]}的，只有${L[0]}。`, `Bù hǎo yìsi, méiyǒu ${SH_COL[c][1]} de, zhǐ yǒu ${L[1]}.`, `Xin lỗi, không có màu ${SH_COL[c][2]}, chỉ có ${L[2]}.`] }; }
@@ -5025,7 +5039,7 @@ const SH_STATES = {
       return { ok: false }; } },
   bargain: { hint: "Mặc cả: 太贵了，便宜一点儿吧！/ 一百块行吗？ – hoặc đồng ý: 好，我买了。", model: T => [`太贵了！便宜一点儿吧。`, `${odNum(sh5(T.item.price * .6), true)[0]}块，行吗？`, "好，我买了。"], ask: () => null,
     check(T, n, raw){ const it = T.item, F = it.floor, P = it.price, Z = x => odNum(x, true), N = shNums(raw.replace(/\d+\s*(号|码)/g, "")).filter(x => x >= 5).pop();
-      const deal = (x, r) => { it.price = x; it.deal = true; T.cart.push({ ...it }); T.lastItem = { ...it, price: it.price0 }; T.item = null; return { ok: true, react: r, next: "more" }; };
+      const deal = (x, r) => { it.price = x; it.deal = true; T.cart.push({ ...it }); T.lastItem = { ...it, price: it.price0 }; T.item = null; return { ok: true, react: r, after: true }; };
       T.ctx.bargained = T.ctx.bargained || /贵|便宜|打折|少|优惠|行吗|可以吗|怎么样|再看看/.test(n) || !!N;
       if(N && !/^(好|行|可以)/.test(n)){
         if(N >= P) return deal(P, [`好的，就${Z(P)[0]}块！`, `Hǎo de, jiù ${Z(P)[1]} kuài!`, `Vâng, ${P} tệ!`]);
@@ -5036,7 +5050,7 @@ const SH_STATES = {
           : [`${Z(Y)[0]}块吧，不能再少了。`, `${Z(Y)[1]} kuài ba, bù néng zài shǎo le.`, `${Y} tệ nhé, không bớt được nữa.`] }; }
       if(/不要了|不买了|再看看|算了|走了|别家/.test(n)){
         if(P > F || !T.ctx.called){ it.price = F; T.ctx.called = true; return { ok: true, stay: true, react: [`别走别走！${Z(F)[0]}块卖给您，怎么样？`, `Bié zǒu bié zǒu! ${Z(F)[1]} kuài mài gěi nín, zěnmeyàng?`, `Đừng đi! ${F} tệ bán cho anh/chị, được không?`] }; }
-        T.item = null; return { ok: true, react: ["好吧，那您再看看别的。", "Hǎo ba, nà nín zài kànkan bié de.", "Thôi được, anh/chị xem món khác nhé."], next: "more" }; }
+        T.item = null; return { ok: true, react: ["好吧。", "Hǎo ba.", "Thôi được."], after: true }; }
       if(/^(好|行|可以|成交|买|要|那好|没问题|ok)/i.test(n) || /我买了|我要了|买吧|就这个/.test(n)){ const r = deal(P, [`好的，${Z(P)[0]}块。`, `Hǎo de, ${Z(P)[1]} kuài.`, `Vâng, ${P} tệ.`]);
         if(!T.ctx.bargained) r.soft = "Ở chợ / cửa hàng nhỏ có thể mặc cả: 太贵了，便宜一点儿吧！"; T.ctx.bargained = false; return r; }
       if(/贵|便宜|打折|少一点|优惠|少点/.test(n)){ const Y = Math.max(F, sh5(P * .88)); if(Y >= P) return { ok: true, stay: true, react: [`不能再便宜了，${Z(F)[0]}块是最低价。`, `Bù néng zài piányi le, ${Z(F)[1]} kuài shì zuìdī jià.`, `Không rẻ hơn được nữa, ${F} tệ là giá thấp nhất.`] };
@@ -5044,7 +5058,7 @@ const SH_STATES = {
       return { ok: false }; } },
   more: { hint: "Mua thêm món khác, hoặc nói: 不要了，就这些.", model: () => ["不要了，就这些。", "我还想买一顶帽子。"],
     ask: () => ["还要别的吗？", "Hái yào bié de ma?", "Còn lấy gì nữa không ạ?"],
-    check(T, n, raw){ const f = shFind(raw); if(f) return T.shStart(f);
+    check(T, n, raw){ const f = shFindAll(raw); if(f.length) return T.shStart(f);
       if(/不要|不用|就这些|没有了|没了|够了|好了|就这样|买单|结账|多少钱/.test(n)){ if(!T.cart.length) return { ok: true, react: ["好的，欢迎下次再来！", "Hǎo de, huānyíng xià cì zài lái!", "Vâng, hẹn gặp lại!"], next: "bye" };
         return { ok: true, next: "pay" }; }
       const o = T.shOff(n); return o.ok ? o : shCat(n) || o; } },
@@ -5070,13 +5084,18 @@ const SH_STATES = {
 /* các hàm riêng của chủ đề mua sắm, gắn vào Topic */
 Object.assign(Topic, {
   shTotal(){ return (this.cart || []).reduce((a, it) => a + it.price * it.n, 0); },
-  shStart(f){ const d = f.d, it = { id: d.id, n: f.n, price0: d.price, price: d.price, floor: sh5(d.price * (.62 + Math.random() * .1)) };
+  shStart(fs){ fs = [].concat(fs); const f = fs[0], rest = fs.slice(1); this.queue = (this.queue || []).concat(rest);
+    const notes = fs.map(shMeasNote).filter(Boolean), bad = fs.find(x => shMeasNote(x));
+    const r = this.shSet(f);
+    if(fs.length > 1){ const L = fs.map(x => [odQty(x.n, x.d.m)[0] + x.d.h, x.d.p, x.d.vi]);
+      r.react = [`好的，${L.map(x => x[0]).join("和")}。我们先看${f.d.h}吧。`, `Hǎo de, ${L.map(x => x[1]).join(" hé ")}. Wǒmen xiān kàn ${f.d.p} ba.`, `Vâng, ${L.map(x => x[2]).join(" và ")}. Mình xem ${f.d.vi} trước nhé.`]; }
+    r.note = notes[0] || ""; r.fix = bad ? `我想买${odQty(bad.n, bad.d.m)[0]}${bad.d.h}。` : ""; return r; },
+  shSet(f){ const d = f.d, it = { id: d.id, n: f.n, price0: d.price, price: d.price, floor: sh5(d.price * (.62 + Math.random() * .1)) };
     let pre = null;
     if(f.color){ if(d.cols.includes(f.color)) it.color = f.color; else { const L = shColsTx(d); pre = [`不好意思，没有${SH_COL[f.color][0]}的，只有${L[0]}。`, `Bù hǎo yìsi, méiyǒu ${SH_COL[f.color][1]} de, zhǐ yǒu ${L[1]}.`, `Xin lỗi, không có màu ${SH_COL[f.color][2]}, chỉ có ${L[2]}.`]; } }
     if(f.size != null && d.k !== "acc") it.size = f.size;
     this.item = it; this.ctx.tried = false; this.ctx.bargained = false; this.ctx.called = false;
-    const q = odQty(f.n, d.m), note = shMeasNote(f);
-    return { ok: true, note, fix: note ? `我想买${q[0]}${d.h}。` : "", react: pre || [`好的，${d.h}在这儿。`, `Hǎo de, ${d.p} zài zhèr.`, `Vâng, ${d.vi} ở đây ạ.`], after: true }; },
+    return { ok: true, react: pre || [`好的，${d.h}在这儿。`, `Hǎo de, ${d.p} zài zhèr.`, `Vâng, ${d.vi} ở đây ạ.`], after: true }; },
   shOff(n){ const off = Object.keys(SH_OFF).sort((a, b) => b.length - a.length).find(k => n.includes(k));
     if(off) return { ok: true, stay: true, soft: "Cửa hàng không bán món này – hãy chọn trong bảng 商品.", react: [`不好意思，我们这儿不卖${off}。我们卖衣服、鞋和帽子。`, `Bù hǎo yìsi, wǒmen zhèr bú mài ${SH_OFF[off][0]}. Wǒmen mài yīfu, xié hé màozi.`, `Xin lỗi, cửa hàng không bán ${SH_OFF[off][1]}. Ở đây bán quần áo, giày và mũ.`] };
     return { ok: false }; }
@@ -5088,8 +5107,12 @@ TOPIC_DEF.shop = {
   intro: "Bạn là <b>khách</b>, chị Tiểu Mỹ là <b>người bán hàng</b>. Hãy tự chọn món trong bảng 商品, chọn màu, cỡ, mặc thử, hỏi giá rồi <b>mặc cả</b> – người bán sẽ trả giá lại theo số tiền bạn đưa ra. Cuối cùng chọn cách thanh toán (WeChat, quẹt thẻ, hoặc tiền mặt – sẽ được thối tiền).",
   againBtn: "▶ Mua sắm lần nữa", label: "Mua sắm", nextBtn: "Đến lượt bạn: thực hành mua sắm ›", boardNext: "Xem hàng hóa ›",
   STATES: SH_STATES,
-  reset(T){ T.cart = []; T.item = null; },
-  after(T, r){ const it = T.item; if(!it) return "more"; const d = SH_ITEMS[it.id];
+  reset(T){ T.cart = []; T.item = null; T.queue = []; },
+  after(T, r){ if(!T.item){ if(!(T.queue || []).length) return "more";
+      const f = T.queue.shift(), x = T.shSet(f), d0 = f.d, add = [`我们再看看${d0.h}吧。`, `Wǒmen zài kànkan ${d0.p} ba.`, `Giờ mình xem ${d0.vi} nhé.`];
+      if(r.react){ r.react[0] += add[0]; r.react[1] += " " + add[1]; r.react[2] += " " + add[2]; } else r.react = add;
+      if(x.react && /没有/.test(x.react[0])){ r.react[0] += x.react[0]; r.react[1] += " " + x.react[1]; r.react[2] += " " + x.react[2]; } }
+    const it = T.item; const d = SH_ITEMS[it.id];
     if(!it.color) return "color"; if(d.k !== "acc" && it.size == null) return "size"; if(d.k !== "acc" && !T.ctx.tried) return "try"; return "price"; },
   tryOn(T){ const d = SH_ITEMS[T.item.id]; T.sys(`<span class="od-clock">${d.k === "shoe" ? "👟" : "👕"}</span> Bạn ${d.k === "shoe" ? "đi thử" : "vào phòng thử đồ, mặc thử"} <b class="han">${esc(shItemTx({ ...T.item, n: 1 })[0])}</b>…`); },
   hasBill: T => (T.cart || []).length,
