@@ -4607,11 +4607,13 @@ function avLayout(c){ const L={s:34,m:42,t:50}[c.height]||42, Tt={s:36,m:39,t:43
 function shade(hex,a){ const n=parseInt(hex.slice(1),16); let r=n>>16,g=n>>8&255,b=n&255; const f=v=>Math.max(0,Math.min(255,Math.round(a<0?v*(1+a):v+(255-v)*a))); return "#"+((1<<24)+(f(r)<<16)+(f(g)<<8)+f(b)).toString(16).slice(1); }
 const mirror=s=>`<g transform="translate(200,0) scale(-1,1)">${s}</g>`;
 let AVN=0, G="av0";
+const FEM_ACC=["bow","flower","catears"]; /* phụ kiện chỉ dành cho nhân vật nữ */
 function fixHair(c){
   if(c.acc&&c.acc!=="none"){ const a=c.acc, k=a==="glasses"?"accFace":(a==="scarf"||a==="book")?"accBody":"accHead"; if(!c[k]||c[k]==="none") c[k]=a; }
   delete c.acc; if(c.outfit==="nhatbinh") c.outfit="aogam";
   if(c.gender==="m"&&MALE_HAIR_OLD[c.hair]) c.hair=MALE_HAIR_OLD[c.hair];
   const ok=(c.gender==="m"?AV_OPTS.hairM:AV_OPTS.hairF).map(x=>x[0]); if(!ok.includes(c.hair)) c.hair=ok[0];
+  if(c.gender==="m"&&FEM_ACC.includes(c.accHead)) c.accHead="none";
   for(const k of ["bangs","outfit","shoes","accHead","accFace","accBody","expr"]) if(!AV_OPTS[k].some(o=>o[0]===c[k])) c[k]=AV_DEF[k];
   return c;
 }
@@ -4784,15 +4786,60 @@ const MALE_HAIR={
       +mh.lines("M79,-6 C76,-28 80,-48 92,-62 M122,-5 C128,-26 126,-46 116,-60 M100,-12 C104,-34 104,-52 98,-66 M56,-10 C52,-26 56,-42 66,-52",h)
       +mh.shine("M66,-58 Q80,-66 94,-66 M112,-68 Q124,-66 132,-60",h) }
 };
+/* ---------- TÓC NAM (bản vẽ mới, cùng hệ tọa độ đầu chibi: tâm (100,0), đầu rx 64 / ry 58, mắt y 2–30, tai x 37/163) ---------- */
+const mhN={
+  mass:(d)=>`<path d="${d}" fill="url(#${G}h)" ${LINE}/>`,
+  line:(h,d,o=.5)=>`<path d="${d}" stroke="${shade(h,-.45)}" stroke-opacity="${o}" stroke-width="1.4" fill="none" stroke-linecap="round"/>`,
+  shine:(h,d)=>`<path d="${d}" stroke="${shade(h,.55)}" stroke-opacity=".55" stroke-width="4" fill="none" stroke-linecap="round"/>`,
+  shaved:(h,d)=>`<path d="${d}" fill="${h}" fill-opacity=".38" stroke="${OLC}" stroke-opacity=".3" stroke-width="1.2"/>`,
+  /* chuỗi cung lồi qua các điểm – dùng cho tóc xoăn */
+  bumps:(pts,r)=>"M"+pts[0].join(",")+pts.slice(1).map(p=>` A${r},${r} 0 0 1 ${p.join(",")}`).join("")+"Z"
+};
+Object.assign(MALE_HAIR,{
+  twoblock:{ label:"Two-block", native:true,
+    front:h=>{ const sv=`M33,-24 C31,-8 33,4 37,10 L45,8 C43,-4 43,-14 45,-24 Z`;
+      return mhN.shaved(h,sv)+mhN.shaved(h,`M167,-24 C169,-8 167,4 163,10 L155,8 C157,-4 157,-14 155,-24 Z`)
+      +mhN.mass(`M28,-20 C22,-70 62,-90 100,-90 C138,-90 178,-70 172,-20 C168,-14 160,-12 154,-16
+        C152,-8 148,-2 142,-2 C142,-8 138,-12 134,-14 C132,-6 126,1 118,2 C120,-6 118,-12 114,-16
+        C110,-8 104,-3 98,-2 C100,-8 98,-14 94,-17 C90,-9 82,-3 74,-2 C78,-8 78,-14 74,-17
+        C70,-10 62,-6 56,-6 C58,-10 58,-14 56,-17 C50,-12 40,-12 28,-20 Z`)
+      +mhN.line(h,"M118,2 C126,-16 126,-40 114,-62 M98,-2 C104,-22 106,-46 98,-70 M74,-2 C82,-22 84,-44 78,-64 M142,-2 C150,-18 150,-38 140,-56 M56,-6 C62,-20 62,-38 58,-52")
+      +mhN.shine(h,"M58,-62 Q80,-80 104,-80 M118,-78 Q134,-74 146,-62"); } },
+  comma:{ label:"Tóc dấu phẩy", native:true,
+    /* mái dày rẽ 6/4, các mảng mái cong vào phía trong như dấu phẩy */
+    front:h=>{ const R=(x1,x2,tx,ty)=>` C${x1},-4 ${tx+8},${ty} ${tx},${ty} C${tx-4},${ty-1} ${tx-4},${ty-7} ${x2},-14`,
+        Lf=(x1,x2,tx,ty)=>` C${x1+4},${ty-7} ${x1+4},${ty-1} ${tx},${ty} C${tx-8},${ty} ${x2},-4 ${x2},-14`;
+      const d=`M32,8 C22,-56 60,-86 100,-86 C142,-86 180,-58 168,8 C166,0 162,-8 156,-14`
+        +R(156,136,140,2)+R(136,114,118,-1)+` C112,-20 108,-26 104,-30 C100,-26 99,-20 98,-14`
+        +Lf(98,78,92,0)+Lf(78,56,72,2)+` C52,-10 46,-12 42,-12 C38,-6 34,2 32,8 Z`;
+      return mhN.mass(d)
+        +mhN.line(h,"M140,2 C146,-14 144,-34 130,-52 M118,-1 C124,-16 122,-34 112,-50 M92,0 C88,-16 90,-34 98,-50 M72,2 C66,-14 68,-32 78,-48 M104,-30 C104,-44 102,-58 100,-72")
+        +mhN.shine(h,"M62,-64 Q86,-78 110,-76 M128,-74 Q144,-66 154,-52"); } },
+  softcurl:{ label:"Tóc xoăn nhẹ", native:true,
+    back:h=>mhN.mass(mhN.bumps([[34,18],[28,6],[30,-8],[38,0],[36,16]],6))+mhN.mass(mhN.bumps([[164,16],[162,0],[170,-8],[172,6],[166,18]],6)),
+    front:h=>{ const top=[[34,10],[28,-8],[30,-28],[40,-46],[56,-62],[76,-74],[100,-78],[124,-74],[144,-62],[160,-46],[170,-28],[172,-8],[166,10]],
+        fr=[[158,-4],[146,-10],[134,-5],[122,-12],[110,-5],[98,-12],[86,-6],[74,-12],[62,-6],[50,-10],[42,-4]];
+      const d=mhN.bumps(top,15).slice(0,-1)+" L158,-4"+fr.slice(1).map(p=>` A8,8 0 0 1 ${p.join(",")}`).join("")+" L34,10 Z";
+      const curl=(x,y,s=1)=>`<path d="M${x},${y} c${3*s},-4 ${8*s},-2 ${7*s},3 c-1,4 -6,4 -6,0" stroke="${shade(h,-.45)}" stroke-opacity=".5" stroke-width="1.3" fill="none" stroke-linecap="round"/>`;
+      return mhN.mass(d)+[[62,-48],[96,-60],[132,-50],[78,-26],[118,-28],[150,-22],[50,-22]].map(([x,y],i)=>curl(x,y,i%2?1:-1)).join("")
+        +mhN.shine(h,"M64,-60 Q82,-72 98,-72 M118,-70 Q134,-64 144,-54"); } },
+  crew:{ label:"Tóc húi cua", native:true,
+    front:h=>{ let t=""; for(let y=-60;y<=-34;y+=6) for(let x=46;x<=154;x+=9){ const xx=x+(y/6%2?4.5:0), e=((xx-100)/58)**2+((y+28)/36)**2; if(e<.92&&y<-32) t+=`M${xx},${y} l${((xx-100)/40).toFixed(1)},-2.6 `; }
+      return mhN.mass(`M36,-4 C32,-48 62,-68 100,-68 C138,-68 168,-48 164,-4 C162,-12 158,-20 152,-25
+        Q148,-25 145,-29 Q140,-27 136,-31 Q130,-29 125,-33 Q118,-31 112,-34 Q106,-32 100,-35 Q94,-32 88,-34 Q82,-31 75,-33 Q70,-29 64,-31 Q60,-27 55,-29 Q52,-25 48,-25
+        C42,-20 38,-12 36,-4 Z`)
+        +`<path d="${t}" stroke="${shade(h,mhLum(h)<.3?.4:-.35)}" stroke-opacity=".45" stroke-width="1.3" fill="none" stroke-linecap="round"/>`
+        +mhN.shine(h,"M66,-54 Q100,-66 134,-54"); } }
+});
 const MALE_HAIR_OLD={short:"layer",side:"side73",buzz:"crew",bowl:"twoblock",curly:"softcurl"};
 AV_OPTS.hairM=Object.entries(MALE_HAIR).map(([k,v])=>[k,v.label]);
 
 function hairBack(c){
-  if(c.gender==="m"&&MALE_HAIR[c.hair]) return MALE_HAIR[c.hair].back?`<g ${MH_T}>${MALE_HAIR[c.hair].back(c.hairColor)}</g>`:"";
+  if(c.gender==="m"&&MALE_HAIR[c.hair]){ const H=MALE_HAIR[c.hair]; return H.back?(H.native?H.back(c.hairColor):`<g ${MH_T}>${H.back(c.hairColor)}</g>`):""; }
   return femaleBack(c);
 }
 function hairFront(c){
-  if(c.gender==="m"&&MALE_HAIR[c.hair]) return `<g ${MH_T}>${MALE_HAIR[c.hair].front(c.hairColor)}</g>`;
+  if(c.gender==="m"&&MALE_HAIR[c.hair]){ const H=MALE_HAIR[c.hair]; return H.native?H.front(c.hairColor):`<g ${MH_T}>${H.front(c.hairColor)}</g>`; }
   return femaleFront(c);
 }
 
@@ -5125,7 +5172,7 @@ function renderAv(){
     case "hair": h=avGrp("Kiểu tóc "+(c.gender==="m"?"(nam)":"(nữ)"),avTiles("hair",c.gender==="m"?AV_OPTS.hairM:AV_OPTS.hairF,"head"))+(c.gender==="m"?"":avGrp("Kiểu mái",avTiles("bangs",AV_OPTS.bangs,"head",{accHead:"none"})))+avGrp("Màu tóc",avSwatch("hairColor",AV_OPTS.hairColor,v=>v)); break;
     case "outfit": h=avGrp("Quần áo",avTiles("outfit",AV_OPTS.outfit,"body")); break;
     case "shoes": h=avGrp("Giày dép",avTiles("shoes",AV_OPTS.shoes,"feet",{outfit:c.gender==="f"?"tee":"hoodie"})); break;
-    case "acc": h=avGrp("Trên đầu",avTiles("accHead",AV_OPTS.accHead,"head"))+avGrp("Kính",avTiles("accFace",AV_OPTS.accFace,"head"))+avGrp("Trên người",avTiles("accBody",AV_OPTS.accBody,"full")); break;
+    case "acc": h=avGrp("Trên đầu",avTiles("accHead",c.gender==="m"?AV_OPTS.accHead.filter(o=>!FEM_ACC.includes(o[0])):AV_OPTS.accHead,"head"))+avGrp("Kính",avTiles("accFace",AV_OPTS.accFace,"head"))+avGrp("Trên người",avTiles("accBody",AV_OPTS.accBody,"full")); break;
     case "expr": h=avGrp("Biểu cảm",avTiles("expr",AV_OPTS.expr,"head")); break;
   }
   $("#avPanel").innerHTML=h;
