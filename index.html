@@ -5173,7 +5173,7 @@ function avatarSVG(c0,opt={}){
   s+=`<g transform="translate(0,${l.hy})">${ears}
      <path d="M36,2 C36,-38 64,-58 100,-58 C136,-58 164,-38 164,2 C164,38 138,58 100,58 C62,58 36,38 36,2Z" fill="url(#${G}f)" ${LINE}/>${face(c)}<g${hc}>${hairFront(c)}</g>${brows(c)}${faceAcc(c)}${headAcc(c)}</g>`;
   const top=l.hy-(c.accHead==="nonla"?114:c.hair==="highbun"&&c.gender==="f"?120:(c.accHead==="catears"||c.accHead==="beret")?116:104);
-  const vb=opt.view==="head"?`6 ${top} 188 ${l.hip-2-top}`:opt.view==="feet"?`46 ${l.foot-52} 108 ${64}`:opt.view==="body"?`8 ${top} 184 ${l.foot+14-top}`:`0 ${top-6} 200 ${l.foot+16-top}`;
+  const vb=opt.view==="wrist"?`36 ${l.sy-14} 128 ${l.hip-l.sy+34}`:opt.view==="head"?`6 ${top} 188 ${l.hip-2-top}`:opt.view==="feet"?`46 ${l.foot-52} 108 ${64}`:opt.view==="body"?`8 ${top} 184 ${l.foot+14-top}`:`0 ${top-6} 200 ${l.foot+16-top}`;
   return `<svg viewBox="${vb}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${esc(opt.label||"Nhân vật")}" ${opt.cls?`class="${opt.cls}"`:""}>${s}</svg>`;
 }
 
@@ -5269,7 +5269,7 @@ function renderAv(){
     case "hair": h=avGrp("Kiểu tóc "+(c.gender==="m"?"(nam)":"(nữ)"),avTiles("hair",c.gender==="m"?AV_OPTS.hairM:AV_OPTS.hairF,"head"))+(c.gender==="m"?"":avGrp("Kiểu mái",avTiles("bangs",AV_OPTS.bangs,"head",{accHead:"none"})))+avGrp("Màu tóc",avSwatch("hairColor",AV_OPTS.hairColor,v=>v)); break;
     case "outfit": h=avGrp("Quần áo",avTiles("outfit",AV_OPTS.outfit,"body")); break;
     case "shoes": h=avGrp("Giày dép",avTiles("shoes",forG(c,AV_OPTS.shoes,FEM_SHOES),"feet",{outfit:c.gender==="f"?"tee":"hoodie"})); break;
-    case "acc": h=avGrp("Nón mũ & tai nghe",avTiles("accHead",forG(c,AV_OPTS.accHead,FEM_ACC),"head"))+avGrp("Kính",avTiles("accFace",forG(c,AV_OPTS.accFace,FEM_FACE),"head"))+avGrp("Cổ",avTiles("accNeck",AV_OPTS.accNeck,"head"))+avGrp("Cổ tay",avTiles("accWrist",AV_OPTS.accWrist,"body"))+avGrp("Trên người",avTiles("accBody",AV_OPTS.accBody,"full")); break;
+    case "acc": h=avGrp("Nón mũ & tai nghe",avTiles("accHead",forG(c,AV_OPTS.accHead,FEM_ACC),"head"))+avGrp("Kính",avTiles("accFace",forG(c,AV_OPTS.accFace,FEM_FACE),"head"))+avGrp("Cổ",avTiles("accNeck",AV_OPTS.accNeck,"head"))+avGrp("Cổ tay",avTiles("accWrist",AV_OPTS.accWrist,"wrist"))+avGrp("Trên người",avTiles("accBody",AV_OPTS.accBody,"full")); break;
     case "expr": h=avGrp("Biểu cảm",avTiles("expr",AV_OPTS.expr,"head")); break;
   }
   $("#avPanel").innerHTML=h;
