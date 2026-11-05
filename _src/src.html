@@ -4740,11 +4740,17 @@ const Topic = {
     opt: { hint: "", model: T => { const [it, k] = T.ctx.cur || []; return k === "size" ? ["大碗。", "小碗。"] : k === "temp" ? ["热的。", "冰的。"] : ["不要辣。", "微辣。"]; },
       ask(T){ const [it, k] = T.ctx.cur, d = OD_MENU[it.id];
         this.hint = k === "size" ? "Chọn bát to (大碗) hay bát nhỏ (小碗)." : k === "temp" ? "Chọn nóng (热的) hay đá (冰的)." : "Chọn: 不要辣 (không cay) / 微辣 (cay nhẹ) / 辣 (cay).";
-        return k === "size" ? [`${d.h}要大碗还是小碗？`, `${d.p} yào dà wǎn háishi xiǎo wǎn?`, `${d.vi} lấy bát to hay bát nhỏ ạ?`]
-          : k === "temp" ? [`${d.h}要热的还是冰的？`, `${d.p} yào rè de háishi bīng de?`, `${d.vi} lấy nóng hay đá ạ?`]
-          : [`${d.h}要辣的吗？`, `${d.p} yào là de ma?`, `${d.vi} có lấy cay không ạ?`]; },
+        return k === "size" ? [`${d.h}要大碗还是小碗？`, `${d.p} yào dà wǎn háishi xiǎo wǎn?`, `${d.vi[0].toUpperCase() + d.vi.slice(1)} lấy bát to hay bát nhỏ ạ?`]
+          : k === "temp" ? [`${d.h}要热的还是冰的？`, `${d.p} yào rè de háishi bīng de?`, `${d.vi[0].toUpperCase() + d.vi.slice(1)} lấy nóng hay đá ạ?`]
+          : [`${d.h}要辣的吗？`, `${d.p} yào là de ma?`, `${d.vi[0].toUpperCase() + d.vi.slice(1)} có lấy cay không ạ?`]; },
       check(T, n, raw){ const [it, k] = T.ctx.cur;
-        if(odFind(raw).filter(x => !x.no).length) return T.orderCheck(n, raw, true);
+        // nhắc lại tên món đang được hỏi (牛肉面小碗吧 / 牛肉面要辣的) = trả lời câu hỏi, không phải gọi thêm
+        const fd = odFind(raw).filter(x => !x.no), newDish = fd.filter(x => x.id !== it.id || x.hadNum && /再|还|也|另外|加/.test(n));
+        if(newDish.length) return T.orderCheck(n, raw, true);
+        const extra = () => { const d = OD_MENU[it.id];
+          if(d.size && k !== "size" && !it.size && /大碗|小碗/.test(n)) it.size = /小碗/.test(n) ? "S" : "L";
+          if(d.temp && k !== "temp" && !it.temp && /冰|热/.test(n)) it.temp = /冰/.test(n) ? "ice" : "hot";
+          if(d.spicy && k !== "spicy" && it.spicy == null && odSpicy(n) != null) it.spicy = odSpicy(n); };
         const other = () => { let ch = false; T.order.forEach(o => { const d = OD_MENU[o.id];
             if(d.size && !o.size && /大碗|小碗/.test(n)){ o.size = /小/.test(n) ? "S" : "L"; ch = true; }
             if(d.temp && !o.temp && /冰|热/.test(n)){ o.temp = /冰/.test(n) ? "ice" : "hot"; ch = true; }
@@ -4752,8 +4758,8 @@ const Topic = {
           return ch ? { ok: true, soft: "Phục vụ đang hỏi câu khác – hãy nghe kỹ và trả lời đúng câu hỏi nhé.", react: ["好的。", "Hǎo de.", "Vâng."], after: true } : { ok: false }; };
         if(k === "size"){ const s = /小/.test(n) ? "S" : /大/.test(n) ? "L" : null; if(!s) return other(); it.size = s; }
         else if(k === "temp"){ const s = /冰|凉|冷/.test(n) ? "ice" : /热|温/.test(n) ? "hot" : null; if(!s) return other(); it.temp = s; }
-        else { let v = odSpicy(n); if(v == null && /^(不要|不用|不)$/.test(n)) v = 0; if(v == null && /^(要|好|可以|要的)$/.test(n)) v = 2; if(v == null) return other(); it.spicy = v; }
-        return { ok: true, react: ["好的。", "Hǎo de.", "Vâng."], after: true }; } },
+        else { let v = odSpicy(n.replace(new RegExp(OD_MENU[it.id].al.join("|"), "g"), "")); if(v == null && /^(不要|不用|不)/.test(n)) v = 0; if(v == null && /^(要|好|可以|要的)/.test(n)) v = 2; if(v == null) return other(); it.spicy = v; }
+        extra(); return { ok: true, react: ["好的。", "Hǎo de.", "Vâng."], after: true }; } },
     eat: { hint: "Ăn ở đây (在这儿吃) hay mang đi (带走)?", model: () => ["在这儿吃。", "带走。"],
       ask: () => ["在这儿吃还是带走？", "Zài zhèr chī háishi dàizǒu?", "Ăn ở đây hay mang đi ạ?"],
       check(T, n){ if(/带走|打包|外带|拿走/.test(n)) T.ctx.away = true; else if(!/这|堂食|这里|在店/.test(n)) return { ok: false };
