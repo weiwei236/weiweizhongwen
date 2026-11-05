@@ -939,7 +939,8 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .od-topic{position:relative;overflow:hidden;text-align:left;display:grid;gap:3px;padding:16px 16px 16px 18px;border:2px solid var(--line);border-radius:18px;background:linear-gradient(135deg,#FFF6E8,#FFE9D2);cursor:pointer;font:inherit;color:var(--ink);min-height:170px;align-content:start}
 .od-topic:hover:not(.soon){border-color:#E58A3A;transform:translateY(-2px);box-shadow:0 8px 18px rgba(229,138,58,.18)}.od-topic{transition:.15s}
 .od-topic .od-ti{font-size:30px}.od-topic b{font-size:24px}.od-topic small{color:var(--muted)}.od-topic>span:not(.od-ti){font-weight:700}.od-topic em{font-style:normal;font-size:13px;color:#8A5A10;max-width:56%}.od-topic:not(.soon){min-height:200px}
-.od-topic .od-tw{position:absolute;right:-6px;bottom:-40px;height:190px;pointer-events:none}
+.od-topic .od-tw{position:absolute;right:4px;bottom:-30px;height:200px;pointer-events:none}.od-topic:not(.soon)>*:not(.od-tw){max-width:62%}
+@media (min-width:700px){.od-topic:not(.soon){grid-column:span 2;min-height:210px}.od-topic:not(.soon) b{font-size:28px}}
 .od-topic.soon{background:var(--surface-2);cursor:default;opacity:.75}.od-soon{position:absolute;top:12px;right:12px;font-style:normal;font-size:12px;background:#fff;border-radius:999px;padding:2px 10px;color:var(--muted);border:1px solid var(--line)}
 .od-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.od-top b{font-size:17px}
 .od-tabs{display:flex;flex-wrap:wrap}.od-tabs button{flex:1 1 auto}
@@ -971,6 +972,13 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .od-bill-r{display:flex;justify-content:space-between;gap:10px;align-items:baseline}.od-bill-r>span{display:grid}.od-bill-r .han{font-size:16px}.od-bill-r small{color:var(--muted);font-family:inherit}
 .od-bill-t{display:flex;justify-content:space-between;border-top:1px dashed #B9A88C;padding-top:6px;font-size:18px}.od-bill-t b{color:#C0533A}
 .od-drill{display:grid;gap:8px;background:var(--surface-2);border-radius:12px;padding:10px}
+.od-menu.sh{grid-template-columns:repeat(6,minmax(0,1fr))}.od-menu.sh .od-dish i{aspect-ratio:200/170}
+.sh-cols{display:flex;gap:3px;justify-content:center;margin:2px 0}.sh-dot{width:12px!important;height:12px;aspect-ratio:auto!important;border-radius:50%!important;border:1px solid rgba(0,0,0,.25);display:inline-block}
+.c-红{background:#E0394A}.c-白{background:#fff}.c-黑{background:#222}.c-蓝{background:#2C7BE5}.c-黄{background:#F2C531}.c-粉{background:#F7A1C4}.c-绿{background:#3FA34D}.c-灰{background:#9AA0A6}.c-咖{background:#7A4E2D}.c-米{background:#EBDCC0}
+.od-menu.sh.sm{grid-template-columns:repeat(6,minmax(0,1fr))}
+.od-bill s{color:var(--muted);font-weight:400;margin-right:4px}.od-bill-r b{white-space:nowrap}.od-bill-s{text-align:center;color:#1E8E5A;font-size:14px}
+@media (max-width:600px){.od-menu.sh{grid-template-columns:repeat(3,minmax(0,1fr))}.od-menu.sh.sm{grid-template-columns:repeat(6,minmax(0,1fr))}}
+
 @media (max-width:600px){.od-learn{grid-template-columns:minmax(0,1fr)}.od-menu{grid-template-columns:repeat(2,minmax(0,1fr))}.od-menu.sm{grid-template-columns:repeat(4,minmax(0,1fr))}.od-menu.sm .od-dish em{display:none}.od-menu.sm .od-dish b{font-size:12px}.od-tabs button{font-size:13px;padding-inline:8px}.od-topic em{max-width:58%}}
 
 </style>
@@ -3969,12 +3977,13 @@ const Link = {
     const W = $("#work");
     W.innerHTML = `<div class="gm"><div class="lk-wrap" id="lkWrap">
       <div class="fn-hud"><span>⏱ <b id="lkTime"></b></span><span>Còn <b id="lkLeft"></b> cặp</span><span class="fn-score">Điểm <b id="lkScore">0</b></span>
-        <button class="btn sm" id="lkHint">💡 Gợi ý (<span>3</span>)</button><button class="btn sm" id="lkShuf">🔀 Đảo (<span>3</span>)</button><button class="btn sm fn-quit" id="lkQuit">Thoát</button></div>
+        <button class="btn sm" id="lkHint">💡 Gợi ý (<span>3</span>)</button><button class="btn sm" id="lkShuf">🔀 Đảo (<span>3</span>)</button><button class="btn sm rc-snd" id="lkSnd"></button><button class="btn sm fn-quit" id="lkQuit">Thoát</button></div>
       <div class="lk-bar"><i id="lkBar"></i></div>
       <div class="lk-info" id="lkInfo">${mode === "vo" ? "Nối <b>động từ</b> với <b>tân ngữ</b> phù hợp." : "Nối 2 chữ thành <b>một từ có nghĩa</b>."}</div>
       <div class="lk-stage"><div class="lk-board" id="lkBoard" style="--c:${this.C};--r:${this.R}"></div></div>
       <p class="fn-tip">Đường nối đi qua ô trống hoặc vòng ra mép bảng, tối đa 2 lần rẽ. Hết nước đi thì bảng tự đảo.</p></div></div>`;
     $("#lkQuit").onclick = () => { Games.stop(); Games.menu(); };
+    RaceSnd.button($("#lkSnd")); RaceSnd.start("link");
     $("#lkHint").onclick = () => this.hint(); $("#lkShuf").onclick = () => { if(this.shuf > 0){ this.shuf--; this.shuffleBoard(); } };
     this.draw(); this.hud();
     const tick = () => { if(this.over || !Games.alive($("#lkBoard"))) return; this.hud(); if(this.remain() <= 0) return this.end(false); Games.later(tick, 250); }; tick();
@@ -3994,13 +4003,13 @@ const Link = {
   },
   cell(r, c){ return $(`#lkBoard .lk-t[data-r="${r}"][data-c="${c}"]`); },
   click(r, c, el){
-    if(this.over) return; speak(this.g[r][c]);
+    if(this.over) return; speak(this.g[r][c]); RaceSnd.click();
     if(!this.sel){ this.sel = [r, c]; el.classList.add("on"); return; }
     const [r0, c0] = this.sel; if(r0 === r && c0 === c){ this.sel = null; el.classList.remove("on"); return; }
     const a = this.g[r0][c0], b = this.g[r][c], P = this.valid.get(a + "|" + b), path = P && this.path(r0, c0, r, c);
     const prev = this.cell(r0, c0);
     if(P && path){ prev.classList.remove("on"); this.sel = null; this.hit(r0, c0, r, c, P, path); return; }
-    prev.classList.remove("on"); prev.classList.add("bad"); el.classList.add("bad"); this.combo = 0;
+    prev.classList.remove("on"); prev.classList.add("bad"); el.classList.add("bad"); this.combo = 0; RaceSnd.buzz();
     $("#lkInfo").innerHTML = P ? `<b class="han">${esc(a)}</b> + <b class="han">${esc(b)}</b> ghép đúng nhưng <b>bị chắn đường</b>, đường nối quá 2 lần rẽ.` : `<b class="han">${esc(a)}</b> + <b class="han">${esc(b)}</b> không tạo thành ${this.mode === "vo" ? "cụm động – tân" : "từ"} trong bài.`;
     Games.later(() => { prev && prev.classList.remove("bad"); el.classList.remove("bad"); }, 450);
     this.sel = [r, c]; el.classList.add("on");
@@ -4025,7 +4034,7 @@ const Link = {
     this.g[r0][c0] = null; this.g[r1][c1] = null; this.left -= 2;
     const now = performance.now(); this.combo = now - this.lastHit < 5000 ? this.combo + 1 : 1; this.lastHit = now;
     const pts2 = 10 + Math.min(10, (this.combo - 1) * 2); this.score += pts2;
-    if(!this.found.some(x => x.h === P.h)) this.found.push(P);
+    if(!this.found.some(x => x.h === P.h)) this.found.push(P); RaceSnd.match(this.combo);
     $("#lkInfo").innerHTML = `<b class="han lk-w">${esc(P.h)}</b> <span class="py">${esc(P.p)}</span> – ${esc(P.vs)} <em class="lk-plus">+${pts2}${this.combo > 1 ? ` · combo ×${this.combo}` : ""}</em>`;
     speak(P.h); this.hud();
     Games.later(() => { if(!Games.alive($("#lkBoard"))) return; $("#lkSvg").innerHTML = ""; this.draw();
@@ -4037,14 +4046,14 @@ const Link = {
     return null; },
   anyMove(){ return !!this.moves(); },
   hint(){ if(!this.hints) return; const m = this.moves(); if(!m) return this.shuffleBoard(); this.hints--; this.score = Math.max(0, this.score - 5); this.hud();
-    m.forEach(([r, c]) => { const e = this.cell(r, c); e.classList.add("hint"); Games.later(() => e && e.classList.remove("hint"), 1600); }); },
+    RaceSnd.sparkle(); m.forEach(([r, c]) => { const e = this.cell(r, c); e.classList.add("hint"); Games.later(() => e && e.classList.remove("hint"), 1600); }); },
   shuffleBoard(){
     const T = [], V = []; for(let r = 1; r <= this.R; r++) for(let c = 1; c <= this.C; c++) if(this.g[r][c]){ T.push([r, c]); V.push(this.g[r][c]); }
     for(let k = 0; k < 30; k++){ const S2 = shuffle(V); T.forEach(([r, c], i) => this.g[r][c] = S2[i]); if(this.anyMove()) break; }
-    this.sel = null; this.draw(); this.hud();
+    this.sel = null; this.draw(); this.hud(); RaceSnd.shuffleSnd();
   },
   end(win){
-    this.over = true; const left = Math.round(this.remain()); if(win) this.score += left;
+    this.over = true; const left = Math.round(this.remain()); if(win) this.score += left; RaceSnd.finish(win);
     const tot = this.C * this.R / 2, done = tot - this.left / 2;
     Games.over($("#lkWrap"), `<div class="gm-over-t">${win ? "🎉 Dọn sạch bảng!" : "⏰ Hết giờ!"}</div>
       <div class="gm-over-s">Nối được <b>${done}/${tot}</b> cặp · <b>${this.score}</b> điểm${win ? ` (thưởng ${left} điểm thời gian)` : ""}</div>
@@ -4071,11 +4080,12 @@ const Fruit = {
     this.lives = 5; this.score = 0; this.combo = 0; this.best = 0; this.right = 0; this.asked = 0; this.miss = []; this.bag = [];
     const W = $("#work");
     W.innerHTML = `<div class="gm"><div class="fn-wrap" id="fnWrap">
-      <div class="fn-hud"><span class="fn-lives" id="fnLives"></span><span class="fn-score">Điểm <b id="fnScore">0</b></span><span class="fn-combo" id="fnCombo"></span><button class="btn sm fn-quit" id="fnQuit">Thoát</button></div>
+      <div class="fn-hud"><span class="fn-lives" id="fnLives"></span><span class="fn-score">Điểm <b id="fnScore">0</b></span><span class="fn-combo" id="fnCombo"></span><button class="btn sm rc-snd fn-quit" id="fnSnd"></button><button class="btn sm" id="fnQuit">Thoát</button></div>
       <div class="fn-prompt" id="fnPrompt"></div><div class="fn-timer"><i id="fnBar"></i></div>
       <div class="fn-arena" id="fnArena"><canvas id="fnTrail"></canvas></div>
       <p class="fn-tip">Rê chuột hoặc vuốt ngón tay qua quả đúng để chém (bấm vào quả cũng được).</p></div></div>`;
     $("#fnQuit").onclick = () => { Games.stop(); Games.menu(); };
+    RaceSnd.button($("#fnSnd")); RaceSnd.start("fruit");
     this.arena = $("#fnArena"); this.canvas = $("#fnTrail"); this.trail = [];
     this.bindBlade(); this.drawLives(); this.next(); $("#fnWrap").scrollIntoView({ behavior: "smooth", block: "start" });
     const loop = now => { if(!Games.alive(this.arena)) return Games.stop(); this.frame(now); Games.raf = requestAnimationFrame(loop); };
@@ -4130,7 +4140,7 @@ const Fruit = {
       g.strokeStyle = `rgba(255,255,255,${.85 * k})`; g.lineWidth = 2 + 6 * k; g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.stroke(); }
   },
   cut(f){
-    if(this.done || f.dead) return; f.dead = true;
+    if(this.done || f.dead) return; f.dead = true; RaceSnd.slash(); RaceSnd.splat();
     const A = this.arena, ang = Math.random() * 40 - 20;
     ["l", "r"].forEach(s => { const h = document.createElement("div"); h.className = `fn-half ${s}`; h.innerHTML = fnFruitSVG(f.f, true);
       h.style.left = (f.x - 48) + "px"; h.style.top = (f.y - 48) + "px"; h.style.setProperty("--a", ang + "deg"); A.appendChild(h); Games.later(() => h.remove(), 1000); });
@@ -4142,11 +4152,11 @@ const Fruit = {
   win(f){
     this.done = true; this.right++; this.combo++; this.best = Math.max(this.best, this.combo);
     const pts = 10 + (this.combo - 1) * 2; this.score += pts; $("#fnScore").textContent = this.score;
-    $("#fnCombo").textContent = this.combo > 1 ? `Combo ×${this.combo}` : ""; this.pop("+" + pts, f.x, f.y - 30, "ok");
+    $("#fnCombo").textContent = this.combo > 1 ? `Combo ×${this.combo}` : ""; this.pop("+" + pts, f.x, f.y - 30, "ok"); this.combo > 1 ? RaceSnd.combo(this.combo) : RaceSnd.ding(1);
     speak(this.q.w.h); Games.later(() => this.next(), 650);
   },
   fail(f){
-    this.done = true; this.combo = 0; $("#fnCombo").textContent = ""; this.lives--; this.drawLives();
+    this.done = true; this.combo = 0; $("#fnCombo").textContent = ""; this.lives--; this.drawLives(); RaceSnd.buzz();
     const w = this.q.w; if(!this.miss.some(x => x.h === w.h)) this.miss.push(w);
     const right = this.fruits.find(x => x.o.ok); if(right && !right.dead) right.el.classList.add("fn-show");
     $("#fnPrompt").insertAdjacentHTML("beforeend", `<em class="fn-ans">${f ? "Sai rồi!" : "Hết giờ!"} <b class="han">${esc(w.h)}</b> ${esc(w.p)} = ${esc(w.vs)}</em>`);
@@ -4155,7 +4165,7 @@ const Fruit = {
     Games.later(() => this.next(), 1500);
   },
   end(){
-    cancelAnimationFrame(Games.raf);
+    cancelAnimationFrame(Games.raf); RaceSnd.finish(this.right >= 10);
     const pct = this.asked ? this.right / this.asked * 100 : 0;
     Games.over($("#fnWrap"), `<div class="gm-over-t">🍉 Hết mạng!</div><div class="gm-over-s"><b>${this.score}</b> điểm · chém đúng <b>${this.right}</b> từ · combo cao nhất ×${this.best}</div>
       ${this.miss.length ? `<div class="gm-miss"><b>Từ cần ôn lại</b>${this.miss.map(w => `<span><b class="han">${esc(w.h)}</b> ${esc(w.p)} – ${esc(w.vs)}</span>`).join("")}</div>` : ""}`, () => this.start());
@@ -4347,8 +4357,7 @@ const Race = {
       <div class="rc-ctl">${"ABCD".split("").map((L, i) => `<button class="btn rc-go" data-l="${i}">${L}</button>`).join("")}</div>
       <p class="fn-tip">Lái xe vào làn có đáp án đúng trước khi tới chướng ngại: bấm phím ← → hoặc A B C D, chạm vào làn đường, hay bấm các nút bên dưới.</p></div></div>`;
     $("#rcQuit").onclick = () => { Games.stop(); Games.menu(); };
-    const sb = $("#rcSnd"), sbDraw = () => { sb.textContent = RaceSnd.muted ? "🔇" : "🔊"; sb.setAttribute("aria-label", RaceSnd.muted ? "Bật âm thanh" : "Tắt âm thanh"); };
-    sb.onclick = () => { RaceSnd.toggle(); sbDraw(); }; sbDraw(); RaceSnd.start();
+    RaceSnd.button($("#rcSnd")); RaceSnd.start("race");
     this.scene = $("#rcScene"); const road = this.road = $("#rcRoad");
     road.onpointerdown = e => { const r = road.getBoundingClientRect(); this.steer(Math.min(3, Math.floor((e.clientX - r.left) / r.width * 4))); };
     W.querySelectorAll(".rc-go").forEach(b => b.onclick = () => this.steer(+b.dataset.l));
@@ -4433,6 +4442,15 @@ function raceSideArt(side){
 /* Âm thanh game đua xe – tự tổng hợp bằng WebAudio, không cần file */
 const RaceSnd = {
   muted: (() => { try { return localStorage.getItem("ww_race_mute") === "1"; } catch(e){ return false; } })(),
+  button(sb){ if(!sb) return; const d = () => { sb.textContent = this.muted ? "🔇" : "🔊"; sb.setAttribute("aria-label", this.muted ? "Bật âm thanh" : "Tắt âm thanh"); }; sb.onclick = () => { this.toggle(); d(); }; d(); },
+  /* nhạc nền riêng cho từng game */
+  THEMES: {
+    race: { bpm: 132, lead: [76, 0, 79, 81, 79, 0, 76, 74, 72, 0, 74, 76, 74, 0, 69, 0, 76, 0, 79, 81, 83, 0, 81, 79, 76, 0, 74, 72, 74, 0, 0, 0], bass: [45, 45, 52, 45, 41, 41, 48, 41, 43, 43, 50, 43, 40, 40, 47, 40], lt: "square", lv: .035, engine: 1 },
+    // chém trái cây: điệu ngũ cung kiểu phương Đông, sôi động
+    fruit: { bpm: 140, lead: [74, 0, 76, 79, 81, 0, 79, 76, 74, 76, 74, 0, 71, 0, 69, 0, 74, 0, 76, 79, 81, 84, 81, 79, 76, 0, 79, 76, 74, 0, 0, 0], bass: [50, 50, 57, 50, 47, 47, 54, 47, 45, 45, 52, 45, 50, 50, 57, 57], lt: "triangle", lv: .07, pluck: 1 },
+    // nối chữ Pikachu: giai điệu dễ thương, nhẹ nhàng
+    link: { bpm: 112, lead: [72, 76, 79, 76, 77, 0, 74, 0, 71, 74, 77, 74, 76, 0, 72, 0, 72, 76, 79, 84, 81, 0, 79, 0, 77, 76, 74, 71, 72, 0, 0, 0], bass: [48, 0, 55, 0, 53, 0, 50, 0, 55, 0, 50, 0, 48, 0, 55, 0], lt: "triangle", lv: .06, soft: 1 }
+  },
   ctx: null, master: null, eng: null, mus: 0, step: 0, nextT: 0, rate: 0,
   ac(){ if(this.ctx) return this.ctx; const A = window.AudioContext || window.webkitAudioContext; if(!A) return null;
     try { this.ctx = new A(); this.master = this.ctx.createGain(); this.master.gain.value = this.muted ? 0 : 1; this.master.connect(this.ctx.destination); } catch(e){ this.ctx = null; } return this.ctx; },
@@ -4445,22 +4463,22 @@ const RaceSnd = {
     for(let i = 0; i < a.length; i++) a[i] = (Math.random() * 2 - 1) * (1 - i / a.length);
     const s = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain(); s.buffer = b; f.type = "lowpass"; f.frequency.value = fq || 1200; g.gain.value = v || .3;
     s.connect(f); f.connect(g); g.connect(this.master); s.start(t); },
-  start(){ const c = this.ac(); if(!c) return; c.resume && c.resume(); this.stop();
-    // tiếng động cơ: sóng răng cưa trầm qua bộ lọc
+  start(theme){ const c = this.ac(); if(!c) return; c.resume && c.resume(); this.stop(); const TH = this.THEMES[theme || "race"]; this.theme = theme || "race";
+    if(TH.engine){
     const o = c.createOscillator(), o2 = c.createOscillator(), f = c.createBiquadFilter(), g = c.createGain();
     o.type = "sawtooth"; o2.type = "square"; o.frequency.value = 55; o2.frequency.value = 27.5; f.type = "lowpass"; f.frequency.value = 380; g.gain.value = .045;
-    o.connect(f); o2.connect(f); f.connect(g); g.connect(this.master); o.start(); o2.start(); this.eng = { o, o2, f, g };
+    o.connect(f); o2.connect(f); f.connect(g); g.connect(this.master); o.start(); o2.start(); this.eng = { o, o2, f, g }; }
     // nhạc nền: vòng lặp chiptune nhỏ
     this.step = 0; this.nextT = c.currentTime + .1; this.rate = 0;
-    const BPM = 132, sx = 60 / BPM / 2;
-    const lead = [76, 0, 79, 81, 79, 0, 76, 74, 72, 0, 74, 76, 74, 0, 69, 0, 76, 0, 79, 81, 83, 0, 81, 79, 76, 0, 74, 72, 74, 0, 0, 0];
-    const bass = [45, 45, 52, 45, 41, 41, 48, 41, 43, 43, 50, 43, 40, 40, 47, 40];
+    const BPM = TH.bpm, sx = 60 / BPM / 2, lead = TH.lead, bass = TH.bass;
     const hz = m => 440 * Math.pow(2, (m - 69) / 12);
     this.mus = setInterval(() => { const c = this.ctx; if(!c) return;
       while(this.nextT < c.currentTime + .25){ const i = this.step, t = this.nextT, d = sx * (1 - this.rate * .25);
-        const m = lead[i % 32]; if(m) this.tone(hz(m), t, d * .9, "square", .035);
-        if(i % 2 === 0) this.tone(hz(bass[(i >> 1) % 16]), t, d * 1.8, "triangle", .09);
-        if(i % 4 === 0) this.tone(150, t, .12, "sine", .16, 45); else if(i % 4 === 2) this.noise(t, .05, .06, 6000);
+        const m = lead[i % 32]; if(m){ this.tone(hz(m), t, TH.pluck ? d * .7 : d * .9, TH.lt, TH.lv); if(TH.soft) this.tone(hz(m + 12), t, d * .5, "sine", .02); }
+        const bm = bass[(i >> 1) % 16]; if(i % 2 === 0 && bm) this.tone(hz(bm), t, d * 1.8, "triangle", TH.soft ? .07 : .09);
+        if(TH.soft){ if(i % 8 === 0) this.tone(120, t, .1, "sine", .08, 50); if(i % 4 === 2) this.noise(t, .03, .03, 8000); }
+        else if(i % 4 === 0) this.tone(150, t, .12, "sine", .16, 45); else if(i % 4 === 2) this.noise(t, .05, .06, 6000);
+        if(TH.pluck && i % 8 === 6) this.noise(t, .04, .05, 3000);
         this.nextT += d; this.step++; } }, 90);
   },
   speed(r){ this.rate = Math.max(0, Math.min(1, r)); const e = this.eng; if(!e || !this.ctx) return; const t = this.ctx.currentTime;
@@ -4470,6 +4488,15 @@ const RaceSnd = {
     if(this.eng){ const e = this.eng; e.o.frequency.setTargetAtTime(110, t, .05); e.o.frequency.setTargetAtTime(55 + this.rate * 40, t + .3, .3); } },
   crash(){ const c = this.ctx; if(!c) return; const t = c.currentTime; this.noise(t, .5, .5, 900); this.tone(160, t, .45, "sawtooth", .12, 40); this.tone(90, t + .05, .5, "square", .06, 30); },
   swish(){ const c = this.ctx; if(!c) return; this.noise(c.currentTime, .12, .08, 2500); },
+  slash(){ const c = this.ctx; if(!c) return; const t = c.currentTime; this.noise(t, .18, .22, 5000); this.tone(1400, t, .12, "sine", .03, 300); },
+  splat(){ const c = this.ctx; if(!c) return; const t = c.currentTime; this.noise(t, .15, .25, 700); this.tone(220, t, .15, "sine", .1, 90); },
+  combo(k){ const c = this.ctx; if(!c) return; const t = c.currentTime, b = [72, 76, 79, 84, 88][Math.min(4, k - 2)] || 72; [0, 4, 7].forEach((x, i) => this.tone(440 * Math.pow(2, (b + x - 69) / 12), t + i * .05, .2, "square", .05)); },
+  buzz(){ const c = this.ctx; if(!c) return; const t = c.currentTime; this.tone(140, t, .32, "sawtooth", .1); this.tone(147, t, .32, "square", .05); },
+  click(){ const c = this.ctx; if(!c) return; this.tone(1200, c.currentTime, .05, "sine", .08, 900); },
+  match(k){ const c = this.ctx; if(!c) return; const t = c.currentTime, up = Math.min(6, (k || 1) - 1) * 2, f = n => 440 * Math.pow(2, (n + up - 69) / 12);
+    this.tone(f(79), t, .12, "triangle", .1); this.tone(f(84), t + .08, .25, "triangle", .1); this.tone(f(91), t + .16, .3, "sine", .05); },
+  sparkle(){ const c = this.ctx; if(!c) return; const t = c.currentTime; [96, 100, 103, 108].forEach((n, i) => this.tone(440 * Math.pow(2, (n - 69) / 12), t + i * .06, .15, "sine", .04)); },
+  shuffleSnd(){ const c = this.ctx; if(!c) return; const t = c.currentTime; for(let i = 0; i < 6; i++) this.noise(t + i * .05, .04, .08, 2000 + i * 500); this.tone(300, t, .35, "triangle", .05, 900); },
   finish(ok){ const c = this.ctx; if(!c) return; this.stopLoop(); const t = c.currentTime + .05;
     (ok ? [[72, 0, .14], [76, .14, .14], [79, .28, .14], [84, .42, .5], [79, .62, .12], [84, .74, .7]] : [[67, 0, .3], [63, .3, .3], [60, .6, .7]])
       .forEach(([m, s, d]) => { this.tone(440 * Math.pow(2, (m - 69) / 12), t + s, d, "square", .08); this.tone(220 * Math.pow(2, (m - 69) / 12), t + s, d, "triangle", .08); }); },
@@ -4550,7 +4577,7 @@ function odFind(text){
 }
 function odSpicy(s){ if(/不辣|不要辣|不放辣|别放辣|不能吃辣|不吃辣/.test(s)) return 0; if(/微辣|一点辣|一点点辣|少辣|有点辣|小辣|少放/.test(s)) return 1; if(/中辣|特辣|很辣|特别辣|辣一点|多放辣|要辣|辣的|^辣/.test(s)) return 2; return null; }
 function odErr(said){ const n = talkNorm(String(said).replace(/2(?=\s*[个位碗份杯壶根串只盘笼锅])/g, "两"));
-  return Talk.ERRS.find(([re]) => re.test(n.replace(/是(大|小)(?=碗|份|杯|的)/g, "是X"))); }
+  return Talk.ERRS.find(([re]) => re.test(n.replace(/是(大|小)(?=碗|份|杯|的|号|码)/g, "是X"))); }
 function odMeasNote(it){ const d = OD_MENU[it.id]; if(!it.hadNum) return "";
   if(!it.meas) return `Thiếu lượng từ: nói “${odQty(it.n, d.m)[0]}${d.h}”, không nói “${odNum(it.n, true)[0]}${d.h}”.`;
   if(it.meas !== d.m && !d.alt.includes(it.meas)) return `Lượng từ của ${d.h} là “${d.m}” (${OD_MEAS[d.m][1]}): ${odQty(it.n, d.m)[0]}${d.h}.`;
@@ -4575,20 +4602,22 @@ const OD_SAMPLE = [["服", "欢迎光临！请问几位？", "Huānyíng guāngl
   ["服", "豆浆要热的还是冰的？", "Dòujiāng yào rè de háishi bīng de?", "Sữa đậu nành nóng hay đá?"], ["客", "冰的。", "Bīng de.", "Đá."], ["服", "好的。您点了一大碗牛肉面（微辣）、一份饺子、两杯冰豆浆，对吗？", "Hǎo de. Nín diǎn le yí dà wǎn niúròumiàn (wēi là), yí fèn jiǎozi, liǎng bēi bīng dòujiāng, duì ma?", "Vâng. Anh chị gọi một bát to mì bò (cay nhẹ), một phần sủi cảo, hai cốc sữa đậu nành đá, đúng không ạ?"],
   ["客", "对。", "Duì.", "Đúng."], ["服", "好的，请稍等。", "Hǎo de, qǐng shāo děng.", "Vâng, xin chờ một chút."], ["客", "服务员，买单！一共多少钱？", "Fúwùyuán, mǎidān! Yígòng duōshao qián?", "Phục vụ ơi, tính tiền! Tổng cộng bao nhiêu?"],
   ["服", "一共四十一块。", "Yígòng sìshíyī kuài.", "Tổng cộng 41 tệ."], ["客", "可以用微信吗？", "Kěyǐ yòng Wēixìn ma?", "Trả WeChat được không?"], ["服", "可以，请扫这儿。谢谢，欢迎下次再来！", "Kěyǐ, qǐng sǎo zhèr. Xièxie, huānyíng xià cì zài lái!", "Được, mời quét ở đây. Cảm ơn, hẹn gặp lại!"], ["客", "谢谢，再见！", "Xièxie, zàijiàn!", "Cảm ơn, tạm biệt!"]];
-const TOPICS = [{ id: "order", ic: "🍜", zh: "点菜", py: "diǎn cài", vi: "Gọi món ở quán ăn", d: "Chào hỏi · xin thực đơn · gọi món · bát to/nhỏ · nóng/đá · cay · xác nhận · thanh toán" },
-  { id: "shop", ic: "🛍️", zh: "买东西", py: "mǎi dōngxi", vi: "Mua sắm, mặc cả", soon: 1 }, { id: "way", ic: "🧭", zh: "问路", py: "wèn lù", vi: "Hỏi đường", soon: 1 }, { id: "hotel", ic: "🏨", zh: "住酒店", py: "zhù jiǔdiàn", vi: "Đặt phòng khách sạn", soon: 1 }];
+const TOPICS = [{ id: "order", ic: "🍜", zh: "点菜", py: "diǎn cài", vi: "Gọi món ở quán ăn", img: "s1_waiter", d: "Chào hỏi · xin thực đơn · gọi món · bát to/nhỏ · nóng/đá · cay · xác nhận · thanh toán" },
+  { id: "shop", ic: "🛍️", zh: "买东西", py: "mǎi dōngxi", vi: "Mua sắm · mặc cả · thanh toán", img: "s1_seller", d: "Chọn đồ · màu sắc · cỡ · mặc thử · hỏi giá · mặc cả · trả tiền, thối tiền" }, { id: "way", ic: "🧭", zh: "问路", py: "wèn lù", vi: "Hỏi đường", soon: 1 }, { id: "hotel", ic: "🏨", zh: "住酒店", py: "zhù jiǔdiàn", vi: "Đặt phòng khách sạn", soon: 1 }];
 
+const TOPIC_DEF = {};
 const Topic = {
   tab: store.get("ww_topic_tab", "learn"), py: store.get("ww_talk_py", false), vi: store.get("ww_talk_vi", false), cur: null,
   mount(les){ this.les = les; this.stopMic(); this.render(); },
   head(){ return `<div class="tk-head"><div><b class="han">对话练习</b> <span>Hội thoại · luyện phản xạ nói</span></div>${Talk.viewSeg("topic")}</div>`; },
   render(){ const W = $("#work"); this.stopMic();
     if(!this.cur){ W.innerHTML = `<div class="tk">${this.head()}<p class="tk-intro"><span>Chọn một <b>chủ đề giao tiếp</b>: học mẫu câu trước, xem hội thoại mẫu, rồi đóng vai thực hành với nhân viên phục vụ.</span></p>
-      <div class="od-topics">${TOPICS.map(t => `<button class="od-topic ${t.soon ? "soon" : ""}" data-t="${t.id}" ${t.soon ? "disabled" : ""}>${t.id === "order" ? `<img src="${Exam.img("s1_waiter")}" alt="" class="od-tw">` : ""}<span class="od-ti">${t.ic}</span><b class="han">${t.zh}</b><small>${t.py}</small><span>${t.vi}</span>${t.d ? `<em>${t.d}</em>` : ""}${t.soon ? `<i class="od-soon">Sắp có</i>` : ""}</button>`).join("")}</div></div>`;
-      Talk.bindView(W); W.querySelectorAll(".od-topic:not(.soon)").forEach(b => b.onclick = () => { this.cur = b.dataset.t; this.reset(); this.render(); }); return; }
+      <div class="od-topics">${TOPICS.map(t => `<button class="od-topic ${t.soon ? "soon" : ""}" data-t="${t.id}" ${t.soon ? "disabled" : ""}>${t.img ? `<img src="${Exam.img(t.img)}" alt="" class="od-tw">` : ""}<span class="od-ti">${t.ic}</span><b class="han">${t.zh}</b><small>${t.py}</small><span>${t.vi}</span>${t.d ? `<em>${t.d}</em>` : ""}${t.soon ? `<i class="od-soon">Sắp có</i>` : ""}</button>`).join("")}</div></div>`;
+      Talk.bindView(W); W.querySelectorAll(".od-topic:not(.soon)").forEach(b => b.onclick = () => { this.cur = b.dataset.t; this.D = TOPIC_DEF[this.cur]; this.reset(); this.render(); }); return; }
+    const D = this.D = TOPIC_DEF[this.cur];
     W.innerHTML = `<div class="tk od">${this.head()}
-      <div class="od-top"><button class="btn sm" id="odBack">‹ Chủ đề</button><b>🍜 <span class="han">点菜</span> · Gọi món ở quán ăn</b></div>
-      <div class="seg od-tabs" role="tablist">${[["learn", "① Mẫu câu"], ["menu", "② Thực đơn"], ["sample", "③ Hội thoại mẫu"], ["play", "④ Thực hành"]].map(([k, t]) => `<button role="tab" data-tab="${k}" aria-selected="${this.tab === k}">${t}</button>`).join("")}</div>
+      <div class="od-top"><button class="btn sm" id="odBack">‹ Chủ đề</button><b>${D.title[0]} <span class="han">${D.title[1]}</span> · ${D.title[2]}</b></div>
+      <div class="seg od-tabs" role="tablist">${[["learn", "① Mẫu câu"], ["menu", D.boardTab], ["sample", "③ Hội thoại mẫu"], ["play", "④ Thực hành"]].map(([k, t]) => `<button role="tab" data-tab="${k}" aria-selected="${this.tab === k}">${t}</button>`).join("")}</div>
       <div id="odBody"></div></div>`;
     Talk.bindView(W); $("#odBack").onclick = () => { this.cur = null; this.render(); };
     W.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => { this.tab = b.dataset.tab; store.set("ww_topic_tab", this.tab); this.render(); });
@@ -4597,41 +4626,41 @@ const Topic = {
   sayBtns(R){ R.querySelectorAll("[data-say]").forEach(b => b.onclick = e => { e.stopPropagation(); speak(b.dataset.say); }); },
   /* ① mẫu câu */
   drawLearn(){ const B = $("#odBody");
-    B.innerHTML = `<p class="od-lead">Bấm vào câu để nghe. Vai <b class="od-who s">服</b> = 服务员 (phục vụ), <b class="od-who k">客</b> = 顾客 (khách – là bạn).</p>
-      <div class="od-learn">${OD_LEARN.map((g, gi) => `<section class="od-card"><h4><span>${g.ic}</span>${gi + 1}. ${g.t}</h4>${g.L.map(([w, z, p, v]) => `<button class="od-line" data-say="${esc(z.replace(/\s*\/\s*/g, "，"))}"><b class="od-who ${w === "服" ? "s" : "k"}">${w}</b><span><span class="han">${esc(z)}</span><small>${esc(p)}</small><em>${esc(v)}</em></span>${ICON.sound}</button>`).join("")}${g.tip ? `<p class="od-tip">💡 ${esc(g.tip)}</p>` : ""}</section>`).join("")}</div>
-      <div class="od-next"><button class="btn primary" data-go="menu">Xem thực đơn ›</button></div>`;
+    const D = this.D; B.innerHTML = `<p class="od-lead">Bấm vào câu để nghe. Vai <b class="od-who s">${D.role[0]}</b> = ${D.role[1]}, <b class="od-who k">客</b> = 顾客 (khách – là bạn).</p>
+      <div class="od-learn">${D.learn.map((g, gi) => `<section class="od-card"><h4><span>${g.ic}</span>${gi + 1}. ${g.t}</h4>${g.L.map(([w, z, p, v]) => `<button class="od-line" data-say="${esc(z.replace(/\s*\/\s*/g, "，"))}"><b class="od-who ${w !== "客" ? "s" : "k"}">${w}</b><span><span class="han">${esc(z)}</span><small>${esc(p)}</small><em>${esc(v)}</em></span>${ICON.sound}</button>`).join("")}${g.tip ? `<p class="od-tip">💡 ${esc(g.tip)}</p>` : ""}</section>`).join("")}</div>
+      <div class="od-next"><button class="btn primary" data-go="menu">${D.boardNext}</button></div>`;
     this.sayBtns(B); B.querySelector("[data-go]").onclick = () => { this.tab = "menu"; this.render(); }; },
   menuHTML(small){ return `<div class="od-menu ${small ? "sm" : ""}">${OD_MENU.map(d => `<button class="od-dish" data-say="${esc(d.h)}"><i style="background-image:url('${Exam.img("s1_menu")}');background-position:${(d.id % 4) * 100 / 3}% ${(d.id / 4 | 0) * 100 / 3}%"></i>
       <b class="han">${d.h}</b>${small ? "" : `<small>${d.p}</small><span>${d.vi}</span>`}<em>${d.size ? `${d.price}/${d.small}` : d.price}元${small ? "" : ` / ${d.m}`}</em></button>`).join("")}</div>`; },
   /* ② thực đơn */
   drawMenu(){ const B = $("#odBody");
-    B.innerHTML = `<div class="od-board"><div class="od-bh"><b class="han">菜单</b><span>càidān · thực đơn – bấm vào món để nghe</span></div>${this.menuHTML()}
-      <p class="od-tip">💡 牛肉面: 大碗 20元 · 小碗 16元. Đồ uống (豆浆, 茶) có 热的 (nóng) / 冰的 (đá). Món có thể chọn độ cay: 麻婆豆腐, 火锅, 牛肉面, 臭豆腐.</p></div>
+    const D = this.D; B.innerHTML = `<div class="od-board"><div class="od-bh"><b class="han">${D.boardHead[0]}</b><span>${D.boardHead[1]}</span></div>${D.board()}
+      <p class="od-tip">${D.boardTip}</p></div>
       <div class="od-next"><button class="btn primary" data-go="sample">Xem hội thoại mẫu ›</button></div>`;
     this.sayBtns(B); B.querySelector("[data-go]").onclick = () => { this.tab = "sample"; this.render(); }; },
   /* ③ hội thoại mẫu */
   drawSample(){ const B = $("#odBody");
     B.innerHTML = `<div class="tk-tools"><button class="btn sm primary" id="odPlay">▶ Nghe cả bài</button><button class="btn sm" id="tkPy" aria-pressed="${this.py}">${this.py ? "Ẩn" : "Hiện"} phiên âm</button><button class="btn sm" id="tkVi" aria-pressed="${this.vi}">${this.vi ? "Ẩn" : "Hiện"} nghĩa</button></div>
-      <div class="tk-chat od-chat" id="odSam">${OD_SAMPLE.map(([w, z, p, v], i) => this.bubble({ who: w === "服" ? "ai" : "me", zh: z, py: p, vi: v, i, full: true })).join("")}</div>
-      <div class="od-next"><button class="btn primary" data-go="play">Đến lượt bạn: thực hành gọi món ›</button></div>`;
+      <div class="tk-chat od-chat" id="odSam">${this.D.sample.map(([w, z, p, v], i) => this.bubble({ who: w !== "客" ? "ai" : "me", zh: z, py: p, vi: v, i, full: true })).join("")}</div>
+      <div class="od-next"><button class="btn primary" data-go="play">${this.D.nextBtn}</button></div>`;
     $("#tkPy").onclick = () => { this.py = !this.py; store.set("ww_talk_py", this.py); this.render(); };
     $("#tkVi").onclick = () => { this.vi = !this.vi; store.set("ww_talk_vi", this.vi); this.render(); };
     this.sayBtns(B); B.querySelector("[data-go]").onclick = () => { this.tab = "play"; this.render(); };
     $("#odPlay").onclick = () => { const L = [...B.querySelectorAll(".tk-b")]; let k = 0; const go = () => { L.forEach(x => x.classList.remove("on")); if(k >= L.length || !document.body.contains(B)) return;
       const el = L[k++]; el.classList.add("on"); el.scrollIntoView({ block: "nearest", behavior: "smooth" }); speak(el.dataset.zh); Games.later(go, 900 + [...el.dataset.zh].length * 230); }; go(); }; },
-  bubble(b){ const av = `<span class="tk-av od-av"><img src="${Exam.img("s1_waiterface")}" alt="服务员"></span>`;
+  bubble(b){ const av = `<span class="tk-av od-av"><img src="${Exam.img(this.D.face)}" alt="服务员"></span>`;
     if(b.who === "sys") return `<div class="od-sys">${b.html}</div>`;
-    if(b.who === "menu") return `<div class="tk-b ai od-mb">${av}<div class="tk-bb">${this.menuHTML(true)}</div></div>`;
+    if(b.who === "menu") return `<div class="tk-b ai od-mb">${av}<div class="tk-bb">${this.D.board(true)}</div></div>`;
     const showPy = this.py, showVi = this.vi;
     return b.who === "ai" ? `<div class="tk-b ai" data-zh="${esc(b.zh)}">${av}<div class="tk-bb"><button class="say-sm" data-say="${esc(b.zh)}" aria-label="Nghe">${ICON.sound}</button><span class="han">${esc(b.zh)}</span>${showPy && b.py ? `<small class="tk-py">${esc(b.py)}</small>` : ""}${showVi && b.vi ? `<small class="tk-vi">${esc(b.vi)}</small>` : ""}</div></div>`
       : `<div class="tk-b me" data-zh="${esc(b.zh)}"><div class="tk-bb">${b.full ? `<button class="say-sm" data-say="${esc(b.zh)}" aria-label="Nghe">${ICON.sound}</button>` : ""}<span class="han">${esc(b.zh || "（không nói）")}</span>${b.full && showPy && b.py ? `<small class="tk-py">${esc(b.py)}</small>` : ""}${b.full && showVi && b.vi ? `<small class="tk-vi">${esc(b.vi)}</small>` : ""}</div></div>`; },
   /* ④ thực hành – máy trạng thái */
-  reset(){ this.chat = []; this.log = []; this.st = null; this.order = []; this.ctx = { fails: 0 }; this.review = null; this.busy = false; this.drill = null; },
+  reset(){ this.chat = []; this.log = []; this.st = null; this.order = []; this.ctx = { fails: 0 }; this.review = null; this.busy = false; this.drill = null; this.D && this.D.reset(this); },
   drawPlay(){ const B = $("#odBody");
-    B.innerHTML = `<p class="tk-intro"><span>Bạn là <b>khách</b>, Tiểu Vương là <b>phục vụ</b>. Trả lời bằng giọng nói (🎤) hoặc gõ chữ Hán. Hãy tự chọn món mình thích trong thực đơn – phục vụ sẽ hỏi lại bát to/nhỏ, nóng/đá, cay… theo món bạn gọi. Cuối buổi sẽ có hóa đơn và phần sửa lỗi.</span></p>
+    B.innerHTML = `<p class="tk-intro"><span>${this.D.intro} Trả lời bằng giọng nói (🎤) hoặc gõ chữ Hán. Cuối buổi sẽ có hóa đơn và phần sửa lỗi.</span></p>
       <div class="tk-tools"><button class="btn sm" id="tkPy" aria-pressed="${this.py}">${this.py ? "Ẩn" : "Hiện"} phiên âm</button><button class="btn sm" id="tkVi" aria-pressed="${this.vi}">${this.vi ? "Ẩn" : "Hiện"} nghĩa</button>
-        <button class="btn sm" id="odMenuBtn">📋 Thực đơn</button><button class="btn sm" id="tkRestart">${ICON.redo}Bắt đầu lại</button></div>
-      <div id="odMenuPop" hidden>${this.menuHTML(true)}</div>
+        <button class="btn sm" id="odMenuBtn">${this.D.boardBtn}</button><button class="btn sm" id="tkRestart">${ICON.redo}Bắt đầu lại</button></div>
+      <div id="odMenuPop" hidden>${this.D.board(true)}</div>
       <div class="tk-chat" id="tkChat"></div><div id="odBill"></div><div id="tkReview"></div><div class="tk-bar" id="tkBar"></div>`;
     $("#tkPy").onclick = () => { this.py = !this.py; store.set("ww_talk_py", this.py); this.drawPlay(); };
     $("#tkVi").onclick = () => { this.vi = !this.vi; store.set("ww_talk_vi", this.vi); this.drawPlay(); };
@@ -4642,7 +4671,7 @@ const Topic = {
     if(this.review) this.drawReview(); else if(!this.st) this.go("greet");
   },
   drawChat(){ const C = $("#tkChat"); if(!C) return;
-    C.innerHTML = this.chat.map(b => this.bubble(b)).join("") + (this.busy ? `<div class="tk-b ai"><span class="tk-av od-av"><img src="${Exam.img("s1_waiterface")}" alt=""></span><div class="tk-bb tk-typing"><i></i><i></i><i></i></div></div>` : "");
+    C.innerHTML = this.chat.map(b => this.bubble(b)).join("") + (this.busy ? `<div class="tk-b ai"><span class="tk-av od-av"><img src="${Exam.img(this.D.face)}" alt=""></span><div class="tk-bb tk-typing"><i></i><i></i><i></i></div></div>` : "");
     this.sayBtns(C); C.scrollTop = C.scrollHeight; },
   drawBar(){ const B = $("#tkBar"); if(!B) return; if(this.review || this.st === "end"){ B.innerHTML = ""; return; }
     B.innerHTML = `<div class="tk-live" id="tkLive">${this.recOn ? "Đang nghe… nói xong bấm 🎤 lần nữa" : (SR ? "Bấm 🎤 rồi nói tiếng Trung" : "Trình duyệt không hỗ trợ nhận giọng nói – hãy gõ chữ Hán")}</div>
@@ -4656,7 +4685,7 @@ const Topic = {
   listen: Talk.listen, stopMic: Talk.stopMic,
   say(zh, py, vi, delay){ this.chat.push({ who: "ai", zh, py, vi }); this.q = [zh, py, vi]; this.drawChat(); Games.later(() => speak(zh), delay || 50); },
   sys(html){ this.chat.push({ who: "sys", html }); this.drawChat(); },
-  S(){ return this.STATES[this.st]; },
+  S(){ return this.D.STATES[this.st]; },
   go(st, pre, delay){ this.st = st; this.ctx.fails = 0; this.log.forEach(x => x.open = false); const S = this.S(); if(st === "end") return this.finish();
     let q = S.ask(this); if(q && pre){ if(/^好的/.test(pre[0]) || /改/.test(pre[0])) q = [q[0].replace(/^好的。/, ""), q[1].replace(/^Hǎo de\. /, ""), q[2].replace(/^Vâng\. /, "")]; q = [pre[0] + q[0], pre[1] + " " + q[1], pre[2] + " " + q[2]]; } else if(!q) q = pre;
     if(q) this.say(...q, delay); this.drawBar(); },
@@ -4762,7 +4791,7 @@ const Topic = {
     return { ok: true, note: notes[0] || "", fix: bad ? raw.replace(/[。！!.]$/, "").replace(new RegExp((bad.hadNum ? "(\\d+|[一二两三四五六七八九十]+)[碗份杯壶个根串只盘笼锅条盒]?" : "") + "(?=[^一二两三四五六七八九十\\d]{0,4}(" + OD_MENU[bad.id].al.join("|") + "))"), odQty(bad.n, OD_MENU[bad.id].m)[0]) + "。" : "", react: L.length ? [`好的，${L.map(x => x[0]).join("、")}。`, `Hǎo de, ${L.map(x => x[1]).join(", ")}.`, `Vâng, ${L.map(x => x[2]).join(", ")}.`] : ["好的。", "Hǎo de.", "Vâng."], after: true };
   },
   answer(said){ if(this.busy || !this.st || this.st === "end") return;
-    const S = this.S(), n = talkNorm(said).replace(/二(?=[个位碗份杯壶根串只盘笼])/g, "两"), raw = said;
+    const S = this.S(), n = talkNorm(said).replace(/二(?=[个位碗份杯壶根串只盘笼件条双顶])/g, "两"), raw = said;
     this.chat.push({ who: "me", zh: said }); this.drawChat();
     const model = S.model(this), hint = S.hint, r = S.check(this, n, raw) || { ok: false }, er = odErr(said);
     const entry = { st: this.st, q: this.q, said, ok: r.ok && !er && !r.note, model: r.fix ? [r.fix, ...model] : model, hint, note: er ? er[1] : r.note || r.soft || "", open: true };
@@ -4774,7 +4803,7 @@ const Topic = {
     this.busy = true; this.drawChat(); this.drawBar();
     const t = 550;
     Games.later(() => { this.busy = false;
-      if(!r.ok && !r.react){ const off = Object.keys(OD_OFF).find(k => n.includes(k)), q = S.ask(this);
+      if(!r.ok && !r.react && this.cur === "order"){ const off = Object.keys(OD_OFF).find(k => n.includes(k)), q = S.ask(this);
         if(off){ const L = this.log[this.log.length - 1]; if(L && L.said === said){ L.ok = true; L.note = "Món này không có trong thực đơn – hãy chọn món trong 菜单."; } this.ctx.fails = Math.max(0, this.ctx.fails - 1);
           const z = [`不好意思，我们没有${off}。`, `Bù hǎo yìsi, wǒmen méiyǒu ${OD_OFF[off][0]}.`, `Xin lỗi, quán không có ${OD_OFF[off][1]}.`];
           this.say(...(q ? [z[0] + q[0], z[1] + " " + q[1], z[2] + " " + q[2]] : z)); this.drawBar(); return; } }
@@ -4789,38 +4818,32 @@ const Topic = {
     if(r.bill) Games.later(() => this.drawBill(), 300);
     if(r.stay){ sayPre(); this.drawBar(); return; }
     if(r.menu){ sayPre(); this.busy = true; this.drawChat(); this.drawBar();
-      return Games.later(() => { this.busy = false; this.chat.push({ who: "menu" }); this.go("order", null, 1400); }, 700); }
+      return Games.later(() => { this.busy = false; this.chat.push({ who: "menu" }); this.go(r.next || "order", null, 1400); }, 700); }
     if(r.wait){ sayPre(); this.busy = true; this.drawBar();
       return Games.later(() => { this.busy = false; this.st = "pay"; this.ctx.fails = 0; this.log.forEach(x => x.open = false); this.q = ["（Bạn ăn xong – gọi phục vụ tính tiền）", "", "Hãy gọi phục vụ để tính tiền"];
         this.sys(`<span class="od-clock">⏳</span> Mười phút sau… món ăn đã được mang lên. <b>Bạn ăn xong rồi – hãy gọi phục vụ để tính tiền.</b>`); this.drawBar(); }, 1800); }
-    if(["pay2", "fix", "bye"].includes(r.next)){ sayPre(); this.st = r.next; this.ctx.fails = 0; this.log.forEach(x => x.open = false); this.drawBar(); return; }
+    if(r.tryOn && this.D.tryOn){ sayPre(); this.D.tryOn(this); this.busy = true; this.drawBar(); return Games.later(() => { this.busy = false; this.go(r.next); }, 1500); }
+    if(r.next && r.next !== "end" && !r.after && !this.D.STATES[r.next].ask(this)){ sayPre(); this.st = r.next; this.ctx.fails = 0; this.log.forEach(x => x.open = false); this.drawBar(); return; }
     if(r.next === "end"){ sayPre(); this.st = "end"; this.drawBar(); return Games.later(() => this.finish(), 1600); }
     let nx = r.next;
-    if(r.after){ const p = this.pending();
-      if(p){ this.ctx.cur = p; nx = "opt"; }
-      else if(r.reconfirm || this.st === "confirm" || this.st === "fix") nx = "confirm";
-      else if(!this.order.some(it => OD_MENU[it.id].drink) && !this.ctx.drinkAsked){ this.ctx.drinkAsked = true; nx = "drink"; }
-      else nx = "more"; }
+    if(r.after) nx = this.D.after(this, r);
     if(nx) return this.go(nx, pre);
     sayPre(); this.drawBar();
   },
-  drawBill(){ const B = $("#odBill"); if(!B) return; const t = this.total();
-    B.innerHTML = `<div class="od-bill"><div class="od-bill-h"><b class="han">小票</b> Hóa đơn${this.ctx.away ? " · 带走 (mang đi)" : ""}</div>
-      ${this.order.map(it => { const x = odItemTx(it); return `<div class="od-bill-r"><span><span class="han">${esc(x[0])}</span><small>${esc(x[2])}</small></span><b>${odPrice(it)}元</b></div>`; }).join("")}
-      <div class="od-bill-t"><span class="han">一共</span><b>${t}元</b></div></div>`; },
+  drawBill(){ const B = $("#odBill"); if(B) B.innerHTML = this.D.bill(this); },
   finish(){ this.st = "end"; this.drawBar();
     const it = this.log, ok = it.filter(x => x.ok).length;
-    Track.log("talk", { mode: "topic", topic: "order", right: ok, total: it.length });
-    if(ok === it.length && it.length >= 6) Games.reward("talk", 100, `Hội thoại chủ đề Gọi món (${ok}/${it.length})`);
+    Track.log("talk", { mode: "topic", topic: this.cur, right: ok, total: it.length });
+    if(ok === it.length && it.length >= 6) Games.reward("talk", 100, `Hội thoại chủ đề ${this.D.label} (${ok}/${it.length})`);
     this.review = { items: it }; this.drawReview(); },
   drawReview(){ const R = $("#tkReview"); if(!R) return; const it = this.review.items, wrong = it.filter(x => !x.ok), ok = it.length - wrong.length;
-    if(this.order.length) this.drawBill();
-    R.innerHTML = `<div class="tk-rev"><div class="tk-rev-h"><b>Kết quả: ${ok}/${it.length} lượt nói đạt</b><span>${wrong.length ? "Xem các câu cần sửa, nghe câu mẫu rồi bấm “Luyện lại câu sai”." : "Tuyệt vời! Bạn đã gọi món trôi chảy. 太棒了！"}</span></div>
+    if(this.D.hasBill(this)) this.drawBill();
+    R.innerHTML = `<div class="tk-rev"><div class="tk-rev-h"><b>Kết quả: ${ok}/${it.length} lượt nói đạt</b><span>${wrong.length ? "Xem các câu cần sửa, nghe câu mẫu rồi bấm “Luyện lại câu sai”." : "Tuyệt vời! " + this.D.doneMsg + ". 太棒了！"}</span></div>
       <ol>${it.map(x => `<li class="${x.ok ? "ok" : "no"}"><div class="tk-q"><span class="han">${esc(x.q[0])}</span> <small>${esc(x.q[2])}</small></div>
         <div>Bạn nói: <span class="han">${esc(x.said)}</span> ${x.ok ? "✓" : "✗"}${x.later ? ` → nói lại: <span class="han">${esc(x.later)}</span>` : ""}</div>
         ${x.ok ? (x.note ? `<div class="tk-note">💡 ${esc(x.note)}</div>` : "") : `<div class="tk-mod">Có thể nói: <button class="say-sm" data-say="${esc(x.model[0])}">${ICON.sound}</button><span class="han">${x.model.map(esc).join(" / ")}</span> <small>(${esc(x.hint)})</small></div>${x.note ? `<div class="tk-note">⚠ ${esc(x.note)}</div>` : ""}`}</li>`).join("")}</ol>
       <div id="odDrill"></div>
-      <div class="tk-rev-b">${wrong.length ? `<button class="btn primary" id="tkFix">🎯 Luyện lại câu sai (${wrong.length})</button>` : ""}<button class="btn ${wrong.length ? "" : "primary"}" id="tkAgain">▶ Gọi món lần nữa</button></div></div>`;
+      <div class="tk-rev-b">${wrong.length ? `<button class="btn primary" id="tkFix">🎯 Luyện lại câu sai (${wrong.length})</button>` : ""}<button class="btn ${wrong.length ? "" : "primary"}" id="tkAgain">${this.D.againBtn}</button></div></div>`;
     this.sayBtns(R);
     const f = $("#tkFix"); if(f) f.onclick = () => this.startDrill(wrong);
     $("#tkAgain").onclick = () => { this.reset(); this.drawPlay(); };
@@ -4828,14 +4851,14 @@ const Topic = {
   /* luyện lại từng câu sai: hỏi lại đúng câu đó, chấm theo cùng quy tắc nhưng không đổi đơn hàng */
   startDrill(list){ this.drill = { list, k: 0 }; this.drawDrill(); },
   drawDrill(){ const D = $("#odDrill"), d = this.drill; if(!D || !d) return;
-    if(d.k >= d.list.length){ D.innerHTML = `<p class="od-sys">✅ Đã luyện xong các câu sai! Bấm “Gọi món lần nữa” để đóng vai lại từ đầu.</p>`; return; }
+    if(d.k >= d.list.length){ D.innerHTML = `<p class="od-sys">✅ Đã luyện xong các câu sai! Bấm “${this.D.againBtn.replace("▶ ", "")}” để đóng vai lại từ đầu.</p>`; return; }
     const x = d.list[d.k];
-    D.innerHTML = `<div class="od-drill"><b>Câu ${d.k + 1}/${d.list.length}</b><div class="tk-b ai"><span class="tk-av od-av"><img src="${Exam.img("s1_waiterface")}" alt=""></span><div class="tk-bb"><button class="say-sm" data-say="${esc(x.q[0])}">${ICON.sound}</button><span class="han">${esc(x.q[0])}</span><small class="tk-vi">${esc(x.q[2])}</small></div></div>
+    D.innerHTML = `<div class="od-drill"><b>Câu ${d.k + 1}/${d.list.length}</b><div class="tk-b ai"><span class="tk-av od-av"><img src="${Exam.img(this.D.face)}" alt=""></span><div class="tk-bb"><button class="say-sm" data-say="${esc(x.q[0])}">${ICON.sound}</button><span class="han">${esc(x.q[0])}</span><small class="tk-vi">${esc(x.q[2])}</small></div></div>
       <div class="tk-row">${SR ? `<button class="tk-mic" id="odDMic">🎤</button>` : ""}<input id="odDIn" class="han" placeholder="Trả lời lại…"><button class="btn primary" id="odDSend">Gửi</button></div><div id="odDRes"></div></div>`;
     this.sayBtns(D); speak(x.q[0]);
-    const go = said => { const T = Object.create(this); T.order = this.order.map(o => ({ ...o })); T.ctx = { ...this.ctx, cur: x.st === "opt" && this.ctx.cur ? [{ ...this.ctx.cur[0] }, this.ctx.cur[1]] : this.ctx.cur }; T.addItems = this.addItems;
-      const S = this.STATES[x.st], n = talkNorm(said).replace(/二(?=[个位碗份杯壶根串只盘笼])/g, "两"); let r = { ok: false };
-      try { r = (x.st === "order" || x.st === "more") ? T.orderCheck(n, said, x.st === "more") : S.check(T, n, said) || r; } catch(e){ r = { ok: false }; }
+    const go = said => { const T = Object.create(this); T.ctx = { ...this.ctx, cur: x.st === "opt" && this.ctx.cur ? [{ ...this.ctx.cur[0] }, this.ctx.cur[1]] : this.ctx.cur }; this.D.clone(T, this, x);
+      const S = this.D.STATES[x.st], n = talkNorm(said).replace(/二(?=[个位碗份杯壶根串只盘笼件条双顶])/g, "两"); let r = { ok: false };
+      try { r = S.check(T, n, said) || r; } catch(e){ r = { ok: false }; }
       const er = odErr(said), good = r.ok && !er && !r.note;
       $("#odDRes").innerHTML = good ? `<p class="tk-redo-r ok">✓ <span class="han">${esc(said)}</span> – Chính xác!</p>` : `<p class="tk-redo-r no">✗ <span class="han">${esc(said)}</span>${er || r.note ? ` – ${esc(er ? er[1] : r.note)}` : ""}. Thử: <span class="han">${esc(x.model[0])}</span></p>`;
       if(good){ x.fixed = true; Games.later(() => { d.k++; this.drawDrill(); }, 1300); } };
@@ -4843,6 +4866,223 @@ const Topic = {
     $("#odDSend").onclick = s; $("#odDIn").onkeydown = e => { if(e.key === "Enter") s(); };
     const m = $("#odDMic"); if(m) m.onclick = () => { const own = { drawBar: () => { m.classList.toggle("on", !!own.recOn); } }; Object.setPrototypeOf(own, this); this.listen.call(own, t => { m.classList.remove("on"); go(t); }); };
   }
+};
+TOPIC_DEF.order = {
+  title: ["🍜", "点菜", "Gọi món ở quán ăn"], face: "s1_waiterface", full: "s1_waiter", role: ["服", "服务员 (phục vụ)"], doneMsg: "Bạn đã gọi món trôi chảy",
+  learn: OD_LEARN, sample: OD_SAMPLE, boardTab: "② Thực đơn", board: s => Topic.menuHTML(s), boardHead: ["菜单", "càidān · thực đơn – bấm vào món để nghe"], boardBtn: "📋 Thực đơn",
+  boardTip: "💡 牛肉面: 大碗 20元 · 小碗 16元. Đồ uống (豆浆, 茶) có 热的 (nóng) / 冰的 (đá). Món có thể chọn độ cay: 麻婆豆腐, 火锅, 牛肉面, 臭豆腐.",
+  intro: "Bạn là <b>khách</b>, Tiểu Vương là <b>phục vụ</b>. Hãy tự chọn món mình thích trong thực đơn – phục vụ sẽ hỏi lại bát to/nhỏ, nóng/đá, cay… theo món bạn gọi.",
+  againBtn: "▶ Gọi món lần nữa", label: "Gọi món", nextBtn: "Đến lượt bạn: thực hành gọi món ›", boardNext: "Xem thực đơn ›",
+  STATES: Topic.STATES,
+  reset(T){ T.order = []; },
+  after(T, r){ const p = T.pending();
+    if(p){ T.ctx.cur = p; return "opt"; }
+    if(r.reconfirm || T.st === "confirm" || T.st === "fix") return "confirm";
+    if(!T.order.some(it => OD_MENU[it.id].drink) && !T.ctx.drinkAsked){ T.ctx.drinkAsked = true; return "drink"; }
+    return "more"; },
+  hasBill: T => T.order.length,
+  bill(T){ const t = T.total(); return `<div class="od-bill"><div class="od-bill-h"><b class="han">小票</b> Hóa đơn${T.ctx.away ? " · 带走 (mang đi)" : ""}</div>
+      ${T.order.map(it => { const x = odItemTx(it); return `<div class="od-bill-r"><span><span class="han">${esc(x[0])}</span><small>${esc(x[2])}</small></span><b>${odPrice(it)}元</b></div>`; }).join("")}
+      <div class="od-bill-t"><span class="han">一共</span><b>${t}元</b></div></div>`; },
+  clone(T, src){ T.order = src.order.map(o => ({ ...o })); T.addItems = src.addItems; }
+};
+/* ===================== Hội thoại theo chủ đề: MUA SẮM – MẶC CẢ – THANH TOÁN (买东西) ===================== */
+const SH_COL = { 红: ["红色", "hóngsè", "đỏ"], 白: ["白色", "báisè", "trắng"], 黑: ["黑色", "hēisè", "đen"], 蓝: ["蓝色", "lánsè", "xanh dương"], 黄: ["黄色", "huángsè", "vàng"],
+  粉: ["粉色", "fěnsè", "hồng"], 绿: ["绿色", "lǜsè", "xanh lá"], 灰: ["灰色", "huīsè", "xám"], 咖: ["咖啡色", "kāfēisè", "nâu"], 米: ["米色", "mǐsè", "màu be"] };
+const SH_SIZE = { S: ["小号", "xiǎo hào", "size S"], M: ["中号", "zhōng hào", "size M"], L: ["大号", "dà hào", "size L"], XL: ["加大号", "jiādà hào", "size XL"] };
+const SH_M = { 件: ["jiàn", "chiếc"], 条: ["tiáo", "chiếc"], 双: ["shuāng", "đôi"], 顶: ["dǐng", "chiếc"], 副: ["fù", "đôi"], 个: ["ge", "cái"] };
+/* id: vị trí trong ảnh 商品 (6×3) */
+const SH_ITEMS = [
+  { h: "外套", p: "wàitào", vi: "áo khoác", price: 280, m: "件", k: "top", c: "黄黑蓝", al: ["夹克"] },
+  { h: "衬衫", p: "chènshān", vi: "áo sơ mi", price: 120, m: "件", k: "top", c: "白蓝粉", al: ["衬衣"] },
+  { h: "T恤", p: "T xù", vi: "áo phông", price: 60, m: "件", k: "top", c: "白黑黄", al: ["T恤衫", "t恤", "体恤", "T血", "提需"] },
+  { h: "毛衣", p: "máoyī", vi: "áo len", price: 150, m: "件", k: "top", c: "米灰红" },
+  { h: "POLO衫", p: "POLO shān", vi: "áo polo", price: 90, m: "件", k: "top", c: "蓝白黑", al: ["polo衫", "Polo衫", "保罗衫", "POLO", "polo"] },
+  { h: "大衣", p: "dàyī", vi: "áo măng tô", price: 480, m: "件", k: "top", c: "黑灰咖" },
+  { h: "羽绒服", p: "yǔróngfú", vi: "áo phao lông vũ", price: 520, m: "件", k: "top", c: "蓝黑白" },
+  { h: "短裤", p: "duǎnkù", vi: "quần short", price: 50, m: "条", k: "top", c: "蓝黑" },
+  { h: "长裤", p: "chángkù", vi: "quần dài", price: 130, m: "条", k: "top", c: "蓝黑灰", al: ["裤子", "牛仔裤"] },
+  { h: "半身裙", p: "bànshēnqún", vi: "chân váy", price: 110, m: "条", k: "top", c: "米黑", al: ["短裙", "裙子"] },
+  { h: "连衣裙", p: "liányīqún", vi: "váy liền", price: 180, m: "条", k: "top", c: "粉白蓝" },
+  { h: "棉衣", p: "miányī", vi: "áo bông", price: 260, m: "件", k: "top", c: "粉米黑", al: ["棉袄"] },
+  { h: "高跟鞋", p: "gāogēnxié", vi: "giày cao gót", price: 220, m: "双", k: "shoe", c: "红黑" },
+  { h: "运动鞋", p: "yùndòngxié", vi: "giày thể thao", price: 300, m: "双", k: "shoe", c: "白蓝黑", al: ["球鞋"] },
+  { h: "洞洞鞋", p: "dòngdòngxié", vi: "dép crocs", price: 80, m: "双", k: "shoe", c: "黄绿粉" },
+  { h: "拖鞋", p: "tuōxié", vi: "dép lê", price: 25, m: "双", k: "shoe", c: "绿蓝" },
+  { h: "帽子", p: "màozi", vi: "mũ", price: 45, m: "顶", alt: ["个"], k: "acc", c: "米黑" },
+  { h: "手套", p: "shǒutào", vi: "găng tay", price: 30, m: "双", alt: ["副"], k: "acc", c: "红蓝" }
+].map((d, i) => ({ ...d, id: i, al: [d.h, ...(d.al || [])], cols: [...d.c].map(x => x === "咖" ? "咖" : x) }));
+const SH_OFF = { 手机: ["shǒujī", "điện thoại"], 书: ["shū", "sách"], 包: ["bāo", "túi xách"], 袜子: ["wàzi", "tất"], 围巾: ["wéijīn", "khăn quàng"], 眼镜: ["yǎnjìng", "kính"], 手表: ["shǒubiǎo", "đồng hồ"], 苹果: ["píngguǒ", "táo"], 水: ["shuǐ", "nước"], 电脑: ["diànnǎo", "máy tính"], 书包: ["shūbāo", "cặp sách"] };
+const sh5 = x => Math.round(x / 5) * 5;
+function shZhNum(t){ const v = { 零: 0, 一: 1, 二: 2, 两: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9 }; let tot = 0, cur = 0, unit = 1, zero = false;
+  for(const ch of t){ if(ch === "零"){ zero = true; unit = 1; } else if(v[ch] != null) cur = v[ch]; else { const u = { 十: 10, 百: 100, 千: 1000 }[ch]; tot += (cur || (u === 10 ? 1 : 0)) * u; cur = 0; unit = u; zero = false; } }
+  if(cur) tot += !zero && unit >= 100 ? cur * unit / 10 : cur; return tot; }
+function shNums(raw){ const out = []; String(raw).replace(/\d+|[零一二两三四五六七八九十百千]+/g, m => { out.push(/^\d+$/.test(m) ? +m : shZhNum(m)); }); return out.filter(x => x > 0); }
+function shColor(s){ if(/咖啡|棕/.test(s)) return "咖"; if(/米色|米白|米黄/.test(s)) return "米"; const m = s.match(/(红|白|黑|蓝|黄|粉|绿|灰)(色|的)?/); return m ? m[1] : null; }
+function shSize(raw, d){ const s = String(raw);
+  if(d.k === "shoe"){ const m = s.match(/(\d{2})\s*(号|码|的)?/) || talkNorm(s).match(/(三十[五六七八九]|四十[一二三四五]?)(号|码|的)?/); return m ? (/^\d+$/.test(m[1]) ? +m[1] : shZhNum(m[1])) : null; }
+  if(/XL|加大|特大/i.test(s)) return "XL"; if(/\bS\b|小号|小码|(^|要|穿)小的|S号|S码/i.test(s)) return "S"; if(/\bM\b|中号|中码|中的|M号|M码/i.test(s)) return "M";
+  if(/\bL\b|大号|大码|(^|要|穿)大的|L号|L码/i.test(s)) return "L"; return null; }
+function shFind(raw){ const s = talkNorm(raw).replace(/二(?=[件条双顶副个])/g, "两"), lo = String(raw);
+  const all = SH_ITEMS.flatMap(d => d.al.map(a => [a, d])).sort((a, b) => b[0].length - a[0].length);
+  for(const [a, d] of all){ const k = s.indexOf(a) >= 0 ? s.indexOf(a) : lo.toLowerCase().indexOf(a.toLowerCase()) >= 0 ? -2 : -1; if(k === -1) continue;
+    const before = k >= 0 ? s.slice(0, k) : "", m = before.match(/(\d+|[一两三四五六七八九十]+)([件条双顶副个])?[^一两三四五六七八九十\d]{0,4}$/);
+    return { d, n: m ? odParseNum(m[1]) || 1 : 1, meas: m ? m[2] || "" : "", hadNum: !!m, color: shColor(s), size: shSize(raw, d) }; }
+  return null; }
+function shItemTx(it){ const d = SH_ITEMS[it.id], M = SH_M[d.m], one = ["件", "副", "个"].includes(d.m) ? "yí" : "yì";
+  let zh = (it.n === 1 ? "一" : odNum(it.n, true)[0]) + d.m, py = (it.n === 1 ? one : odNum(it.n, true)[1]) + " " + M[0], vi = `${it.n} ${M[1]} ${d.vi}`;
+  if(it.color){ const C = SH_COL[it.color]; zh += C[0] + "的"; py += " " + C[1] + " de"; vi += " " + C[2]; }
+  zh += d.h; py += " " + d.p;
+  if(it.size != null){ const z = d.k === "shoe" ? [it.size + "号", it.size + " hào", "cỡ " + it.size] : SH_SIZE[it.size]; zh += `（${z[0]}）`; py += ` (${z[1]})`; vi += ` (${z[2]})`; }
+  return [zh, py, vi]; }
+function shColsTx(d){ const L = d.cols.map(c => SH_COL[c]); const j = (a, sep, last) => a.length > 1 ? a.slice(0, -1).join(sep) + last + a[a.length - 1] : a[0];
+  return [j(L.map(x => x[0]), "、", "和"), j(L.map(x => x[1]), ", ", " hé "), j(L.map(x => x[2]), ", ", " và ")]; }
+function shMeasNote(f){ const d = f.d; if(!f.hadNum) return "";
+  if(!f.meas) return `Thiếu lượng từ: nói “${odQty(f.n, d.m)[0]}${d.h}”, không nói “${odNum(f.n, true)[0]}${d.h}”.`;
+  if(f.meas !== d.m && !(d.alt || []).includes(f.meas)) return `Lượng từ của ${d.h} là “${d.m}”: ${odQty(f.n, d.m)[0]}${d.h}.`; return ""; }
+const SH_LEARN = [
+  { t: "Vào cửa hàng", ic: "👋", L: [["店", "欢迎光临！您想买点儿什么？", "Huānyíng guānglín! Nín xiǎng mǎi diǎnr shénme?", "Chào mừng quý khách! Anh/chị muốn mua gì ạ?"], ["客", "我想买一件毛衣。", "Wǒ xiǎng mǎi yí jiàn máoyī.", "Tôi muốn mua một chiếc áo len."], ["客", "我随便看看。", "Wǒ suíbiàn kànkan.", "Tôi xem qua thôi."], ["客", "有运动鞋吗？", "Yǒu yùndòngxié ma?", "Có giày thể thao không?"]],
+    tip: "Lượng từ: 件 (áo: 一件衬衫) · 条 (quần, váy: 一条长裤) · 双 (giày, dép, găng: 一双运动鞋) · 顶 (mũ: 一顶帽子)." },
+  { t: "Chọn màu", ic: "🎨", L: [["店", "您要什么颜色的？", "Nín yào shénme yánsè de?", "Anh/chị lấy màu gì ạ?"], ["客", "我要白色的。", "Wǒ yào báisè de.", "Tôi lấy màu trắng."], ["客", "有没有黑色的？", "Yǒu méiyǒu hēisè de?", "Có màu đen không?"], ["店", "不好意思，黑色的卖完了。", "Bù hǎo yìsi, hēisè de mài wán le.", "Xin lỗi, màu đen bán hết rồi."]],
+    tip: "红色 đỏ · 白色 trắng · 黑色 đen · 蓝色 xanh dương · 黄色 vàng · 粉色 hồng · 绿色 xanh lá · 灰色 xám · 咖啡色 nâu · 米色 be. Màu + 的 = cái màu đó: 白色的." },
+  { t: "Cỡ – thử đồ", ic: "📏", L: [["店", "您穿多大号的？", "Nín chuān duō dà hào de?", "Anh/chị mặc cỡ nào ạ?"], ["客", "我穿中号的。/ 我穿M号。", "Wǒ chuān zhōng hào de. / Wǒ chuān M hào.", "Tôi mặc cỡ M."], ["客", "我穿三十八号的鞋。", "Wǒ chuān sānshíbā hào de xié.", "Tôi đi giày cỡ 38."], ["客", "我可以试试吗？", "Wǒ kěyǐ shìshi ma?", "Tôi mặc thử được không?"], ["店", "可以，试衣间在那边。", "Kěyǐ, shìyījiān zài nà biān.", "Được ạ, phòng thử đồ ở bên kia."]] },
+  { t: "Vừa hay không vừa?", ic: "🪞", L: [["店", "怎么样？合适吗？", "Zěnmeyàng? Héshì ma?", "Thế nào ạ? Có vừa không?"], ["客", "很合适，我很喜欢。", "Hěn héshì, wǒ hěn xǐhuan.", "Rất vừa, tôi rất thích."], ["客", "有点儿大，有没有小一点儿的？", "Yǒudiǎnr dà, yǒu méiyǒu xiǎo yìdiǎnr de?", "Hơi rộng, có cái nhỏ hơn không?"], ["客", "有点儿小，有大一号的吗？", "Yǒudiǎnr xiǎo, yǒu dà yí hào de ma?", "Hơi chật, có cỡ lớn hơn một số không?"]],
+    tip: "有点儿 + tính từ (không như ý): 有点儿大, 有点儿贵. So sánh mong muốn: 小一点儿的, 便宜一点儿." },
+  { t: "Hỏi giá", ic: "🏷️", L: [["客", "这件毛衣多少钱？", "Zhè jiàn máoyī duōshao qián?", "Chiếc áo len này bao nhiêu tiền?"], ["客", "这双鞋怎么卖？", "Zhè shuāng xié zěnme mài?", "Đôi giày này bán thế nào?"], ["店", "一百五十块。", "Yìbǎi wǔshí kuài.", "150 tệ."]], tip: "这 + lượng từ + đồ vật: 这件衬衫, 这条裤子, 这双鞋. Khẩu ngữ: 一百五 = 150, 两百 = 200." },
+  { t: "Mặc cả", ic: "🤝", L: [["客", "太贵了！便宜一点儿吧。", "Tài guì le! Piányi yìdiǎnr ba.", "Đắt quá! Rẻ một chút đi."], ["客", "能不能便宜点儿？", "Néng bu néng piányi diǎnr?", "Có thể rẻ hơn chút không?"], ["客", "一百块，行吗？", "Yìbǎi kuài, xíng ma?", "100 tệ được không?"], ["店", "一百块太少了，一百二吧。", "Yìbǎi kuài tài shǎo le, yìbǎi èr ba.", "100 tệ ít quá, 120 nhé."], ["店", "不能再便宜了。", "Bù néng zài piányi le.", "Không thể rẻ hơn nữa."], ["客", "好吧，我买了。/ 那我再看看。", "Hǎo ba, wǒ mǎi le. / Nà wǒ zài kànkan.", "Thôi được, tôi mua. / Vậy tôi xem thêm."]],
+    tip: "Mẹo: trả khoảng 60–70% giá đầu tiên, rồi nhích dần. Nói “我再看看” (tôi xem thêm) – người bán thường sẽ gọi lại và giảm giá!" },
+  { t: "Thanh toán", ic: "💳", L: [["客", "一共多少钱？", "Yígòng duōshao qián?", "Tổng cộng bao nhiêu?"], ["店", "一共两百三十块。", "Yígòng liǎngbǎi sānshí kuài.", "Tổng cộng 230 tệ."], ["客", "可以用微信吗？/ 可以刷卡吗？", "Kěyǐ yòng Wēixìn ma? / Kěyǐ shuā kǎ ma?", "Trả WeChat được không? / Quẹt thẻ được không?"], ["客", "给你三百块。", "Gěi nǐ sānbǎi kuài.", "Gửi chị 300 tệ."], ["店", "收您三百，找您七十。", "Shōu nín sānbǎi, zhǎo nín qīshí.", "Nhận 300, thối lại 70."]] },
+  { t: "Túi & tạm biệt", ic: "🛍️", L: [["店", "要袋子吗？", "Yào dàizi ma?", "Có lấy túi không ạ?"], ["客", "要一个，谢谢。/ 不用了。", "Yào yí ge, xièxie. / Bú yòng le.", "Cho một cái, cảm ơn. / Không cần đâu."], ["店", "欢迎下次再来！", "Huānyíng xià cì zài lái!", "Hẹn gặp lại lần sau!"]] }
+];
+const SH_SAMPLE = [["店", "欢迎光临！您想买点儿什么？", "Huānyíng guānglín! Nín xiǎng mǎi diǎnr shénme?", "Chào mừng quý khách! Anh/chị muốn mua gì?"], ["客", "我想买一件毛衣。", "Wǒ xiǎng mǎi yí jiàn máoyī.", "Tôi muốn mua một chiếc áo len."],
+  ["店", "您要什么颜色的？我们有米色、灰色和红色。", "Nín yào shénme yánsè de? Wǒmen yǒu mǐsè, huīsè hé hóngsè.", "Anh/chị lấy màu gì? Có màu be, xám và đỏ."], ["客", "我要灰色的。", "Wǒ yào huīsè de.", "Tôi lấy màu xám."], ["店", "您穿多大号的？", "Nín chuān duō dà hào de?", "Anh/chị mặc cỡ nào?"], ["客", "中号的。可以试试吗？", "Zhōng hào de. Kěyǐ shìshi ma?", "Cỡ M. Thử được không?"],
+  ["店", "可以，试衣间在那边。……怎么样？合适吗？", "Kěyǐ, shìyījiān zài nà biān. …… Zěnmeyàng? Héshì ma?", "Được, phòng thử ở bên kia. … Thế nào? Vừa không?"], ["客", "很合适。这件多少钱？", "Hěn héshì. Zhè jiàn duōshao qián?", "Rất vừa. Cái này bao nhiêu?"], ["店", "一百五十块。", "Yìbǎi wǔshí kuài.", "150 tệ."],
+  ["客", "太贵了！一百块行吗？", "Tài guì le! Yìbǎi kuài xíng ma?", "Đắt quá! 100 tệ được không?"], ["店", "一百块太少了。一百三吧。", "Yìbǎi kuài tài shǎo le. Yìbǎi sān ba.", "100 ít quá. 130 nhé."], ["客", "一百一，不行我就再看看。", "Yìbǎi yī, bù xíng wǒ jiù zài kànkan.", "110, không được thì tôi xem chỗ khác."],
+  ["店", "好吧好吧，一百一卖给您。还要别的吗？", "Hǎo ba hǎo ba, yìbǎi yī mài gěi nín. Hái yào bié de ma?", "Thôi được, 110 bán cho anh/chị. Còn lấy gì nữa không?"], ["客", "不要了。可以用微信吗？", "Bú yào le. Kěyǐ yòng Wēixìn ma?", "Không ạ. Trả WeChat được không?"],
+  ["店", "可以，请扫这儿。要袋子吗？", "Kěyǐ, qǐng sǎo zhèr. Yào dàizi ma?", "Được, mời quét ở đây. Có lấy túi không?"], ["客", "不用了，谢谢。再见！", "Bú yòng le, xièxie. Zàijiàn!", "Không cần, cảm ơn. Tạm biệt!"], ["店", "欢迎下次再来！", "Huānyíng xià cì zài lái!", "Hẹn gặp lại lần sau!"]];
+function shBoard(small){ return `<div class="od-menu sh ${small ? "sm" : ""}">${SH_ITEMS.map(d => `<button class="od-dish" data-say="${esc(d.h)}"><i style="background-image:url('${Exam.img("s1_shop")}');background-size:600% 300%;background-position:${(d.id % 6) * 20}% ${(d.id / 6 | 0) * 50}%"></i>
+  <b class="han">${d.h}</b>${small ? "" : `<small>${d.p}</small><span>${d.vi}</span><span class="sh-cols">${d.cols.map(c => `<i class="sh-dot c-${c}" title="${SH_COL[c][2]}"></i>`).join("")}</span>`}<em>${d.price}元${small ? "" : ` / ${d.m}`}</em></button>`).join("")}</div>`; }
+const SH_STATES = {
+  greet: { hint: "Nói món muốn mua: 我想买一件… / 我随便看看.", model: () => ["我想买一件毛衣。", "我随便看看。", "有运动鞋吗？"],
+    ask: () => ["欢迎光临！您想买点儿什么？", "Huānyíng guānglín! Nín xiǎng mǎi diǎnr shénme?", "Chào mừng quý khách! Anh/chị muốn mua gì ạ?"],
+    check(T, n, raw){ const f = shFind(raw); if(f) return T.shStart(f);
+      if(/^(你好|您好|老板好|早上好|下午好|晚上好)$/.test(n)) return { ok: true, stay: true, react: ["您好！您想买点儿什么？", "Nín hǎo! Nín xiǎng mǎi diǎnr shénme?", "Chào anh/chị! Anh/chị muốn mua gì ạ?"] };
+      if(/看看|随便|先看|逛逛/.test(n)) return { ok: true, react: ["好的，您随便看看。这是我们的商品。", "Hǎo de, nín suíbiàn kànkan. Zhè shì wǒmen de shāngpǐn.", "Vâng, anh/chị cứ xem thoải mái. Đây là hàng của cửa hàng."], menu: true, next: "pick" };
+      return T.shOff(n); } },
+  pick: { hint: "Chọn một món trong hình: 我想看看那件外套 / 我要一双运动鞋.", model: () => ["我想看看那件外套。", "我要一双运动鞋。"],
+    ask: () => ["您喜欢哪个？", "Nín xǐhuan nǎge?", "Anh/chị thích cái nào ạ?"],
+    check(T, n, raw){ const f = shFind(raw); return f ? T.shStart(f) : T.shOff(n); } },
+  color: { hint: "Chọn màu: 我要…色的.", model: T => [`我要${SH_COL[SH_ITEMS[T.item.id].cols[0]][0]}的。`, `有没有${SH_COL[SH_ITEMS[T.item.id].cols[1] || SH_ITEMS[T.item.id].cols[0]][0]}的？`],
+    ask(T){ const d = SH_ITEMS[T.item.id], c = shColsTx(d); return [`您要什么颜色的？我们有${c[0]}。`, `Nín yào shénme yánsè de? Wǒmen yǒu ${c[1]}.`, `Anh/chị lấy màu gì? Có ${c[2]}.`]; },
+    check(T, n, raw){ const c = shColor(n), d = SH_ITEMS[T.item.id]; if(!c) return { ok: false };
+      const z = d.k === "acc" ? null : shSize(raw, d); if(z != null) T.item.size = z;
+      if(!d.cols.includes(c)){ const L = shColsTx(d); return { ok: true, soft: "", stay: true, react: [`不好意思，没有${SH_COL[c][0]}的，只有${L[0]}。`, `Bù hǎo yìsi, méiyǒu ${SH_COL[c][1]} de, zhǐ yǒu ${L[1]}.`, `Xin lỗi, không có màu ${SH_COL[c][2]}, chỉ có ${L[2]}.`] }; }
+      T.item.color = c; return { ok: true, react: ["好的。", "Hǎo de.", "Vâng."], after: true }; } },
+  size: { hint: "", model: T => SH_ITEMS[T.item.id].k === "shoe" ? ["我穿三十八号的。", "三十九号。"] : ["我穿中号的。", "M号。", "大号的。"],
+    ask(T){ const d = SH_ITEMS[T.item.id]; this.hint = d.k === "shoe" ? "Nói cỡ giày: 我穿…号的 (35–44)." : "Nói cỡ: 小号 (S) · 中号 (M) · 大号 (L) · 加大号 (XL).";
+      return d.k === "shoe" ? ["您穿多大的？", "Nín chuān duō dà de?", "Anh/chị đi giày cỡ bao nhiêu?"] : ["您穿多大号的？我们有S、M、L和XL。", "Nín chuān duō dà hào de? Wǒmen yǒu S, M, L hé XL.", "Anh/chị mặc cỡ nào? Có S, M, L và XL."]; },
+    check(T, n, raw){ const d = SH_ITEMS[T.item.id], z = shSize(raw, d); if(z == null || d.k === "shoe" && (z < 34 || z > 46)) return { ok: false };
+      T.item.size = z; return { ok: true, react: ["好的。", "Hǎo de.", "Vâng."], after: true }; } },
+  try: { hint: "Đồng ý thử (好，我试试) hoặc hỏi phòng thử đồ (试衣间在哪儿？).", model: () => ["好，我试试。", "试衣间在哪儿？", "不用了。"],
+    ask(T){ const d = SH_ITEMS[T.item.id]; return d.k === "shoe" ? ["您要试试吗？", "Nín yào shìshi ma?", "Anh/chị có muốn thử không?"] : ["您要试试吗？", "Nín yào shìshi ma?", "Anh/chị có muốn mặc thử không?"]; },
+    check(T, n){ if(/不用|不试|不要/.test(n)){ T.ctx.tried = true; const d = SH_ITEMS[T.item.id]; return { ok: true, react: [`好的。这${d.m}很好看！`, `Hǎo de. Zhè ${SH_M[d.m][0]} hěn hǎokàn!`, "Vâng. Cái này rất đẹp!"], after: true }; }
+      if(/试衣间|在哪/.test(n)) return { ok: true, react: ["在那边，请。", "Zài nà biān, qǐng.", "Ở bên kia, mời anh/chị."], next: "fit", tryOn: true };
+      if(/试|好|要|可以|行/.test(n)) return { ok: true, react: ["好的，请。", "Hǎo de, qǐng.", "Vâng, mời anh/chị."], next: "fit", tryOn: true };
+      return { ok: false }; } },
+  fit: { hint: "Nói vừa hay không: 很合适 / 有点儿大 / 有点儿小.", model: () => ["很合适，我很喜欢。", "有点儿大，有没有小一点儿的？"],
+    ask: () => ["怎么样？合适吗？", "Zěnmeyàng? Héshì ma?", "Thế nào ạ? Có vừa không?"],
+    check(T, n){ const d = SH_ITEMS[T.item.id], it = T.item, ord = ["S", "M", "L", "XL"];
+      const big = /大|肥|长|松/.test(n) && !/不大|不太大/.test(n), small = /小|瘦|短|紧/.test(n) && !/不小|不太小/.test(n);
+      if(/不大不小/.test(n) || /合适|正好|不错|挺好|很好|喜欢|漂亮|好看|舒服|可以/.test(n) && !big && !small){ T.ctx.tried = true; T.ctx.fitOk = true;
+        const z = d.k === "shoe" ? ["这双很适合您！", "Zhè shuāng hěn shìhé nín!", "Đôi này rất hợp với anh/chị!"] : [`这${d.m}很适合您！`, `Zhè ${SH_M[d.m][0]} hěn shìhé nín!`, "Cái này rất hợp với anh/chị!"];
+        return { ok: true, react: z, next: "price" }; }
+      if(big || small){ const up = small; let ns;
+        if(d.k === "shoe") ns = it.size + (up ? 1 : -1); else { const i = ord.indexOf(it.size); ns = ord[Math.max(0, Math.min(3, i + (up ? 1 : -1)))]; }
+        if(ns === it.size) return { ok: true, react: ["不好意思，没有更" + (up ? "大" : "小") + "的了。", "Bù hǎo yìsi, méiyǒu gèng " + (up ? "dà" : "xiǎo") + " de le.", "Xin lỗi, không còn cỡ " + (up ? "lớn" : "nhỏ") + " hơn."], next: "price" };
+        it.size = ns; const z = d.k === "shoe" ? [ns + "号", ns + " hào"] : SH_SIZE[ns];
+        return { ok: true, react: [`那您试试这个${z[0]}的。`, `Nà nín shìshi zhège ${z[1]} de.`, `Vậy anh/chị thử cái ${d.k === "shoe" ? "cỡ " + ns : "size " + ns} này.`], tryOn: true, next: "fit" }; }
+      return { ok: false }; } },
+  price: { hint: "Hỏi giá: 这件多少钱？/ 这双鞋怎么卖？", model: T => { const d = SH_ITEMS[T.item.id]; return [`这${d.m}${d.h}多少钱？`, `这${d.m}怎么卖？`]; }, ask: () => null,
+    check(T, n){ const it = T.item, z = odNum(it.price, true);
+      if(/多少钱|怎么卖|几块|什么价|价格|多少|贵吗/.test(n)) return { ok: true, react: [`${z[0]}块。`, `${z[1]} kuài.`, `${it.price} tệ.`], next: "bargain" };
+      if(/买|要了|就这|好/.test(n)) return { ok: true, soft: "Nên hỏi giá trước khi mua: 这件多少钱？", react: [`好的，这${SH_ITEMS[it.id].m}${z[0]}块。`, `Hǎo de, zhè ${SH_M[SH_ITEMS[it.id].m][0]} ${z[1]} kuài.`, `Vâng, cái này ${it.price} tệ.`], next: "bargain" };
+      return { ok: false }; } },
+  bargain: { hint: "Mặc cả: 太贵了，便宜一点儿吧！/ 一百块行吗？ – hoặc đồng ý: 好，我买了。", model: T => [`太贵了！便宜一点儿吧。`, `${odNum(sh5(T.item.price * .6), true)[0]}块，行吗？`, "好，我买了。"], ask: () => null,
+    check(T, n, raw){ const it = T.item, F = it.floor, P = it.price, Z = x => odNum(x, true), N = shNums(raw.replace(/\d+\s*(号|码)/g, "")).filter(x => x >= 5).pop();
+      const deal = (x, r) => { it.price = x; it.deal = true; T.cart.push({ ...it }); T.lastItem = { ...it, price: it.price0 }; T.item = null; return { ok: true, react: r, next: "more" }; };
+      T.ctx.bargained = T.ctx.bargained || /贵|便宜|打折|少|优惠|行吗|可以吗|怎么样|再看看/.test(n) || !!N;
+      if(N && !/^(好|行|可以)/.test(n)){
+        if(N >= P) return deal(P, [`好的，就${Z(P)[0]}块！`, `Hǎo de, jiù ${Z(P)[1]} kuài!`, `Vâng, ${P} tệ!`]);
+        if(N >= F) return deal(N, [`好吧好吧，${Z(N)[0]}块卖给您！`, `Hǎo ba hǎo ba, ${Z(N)[1]} kuài mài gěi nín!`, `Thôi được, ${N} tệ bán cho anh/chị!`]);
+        let Y = N < F * .6 ? Math.max(F, sh5((P + F) / 2)) : Math.max(F, sh5((N + P) / 2)); if(Y >= P) Y = Math.max(F, P - 5);
+        if(Y === P) return { ok: true, stay: true, react: [`真的不能再便宜了，最低${Z(F)[0]}块。`, `Zhēn de bù néng zài piányi le, zuìdī ${Z(F)[1]} kuài.`, `Thật sự không rẻ hơn được nữa, thấp nhất ${F} tệ.`] };
+        it.price = Y; return { ok: true, stay: true, react: N < F * .6 ? [`${Z(N)[0]}块？太少了！不行不行。最少${Z(Y)[0]}块。`, `${Z(N)[1]} kuài? Tài shǎo le! Bù xíng bù xíng. Zuì shǎo ${Z(Y)[1]} kuài.`, `${N} tệ? Ít quá! Không được. Ít nhất ${Y} tệ.`]
+          : [`${Z(Y)[0]}块吧，不能再少了。`, `${Z(Y)[1]} kuài ba, bù néng zài shǎo le.`, `${Y} tệ nhé, không bớt được nữa.`] }; }
+      if(/不要了|不买了|再看看|算了|走了|别家/.test(n)){
+        if(P > F || !T.ctx.called){ it.price = F; T.ctx.called = true; return { ok: true, stay: true, react: [`别走别走！${Z(F)[0]}块卖给您，怎么样？`, `Bié zǒu bié zǒu! ${Z(F)[1]} kuài mài gěi nín, zěnmeyàng?`, `Đừng đi! ${F} tệ bán cho anh/chị, được không?`] }; }
+        T.item = null; return { ok: true, react: ["好吧，那您再看看别的。", "Hǎo ba, nà nín zài kànkan bié de.", "Thôi được, anh/chị xem món khác nhé."], next: "more" }; }
+      if(/^(好|行|可以|成交|买|要|那好|没问题|ok)/i.test(n) || /我买了|我要了|买吧|就这个/.test(n)){ const r = deal(P, [`好的，${Z(P)[0]}块。`, `Hǎo de, ${Z(P)[1]} kuài.`, `Vâng, ${P} tệ.`]);
+        if(!T.ctx.bargained) r.soft = "Ở chợ / cửa hàng nhỏ có thể mặc cả: 太贵了，便宜一点儿吧！"; T.ctx.bargained = false; return r; }
+      if(/贵|便宜|打折|少一点|优惠|少点/.test(n)){ const Y = Math.max(F, sh5(P * .88)); if(Y >= P) return { ok: true, stay: true, react: [`不能再便宜了，${Z(F)[0]}块是最低价。`, `Bù néng zài piányi le, ${Z(F)[1]} kuài shì zuìdī jià.`, `Không rẻ hơn được nữa, ${F} tệ là giá thấp nhất.`] };
+        it.price = Y; return { ok: true, stay: true, react: /打折/.test(n) ? [`可以打折，${Z(Y)[0]}块吧。`, `Kěyǐ dǎ zhé, ${Z(Y)[1]} kuài ba.`, `Giảm giá được, ${Y} tệ nhé.`] : [`那${Z(Y)[0]}块吧。`, `Nà ${Z(Y)[1]} kuài ba.`, `Vậy ${Y} tệ nhé.`] }; }
+      return { ok: false }; } },
+  more: { hint: "Mua thêm món khác, hoặc nói: 不要了，就这些.", model: () => ["不要了，就这些。", "我还想买一顶帽子。"],
+    ask: () => ["还要别的吗？", "Hái yào bié de ma?", "Còn lấy gì nữa không ạ?"],
+    check(T, n, raw){ const f = shFind(raw); if(f) return T.shStart(f);
+      if(/不要|不用|就这些|没有了|没了|够了|好了|就这样|买单|结账|多少钱/.test(n)){ if(!T.cart.length) return { ok: true, react: ["好的，欢迎下次再来！", "Hǎo de, huānyíng xià cì zài lái!", "Vâng, hẹn gặp lại!"], next: "bye" };
+        return { ok: true, next: "pay" }; }
+      return T.shOff(n); } },
+  pay: { hint: "Chọn cách trả: 可以用微信吗？/ 刷卡 / 给你…块 (tiền mặt).", model: () => ["可以用微信吗？", "给你三百块。", "可以刷卡吗？"],
+    ask(T){ const t = T.shTotal(), z = odNum(t, true); return [`一共${z[0]}块。您怎么付？`, `Yígòng ${z[1]} kuài. Nín zěnme fù?`, `Tổng cộng ${t} tệ. Anh/chị trả bằng gì ạ?`]; },
+    check(T, n, raw){ const t = T.shTotal(), Z = x => odNum(x, true);
+      if(/一共|多少钱/.test(n) && !/给/.test(n)) return { ok: true, stay: true, react: [`一共${Z(t)[0]}块。`, `Yígòng ${Z(t)[1]} kuài.`, `Tổng cộng ${t} tệ.`] };
+      if(/微信|支付宝|扫|手机|二维码/.test(n)){ T.ctx.paid = "扫码"; return { ok: true, react: ["可以，请扫这儿。……好了，谢谢！", "Kěyǐ, qǐng sǎo zhèr. …… Hǎo le, xièxie!", "Được, mời quét ở đây. … Xong rồi, cảm ơn!"], next: "bag", bill: true }; }
+      if(/刷卡|信用卡|银行卡|卡/.test(n)){ T.ctx.paid = "刷卡"; return { ok: true, react: ["可以，请输密码。……好了，谢谢！", "Kěyǐ, qǐng shū mìmǎ. …… Hǎo le, xièxie!", "Được, mời nhập mật khẩu. … Xong rồi, cảm ơn!"], next: "bag", bill: true }; }
+      const N = shNums(raw).filter(x => x >= 1).pop();
+      if(N){ if(N < t) return { ok: true, stay: true, react: [`您给我${Z(N)[0]}块，还差${Z(t - N)[0]}块。`, `Nín gěi wǒ ${Z(N)[1]} kuài, hái chà ${Z(t - N)[1]} kuài.`, `Anh/chị đưa ${N} tệ, còn thiếu ${t - N} tệ.`] };
+        T.ctx.paid = "现金"; T.ctx.given = N; return { ok: true, react: N === t ? [`收您${Z(N)[0]}块，正好。谢谢！`, `Shōu nín ${Z(N)[1]} kuài, zhènghǎo. Xièxie!`, `Nhận ${N} tệ, vừa đủ. Cảm ơn!`]
+          : [`收您${Z(N)[0]}块，找您${Z(N - t)[0]}块。`, `Shōu nín ${Z(N)[1]} kuài, zhǎo nín ${Z(N - t)[1]} kuài.`, `Nhận ${N} tệ, thối lại ${N - t} tệ.`], next: "bag", bill: true }; }
+      if(/现金|给你|钱/.test(n)) return { ok: true, stay: true, react: ["好的，您给我多少钱？", "Hǎo de, nín gěi wǒ duōshao qián?", "Vâng, anh/chị đưa bao nhiêu ạ?"] };
+      return { ok: false }; } },
+  bag: { hint: "Lấy túi: 要一个，谢谢 / 不用了.", model: () => ["要一个，谢谢。", "不用了，谢谢。"],
+    ask: () => ["要袋子吗？", "Yào dàizi ma?", "Có lấy túi không ạ?"],
+    check(T, n){ if(!/要|好|不用|不要|可以|谢|行/.test(n)) return { ok: false };
+      return { ok: true, react: /不用|不要/.test(n) ? ["好的。欢迎下次再来！", "Hǎo de. Huānyíng xià cì zài lái!", "Vâng. Hẹn gặp lại lần sau!"] : ["好的，给您。欢迎下次再来！", "Hǎo de, gěi nín. Huānyíng xià cì zài lái!", "Vâng, gửi anh/chị. Hẹn gặp lại lần sau!"], next: "bye" }; } },
+  bye: { hint: "Chào tạm biệt: 谢谢，再见！", model: () => ["谢谢，再见！"], ask: () => null,
+    check(T, n){ if(!/谢|再见|拜拜|好/.test(n)) return { ok: false }; return { ok: true, react: ["再见！慢走！", "Zàijiàn! Màn zǒu!", "Tạm biệt! Đi cẩn thận nhé!"], next: "end" }; } }
+};
+/* các hàm riêng của chủ đề mua sắm, gắn vào Topic */
+Object.assign(Topic, {
+  shTotal(){ return (this.cart || []).reduce((a, it) => a + it.price * it.n, 0); },
+  shStart(f){ const d = f.d, it = { id: d.id, n: f.n, price0: d.price, price: d.price, floor: sh5(d.price * (.62 + Math.random() * .1)) };
+    let pre = null;
+    if(f.color){ if(d.cols.includes(f.color)) it.color = f.color; else { const L = shColsTx(d); pre = [`不好意思，没有${SH_COL[f.color][0]}的，只有${L[0]}。`, `Bù hǎo yìsi, méiyǒu ${SH_COL[f.color][1]} de, zhǐ yǒu ${L[1]}.`, `Xin lỗi, không có màu ${SH_COL[f.color][2]}, chỉ có ${L[2]}.`]; } }
+    if(f.size != null && d.k !== "acc") it.size = f.size;
+    this.item = it; this.ctx.tried = false; this.ctx.bargained = false; this.ctx.called = false;
+    const q = odQty(f.n, d.m), note = shMeasNote(f);
+    return { ok: true, note, fix: note ? `我想买${q[0]}${d.h}。` : "", react: pre || [`好的，${d.h}在这儿。`, `Hǎo de, ${d.p} zài zhèr.`, `Vâng, ${d.vi} ở đây ạ.`], after: true }; },
+  shOff(n){ const off = Object.keys(SH_OFF).sort((a, b) => b.length - a.length).find(k => n.includes(k));
+    if(off) return { ok: true, stay: true, soft: "Cửa hàng không bán món này – hãy chọn trong bảng 商品.", react: [`不好意思，我们这儿不卖${off}。我们卖衣服、鞋和帽子。`, `Bù hǎo yìsi, wǒmen zhèr bú mài ${SH_OFF[off][0]}. Wǒmen mài yīfu, xié hé màozi.`, `Xin lỗi, cửa hàng không bán ${SH_OFF[off][1]}. Ở đây bán quần áo, giày và mũ.`] };
+    return { ok: false }; }
+});
+TOPIC_DEF.shop = {
+  title: ["🛍️", "买东西", "Mua sắm · mặc cả · thanh toán"], face: "s1_sellerface", full: "s1_seller", role: ["店", "售货员 (người bán)"], doneMsg: "Bạn đã mua sắm trôi chảy",
+  learn: SH_LEARN, sample: SH_SAMPLE, boardTab: "② Hàng hóa", board: shBoard, boardHead: ["商品", "shāngpǐn · hàng hóa – bấm vào món để nghe"], boardBtn: "📋 Hàng hóa",
+  boardTip: "💡 Giá ghi trên bảng là giá người bán nói đầu tiên – bạn có thể mặc cả! Chấm màu dưới mỗi món là các màu đang có.",
+  intro: "Bạn là <b>khách</b>, chị Tiểu Mỹ là <b>người bán hàng</b>. Hãy tự chọn món trong bảng 商品, chọn màu, cỡ, mặc thử, hỏi giá rồi <b>mặc cả</b> – người bán sẽ trả giá lại theo số tiền bạn đưa ra. Cuối cùng chọn cách thanh toán (WeChat, quẹt thẻ, hoặc tiền mặt – sẽ được thối tiền).",
+  againBtn: "▶ Mua sắm lần nữa", label: "Mua sắm", nextBtn: "Đến lượt bạn: thực hành mua sắm ›", boardNext: "Xem hàng hóa ›",
+  STATES: SH_STATES,
+  reset(T){ T.cart = []; T.item = null; },
+  after(T, r){ const it = T.item; if(!it) return "more"; const d = SH_ITEMS[it.id];
+    if(!it.color) return "color"; if(d.k !== "acc" && it.size == null) return "size"; if(d.k !== "acc" && !T.ctx.tried) return "try"; return "price"; },
+  tryOn(T){ const d = SH_ITEMS[T.item.id]; T.sys(`<span class="od-clock">${d.k === "shoe" ? "👟" : "👕"}</span> Bạn ${d.k === "shoe" ? "đi thử" : "vào phòng thử đồ, mặc thử"} <b class="han">${esc(shItemTx({ ...T.item, n: 1 })[0])}</b>…`); },
+  hasBill: T => (T.cart || []).length,
+  bill(T){ const t = T.shTotal(), t0 = T.cart.reduce((a, it) => a + it.price0 * it.n, 0);
+    return `<div class="od-bill"><div class="od-bill-h"><b class="han">小票</b> Hóa đơn${T.ctx.paid ? ` · ${T.ctx.paid}` : ""}</div>
+      ${T.cart.map(it => { const x = shItemTx(it); return `<div class="od-bill-r"><span><span class="han">${esc(x[0])}</span><small>${esc(x[2])}</small></span><b>${it.price0 !== it.price ? `<s>${it.price0 * it.n}</s> ` : ""}${it.price * it.n}元</b></div>`; }).join("")}
+      <div class="od-bill-t"><span class="han">一共</span><b>${t}元</b></div>${t0 > t ? `<div class="od-bill-s">🎉 Mặc cả được <b>${t0 - t}元</b> (${Math.round((t0 - t) / t0 * 100)}%)</div>` : ""}
+      ${T.ctx.given ? `<div class="od-bill-r"><span>Tiền đưa / thối lại</span><b>${T.ctx.given} / ${T.ctx.given - t}元</b></div>` : ""}</div>`; },
+  clone(T, src){ T.cart = (src.cart || []).map(o => ({ ...o })); T.item = src.item ? { ...src.item } : { ...(src.lastItem || { id: 3, n: 1, price: 150, price0: 150, floor: 100, size: "M", color: "灰" }) }; }
 };
 
 const Exam = {
