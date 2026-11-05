@@ -3274,7 +3274,7 @@ const Talk = {
     this.log.push({ ...t, q, said: null }); this.drawChat(); this.drawBar(); if(t.ai && t.ai.length) speak(t.ai[0]); },
   /* lỗi ngữ pháp thường gặp – dù câu trả lời đúng ý vẫn bị đánh dấu để sửa */
   ERRS: [[/是(很|非常|太|也很|不)?(忙|累|好|高兴|漂亮|新鲜|贵|便宜|冷|热|饿|渴|多|小)(?!人|朋友|学生|老师|的)/, "Câu vị ngữ tính từ không dùng 是: nói 我很忙, không nói 我是忙."],
-    [/我贵姓/, "Khi trả lời không nói 我贵姓…, mà nói 我姓…"], [/二(个|口|斤|本|支|台|部|种|点|块)/, "Trước lượng từ dùng 两, không dùng 二 (两个, 两口, 两点…)."],
+    [/我贵姓/, "Khi trả lời không nói 我贵姓…, mà nói 我姓…"], [/(?<![十百千万零一])二(个|口|斤|本|支|台|部|种|点|块)/, "Trước lượng từ dùng 两, không dùng 二 (两个, 两口, 两点…)."],
     [/(什么|哪|几|谁|多少|怎么样).*吗$/, "Câu đã có từ để hỏi (什么, 哪, 几…) thì không thêm 吗."], [/不有/, "Phủ định của 有 là 没有, không nói 不有."],
     [/(忙|累|去|喝|是)不(忙|累|去|喝|是).*吗$/, "Câu hỏi chính phản (A不A) không thêm 吗."]],
   judge(t, said){ const n = talkNorm(said); let best = null;
