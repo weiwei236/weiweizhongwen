@@ -2696,9 +2696,11 @@ function speakDevice(text){
 const S = { level: store.get("ww_level","hsk1"), lesson: 10, section: store.get("ww_section","flash") };
 
 function renderLevels(){
-  const grp=(LEVELS[S.level]||{}).grp||"hsk", other=grp==="gt"?"hsk1":"gt1";
-  $("#levels").innerHTML = Object.entries(LEVELS).filter(([k,v])=>(v.grp||"hsk")===grp).map(([k,v])=>`<button role="tab" aria-selected="${k===S.level}" data-lv="${k}">${v.name}</button>`).join("")
-    +`<button class="lv-sw" data-lv="${other}" title="Chuyển giáo trình">${grp==="gt"?"HSK ▸":"Giao tiếp ▸"}</button>`;
+  /* HSK và Giao tiếp tách biệt: học viên chỉ thấy giáo trình của lớp mình */
+  const pf=Profile.get(), grp=pf&&pf.cls==="gt"?"gt":"hsk";
+  if(!LEVELS[S.level]||(LEVELS[S.level].grp||"hsk")!==grp){ S.level=grp==="gt"?gtLv(pf&&pf.level):(pf&&LEVELS[pf.level]&&!LEVELS[pf.level].grp?pf.level:"hsk1"); store.set("ww_level",S.level);
+    const ids=Object.keys(LEVELS[S.level].lessons).map(Number); S.lesson=ids.length?(grp==="gt"?ids[0]:ids[ids.length-1]):null; }
+  $("#levels").innerHTML = Object.entries(LEVELS).filter(([k,v])=>(v.grp||"hsk")===grp).map(([k,v])=>`<button role="tab" aria-selected="${k===S.level}" data-lv="${k}">${v.name}</button>`).join("");
   $("#levels").onclick = e=>{const b=e.target.closest("button");if(!b)return;S.level=b.dataset.lv;store.set("ww_level",S.level);
     const ids=Object.keys(LEVELS[S.level].lessons);S.lesson=ids.length?+ids[ids.length-1]:null;renderAll();};
 }
@@ -5617,7 +5619,7 @@ function renderHello(){
 function enterApp(){
   const p=Profile.get(); if(!p||!p.avatar) return openWelcome();
   if(p.cls==="hsk"&&LEVELS[p.level]){ S.level=p.level; const ids=Object.keys(LEVELS[S.level].lessons); S.lesson=ids.length?+ids[ids.length-1]:null; }
-  if(p.cls==="gt"&&!enterApp.gtDone){ enterApp.gtDone=true; S.level=gtLv(p.level); store.set("ww_level",S.level); const ids=Object.keys(LEVELS[S.level].lessons).map(Number); S.lesson=ids.length?ids[0]:LEVELS[S.level].from; }
+  if(p.cls==="gt"&&(LEVELS[S.level]||{}).grp!=="gt"){ S.level=gtLv(p.level); store.set("ww_level",S.level); const ids=Object.keys(LEVELS[S.level].lessons).map(Number); S.lesson=ids.length?ids[0]:LEVELS[S.level].from; }
   showScreen("app"); renderHello(); renderAll();
   if(!enterApp.logged){ enterApp.logged=true; Track.log("session",{},""); }
 }
