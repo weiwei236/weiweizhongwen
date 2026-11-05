@@ -4633,12 +4633,17 @@ function fBangs(h,t="blunt"){
   switch(t){
     case "side": return `<path d="${base}C164,4 161,-2 157,-6 Q146,-2 134,-8 Q116,-14 102,-26 Q90,-36 80,-50 Q72,-36 62,-26 Q52,-16 45,-8 C41,2 37,8 33,14Z" ${hFill()} ${LINE}/>`
       +hLine(h,"M80,-50 C100,-36 122,-22 150,-10 M84,-62 C104,-52 126,-38 152,-24 M74,-44 C66,-34 56,-24 48,-14")+top;
-    case "air": { /* mái thưa Hàn Quốc: các lọn mảnh, đầu lọn cong mềm, có khe hở để lộ trán */
-      const wisp=(rx,w,tx,ty)=>{ const a=rx-w/2, b=rx+w/2, d=tx-rx; return `<path d="M${a},-30 C${a},-18 ${a+d*.7},${ty-12} ${tx-1.6},${ty-1.5} Q${tx},${ty+1.6} ${tx+1.6},${ty-1.2} C${b+d*.5},${ty-12} ${b},-18 ${b},-30 Z" ${hFill()} stroke="${OLC}" stroke-width="1.5" stroke-linejoin="round"/>`; };
-      const W=[[49,12,42,12],[63,13,57,-2],[78,12,73,2],[93,13,90,-4],[108,12,110,1],[122,13,127,-3],[137,12,143,2],[151,12,158,12]];
-      return W.map(v=>wisp(...v)).join("")+`<path d="${base}C164,2 160,-8 154,-16 C138,-25 120,-28 100,-28 C80,-28 62,-25 46,-16 C40,-8 36,2 33,14Z" ${hFill()} ${LINE}/>`
-        +hLine(h,"M86,-28 C88,-44 94,-56 104,-64 M114,-28 C116,-44 114,-56 108,-62 M66,-25 C66,-40 72,-52 82,-60 M134,-25 C136,-40 132,-50 124,-58")
-        +top; }
+    case "air": { /* mái thưa Hàn Quốc: các mảng tóc mảnh rủ từ ngôi giữa xuống, đầu mảng thon mềm, khe hở lộ trán; hai lọn mai dài ôm má */
+      const U=`fill="url(#${G}hu)"`, ST=`stroke="${OLC}" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"`;
+      const clump=(rx,ry,w,tx,ty)=>{ const l=rx-w/2, r=rx+w/2, L=`M${l},${ry} C${l},${ry+(ty-ry)*.55} ${tx-w*.3},${ty-8} ${tx-2.2},${ty-1.5}`, R=`M${tx+2.2},${ty-1.5} C${tx+w*.3},${ty-8} ${r},${ry+(ty-ry)*.5} ${r},${ry}`;
+        return `<path d="${L} Q${tx},${ty+1.8} ${tx+2.2},${ty-1.5} C${tx+w*.3},${ty-8} ${r},${ry+(ty-ry)*.5} ${r},${ry} Z" ${U}/><path d="${L} Q${tx},${ty+1.8} ${tx+2.2},${ty-1.5} C${tx+w*.3},${ty-8} ${r},${ry+(ty-ry)*.5} ${r},${ry}" ${ST}/>`
+          +`<path d="M${rx+(tx-rx)*.2},${ry+6} C${rx+(tx-rx)*.4},${ry+(ty-ry)*.5} ${tx+(rx-tx)*.15},${ty-10} ${tx},${ty-5}" stroke="${shade(h,-.45)}" stroke-opacity=".45" stroke-width="1.1" fill="none" stroke-linecap="round"/>`; };
+      const C=[[54,-36,18,45,26],[146,-36,18,155,26],[72,-50,22,65,3],[128,-50,22,135,3],[90,-58,22,87,0],[110,-58,22,113,0]];
+      return `<path d="${base}C164,0 160,-12 152,-22 C140,-34 120,-40 100,-42 C80,-40 60,-34 48,-22 C40,-12 36,0 33,14Z" ${U} ${LINE}/>`
+        +C.map(v=>clump(...v)).join("")
+        +`<path d="M100,-76 Q99,-68 100,-58" stroke="${OLC}" stroke-opacity=".45" stroke-width="1.3" fill="none" stroke-linecap="round"/>`
+        +hLine(h,"M98,-62 C82,-66 62,-60 48,-44 M102,-62 C118,-66 138,-60 152,-44")
+        +hShine(h,"M62,-54 Q80,-66 96,-66 M104,-66 Q120,-66 138,-54"); }
     case "middle": return `<path d="${base}C164,4 160,-2 156,-6 C146,-10 134,-14 124,-22 C114,-30 106,-42 102,-56 L100,-60 L98,-56 C94,-42 86,-30 76,-22 C66,-14 54,-10 44,-6 C40,0 37,6 33,14Z" ${hFill()} ${LINE}/>`
       +`<path d="M100,-60 L100,-74" stroke="${OLC}" stroke-opacity=".5" stroke-width="1.4"/>`+hLine(h,"M102,-56 C112,-62 132,-58 150,-34 M124,-22 C136,-34 140,-50 130,-64 M98,-56 C88,-62 68,-58 50,-34 M76,-22 C64,-34 60,-50 70,-64")+top;
     case "short": return `<path d="${base}C163,0 159,-12 154,-18 Q146,-14 140,-20 Q130,-12 120,-20 Q110,-13 100,-20 Q90,-13 80,-20 Q70,-12 60,-20 Q54,-14 46,-18 C41,-10 37,2 33,14Z" ${hFill()} ${LINE}/>`
@@ -5004,6 +5009,7 @@ function avatarSVG(c0,opt={}){
   const c=fixHair({...AV_DEF,...(c0.gender==="m"&&!c0.accHead?{accHead:"none"}:{}),...c0}), l=avLayout(c), sk=SKIN[c.skin]; G="av"+(++AVN);
   const h=c.hairColor;
   let s=`<defs><linearGradient id="${G}h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${shade(h,.16)}"/><stop offset=".55" stop-color="${h}"/><stop offset="1" stop-color="${shade(h,-.18)}"/></linearGradient>
+    <linearGradient id="${G}hu" gradientUnits="userSpaceOnUse" x1="0" y1="-80" x2="0" y2="40"><stop offset="0" stop-color="${shade(h,.16)}"/><stop offset=".6" stop-color="${h}"/><stop offset="1" stop-color="${shade(h,-.12)}"/></linearGradient>
     <linearGradient id="${G}e" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1B110D"/><stop offset=".6" stop-color="#3E2519"/><stop offset="1" stop-color="#7A4A30"/></linearGradient>
     <radialGradient id="${G}b"><stop offset="0" stop-color="#F59AA6" stop-opacity=".9"/><stop offset="1" stop-color="#F59AA6" stop-opacity="0"/></radialGradient>
     <radialGradient id="${G}f" cx=".5" cy=".38" r=".62"><stop offset=".7" stop-color="${sk[0]}"/><stop offset="1" stop-color="${shade(sk[0],-.05)}"/></radialGradient></defs>`;
