@@ -4797,43 +4797,57 @@ const mhN={
   shine:(h,d)=>`<path d="${d}" stroke="${shade(h,.55)}" stroke-opacity=".55" stroke-width="4" fill="none" stroke-linecap="round"/>`,
   shaved:(h,d)=>`<path d="${d}" fill="${h}" fill-opacity=".38" stroke="${OLC}" stroke-opacity=".3" stroke-width="1.2"/>`,
   /* chuỗi cung lồi qua các điểm – dùng cho tóc xoăn */
+  shadow:(d)=>`<path d="${d}" fill="#C98F78" opacity=".22"/>`,
+  ring:(h,d)=>`<path d="${d}" fill="${shade(h,.5)}" fill-opacity=".45"/>`,
+  dots:(h,pts)=>pts.map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2.2" fill="#fff" fill-opacity=".55"/>`).join(""),
   bumps:(pts,r)=>"M"+pts[0].join(",")+pts.slice(1).map(p=>` A${r},${r} 0 0 1 ${p.join(",")}`).join("")+"Z"
 };
 Object.assign(MALE_HAIR,{
   twoblock:{ label:"Two-block", native:true,
-    front:h=>{ const sv=`M33,-24 C31,-8 33,4 37,10 L45,8 C43,-4 43,-14 45,-24 Z`;
-      return mhN.shaved(h,sv)+mhN.shaved(h,`M167,-24 C169,-8 167,4 163,10 L155,8 C157,-4 157,-14 155,-24 Z`)
-      +mhN.mass(`M28,-20 C22,-70 62,-90 100,-90 C138,-90 178,-70 172,-20 C168,-14 160,-12 154,-16
-        C152,-8 148,-2 142,-2 C142,-8 138,-12 134,-14 C132,-6 126,1 118,2 C120,-6 118,-12 114,-16
-        C110,-8 104,-3 98,-2 C100,-8 98,-14 94,-17 C90,-9 82,-3 74,-2 C78,-8 78,-14 74,-17
-        C70,-10 62,-6 56,-6 C58,-10 58,-14 56,-17 C50,-12 40,-12 28,-20 Z`)
-      +mhN.line(h,"M118,2 C126,-16 126,-40 114,-62 M98,-2 C104,-22 106,-46 98,-70 M74,-2 C82,-22 84,-44 78,-64 M142,-2 C150,-18 150,-38 140,-56 M56,-6 C62,-20 62,-38 58,-52")
-      +mhN.shine(h,"M58,-62 Q80,-80 104,-80 M118,-78 Q134,-74 146,-62"); } },
+    /* lớp trên dài, dày, mái rủ xuống trán; hai bên mai và sau gáy cắt ngắn sát */
+    front:h=>{ const sd=x=>`<path d="M${x},-30 C${x-2},-16 ${x-2},-4 ${x+2},8 C${x+4},11 ${x+9},10 ${x+9},5 C${x+8},-6 ${x+8},-18 ${x+10},-28 Z" fill="${shade(h,.08)}" fill-opacity=".8" ${THIN}/>`+mhN.line(h,`M${x+3},-20 l1,8 M${x+5},-14 l1,8`,.35);
+      return sd(34)+mirror(sd(34))
+      +mhN.shadow(`M40,-16 C60,-8 80,0 100,-2 C120,0 140,-6 160,-16 L160,-4 C140,6 120,10 100,8 C80,10 60,6 40,-4Z`)
+      +mhN.mass(`M26,-22 C20,-72 62,-90 100,-90 C138,-90 180,-72 174,-22 C172,-16 166,-14 162,-18
+        C158,-10 152,-6 146,-6 C148,-10 147,-15 143,-19 C138,-9 128,-3 118,-2 C122,-8 122,-14 118,-19
+        C112,-11 104,-6 96,-6 C97,-12 94,-20 89,-26 C84,-16 74,-6 62,-4 C66,-10 66,-16 63,-20
+        C57,-12 48,-10 40,-12 C42,-15 42,-18 40,-20 C35,-16 30,-16 26,-22 Z`)
+      +mhN.line(h,"M89,-26 C92,-44 96,-60 104,-74 M118,-2 C126,-20 126,-42 116,-60 M62,-4 C70,-20 72,-40 66,-58",.4)
+      +mhN.ring(h,"M50,-58 Q100,-84 150,-58 Q100,-72 50,-58Z")+mhN.dots(h,[[62,-64],[138,-64]]); } },
   comma:{ label:"Tóc dấu phẩy", native:true,
-    /* mái dày rẽ 6/4, các mảng mái cong vào phía trong như dấu phẩy */
-    front:h=>{ const R=(x1,x2,tx,ty)=>` C${x1},-4 ${tx+8},${ty} ${tx},${ty} C${tx-4},${ty-1} ${tx-4},${ty-7} ${x2},-14`,
-        Lf=(x1,x2,tx,ty)=>` C${x1+4},${ty-7} ${x1+4},${ty-1} ${tx},${ty} C${tx-8},${ty} ${x2},-4 ${x2},-14`;
-      const d=`M32,8 C22,-56 60,-86 100,-86 C142,-86 180,-58 168,8 C166,0 162,-8 156,-14`
-        +R(156,136,140,2)+R(136,114,118,-1)+` C112,-20 108,-26 104,-30 C100,-26 99,-20 98,-14`
-        +Lf(98,78,92,0)+Lf(78,56,72,2)+` C52,-10 46,-12 42,-12 C38,-6 34,2 32,8 Z`;
-      return mhN.mass(d)
-        +mhN.line(h,"M140,2 C146,-14 144,-34 130,-52 M118,-1 C124,-16 122,-34 112,-50 M92,0 C88,-16 90,-34 98,-50 M72,2 C66,-14 68,-32 78,-48 M104,-30 C104,-44 102,-58 100,-72")
-        +mhN.shine(h,"M62,-64 Q86,-78 110,-76 M128,-74 Q144,-66 154,-52"); } },
+    /* rẽ ngôi lệch phải; mái phủ chéo trán, lọn giữa cong móc vào trong như dấu phẩy */
+    front:h=>mhN.shadow(`M44,-14 C60,-10 76,-4 90,0 C104,-2 120,-10 132,-16 L132,-6 C118,2 104,8 90,10 C74,8 58,2 44,-4Z`)
+      +mhN.mass(`M30,8 C20,-58 62,-84 100,-84 C140,-84 182,-58 170,8 C167,-2 163,-10 157,-16
+        C152,-20 146,-24 138,-26 C130,-28 124,-34 120,-40 C116,-30 108,-20 96,-14
+        C82,-8 66,-6 54,-8 C46,-10 40,-4 36,2 C34,4 32,6 30,8 Z`)
+      +mhN.mass(`M120,-42 C114,-26 102,-14 90,-8 C82,-4 76,-2 74,-7 C72,-13 79,-16 84,-12 C86,-14 86,-17 84,-19
+        C94,-24 104,-32 108,-44 Z`)
+      +`<path d="M84,-12 C82,-10 79,-10 78,-12" stroke="${OLC}" stroke-width="1.4" fill="none" stroke-linecap="round"/>`
+      +mhN.line(h,"M116,-38 C110,-26 100,-16 90,-11 M120,-40 C122,-56 120,-70 116,-80",.4)
+      +mhN.line(h,"M157,-16 C152,-34 140,-50 124,-58 M54,-8 C52,-26 58,-44 72,-58",.35)
+      +mhN.ring(h,"M52,-56 Q96,-80 146,-60 Q98,-70 52,-56Z")+mhN.dots(h,[[64,-62],[100,-44]]) },
   softcurl:{ label:"Tóc xoăn nhẹ", native:true,
-    back:h=>mhN.mass(mhN.bumps([[34,18],[28,6],[30,-8],[38,0],[36,16]],6))+mhN.mass(mhN.bumps([[164,16],[162,0],[170,-8],[172,6],[166,18]],6)),
-    front:h=>{ const top=[[34,10],[28,-8],[30,-28],[40,-46],[56,-62],[76,-74],[100,-78],[124,-74],[144,-62],[160,-46],[170,-28],[172,-8],[166,10]],
-        fr=[[158,-4],[146,-10],[134,-5],[122,-12],[110,-5],[98,-12],[86,-6],[74,-12],[62,-6],[50,-10],[42,-4]];
-      const d=mhN.bumps(top,15).slice(0,-1)+" L158,-4"+fr.slice(1).map(p=>` A8,8 0 0 1 ${p.join(",")}`).join("")+" L34,10 Z";
-      const curl=(x,y,s=1)=>`<path d="M${x},${y} c${3*s},-4 ${8*s},-2 ${7*s},3 c-1,4 -6,4 -6,0" stroke="${shade(h,-.45)}" stroke-opacity=".5" stroke-width="1.3" fill="none" stroke-linecap="round"/>`;
-      return mhN.mass(d)+[[62,-48],[96,-60],[132,-50],[78,-26],[118,-28],[150,-22],[50,-22]].map(([x,y],i)=>curl(x,y,i%2?1:-1)).join("")
-        +mhN.shine(h,"M64,-60 Q82,-72 98,-72 M118,-70 Q134,-64 144,-54"); } },
+    /* tóc gợn sóng lớn, bồng tự nhiên, đuôi tóc hai bên hất nhẹ ra ngoài */
+    back:h=>mhN.mass(`M28,-4 C20,8 22,22 30,26 C28,18 34,12 40,10 Z`)+mhN.mass(`M172,-4 C180,8 178,22 170,26 C172,18 166,12 160,10 Z`),
+    front:h=>mhN.shadow(`M42,-12 C62,-4 82,0 100,0 C118,0 138,-4 158,-12 L158,0 C138,8 118,10 100,10 C82,10 62,8 42,0Z`)
+      +mhN.mass(`M30,14 C18,2 22,-10 28,-18 C20,-34 30,-52 44,-60 C50,-76 72,-88 94,-86 C108,-94 134,-88 144,-74
+        C162,-70 176,-52 172,-34 C180,-22 180,-6 170,4 C170,10 168,14 164,16 C162,8 158,2 154,-2
+        C154,-8 150,-12 146,-12 C142,-4 134,0 126,-2 C130,-8 128,-14 124,-16 C118,-8 110,-4 102,-4
+        C104,-10 100,-16 96,-18 C90,-8 80,-2 70,-2 C74,-8 72,-14 68,-16 C62,-8 54,-4 46,-6 C46,-2 42,4 38,6 C36,8 32,12 30,14 Z`)
+      +`<path d="M98,-86 C96,-96 104,-102 112,-98 C106,-98 102,-94 104,-88" ${hFill()} stroke="${OLC}" stroke-width="1.5" stroke-linejoin="round"/>`
+      +mhN.line(h,"M70,-2 C80,-16 74,-30 84,-44 C90,-54 88,-64 96,-72 M102,-4 C112,-18 108,-32 118,-44 C124,-52 124,-62 130,-68 M126,-2 C138,-14 136,-28 146,-38 M46,-6 C52,-18 48,-32 58,-44",.42)
+      +mhN.ring(h,"M48,-52 C70,-74 120,-80 152,-56 C120,-68 76,-66 48,-52Z")+mhN.dots(h,[[60,-58],[142,-60],[116,-64]]) },
   crew:{ label:"Tóc húi cua", native:true,
-    front:h=>{ let t=""; for(let y=-60;y<=-34;y+=6) for(let x=46;x<=154;x+=9){ const xx=x+(y/6%2?4.5:0), e=((xx-100)/58)**2+((y+28)/36)**2; if(e<.92&&y<-32) t+=`M${xx},${y} l${((xx-100)/40).toFixed(1)},-2.6 `; }
-      return mhN.mass(`M36,-4 C32,-48 62,-68 100,-68 C138,-68 168,-48 164,-4 C162,-12 158,-20 152,-25
-        Q148,-25 145,-29 Q140,-27 136,-31 Q130,-29 125,-33 Q118,-31 112,-34 Q106,-32 100,-35 Q94,-32 88,-34 Q82,-31 75,-33 Q70,-29 64,-31 Q60,-27 55,-29 Q52,-25 48,-25
-        C42,-20 38,-12 36,-4 Z`)
-        +`<path d="${t}" stroke="${shade(h,mhLum(h)<.3?.4:-.35)}" stroke-opacity=".45" stroke-width="1.3" fill="none" stroke-linecap="round"/>`
-        +mhN.shine(h,"M66,-54 Q100,-66 134,-54"); } }
+    /* tóc rất ngắn sát da đầu: lớp mỏng bán trong suốt ôm đúng dáng đầu, chân tóc mềm, chấm texture li ti */
+    front:h=>{ let t=""; for(let y=-54;y<=-28;y+=4.5) for(let x=44;x<=156;x+=7){ const xx=x+(Math.round(y/4.5)%2?3.5:0), e=((xx-100)/60)**2+((y+10)/50)**2; if(e<.92&&y<-26+Math.abs(xx-100)*.1) t+=`M${xx.toFixed(1)},${y} l.6,-1.6 `; }
+      const hairline=`C161,-6 156,-14 148,-19 C136,-24 120,-26 108,-25 Q100,-22 92,-25 C80,-26 64,-24 52,-19 C44,-14 39,-6 37,4`;
+      return `<defs><linearGradient id="${G}bz" gradientUnits="userSpaceOnUse" x1="0" y1="-60" x2="0" y2="-16"><stop offset="0" stop-color="${h}" stop-opacity=".97"/><stop offset=".7" stop-color="${h}" stop-opacity=".9"/><stop offset="1" stop-color="${h}" stop-opacity=".55"/></linearGradient></defs>`
+        +`<path d="M36,2 C36,-38 64,-60 100,-60 C136,-60 164,-38 164,2 L163,4 ${hairline} Z" fill="url(#${G}bz)"/>`
+        +`<path d="M36,2 C36,-38 64,-60 100,-60 C136,-60 164,-38 164,2" ${LINE} fill="none"/>`
+        +`<path d="M163,4 ${hairline}" stroke="${h}" stroke-opacity=".5" stroke-width="1.6" stroke-dasharray="1.5 2" fill="none"/>`
+        +`<path d="${t}" stroke="${shade(h,mhLum(h)<.3?.45:-.3)}" stroke-opacity=".5" stroke-width="1.1" fill="none" stroke-linecap="round"/>`
+        +`<path d="M37,-2 C37,4 38,8 40,12 L42,12 C41,6 41,0 42,-6Z M163,-2 C163,4 162,8 160,12 L158,12 C159,6 159,0 158,-6Z" fill="${h}" fill-opacity=".55"/>`
+        +mhN.ring(h,"M62,-50 Q100,-62 138,-50 Q100,-56 62,-50Z"); } }
 });
 const MALE_HAIR_OLD={short:"layer",side:"side73",buzz:"crew",bowl:"twoblock",curly:"softcurl"};
 AV_OPTS.hairM=Object.entries(MALE_HAIR).map(([k,v])=>[k,v.label]);
