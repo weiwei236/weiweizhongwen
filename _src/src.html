@@ -4594,7 +4594,7 @@ const AV_OPTS={
  accHead:[["none","Không"],["nonla","Nón lá"],["khandong","Khăn đóng"],["cap","Mũ lưỡi trai"],["beret","Mũ beret"],["bucket","Mũ bucket"],["bow","Nơ cài tóc"],["flower","Hoa cài tóc"],["catears","Băng đô tai mèo"],["phones","Tai nghe"]],
  accFace:[["none","Không"],["glasses","Kính tròn"],["square","Gọng vuông"],["metal","Gọng kim loại"],["halfrim","Nửa gọng"],["cateye","Mắt mèo"],["sunglasses","Kính râm"],["roundsun","Kính râm tròn"],["heart","Kính trái tim"]],
  accBody:[["none","Không"],["khanran","Khăn rằn"],["scarf","Khăn quàng"],["backpack","Ba lô"],["bag","Túi đeo chéo"],["book","Ôm sách"]],
- expr:[["smile","Vui vẻ"],["laugh","Cười tươi"],["wow","Ngạc nhiên"],["wink","Nháy mắt"],["shy","Ngại ngùng"],["fight","Quyết tâm"]]
+ expr:[["smile","Vui vẻ"],["laugh","Cười tươi"],["wow","Ngạc nhiên"],["wink","Nháy mắt"],["shy","Ngại ngùng"],["fight","Quyết tâm"],["star","Lấp lánh"],["love","Mắt tim"],["tongue","Lêu lêu"],["think","Suy nghĩ"],["sweat","Bối rối"],["sleepy","Buồn ngủ"],["sad","Buồn"],["cry","Khóc"],["angry","Giận dỗi"]]
 };
 const SKIN={dark:["#E2A97F","#C98A62"],mid:["#F8D7BF","#EDBA9C"],light:["#FFECDF","#F6CDB6"]};
 const AV_DEF={gender:"f",skin:"mid",height:"m",hair:"long",bangs:"blunt",hairColor:"#2B2220",outfit:"aodai",shoes:"sneaker",accHead:"bow",accFace:"none",accBody:"none",expr:"wow"};
@@ -4603,7 +4603,7 @@ const OLC="#5A3B30";
 const LINE=`stroke="${OLC}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"`;
 const THIN=`stroke="${OLC}" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"`;
 /* bố cục: đầu to (rx 64, ry 58), thân ngắn, chân ngắn */
-function avLayout(c){ const L={s:34,m:42,t:50}[c.height]||42, Tt={s:36,m:39,t:43}[c.height]||39, foot=280, hip=foot-L-8, sy=hip-Tt, hy=sy-66; return {L,Tt,foot,hip,sy,hy}; }
+function avLayout(c){ const L={s:34,m:42,t:50}[c.height]||42, Tt={s:36,m:39,t:43}[c.height]||39, foot=280, hip=foot-L-8, sy=hip-Tt, hy=sy-62; return {L,Tt,foot,hip,sy,hy}; }
 function shade(hex,a){ const n=parseInt(hex.slice(1),16); let r=n>>16,g=n>>8&255,b=n&255; const f=v=>Math.max(0,Math.min(255,Math.round(a<0?v*(1+a):v+(255-v)*a))); return "#"+((1<<24)+(f(r)<<16)+(f(g)<<8)+f(b)).toString(16).slice(1); }
 const mirror=s=>`<g transform="translate(200,0) scale(-1,1)">${s}</g>`;
 let AVN=0, G="av0";
@@ -4629,14 +4629,24 @@ function fBangs(h,t="blunt"){
   switch(t){
     case "side": return `<path d="${base}C164,4 161,-2 157,-6 Q146,-2 134,-8 Q116,-14 102,-26 Q90,-36 80,-50 Q72,-36 62,-26 Q52,-16 45,-8 C41,2 37,8 33,14Z" ${hFill()} ${LINE}/>`
       +hLine(h,"M80,-50 C100,-36 122,-22 150,-10 M84,-62 C104,-52 126,-38 152,-24 M74,-44 C66,-34 56,-24 48,-14")+top;
-    case "air": { let st=""; [[64,-4],[80,-1],[96,-3],[112,-1],[128,-3],[142,-5]].forEach(([x,y],i)=>{ st+=`<path d="M${x-5},-22 C${x-5},${y-10} ${x-2},${y-2} ${x+1},${y} C${x},${y-6} ${x+3},${y-14} ${x+5},-22 Z" ${hFill()} stroke="${OLC}" stroke-width="1.4" stroke-linejoin="round"/>`; });
-      return `<path d="${base}C163,4 160,-6 156,-12 Q140,-18 124,-20 Q100,-26 76,-20 Q60,-18 46,-12 C41,-4 37,6 33,14Z" ${hFill()} ${LINE}/>`+st+hLine(h,"M90,-26 C92,-44 98,-56 106,-64 M118,-26 C122,-42 120,-54 114,-62")+top; }
+    case "air": { /* mái thưa Hàn Quốc: các lọn mảnh, đầu lọn cong mềm, có khe hở để lộ trán */
+      const wisp=(rx,w,tx,ty)=>{ const a=rx-w/2, b=rx+w/2, d=tx-rx; return `<path d="M${a},-30 C${a},-18 ${a+d*.7},${ty-12} ${tx-1.6},${ty-1.5} Q${tx},${ty+1.6} ${tx+1.6},${ty-1.2} C${b+d*.5},${ty-12} ${b},-18 ${b},-30 Z" ${hFill()} stroke="${OLC}" stroke-width="1.5" stroke-linejoin="round"/>`; };
+      const W=[[49,12,42,12],[63,13,57,-2],[78,12,73,2],[93,13,90,-4],[108,12,110,1],[122,13,127,-3],[137,12,143,2],[151,12,158,12]];
+      return W.map(v=>wisp(...v)).join("")+`<path d="${base}C164,2 160,-8 154,-16 C138,-25 120,-28 100,-28 C80,-28 62,-25 46,-16 C40,-8 36,2 33,14Z" ${hFill()} ${LINE}/>`
+        +hLine(h,"M86,-28 C88,-44 94,-56 104,-64 M114,-28 C116,-44 114,-56 108,-62 M66,-25 C66,-40 72,-52 82,-60 M134,-25 C136,-40 132,-50 124,-58")
+        +top; }
     case "middle": return `<path d="${base}C164,4 160,-2 156,-6 C146,-10 134,-14 124,-22 C114,-30 106,-42 102,-56 L100,-60 L98,-56 C94,-42 86,-30 76,-22 C66,-14 54,-10 44,-6 C40,0 37,6 33,14Z" ${hFill()} ${LINE}/>`
       +`<path d="M100,-60 L100,-74" stroke="${OLC}" stroke-opacity=".5" stroke-width="1.4"/>`+hLine(h,"M102,-56 C112,-62 132,-58 150,-34 M124,-22 C136,-34 140,-50 130,-64 M98,-56 C88,-62 68,-58 50,-34 M76,-22 C64,-34 60,-50 70,-64")+top;
     case "short": return `<path d="${base}C163,0 159,-12 154,-18 Q146,-14 140,-20 Q130,-12 120,-20 Q110,-13 100,-20 Q90,-13 80,-20 Q70,-12 60,-20 Q54,-14 46,-18 C41,-10 37,2 33,14Z" ${hFill()} ${LINE}/>`
       +hLine(h,"M100,-20 C98,-38 100,-52 106,-64 M80,-20 C80,-36 84,-50 92,-60 M120,-20 C122,-36 120,-50 114,-60")+top;
-    case "none": return `<path d="${base}C164,-2 160,-14 150,-26 C134,-40 118,-46 100,-46 C82,-46 66,-40 50,-26 C40,-14 36,-2 33,14Z" ${hFill()} ${LINE}/>`
-      +hLine(h,"M100,-46 C100,-58 100,-68 100,-74 M78,-42 C82,-56 88,-66 96,-72 M122,-42 C118,-56 112,-66 104,-72 M58,-30 C62,-46 70,-58 82,-66 M142,-30 C138,-46 130,-58 118,-66")+top;
+    case "none": { /* không mái: tóc vén ra sau, chân tóc thấp mềm, phần trước hơi phồng */
+      const vol="M31,14 C22,-54 64,-82 100,-82 C136,-82 178,-54 169,14 ";
+      const temple=x=>`<path d="M${x},-12 C${x-4},-2 ${x-5},8 ${x-2},18 C${x+1},10 ${x+4},-2 ${x+8},-10 Z" ${hFill()} stroke="${OLC}" stroke-width="1.5" stroke-linejoin="round"/>`;
+      return `<path d="${vol}C165,2 160,-10 150,-18 C138,-27 122,-31 108,-29 Q104,-28 100,-26 Q96,-28 92,-29 C78,-31 62,-27 50,-18 C40,-10 35,2 31,14Z" ${hFill()} ${LINE}/>`
+        +temple(44)+mirror(temple(44))
+        +hLine(h,"M100,-26 C112,-40 134,-40 154,-24 M100,-26 C88,-40 66,-40 46,-24 M104,-28 C118,-50 140,-52 160,-36 M96,-28 C82,-50 60,-52 40,-36 M100,-26 C104,-46 112,-62 126,-72 M100,-26 C96,-46 88,-62 74,-72")
+        +hShine(h,"M60,-58 Q100,-80 140,-58"); }
+
   }
   return `<path d="${base}C163,6 160,0 157,-4 Q150,-1 146,-6 Q138,4 128,-3 Q120,3 112,-4 Q104,3 96,-4 Q86,4 78,-3 Q68,4 60,-4 Q52,0 45,-4 C41,2 37,8 33,14Z" ${hFill()} ${LINE}/>`+hLine(h,BANG_LINES.blunt)+top;
 }
@@ -4794,8 +4804,18 @@ function face(c){
   else if(x==="wink") s+=eye(74)+happy(126);
   else if(x==="wow") s+=eye(74,1.06)+eye(126,1.06);
   else if(x==="shy") s+=`<g transform="translate(0,2)">${eye(74,.95)+eye(126,.95)}</g>`;
+  else if(x==="tongue") s+=eye(74)+`<path d="M115,10 L136,16 L115,22" stroke="${E}" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+  else if(x==="love") { const hh=cx=>`<path d="M${cx},28 C${cx-6},23 ${cx-14},17 ${cx-14},9 C${cx-14},2 ${cx-6},0 ${cx},7 C${cx+6},0 ${cx+14},2 ${cx+14},9 C${cx+14},17 ${cx+6},23 ${cx},28Z" fill="#EF4D6B" stroke="#B82A47" stroke-width="1.6" stroke-linejoin="round"/><ellipse cx="${cx-6}" cy="8" rx="3" ry="2.2" fill="#fff" opacity=".8"/>`; s+=hh(74)+hh(126); }
+  else if(x==="star") { const st=cx=>`<path d="M${cx+4},${Y-12} l2.2,5.2 5.4,.6 -4.1,3.6 1.3,5.4 -4.8,-2.9 -4.8,2.9 1.3,-5.4 -4.1,-3.6 5.4,-.6Z" fill="#fff"/>`; s+=eye(74,1.06)+eye(126,1.06)+st(74)+st(126)+`<path d="M44,-2 l2,5 5,2 -5,2 -2,5 -2,-5 -5,-2 5,-2Z M156,-4 l1.6,4 4,1.6 -4,1.6 -1.6,4 -1.6,-4 -4,-1.6 4,-1.6Z" fill="#F6C945"/>`; }
+  else if(x==="think") s+=`<g transform="translate(3,-2)">${eye(74,.92)+eye(126,.92)}</g>`;
+  else if(x==="sleepy") s+=`<path d="M62,18 Q74,24 86,18 M114,18 Q126,24 138,18" stroke="${E}" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M64,20 l-3,4 M84,20 l3,4 M116,20 l-3,4 M136,20 l3,4" stroke="${E}" stroke-width="1.8" stroke-linecap="round"/><text x="150" y="-6" font-size="14" font-weight="700" fill="#6B8CC7" style="font-family:var(--f-py)">z</text><text x="160" y="-18" font-size="10" font-weight="700" fill="#6B8CC7" style="font-family:var(--f-py)">z</text>`;
+  else if(x==="cry") s+=`<path d="M62,14 Q74,22 86,14 M114,14 Q126,22 138,14" stroke="${E}" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M64,20 C60,30 62,40 66,48 C70,40 70,30 68,20Z M136,20 C140,30 138,40 134,48 C130,40 130,30 132,20Z" fill="#9AD6F2" stroke="#5DAFD8" stroke-width="1.2"/>`;
+  else if(x==="sad") s+=`<g transform="translate(0,2)">${eye(74,.94)+eye(126,.94)}</g><path d="M64,30 q4,3 8,1 M128,31 q4,2 8,-1" stroke="#9AD6F2" stroke-width="2" fill="none" stroke-linecap="round" opacity=".9"/>`;
+  else if(x==="angry") s+=eye(74,.92)+eye(126,.92);
   else s+=eye(74)+eye(126);
-  s+=`<ellipse cx="58" cy="35" rx="12" ry="7" fill="url(#${G}b)" opacity="${x==="shy"?1:.75}"/><ellipse cx="142" cy="35" rx="12" ry="7" fill="url(#${G}b)" opacity="${x==="shy"?1:.75}"/>`;
+  if(x==="sweat") s+=`<path d="M152,-6 C148,2 146,8 150,12 C154,15 159,11 158,6 C157,2 155,-2 152,-6Z" fill="#9AD6F2" stroke="#5DAFD8" stroke-width="1.3"/><path d="M151,6 q1,2 3,2" stroke="#fff" stroke-width="1.4" fill="none" stroke-linecap="round"/>`;
+  if(x==="angry") s+=`<g transform="translate(150,-14)" stroke="#E2434F" stroke-width="2.6" fill="none" stroke-linecap="round"><path d="M-7,-2 q5,0 5,-5 M2,-7 q0,5 5,5 M7,2 q-5,0 -5,5 M-2,7 q0,-5 -5,-5"/></g>`;
+  s+=`<ellipse cx="58" cy="35" rx="12" ry="7" fill="url(#${G}b)" opacity="${x==="shy"||x==="angry"||x==="love"?1:.75}"/><ellipse cx="142" cy="35" rx="12" ry="7" fill="url(#${G}b)" opacity="${x==="shy"||x==="angry"||x==="love"?1:.75}"/>`;
   if(x==="shy") s+=`<path d="M52,32 l3,5 M58,32 l3,5 M64,32 l3,5 M136,32 l3,5 M142,32 l3,5 M148,32 l3,5" stroke="#E07A7A" stroke-width="1.4" stroke-linecap="round"/>`;
   s+=`<path d="M98.5,31 q1.5,1.6 3,0" stroke="${SKIN[c.skin][1]}" stroke-width="1.6" fill="none" stroke-linecap="round"/>`;
   const mouth={smile:`<path d="M93,38 Q100,45 107,38" stroke="${M}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`,
@@ -4803,12 +4823,23 @@ function face(c){
     wow:`<ellipse cx="100" cy="41" rx="4.6" ry="5.4" fill="${M}"/><ellipse cx="100" cy="43.5" rx="2.8" ry="2" fill="#F08A93"/>`,
     wink:`<path d="M92,37 Q100,47 108,37 Z" fill="${M}" stroke="${M}" stroke-width="1.4" stroke-linejoin="round"/>`,
     shy:`<path d="M94,40 q3,-2.6 6,0 q3,2.6 6,0" stroke="${M}" stroke-width="2.3" fill="none" stroke-linecap="round"/>`,
-    fight:`<path d="M92,39 Q100,44 108,39" stroke="${M}" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M102,40.5 l1.8,3.4 l1.8,-3.9" fill="#fff"/>`}[x]||"";
+    fight:`<path d="M92,39 Q100,44 108,39" stroke="${M}" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M102,40.5 l1.8,3.4 l1.8,-3.9" fill="#fff"/>`,
+    star:`<path d="M90,36 Q100,52 110,36 Z" fill="${M}" stroke="${M}" stroke-width="1.4" stroke-linejoin="round"/><path d="M94,44 Q100,49 106,44 Q100,46 94,44Z" fill="#F08A93"/>`,
+    love:`<path d="M91,37 Q100,49 109,37 Z" fill="${M}" stroke="${M}" stroke-width="1.4" stroke-linejoin="round"/>`,
+    tongue:`<path d="M91,37 Q100,44 109,37" stroke="${M}" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M98,40 Q98,49 103,49 Q108,49 107,40 Z" fill="#F08A93" stroke="${M}" stroke-width="1.4"/>`,
+    think:`<path d="M95,41 Q101,39 107,38" stroke="${M}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`,
+    sweat:`<path d="M92,41 q2,-2.5 4,0 q2,2.5 4,0 q2,-2.5 4,0 q2,2.5 4,0" stroke="${M}" stroke-width="2.2" fill="none" stroke-linecap="round"/>`,
+    sleepy:`<ellipse cx="100" cy="41" rx="3" ry="3.6" fill="${M}"/>`,
+    sad:`<path d="M93,43 Q100,37 107,43" stroke="${M}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`,
+    cry:`<path d="M90,44 Q92,36 100,36 Q108,36 110,44 Q100,40 90,44Z" fill="${M}" stroke="${M}" stroke-width="1.4" stroke-linejoin="round"/>`,
+    angry:`<path d="M94,43 Q100,38 106,43" stroke="${M}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`}[x]||"";
   return s+mouth;
 }
 function brows(c){
   const b=shade(c.hairColor,-.1), st=`stroke="${b}" stroke-width="3.4" fill="none" stroke-linecap="round"`;
-  if(c.expr==="fight") return `<path d="M60,-4 L84,3" ${st}/><path d="M140,-4 L116,3" ${st}/>`;
+  if(c.expr==="fight"||c.expr==="angry") return `<path d="M60,-4 L84,3" ${st}/><path d="M140,-4 L116,3" ${st}/>`;
+  if(c.expr==="sad"||c.expr==="cry") return `<path d="M62,2 Q72,0 84,-6" ${st}/><path d="M138,2 Q128,0 116,-6" ${st}/>`;
+  if(c.expr==="think") return `<path d="M64,-2 Q74,-6 84,-2" ${st}/><path d="M116,-8 Q127,-14 138,-7" ${st}/>`;
   return "";
 }
 
@@ -4828,14 +4859,15 @@ function faceAcc(c){
 }
 function headAcc(c){
   switch(c.accHead){
-    case "nonla": { let r=""; for(let i=1;i<5;i++){ const t=i/5, y=-108+80*t, x=86*t; r+=`<path d="M${(100-x).toFixed(1)},${y.toFixed(1)} Q100,${(y+10*t).toFixed(1)} ${(100+x).toFixed(1)},${y.toFixed(1)}" stroke="#D2B577" stroke-width="1" fill="none" opacity=".9"/>`; }
-      return `<path d="M60,44 Q100,66 140,44" stroke="#B9473A" stroke-width="1.6" fill="none"/><path d="M100,-108 C112,-92 150,-56 188,-30 Q100,-12 12,-30 C50,-56 88,-92 100,-108Z" fill="#F3E3B8" stroke="${OLC}" stroke-width="1.6" stroke-linejoin="round"/>${r}<path d="M100,-108 C108,-92 128,-66 150,-48" stroke="#fff" stroke-opacity=".45" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M14,-30 Q100,-12 186,-30" stroke="#C7A862" stroke-width="2" fill="none" stroke-linecap="round"/>`; }
+    case "nonla": { let r=""; for(let i=1;i<5;i++){ const t=i/5, y=-108+78*t, x=88*Math.pow(t,.8); r+=`<path d="M${(100-x).toFixed(1)},${y.toFixed(1)} Q100,${(y+10*t).toFixed(1)} ${(100+x).toFixed(1)},${y.toFixed(1)}" stroke="#D2B577" stroke-width="1" fill="none" opacity=".9"/>`; }
+      return `<path d="M100,-108 C122,-94 162,-62 190,-30 Q100,-10 10,-30 C38,-62 78,-94 100,-108Z" fill="#F3E3B8" stroke="${OLC}" stroke-width="1.6" stroke-linejoin="round"/>${r}<path d="M100,-108 C112,-96 132,-74 152,-54" stroke="#fff" stroke-opacity=".45" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M12,-30 Q100,-10 188,-30" stroke="#C7A862" stroke-width="2" fill="none" stroke-linecap="round"/>`; }
+
     case "khandong": return `<path d="M26,-10 C20,-72 62,-94 100,-94 C138,-94 180,-72 174,-10 C150,-30 50,-30 26,-10Z" fill="#26324F" ${LINE}/><path d="M30,-22 C60,-40 140,-40 170,-22 M34,-40 C64,-56 136,-56 166,-40 M44,-58 C70,-72 130,-72 156,-58" stroke="#3D4D74" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M60,-30 L70,-80 M86,-26 L96,-92 M112,-26 L122,-90 M138,-30 L146,-74" stroke="#1B2440" stroke-width="1.4" opacity=".7"/><path d="M50,-68 Q74,-86 100,-88" stroke="#fff" stroke-opacity=".25" stroke-width="4" fill="none" stroke-linecap="round"/>`;
     case "cap": return `<path d="M28,-24 C24,-84 64,-100 100,-100 C136,-100 176,-84 172,-24 Z" fill="#2E8B62" ${LINE}/><path d="M100,-100 L100,-26 M66,-92 Q58,-56 58,-26 M134,-92 Q142,-56 142,-26" stroke="#1F6C4B" stroke-width="1.6" fill="none"/><path d="M52,-80 Q74,-96 98,-96" stroke="#fff" stroke-opacity=".28" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M24,-24 Q100,-40 176,-24 Q184,-6 166,-2 Q100,-16 34,-2 Q16,-6 24,-24Z" fill="#25734F" ${LINE}/><circle cx="100" cy="-99" r="5" fill="#25734F" ${THIN}/><g transform="translate(100,-62)" fill="#fff"><path d="M0,-12 L-7,-3 L-4,-3 L-9,4 L9,4 L4,-3 L7,-3 Z"/><rect x="-1.4" y="4" width="2.8" height="5"/></g>`;
     case "beret": { let st=""; for(let i=0;i<9;i++){ const x=44+i*14; st+=`<path d="M${x},-34 Q${x+6},-64 ${x+14},-86" stroke="#3B4C82" stroke-width="1.5" fill="none" opacity=".8"/>`; }
       return `<defs><clipPath id="${G}bc"><path d="M24,-34 C14,-78 70,-102 112,-96 C160,-90 192,-60 172,-30 Q100,-20 24,-34Z"/></clipPath></defs><path d="M24,-34 C14,-78 70,-102 112,-96 C160,-90 192,-60 172,-30 Q100,-20 24,-34Z" fill="#26346A" ${LINE}/><g clip-path="url(#${G}bc)">${st}</g><path d="M30,-30 Q100,-18 168,-28" stroke="#1A244D" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M110,-96 q2,-10 8,-12" stroke="#26346A" stroke-width="5" fill="none" stroke-linecap="round"/>`; }
-    case "bucket": return `<path d="M30,-28 C26,-86 66,-100 100,-100 C134,-100 174,-86 170,-28 Z" fill="#EADCB8" ${LINE}/><path d="M34,-48 Q100,-60 166,-48" stroke="#CDBB90" stroke-width="1.5" fill="none"/><path d="M50,-82 Q74,-96 98,-96" stroke="#fff" stroke-opacity=".4" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M24,-34 Q100,-46 176,-34 L192,-6 Q100,-20 8,-6 Z" fill="#E2D1A8" ${LINE}/><path d="M16,-14 Q100,-28 184,-14" stroke="#CDBB90" stroke-width="1.2" stroke-dasharray="3 3" fill="none"/>
-      <g transform="translate(100,-66)"><circle cx="-9" cy="-8" r="5" fill="#B8783F" ${THIN}/><circle cx="9" cy="-8" r="5" fill="#B8783F" ${THIN}/><ellipse rx="13" ry="11" fill="#C98A4E" ${THIN}/><ellipse cy="4" rx="6" ry="4.5" fill="#F2D6B0"/><circle cx="-5" cy="-2" r="1.6" fill="#2A1A14"/><circle cx="5" cy="-2" r="1.6" fill="#2A1A14"/><circle cy="2.5" r="1.5" fill="#2A1A14"/></g>`;
+    case "bucket": return `<path d="M30,-28 C28,-76 64,-90 100,-90 C136,-90 172,-76 170,-28 Z" fill="#EADCB8" ${LINE}/><path d="M33,-46 Q100,-57 167,-46" stroke="#CDBB90" stroke-width="1.5" fill="none"/><path d="M50,-74 Q74,-86 98,-86" stroke="#fff" stroke-opacity=".4" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M24,-34 Q100,-46 176,-34 L192,-6 Q100,-20 8,-6 Z" fill="#E2D1A8" ${LINE}/><path d="M16,-14 Q100,-28 184,-14" stroke="#CDBB90" stroke-width="1.2" stroke-dasharray="3 3" fill="none"/>
+      <g transform="translate(100,-62) scale(.92)"><circle cx="-9" cy="-8" r="5" fill="#B8783F" ${THIN}/><circle cx="9" cy="-8" r="5" fill="#B8783F" ${THIN}/><ellipse rx="13" ry="11" fill="#C98A4E" ${THIN}/><ellipse cy="4" rx="6" ry="4.5" fill="#F2D6B0"/><circle cx="-5" cy="-2" r="1.6" fill="#2A1A14"/><circle cx="5" cy="-2" r="1.6" fill="#2A1A14"/><circle cy="2.5" r="1.5" fill="#2A1A14"/></g>`;
     case "bow": return `<g transform="translate(140,-58) rotate(16)"><path d="M0,0 C-8,-14 -24,-16 -24,-2 C-24,10 -10,10 0,2 Z M0,0 C8,-14 24,-16 24,-2 C24,10 10,10 0,2 Z" fill="#E2434F" ${LINE}/><path d="M-3,3 L-8,16 L-2,13 Z M3,3 L8,16 L2,13 Z" fill="#C22F3D" ${THIN}/><ellipse rx="5" ry="6" fill="#C22F3D" ${THIN}/><path d="M-18,-4 Q-12,-8 -6,-4 M18,-4 Q12,-8 6,-4" stroke="#fff" stroke-opacity=".5" stroke-width="1.6" fill="none"/></g>`;
     case "flower": { let p=""; for(let i=0;i<5;i++){ const a=i*72*Math.PI/180, px=(Math.cos(a)*9).toFixed(1), py=(Math.sin(a)*9).toFixed(1); p+=`<ellipse cx="${px}" cy="${py}" rx="8" ry="6" transform="rotate(${i*72},${px},${py})" fill="#F7A8C4" ${THIN}/>`; }
       return `<g transform="translate(142,-52)">${p}<circle r="5" fill="#F6C945" ${THIN}/></g>`; }
@@ -4972,15 +5004,18 @@ function avatarSVG(c0,opt={}){
     <radialGradient id="${G}b"><stop offset="0" stop-color="#F59AA6" stop-opacity=".9"/><stop offset="1" stop-color="#F59AA6" stop-opacity="0"/></radialGradient>
     <radialGradient id="${G}f" cx=".5" cy=".38" r=".62"><stop offset=".7" stop-color="${sk[0]}"/><stop offset="1" stop-color="${shade(sk[0],-.05)}"/></radialGradient></defs>`;
   s+=`<ellipse cx="100" cy="${l.foot+5}" rx="46" ry="6.5" fill="rgba(23,51,42,.12)"/>`;
-  s+=`<g transform="translate(0,${l.hy})">${hairBack(c)}</g>`;
+  const clipT={nonla:"M-60,-34 Q100,-14 260,-34",bucket:"M-60,-30 Q100,-42 260,-30"}[c.accHead];
+  const hc=clipT?` clip-path="url(#${G}hc)"`:"";
+  if(clipT) s+=`<defs><clipPath id="${G}hc"><path d="${clipT} L260,400 L-60,400 Z"/></clipPath></defs>`;
+  s+=`<g transform="translate(0,${l.hy})"><g${hc}>${hairBack(c)}</g></g>`;
   s+=`<g transform="translate(100,0) scale(.84,1) translate(-100,0)">${bodyAccBack(c,l)}</g>`;
   s+=`<rect x="79" y="${l.hip-4}" width="14" height="${l.foot-l.hip}" rx="6" fill="${sk[0]}" ${LINE}/><rect x="107" y="${l.hip-4}" width="14" height="${l.foot-l.hip}" rx="5" fill="${sk[0]}" ${LINE}/>`;
-  s+=lowerWear(c,l)+shoes(c,l);
+  s+=["aodai","aogam","baba"].includes(c.outfit)?shoes(c,l)+lowerWear(c,l):lowerWear(c,l)+shoes(c,l);
   s+=`<path d="M92.5,${l.sy-16} L107.5,${l.sy-16} L108,${l.sy+3} L92,${l.sy+3} Z" fill="${sk[0]}" ${LINE}/><path d="M93,${l.sy-10} Q100,${l.sy-4} 107,${l.sy-10} L107,${l.sy-15} L93,${l.sy-15}Z" fill="${sk[1]}" opacity=".7"/>`;
   s+=`<g transform="translate(100,0) scale(.84,1) translate(-100,0)">${torso(c,l)+bodyAccFront(c,l)}</g>`;
   const ears=`<ellipse cx="37" cy="16" rx="8" ry="10" fill="${sk[0]}" ${LINE}/><ellipse cx="163" cy="16" rx="8" ry="10" fill="${sk[0]}" ${LINE}/><path d="M35,12 q4,4 0,9 M165,12 q-4,4 0,9" stroke="${sk[1]}" stroke-width="1.6" fill="none" stroke-linecap="round"/>`;
   s+=`<g transform="translate(0,${l.hy})">${ears}
-     <path d="M36,2 C36,-38 64,-58 100,-58 C136,-58 164,-38 164,2 C164,38 138,58 100,58 C62,58 36,38 36,2Z" fill="url(#${G}f)" ${LINE}/>${face(c)}${hairFront(c)}${brows(c)}${faceAcc(c)}${headAcc(c)}</g>`;
+     <path d="M36,2 C36,-38 64,-58 100,-58 C136,-58 164,-38 164,2 C164,38 138,58 100,58 C62,58 36,38 36,2Z" fill="url(#${G}f)" ${LINE}/>${face(c)}<g${hc}>${hairFront(c)}</g>${brows(c)}${faceAcc(c)}${headAcc(c)}</g>`;
   const top=l.hy-(c.accHead==="nonla"?114:c.hair==="highbun"&&c.gender==="f"?120:(c.accHead==="catears"||c.accHead==="beret")?116:104);
   const vb=opt.view==="head"?`6 ${top} 188 ${l.hip-2-top}`:opt.view==="feet"?`46 ${l.foot-52} 108 ${64}`:opt.view==="body"?`8 ${top} 184 ${l.foot+14-top}`:`0 ${top-6} 200 ${l.foot+16-top}`;
   return `<svg viewBox="${vb}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${esc(opt.label||"Nhân vật")}" ${opt.cls?`class="${opt.cls}"`:""}>${s}</svg>`;
