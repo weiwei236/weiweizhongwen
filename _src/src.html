@@ -1024,7 +1024,7 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
   <div class="wrap">
     <div class="brand">
       <img src="data:image/png;base64,__LOGO__" alt="薇薇中文 Weiwei">
-      <div><b class="han">薇薇中文</b><small>Luyện HSK theo giáo trình HSK 3.0</small></div>
+      <div><b class="han">薇薇中文</b><small id="brandSub">Luyện HSK theo giáo trình HSK 3.0</small></div>
     </div>
     <div class="top-right">
       <label class="voice" for="voiceSel">Giọng đọc
@@ -2723,6 +2723,7 @@ const S = { level: store.get("ww_level","hsk1"), lesson: 10, section: store.get(
 function renderLevels(){
   /* HSK và Giao tiếp tách biệt: học viên chỉ thấy giáo trình của lớp mình */
   const pf=Profile.get(), grp=pf&&pf.cls==="gt"?"gt":"hsk";
+  const bs=$("#brandSub"); if(bs) bs.textContent=grp==="gt"?"Luyện tiếng Trung theo giáo trình Phát triển Hán ngữ tổng hợp sơ cấp 1":"Luyện HSK theo giáo trình HSK 3.0";
   if(!LEVELS[S.level]||(LEVELS[S.level].grp||"hsk")!==grp){ S.level=grp==="gt"?gtLv(pf&&pf.level):(pf&&LEVELS[pf.level]&&!LEVELS[pf.level].grp?pf.level:"hsk1"); store.set("ww_level",S.level);
     const ids=Object.keys(LEVELS[S.level].lessons).map(Number); S.lesson=ids.length?(grp==="gt"?ids[0]:ids[ids.length-1]):null; }
   $("#levels").innerHTML = Object.entries(LEVELS).filter(([k,v])=>(v.grp||"hsk")===grp).map(([k,v])=>`<button role="tab" aria-selected="${k===S.level}" data-lv="${k}">${v.name}</button>`).join("");
@@ -2812,75 +2813,107 @@ const TextView = {
 };
 
 /* Kịch bản hội thoại luyện phản xạ – lớp Giao tiếp (发展汉语 bài 1–10).
-   Mỗi lượt: ai = [chữ Hán, pinyin, tiếng Việt] Tiểu Ngữ nói; hint = gợi ý học viên cần nói gì;
-   ans = các câu trả lời mẫu (câu đầu là câu mẫu chính); re = biểu thức chấp nhận câu trả lời tự do (tên, nước…) */
+   Mỗi lượt: ai = [chữ Hán, pinyin, tiếng Việt]; hint = gợi ý; say = các hướng trả lời được chấp nhận:
+     { ans: [câu mẫu…], re: "biểu thức" (so trên câu đã bỏ dấu câu, 她→他, số → chữ Hán, bỏ 儿),
+       react: [câu Tiểu Ngữ đáp lại], next: "id lượt tiếp theo" | "end" }
+   Học viên được trả lời theo nhiều hướng (có/không, bận/rảnh, tên/nước/nghề tuỳ ý…). */
+const R_ME = "(我)?";
 const TALK = {
- 1: { title: "Chào hỏi", topic: "chào hỏi bạn bè và thầy cô", turns: [
-   { ai: ["你好！", "Nǐ hǎo!", "Chào bạn!"], hint: "Chào lại Tiểu Ngữ.", ans: ["你好！"] },
-   { ai: ["我是老师。", "Wǒ shì lǎoshī.", "Tôi là giáo viên."], hint: "Chào thầy/cô một cách lịch sự.", ans: ["老师好！", "您好！", "老师，您好！"] },
-   { ai: ["你们好！", "Nǐmen hǎo!", "Chào các em!"], hint: "Cả lớp chào lại thầy/cô.", ans: ["老师好！", "您好！"] },
-   { ai: ["上课！", "Shàng kè!", "Vào học!"], hint: "Chào thầy/cô khi vào học.", ans: ["老师好！", "您好！"] },
-   { ai: ["一、二、五，下一个数字是什么？", "Yī, èr, wǔ, xià yí ge shùzì shì shénme?", "Một, hai, năm, số tiếp theo (trong bài) là gì?"], hint: "Nói số 8.", ans: ["八。", "八"] },
-   { ai: ["下课！", "Xià kè!", "Tan học!"], hint: "Chào tạm biệt thầy/cô (dùng 老师好 hoặc 老师再见).", ans: ["老师再见！", "老师好！", "再见！"] }] },
- 2: { title: "Bạn là người nước nào?", topic: "hỏi quốc tịch", turns: [
-   { ai: ["早上好！", "Zǎoshang hǎo!", "Chào buổi sáng!"], hint: "Chào buổi sáng lại.", ans: ["早上好！", "你好！"] },
-   { ai: ["你是哪国人？", "Nǐ shì nǎ guó rén?", "Bạn là người nước nào?"], hint: "Nói bạn là người Việt Nam.", ans: ["我是越南人。"], re: "^我是.{1,4}人$" },
-   { ai: ["我是中国人。你知道马丁是哪国人吗？", "Wǒ shì Zhōngguó rén. Nǐ zhīdào Mǎdīng shì nǎ guó rén ma?", "Mình là người Trung Quốc. Bạn biết Martin là người nước nào không?"], hint: "Martin là người Mỹ.", ans: ["他是美国人。", "马丁是美国人。"] },
-   { ai: ["崔浩呢？", "Cuī Hào ne?", "Còn Thôi Hạo?"], hint: "Thôi Hạo là người Hàn Quốc.", ans: ["他是韩国人。", "崔浩是韩国人。"] },
-   { ai: ["我是日本人。你呢？", "Wǒ shì Rìběn rén. Nǐ ne?", "Mình là người Nhật. Còn bạn?"], hint: "Nói lại quốc tịch của bạn.", ans: ["我是越南人。"], re: "^我是.{1,4}人$" }] },
- 3: { title: "Làm quen, hỏi tên", topic: "làm quen, hỏi họ tên", turns: [
-   { ai: ["你好！请问，你叫什么名字？", "Nǐ hǎo! Qǐngwèn, nǐ jiào shénme míngzi?", "Chào bạn! Xin hỏi bạn tên là gì?"], hint: "Nói tên của bạn: 我叫……", ans: ["我叫阮兰。"], re: "^我叫.{1,6}$" },
-   { ai: ["你姓什么？", "Nǐ xìng shénme?", "Bạn họ gì?"], hint: "Nói họ của bạn: 我姓……", ans: ["我姓阮。"], re: "^我姓.{1,3}$" },
-   { ai: ["我叫林娜。认识你很高兴。", "Wǒ jiào Línnà. Rènshi nǐ hěn gāoxìng.", "Mình tên là Linna. Rất vui được làm quen với bạn."], hint: "Nói bạn cũng rất vui được làm quen.", ans: ["认识你我也很高兴。", "我也很高兴。"] },
-   { ai: ["我是你们的老师。", "Wǒ shì nǐmen de lǎoshī.", "Tôi là giáo viên của các em."], hint: "Hỏi họ của thầy/cô một cách lịch sự.", ans: ["老师，您贵姓？", "您贵姓？"] },
-   { ai: ["我姓王。", "Wǒ xìng Wáng.", "Cô họ Vương."], hint: "Chào cô Vương.", ans: ["王老师，您好！", "王老师好！"] }] },
- 4: { title: "Bạn học gì?", topic: "học ngoại ngữ, bạn cùng lớp", turns: [
-   { ai: ["你学习什么？", "Nǐ xuéxí shénme?", "Bạn học gì?"], hint: "Nói bạn học tiếng Trung.", ans: ["我学习汉语。"] },
-   { ai: ["你学习英语吗？", "Nǐ xuéxí Yīngyǔ ma?", "Bạn có học tiếng Anh không?"], hint: "Trả lời có hoặc không (dùng 学习 / 不学习).", ans: ["我学习英语。", "我不学习英语。"] },
-   { ai: ["你说法语吗？", "Nǐ shuō Fǎyǔ ma?", "Bạn có nói tiếng Pháp không?"], hint: "Nói bạn không nói tiếng Pháp.", ans: ["我不说法语。"] },
-   { ai: ["他是谁？", "Tā shì shéi?", "Anh ấy là ai?"], hint: "Anh ấy là bạn cùng lớp của bạn.", ans: ["他是我同学。", "他是我的同学。"] },
-   { ai: ["他也学习汉语吗？", "Tā yě xuéxí Hànyǔ ma?", "Anh ấy cũng học tiếng Trung à?"], hint: "Anh ấy cũng học tiếng Trung.", ans: ["他也学习汉语。"] },
-   { ai: ["你们一起上课吗？", "Nǐmen yìqǐ shàng kè ma?", "Các bạn cùng lên lớp à?"], hint: "Chúng mình cùng lên lớp.", ans: ["我们一起上课。"] }] },
- 5: { title: "Gia đình bạn", topic: "gia đình, nghề nghiệp, lớp học", turns: [
-   { ai: ["你家有几口人？", "Nǐ jiā yǒu jǐ kǒu rén?", "Nhà bạn có mấy người?"], hint: "Nói số người trong nhà: 我家有……口人。", ans: ["我家有四口人。"], re: "^我家有.{1,2}口人$" },
-   { ai: ["你家有什么人？", "Nǐ jiā yǒu shénme rén?", "Nhà bạn có những ai?"], hint: "Kể các thành viên: 爸爸、妈妈……和我。", ans: ["我家有爸爸、妈妈、哥哥和我。"], re: "^我家有.*和我$" },
-   { ai: ["你爸爸做什么工作？", "Nǐ bàba zuò shénme gōngzuò?", "Bố bạn làm nghề gì?"], hint: "Nói nghề của bố: 我爸爸是……", ans: ["我爸爸是医生。"], re: "^我爸爸是.{1,4}$" },
-   { ai: ["你妈妈呢？", "Nǐ māma ne?", "Còn mẹ bạn?"], hint: "Nói nghề của mẹ: 我妈妈是……", ans: ["我妈妈是老师。"], re: "^我妈妈是.{1,4}$" },
-   { ai: ["你们班有多少个学生？", "Nǐmen bān yǒu duōshao ge xuésheng?", "Lớp bạn có bao nhiêu học sinh?"], hint: "Nói số học sinh: 我们班有……个学生。", ans: ["我们班有十六个学生。"], re: "^我们班有.{1,4}个学生$" }] },
- 6: { title: "Đi mua đồ", topic: "mua đồ, hỏi giá (bạn là khách, Tiểu Ngữ là người bán)", turns: [
-   { ai: ["你好！请问，你要什么？", "Nǐ hǎo! Qǐngwèn, nǐ yào shénme?", "Chào bạn! Xin hỏi bạn muốn mua gì?"], hint: "Nói bạn muốn mua táo.", ans: ["我要苹果。", "我想买苹果。"] },
-   { ai: ["你要哪种？", "Nǐ yào nǎ zhǒng?", "Bạn muốn loại nào?"], hint: "Chọn loại này và hỏi giá một cân.", ans: ["我要这种，这种多少钱一斤？", "这种多少钱一斤？"] },
-   { ai: ["这种三块五一斤。您买多少？", "Zhè zhǒng sān kuài wǔ yì jīn. Nín mǎi duōshao?", "Loại này 3,5 tệ một cân. Bạn mua bao nhiêu?"], hint: "Mua hai cân.", ans: ["我买两斤。", "我要两斤。"] },
-   { ai: ["还要别的吗？", "Hái yào bié de ma?", "Còn lấy gì khác không?"], hint: "Mua thêm ba cân chuối (再买……).", ans: ["再买三斤香蕉。", "我再买三斤香蕉。"] },
-   { ai: ["好的。", "Hǎo de.", "Được."], hint: "Hỏi tổng cộng bao nhiêu tiền.", ans: ["一共多少钱？"] },
-   { ai: ["一共十二块四。", "Yígòng shí'èr kuài sì.", "Tổng cộng 12 tệ 4."], hint: "Cảm ơn người bán.", ans: ["谢谢！", "谢谢你！"] }] },
- 7: { title: "Hỏi đường", topic: "hỏi đường, vị trí trong trường", turns: [
-   { ai: ["你去哪儿？", "Nǐ qù nǎr?", "Bạn đi đâu đấy?"], hint: "Nói bạn đi ngân hàng.", ans: ["我去银行。"], re: "^我去.{1,5}$" },
-   { ai: ["银行在超市东边。我跟你一起去吧。", "Yínháng zài chāoshì dōngbian. Wǒ gēn nǐ yìqǐ qù ba.", "Ngân hàng ở phía đông siêu thị. Mình đi cùng bạn nhé."], hint: "Nói “Tốt quá!”.", ans: ["太好了！"] },
-   { ai: ["你知道图书馆在哪儿吗？", "Nǐ zhīdào túshūguǎn zài nǎr ma?", "Bạn có biết thư viện ở đâu không?"], hint: "Thư viện ở phía bắc giảng đường số 1.", ans: ["图书馆在教学一楼北边。", "在教学一楼北边。"] },
-   { ai: ["请问，哪儿有卫生间？", "Qǐngwèn, nǎr yǒu wèishēngjiān?", "Xin hỏi, chỗ nào có nhà vệ sinh?"], hint: "Trong cửa hàng có.", ans: ["商店里边有。"] },
-   { ai: ["商店在什么地方？", "Shāngdiàn zài shénme dìfang?", "Cửa hàng ở chỗ nào?"], hint: "Ở phía trước, bạn nhìn kìa, chính là chỗ đó.", ans: ["在前边。你看，那儿就是。", "在前边。"] },
-   { ai: ["谢谢！", "Xièxie!", "Cảm ơn!"], hint: "Đáp lại lời cảm ơn.", ans: ["不客气。"] }] },
- 8: { title: "Ngày sinh nhật", topic: "ngày tháng, sinh nhật, mời đi ăn", turns: [
-   { ai: ["今天几号？", "Jīntiān jǐ hào?", "Hôm nay ngày mấy?"], hint: "Nói ngày hôm nay: 今天……月……号。", ans: ["今天九月二十八号。"], re: "^今天.{1,3}月.{1,3}号$" },
-   { ai: ["今天星期几？", "Jīntiān xīngqī jǐ?", "Hôm nay thứ mấy?"], hint: "Nói thứ hôm nay: 今天星期……", ans: ["今天星期二。"], re: "^今天星期.$" },
-   { ai: ["你的生日是几月几号？", "Nǐ de shēngrì shì jǐ yuè jǐ hào?", "Sinh nhật bạn là ngày mấy tháng mấy?"], hint: "我的生日是……月……号。", ans: ["我的生日是十月十号。"], re: "^我的生日是.{1,3}月.{1,3}号$" },
-   { ai: ["我们请你吃饭，怎么样？", "Wǒmen qǐng nǐ chī fàn, zěnmeyàng?", "Bọn mình mời bạn đi ăn, thế nào?"], hint: "Đồng ý và cảm ơn.", ans: ["太好了！谢谢你们！", "好啊！谢谢！"] },
-   { ai: ["祝你生日快乐！这是我们的礼物。", "Zhù nǐ shēngrì kuàilè! Zhè shì wǒmen de lǐwù.", "Chúc bạn sinh nhật vui vẻ! Đây là quà của bọn mình."], hint: "Cảm ơn và hỏi là quà gì.", ans: ["谢谢。是什么礼物？"] }] },
- 9: { title: "Kế hoạch trong ngày", topic: "giờ giấc, sinh hoạt hằng ngày, hẹn đi xem phim", turns: [
-   { ai: ["你每天几点起床？", "Nǐ měi tiān jǐ diǎn qǐ chuáng?", "Mỗi ngày bạn dậy lúc mấy giờ?"], hint: "我每天……点起床。", ans: ["我每天六点半起床。"], re: "^我每天.{1,6}起床$" },
-   { ai: ["起床以后你做什么？", "Qǐ chuáng yǐhòu nǐ zuò shénme?", "Dậy xong bạn làm gì?"], hint: "Trước tiên tắm, sau đó ăn sáng (先……，然后……).", ans: ["我先洗澡，然后吃早饭。"] },
-   { ai: ["下午你常常做什么？", "Xiàwǔ nǐ chángcháng zuò shénme?", "Buổi chiều bạn thường làm gì?"], hint: "Đi thư viện đọc sách.", ans: ["我常常去图书馆看书。", "下午我常常去图书馆看书。"] },
-   { ai: ["你今天有什么安排？", "Nǐ jīntiān yǒu shénme ānpái?", "Hôm nay bạn có kế hoạch gì?"], hint: "Buổi chiều bạn rảnh (下午我有时间).", ans: ["下午我有时间。", "上午我上课，下午我有时间。"] },
-   { ai: ["我想请你看中国电影。", "Wǒ xiǎng qǐng nǐ kàn Zhōngguó diànyǐng.", "Mình muốn mời bạn xem phim Trung Quốc."], hint: "Đồng ý và hỏi phim mấy giờ bắt đầu.", ans: ["好啊。电影几点开始？"] },
-   { ai: ["下午两点半开始。", "Xiàwǔ liǎng diǎn bàn kāishǐ.", "Hai giờ rưỡi chiều bắt đầu."], hint: "Đề nghị hai giờ mười lăm đi (……吧).", ans: ["我们两点一刻去吧。"] }] },
- 10: { title: "Cuối tuần đi chơi", topic: "cuối tuần, leo núi, cảm nhận (bận, mệt, đẹp…)", turns: [
-   { ai: ["这个星期天你忙不忙？", "Zhège xīngqītiān nǐ máng bu máng?", "Chủ nhật này bạn có bận không?"], hint: "Nói bạn không bận.", ans: ["我不忙。"] },
-   { ai: ["星期天我们去爬山，你去不去？", "Xīngqītiān wǒmen qù pá shān, nǐ qù bu qù?", "Chủ nhật bọn mình đi leo núi, bạn có đi không?"], hint: "Nói bạn đi, hỏi đi leo ở đâu.", ans: ["我去。你们去哪儿爬山？"] },
-   { ai: ["去西山。听说西山非常漂亮。", "Qù Xīshān. Tīngshuō Xīshān fēicháng piàoliang.", "Đi Tây Sơn. Nghe nói Tây Sơn rất đẹp."], hint: "Hỏi mấy giờ xuất phát.", ans: ["我们几点出发？", "几点出发？"] },
-   { ai: ["早上八点出发。", "Zǎoshang bā diǎn chūfā.", "Tám giờ sáng xuất phát."], hint: "Nói 7 giờ rưỡi bạn đến tìm bạn ấy.", ans: ["我七点半去找你。"] },
-   { ai: ["大家累不累？", "Dàjiā lèi bu lèi?", "Mọi người có mệt không?"], hint: "Nói bạn rất mệt, rủ nghỉ một chút (……吧).", ans: ["我很累，我们休息一下吧。"] },
-   { ai: ["前边有一个小茶馆，我们去喝点儿茶，好不好？", "Qiánbian yǒu yí ge xiǎo cháguǎn, wǒmen qù hē diǎnr chá, hǎo bu hǎo?", "Phía trước có quán trà nhỏ, chúng ta đi uống chút trà, được không?"], hint: "Đồng ý.", ans: ["好啊！"] }] }
+ 1: { title: "Chào hỏi", turns: [
+   { ai: ["你好！", "Nǐ hǎo!", "Chào bạn!"], hint: "Chào lại Tiểu Ngữ.", say: [{ ans: ["你好！"], re: "^(你|您)好(小语)?$" }] },
+   { ai: ["我是你们的老师。", "Wǒ shì nǐmen de lǎoshī.", "Tôi là giáo viên của các em."], hint: "Chào thầy/cô một cách lịch sự.", say: [{ ans: ["老师好！", "您好！", "老师，您好！"], re: "^(老师)?(您|老师)好$|^老师您好$" }] },
+   { ai: ["上课！", "Shàng kè!", "Vào học!"], hint: "Cả lớp chào thầy/cô khi vào học.", say: [{ ans: ["老师好！"], re: "^(老师|您)好$|^老师您好$" }] },
+   { ai: ["你们好！你们好吗？", "Nǐmen hǎo! Nǐmen hǎo ma?", "Chào các em! Các em khỏe không?"], hint: "Nói bạn khỏe (很好) hoặc không khỏe lắm (不太好), có thể hỏi lại thầy/cô.", say: [
+     { ans: ["我很好，谢谢！您呢？", "我们很好！"], re: "^(我|我们)?(很|都很|也很)?好", react: ["很好，谢谢！", "Hěn hǎo, xièxie!", "Thầy/cô cũng khỏe, cảm ơn!"] },
+     { ans: ["我不太好。"], re: "^(我)?不(太)?好", react: ["你多休息！", "Nǐ duō xiūxi!", "Em nghỉ ngơi nhiều nhé!"] }] },
+   { ai: ["一、二、五，然后呢？请你说一个数字。", "Yī, èr, wǔ, ránhòu ne? Qǐng nǐ shuō yí ge shùzì.", "Một, hai, năm, rồi sao nữa? Em hãy nói một con số."], hint: "Nói một số bất kỳ từ 0 đến 10 (零、一、二…十).", say: [{ ans: ["八。", "零。", "十。"], re: "^[零一二三四五六七八九十两]+$" }] },
+   { ai: ["下课！再见！", "Xià kè! Zàijiàn!", "Tan học! Tạm biệt!"], hint: "Chào tạm biệt thầy/cô.", say: [{ ans: ["老师再见！", "再见！"], re: "^(老师)?再见(老师)?$" }] }] },
+ 2: { title: "Bạn là người nước nào?", turns: [
+   { ai: ["早上好！", "Zǎoshang hǎo!", "Chào buổi sáng!"], hint: "Chào lại.", say: [{ ans: ["早上好！", "你好！"], re: "^(早上|你|您)好" }] },
+   { ai: ["你是哪国人？", "Nǐ shì nǎ guó rén?", "Bạn là người nước nào?"], hint: "Nói quốc tịch của bạn: 我是……人。", say: [
+     { ans: ["我是越南人。"], re: "^我是越南人$", react: ["越南人！我很喜欢越南。", "Yuènán rén! Wǒ hěn xǐhuan Yuènán.", "Người Việt Nam à! Mình rất thích Việt Nam."] },
+     { ans: ["我是中国人。"], re: "^我是.{1,4}人$", react: ["是吗？很好！", "Shì ma? Hěn hǎo!", "Thế à? Hay quá!"] }] },
+   { ai: ["我是中国人。你知道马丁是哪国人吗？", "Wǒ shì Zhōngguó rén. Nǐ zhīdào Mǎdīng shì nǎ guó rén ma?", "Mình là người Trung Quốc. Bạn biết Martin là người nước nào không?"], hint: "Martin là người Mỹ (hoặc nói bạn không biết: 我不知道).", say: [
+     { ans: ["他是美国人。", "马丁是美国人。"], re: "^(他|马丁)是美国人$" },
+     { ans: ["我不知道。"], re: "^(我)?不知道", react: ["他是美国人。", "Tā shì Měiguó rén.", "Anh ấy là người Mỹ."] }] },
+   { ai: ["崔浩呢？", "Cuī Hào ne?", "Còn Thôi Hạo?"], hint: "Thôi Hạo là người Hàn Quốc.", say: [{ ans: ["他是韩国人。", "崔浩是韩国人。"], re: "^(他|崔浩)?是韩国人$" }, { ans: ["我不知道。"], re: "^(我)?不知道", react: ["他是韩国人。", "Tā shì Hánguó rén.", "Anh ấy là người Hàn Quốc."] }] },
+   { ai: ["我的朋友是日本人。你的朋友呢？", "Wǒ de péngyou shì Rìběn rén. Nǐ de péngyou ne?", "Bạn của mình là người Nhật. Còn bạn của bạn?"], hint: "Nói bạn của bạn là người nước nào: 我的朋友是……人。", say: [{ ans: ["我的朋友是越南人。", "他是越南人。"], re: "^(我的朋友|他|我朋友)(也)?是.{1,4}人$" }] }] },
+ 3: { title: "Làm quen, hỏi tên", turns: [
+   { ai: ["你好！请问，你叫什么名字？", "Nǐ hǎo! Qǐngwèn, nǐ jiào shénme míngzi?", "Chào bạn! Xin hỏi bạn tên là gì?"], hint: "Nói tên của bạn: 我叫……", say: [{ ans: ["我叫阮兰。"], re: "^(你好)?(我叫|我是|我的名字是).{1,6}$" }] },
+   { ai: ["你姓什么？", "Nǐ xìng shénme?", "Bạn họ gì?"], hint: "Nói họ của bạn: 我姓……", say: [{ ans: ["我姓阮。"], re: "^我姓.{1,3}$" }] },
+   { ai: ["我叫林娜。认识你很高兴。", "Wǒ jiào Línnà. Rènshi nǐ hěn gāoxìng.", "Mình tên là Linna. Rất vui được làm quen với bạn."], hint: "Nói bạn cũng rất vui được làm quen.", say: [{ ans: ["认识你我也很高兴。", "我也很高兴。"], re: "(我)?也很高兴|很高兴认识你" }] },
+   { ai: ["你认识王老师吗？", "Nǐ rènshi Wáng lǎoshī ma?", "Bạn có quen cô Vương không?"], hint: "Trả lời có (我认识王老师) hoặc không (我不认识).", say: [
+     { ans: ["我认识王老师。", "认识。"], re: "^(我)?认识(王老师|他)?$", react: ["王老师是我的汉语老师。", "Wáng lǎoshī shì wǒ de Hànyǔ lǎoshī.", "Cô Vương là giáo viên tiếng Trung của mình."] },
+     { ans: ["我不认识王老师。", "不认识。"], re: "^(我)?不认识", react: ["没关系，她是我的汉语老师。", "Méi guānxi, tā shì wǒ de Hànyǔ lǎoshī.", "Không sao, cô ấy là giáo viên tiếng Trung của mình."] }] },
+   { ai: ["你好，我是你们的老师。", "Nǐ hǎo, wǒ shì nǐmen de lǎoshī.", "Chào em, tôi là giáo viên của các em."], hint: "Chào và hỏi họ của thầy/cô một cách lịch sự.", say: [{ ans: ["老师好！您贵姓？", "老师，您贵姓？"], re: "贵姓|您姓什么" }] },
+   { ai: ["我姓王。", "Wǒ xìng Wáng.", "Cô họ Vương."], hint: "Chào cô Vương.", say: [{ ans: ["王老师，您好！", "王老师好！"], re: "^王老师(您)?好$" }] }] },
+ 4: { title: "Bạn học gì?", turns: [
+   { ai: ["你学习什么？", "Nǐ xuéxí shénme?", "Bạn học gì?"], hint: "Nói bạn học gì: 我学习……", say: [{ ans: ["我学习汉语。"], re: "^(我)?(学习|学).{1,5}$" }] },
+   { ai: ["你学习英语吗？", "Nǐ xuéxí Yīngyǔ ma?", "Bạn có học tiếng Anh không?"], hint: "Trả lời có hoặc không (学习 / 不学习), có thể nói thêm.", say: [
+     { ans: ["我学习英语。", "我也学习英语。"], re: "^(我)?(也)?学(习)?英语", react: ["你的英语一定很好！", "Nǐ de Yīngyǔ yídìng hěn hǎo!", "Tiếng Anh của bạn chắc giỏi lắm!"] },
+     { ans: ["我不学习英语。"], re: "^(我)?不学(习)?(英语)?", react: ["好，那你学习汉语吧！", "Hǎo, nà nǐ xuéxí Hànyǔ ba!", "Ừ, vậy bạn học tiếng Trung nhé!"] }] },
+   { ai: ["你说法语吗？", "Nǐ shuō Fǎyǔ ma?", "Bạn có nói tiếng Pháp không?"], hint: "Có hoặc không: 我说法语 / 我不说法语。", say: [{ ans: ["我不说法语。"], re: "^(我)?不说(法语)?" }, { ans: ["我说法语。"], re: "^(我)?(也)?说(一点)?法语", react: ["太好了！", "Tài hǎo le!", "Tuyệt quá!"] }] },
+   { ai: ["你的同学是哪国人？", "Nǐ de tóngxué shì nǎ guó rén?", "Bạn cùng lớp của bạn là người nước nào?"], hint: "我的同学是……人 / 我的同学都是……人。", say: [{ ans: ["我的同学是越南人。", "我的同学都是越南人。"], re: "(同学|他们|他)(都|也)?是.{1,4}人$" }] },
+   { ai: ["他们也学习汉语吗？", "Tāmen yě xuéxí Hànyǔ ma?", "Họ cũng học tiếng Trung à?"], hint: "Họ cũng học (也学习汉语) hoặc không học (不学习).", say: [{ ans: ["他们也学习汉语。"], re: "也学(习)?汉语|^(他们)?也学(习)?$" }, { ans: ["他们不学习汉语。"], re: "不学(习)?" }] },
+   { ai: ["你们一起上课吗？", "Nǐmen yìqǐ shàng kè ma?", "Các bạn cùng lên lớp à?"], hint: "Có (我们一起上课) hoặc không (我们不一起上课).", say: [{ ans: ["我们一起上课。"], re: "^(我们|对)?(一起上课|一起)" }, { ans: ["我们不一起上课。"], re: "不一起" }] }] },
+ 5: { title: "Gia đình bạn", turns: [
+   { ai: ["你家有几口人？", "Nǐ jiā yǒu jǐ kǒu rén?", "Nhà bạn có mấy người?"], hint: "我家有……口人。", say: [{ ans: ["我家有四口人。"], re: "^(我家)?(有)?[一二两三四五六七八九十]+口(人)?$" }] },
+   { ai: ["你家有什么人？", "Nǐ jiā yǒu shénme rén?", "Nhà bạn có những ai?"], hint: "Kể các thành viên: 爸爸、妈妈……和我。", say: [{ ans: ["我家有爸爸、妈妈、哥哥和我。"], re: "(爸爸|妈妈|哥哥|姐姐|弟弟|妹妹)" }] },
+   { ai: ["你有哥哥吗？", "Nǐ yǒu gēge ma?", "Bạn có anh trai không?"], hint: "Có (我有一个哥哥) hoặc không (我没有哥哥).", say: [
+     { ans: ["我有一个哥哥。"], re: "^(我)?有.{0,3}哥哥|^有$", react: ["你哥哥做什么工作？", "Nǐ gēge zuò shénme gōngzuò?", "Anh bạn làm nghề gì?"], next: "job" },
+     { ans: ["我没有哥哥。", "没有。"], re: "没有|不有", react: ["你爸爸做什么工作？", "Nǐ bàba zuò shénme gōngzuò?", "Bố bạn làm nghề gì?"], next: "job" }] },
+   { id: "job", ai: [], hint: "Nói nghề nghiệp: ……是医生 / 老师 / 职员 / 律师 / 工人…", say: [{ ans: ["他是医生。", "他是老师。"], re: "是(医生|老师|职员|律师|工人|农民|护士|警察|学生|大学生|.{1,4})$" }] },
+   { ai: ["你们班有多少个学生？", "Nǐmen bān yǒu duōshao ge xuésheng?", "Lớp bạn có bao nhiêu học sinh?"], hint: "我们班有……个学生。", say: [{ ans: ["我们班有十六个学生。"], re: "[一二两三四五六七八九十百]+(个)?(学生)?$" }] },
+   { ai: ["你们班有中国人吗？", "Nǐmen bān yǒu Zhōngguó rén ma?", "Lớp bạn có người Trung Quốc không?"], hint: "Có (有……个中国人) hoặc không (没有).", say: [{ ans: ["有两个中国人。", "有。"], re: "^有|有.{0,3}中国人" }, { ans: ["没有。", "我们班没有中国人。"], re: "没有" }] }] },
+ 6: { title: "Đi mua đồ", turns: [
+   { ai: ["你好！请问，你要什么？", "Nǐ hǎo! Qǐngwèn, nǐ yào shénme?", "Chào bạn! Xin hỏi bạn muốn mua gì?"], hint: "Nói bạn muốn mua gì: 我要 / 我想买……（苹果、香蕉、面包…）", say: [{ ans: ["我要苹果。", "我想买香蕉。"], re: "^(我)?(要|想买|买).{1,6}$" }] },
+   { ai: ["你要哪种？", "Nǐ yào nǎ zhǒng?", "Bạn muốn loại nào?"], hint: "Chọn loại này (我要这种) và có thể hỏi giá.", say: [{ ans: ["我要这种。这种多少钱一斤？", "这种多少钱？"], re: "这种|那种|多少钱" }] },
+   { ai: ["这种三块五一斤。您买多少？", "Zhè zhǒng sān kuài wǔ yì jīn. Nín mǎi duōshao?", "Loại này 3,5 tệ một cân. Bạn mua bao nhiêu?"], hint: "Nói số lượng: 我买……斤 / 我要……个。", say: [{ ans: ["我买两斤。", "我要三斤。"], re: "[一二两三四五六七八九十]+(斤|个|块)" }] },
+   { ai: ["还要别的吗？", "Hái yào bié de ma?", "Còn lấy gì khác không?"], hint: "Mua thêm (再买……) hoặc không (不要了).", say: [
+     { ans: ["再买三斤香蕉。", "我还要一个面包。"], re: "再买|还要|再要", react: ["好的。", "Hǎo de.", "Được."] },
+     { ans: ["不要了，谢谢。"], re: "不要|没有了|不用", react: ["好的。", "Hǎo de.", "Được."] }] },
+   { ai: ["您还有问题吗？", "Nín hái yǒu wèntí ma?", "Bạn còn hỏi gì không?"], hint: "Hỏi tổng cộng bao nhiêu tiền.", say: [{ ans: ["一共多少钱？"], re: "多少钱" }] },
+   { ai: ["一共十二块四。", "Yígòng shí'èr kuài sì.", "Tổng cộng 12 tệ 4."], hint: "Cảm ơn người bán (hoặc nói đắt quá: 太贵了).", say: [{ ans: ["谢谢！"], re: "谢谢" }, { ans: ["太贵了！"], re: "贵", react: ["不贵，不贵！", "Bú guì, bú guì!", "Không đắt đâu!"] }] }] },
+ 7: { title: "Hỏi đường", turns: [
+   { ai: ["你去哪儿？", "Nǐ qù nǎr?", "Bạn đi đâu đấy?"], hint: "Nói bạn đi đâu: 我去……（银行、超市、图书馆…）", say: [{ ans: ["我去银行。", "我去超市。"], re: "^(我)?去.{1,6}$" }] },
+   { ai: ["你知道中国银行在哪儿吗？", "Nǐ zhīdào Zhōngguó Yínháng zài nǎr ma?", "Bạn có biết Ngân hàng Trung Quốc ở đâu không?"], hint: "Biết: 在……边 / Không biết: 我不知道。", say: [
+     { ans: ["在超市东边。", "知道，在超市东边。"], re: "在.{1,8}(边|里|前|后|旁)", react: ["谢谢你！", "Xièxie nǐ!", "Cảm ơn bạn!"] },
+     { ans: ["对不起，我不知道。"], re: "不知道", react: ["没关系。我问一下别人。", "Méi guānxi. Wǒ wèn yíxià biérén.", "Không sao, để mình hỏi người khác."] }] },
+   { ai: ["我们一起去，好吗？", "Wǒmen yìqǐ qù, hǎo ma?", "Chúng ta cùng đi nhé?"], hint: "Đồng ý (好啊 / 太好了) hoặc từ chối (对不起，我有事).", say: [{ ans: ["好啊！", "太好了！"], re: "^(好|行|可以|太好了)" }, { ans: ["对不起，我有事。"], re: "有事|不去|不行", react: ["没关系，再见！", "Méi guānxi, zàijiàn!", "Không sao, tạm biệt!"] }] },
+   { ai: ["请问，哪儿有卫生间？", "Qǐngwèn, nǎr yǒu wèishēngjiān?", "Xin hỏi, chỗ nào có nhà vệ sinh?"], hint: "Nói vị trí (商店里边有 / 在前边…) hoặc không biết.", say: [{ ans: ["商店里边有。", "在前边。"], re: "(里边|前边|后边|旁边|东边|西边|南边|北边|那)" }, { ans: ["对不起，我不知道。"], re: "不知道" }] },
+   { ai: ["你们学校有图书馆吗？在什么地方？", "Nǐmen xuéxiào yǒu túshūguǎn ma? Zài shénme dìfang?", "Trường bạn có thư viện không? Ở chỗ nào?"], hint: "有，在……边。", say: [{ ans: ["有，在教学楼北边。"], re: "(有|在).{0,8}(边|里|前|后|旁)|^有$" }, { ans: ["没有。"], re: "没有" }] },
+   { ai: ["谢谢！", "Xièxie!", "Cảm ơn!"], hint: "Đáp lại lời cảm ơn.", say: [{ ans: ["不客气。", "没关系。"], re: "不客气|不谢|没关系" }] }] },
+ 8: { title: "Ngày sinh nhật", turns: [
+   { ai: ["今天几号？", "Jīntiān jǐ hào?", "Hôm nay ngày mấy?"], hint: "今天……月……号。", say: [{ ans: ["今天十一月五号。"], re: "([一二三四五六七八九十]+月)?[一二三四五六七八九十]+(号|日)" }] },
+   { ai: ["今天星期几？", "Jīntiān xīngqī jǐ?", "Hôm nay thứ mấy?"], hint: "今天星期……", say: [{ ans: ["今天星期四。"], re: "星期[一二三四五六日天]" }] },
+   { ai: ["你的生日是几月几号？", "Nǐ de shēngrì shì jǐ yuè jǐ hào?", "Sinh nhật bạn là ngày mấy tháng mấy?"], hint: "我的生日是……月……号。", say: [{ ans: ["我的生日是十月十号。"], re: "[一二三四五六七八九十]+月[一二三四五六七八九十]+(号|日)" }] },
+   { ai: ["这个星期六我们请你吃饭，怎么样？", "Zhège xīngqīliù wǒmen qǐng nǐ chī fàn, zěnmeyàng?", "Thứ Bảy này bọn mình mời bạn đi ăn, thế nào?"], hint: "Đồng ý (太好了 / 好啊) hoặc từ chối vì bận (对不起，我没有时间).", say: [
+     { ans: ["太好了！谢谢你们！", "好啊！"], re: "^(太好了|好|行|可以)", react: ["不客气！", "Bú kèqi!", "Không có gì!"], next: "gift" },
+     { ans: ["对不起，我没有时间。"], re: "没(有)?时间|不行|忙|对不起", react: ["没关系，下次吧！", "Méi guānxi, xià cì ba!", "Không sao, lần sau nhé!"], next: "gift" }] },
+   { id: "gift", ai: ["祝你生日快乐！这是我的礼物。", "Zhù nǐ shēngrì kuàilè! Zhè shì wǒ de lǐwù.", "Chúc bạn sinh nhật vui vẻ! Đây là quà của mình."], hint: "Cảm ơn, có thể hỏi là quà gì.", say: [{ ans: ["谢谢！是什么礼物？", "谢谢你！"], re: "谢谢|什么礼物" }] }] },
+ 9: { title: "Kế hoạch trong ngày", turns: [
+   { ai: ["你每天几点起床？", "Nǐ měi tiān jǐ diǎn qǐ chuáng?", "Mỗi ngày bạn dậy lúc mấy giờ?"], hint: "我每天……点起床。", say: [{ ans: ["我每天六点半起床。"], re: "[一二两三四五六七八九十]+点.{0,4}(起床)?$" }] },
+   { ai: ["起床以后你做什么？", "Qǐ chuáng yǐhòu nǐ zuò shénme?", "Dậy xong bạn làm gì?"], hint: "Dùng 先……，然后…… (洗澡、吃早饭、去上课…).", say: [{ ans: ["我先洗澡，然后吃早饭。"], re: "先.+然后.+" }, { ans: ["我吃早饭。"], re: "^(我)?(吃早饭|洗澡|去上课|上课|看书|上网)" }] },
+   { ai: ["你今天有什么安排？", "Nǐ jīntiān yǒu shénme ānpái?", "Hôm nay bạn có kế hoạch gì?"], hint: "Kể kế hoạch (上午……，下午……) hoặc nói rảnh (我有时间).", say: [
+     { ans: ["我下午有时间。", "我今天没有事。"], re: "有时间|没(有)?事|不忙", react: ["太好了！我想请你看中国电影。", "Tài hǎo le! Wǒ xiǎng qǐng nǐ kàn Zhōngguó diànyǐng.", "Tuyệt! Mình muốn mời bạn xem phim Trung Quốc."], next: "movie" },
+     { ans: ["上午我上课，下午我去图书馆。"], re: "(上午|下午|晚上|我).{2,}", react: ["那晚上呢？我想请你看电影。", "Nà wǎnshang ne? Wǒ xiǎng qǐng nǐ kàn diànyǐng.", "Vậy buổi tối thì sao? Mình muốn mời bạn xem phim."], next: "movie" }] },
+   { id: "movie", ai: ["你想去看电影吗？", "Nǐ xiǎng qù kàn diànyǐng ma?", "Bạn có muốn đi xem phim không?"], hint: "Muốn đi (好啊，电影几点开始？) hoặc không (对不起，我有事).", say: [
+     { ans: ["好啊。电影几点开始？"], re: "几点|好|想去|行", react: ["下午两点半开始。", "Xiàwǔ liǎng diǎn bàn kāishǐ.", "Hai giờ rưỡi chiều bắt đầu."], next: "time" },
+     { ans: ["对不起，我有事。"], re: "有事|不想|不去|没(有)?时间", react: ["没关系，明天见！", "Méi guānxi, míngtiān jiàn!", "Không sao, mai gặp nhé!"], next: "end" }] },
+   { id: "time", ai: ["我们几点去？", "Wǒmen jǐ diǎn qù?", "Mấy giờ chúng ta đi?"], hint: "Đề nghị giờ đi: 我们……点去吧。", say: [{ ans: ["我们两点一刻去吧。"], re: "[一二两三四五六七八九十]+点.{0,4}(去)?(吧)?$" }] }] },
+ 10: { title: "Cuối tuần đi chơi", turns: [
+   { ai: ["这个星期天你忙不忙？", "Zhège xīngqītiān nǐ máng bu máng?", "Chủ nhật này bạn có bận không?"], hint: "Bận (我很忙 / 有点儿忙) hay không bận (我不忙).", say: [
+     { ans: ["我不忙。"], re: "不忙|不太忙|有时间", react: ["太好了！", "Tài hǎo le!", "Tuyệt quá!"], next: "climb" },
+     { ans: ["我很忙。"], re: "忙", react: ["你星期天做什么？", "Nǐ xīngqītiān zuò shénme?", "Chủ nhật bạn làm gì?"], next: "busy" }] },
+   { id: "busy", ai: [], hint: "Nói bạn làm gì (我去…… / 我学习汉语…).", say: [{ ans: ["我去图书馆学习。", "我要工作。"], re: ".{2,}" }], next: "tired" },
+   { id: "climb", ai: ["星期天我们去爬山，你去不去？", "Xīngqītiān wǒmen qù pá shān, nǐ qù bu qù?", "Chủ nhật bọn mình đi leo núi, bạn có đi không?"], hint: "Đi (我去，你们去哪儿爬山？) hay không đi (我不去).", say: [
+     { ans: ["我去。你们去哪儿爬山？", "去！"], re: "^(我)?(也)?(去|想去)|哪爬山|哪里", react: ["去西山。我们早上八点出发。", "Qù Xīshān. Wǒmen zǎoshang bā diǎn chūfā.", "Đi Tây Sơn. Tám giờ sáng bọn mình xuất phát."], next: "meet" },
+     { ans: ["我不去。"], re: "不去|不想", react: ["没关系，下次吧。", "Méi guānxi, xià cì ba.", "Không sao, lần sau nhé."], next: "tired" }] },
+   { id: "meet", ai: ["你几点来找我？", "Nǐ jǐ diǎn lái zhǎo wǒ?", "Mấy giờ bạn đến tìm mình?"], hint: "我……点去找你。", say: [{ ans: ["我七点半去找你。"], re: "[一二两三四五六七八九十]+点" }] },
+   { id: "tired", ai: ["你今天累不累？", "Nǐ jīntiān lèi bu lèi?", "Hôm nay bạn có mệt không?"], hint: "Mệt (我很累) hay không mệt (我不累).", say: [
+     { ans: ["我很累，我们休息一下吧。"], re: "(很|非常|有点)?累", react: ["那我们去喝点茶吧！", "Nà wǒmen qù hē diǎnr chá ba!", "Vậy chúng ta đi uống chút trà đi!"] },
+     { ans: ["我不累。"], re: "不累", react: ["你真好！我们喝点茶吧！", "Nǐ zhēn hǎo! Wǒmen hē diǎnr chá ba!", "Bạn khỏe thật! Chúng ta uống chút trà nhé!"] }] },
+   { ai: ["你喝不喝茶？", "Nǐ hē bu hē chá?", "Bạn có uống trà không?"], hint: "Uống (我喝 / 好啊) hay không (我不喝，我喝水).", say: [{ ans: ["我喝。", "好啊！"], re: "^(我)?(喝|好|要)" }, { ans: ["我不喝茶，我喝水。"], re: "不喝|喝水|咖啡" }] }] }
 };
 /* ======================= HỘI THOẠI – luyện phản xạ nói (lớp Giao tiếp) =======================
    Hai chế độ:
@@ -2902,17 +2935,18 @@ function lcsPairs(a, b){ const A = [...a], B = [...b], m = A.length, n = B.lengt
   return { len: d[0][0], ia, ib, A, B }; }
 function talkSim(a, b){ a = talkNorm(a); b = talkNorm(b); if(!a || !b) return 0; return 2 * lcsPairs(a, b).len / ([...a].length + [...b].length); }
 
+const TALK_AI = false; /* chế độ trò chuyện AI: tạm khoá (đổi thành true khi muốn bật lại, cần AI_API_KEY trong Apps Script) */
 const Talk = {
   mode: "script", py: store.get("ww_talk_py", false), vi: store.get("ww_talk_vi", false), aiOk: null,
-  mount(les){ this.les = les; this.stopMic(); this.mode = store.get("ww_talk_mode", "script"); if(this.mode === "ai" && !this.canAI()) this.mode = "script"; this.reset(); this.render(); },
-  canAI(){ return Auth.on(); },
+  mount(les){ this.les = les; this.stopMic(); this.mode = TALK_AI ? store.get("ww_talk_mode", "script") : "script"; if(this.mode === "ai" && !this.canAI()) this.mode = "script"; this.reset(); this.render(); },
+  canAI(){ return TALK_AI && Auth.on(); },
   reset(){ this.log = []; this.i = 0; this.done = false; this.review = null; this.retry = null; this.msgs = []; this.from = 0; this.busy = false; this.topic = this.topic || ""; },
   render(){
     const W = $("#work"), T = this.les.talk;
     W.innerHTML = `<div class="tk">
       <div class="tk-head"><div><b class="han">对话练习</b> <span>Hội thoại · luyện phản xạ nói</span></div>
-        <div class="seg tk-mode" role="group"><button data-m="script" aria-pressed="${this.mode === "script"}">Kịch bản Bài ${S.lesson}</button><button data-m="ai" aria-pressed="${this.mode === "ai"}">Trò chuyện với AI</button></div></div>
-      ${this.mode === "script" ? `<p class="tk-intro"><span><b>${esc(T.title)}</b> – Tiểu Ngữ nói trước, bạn trả lời bằng giọng nói (bấm 🎤) hoặc gõ chữ Hán. Cứ nói hết hội thoại, cuối buổi Tiểu Ngữ mới chỉ ra lỗi sai để bạn sửa.</span></p>`
+        ${TALK_AI ? `<div class="seg tk-mode" role="group"><button data-m="script" aria-pressed="${this.mode === "script"}">Kịch bản Bài ${S.lesson}</button><button data-m="ai" aria-pressed="${this.mode === "ai"}">Trò chuyện với AI</button></div>` : ""}</div>
+      ${this.mode === "script" ? `<p class="tk-intro"><span><b>${esc(T.title)}</b> – Tiểu Ngữ nói trước, bạn trả lời bằng giọng nói (bấm 🎤) hoặc gõ chữ Hán. Bạn có thể trả lời theo nhiều cách (có/không, bận/rảnh, tên, nghề… của chính bạn), Tiểu Ngữ sẽ đáp lại theo câu trả lời. Cuối buổi Tiểu Ngữ mới chỉ ra lỗi sai để bạn sửa.</span></p>`
         : `<div class="tk-intro"><label>Chủ đề <input id="tkTopic" value="${esc(this.topic || T.topic)}" maxlength="80"></label><small>Trò chuyện tự do với AI theo chủ đề. Bấm <b>Kết thúc & sửa lỗi</b> khi muốn xem lỗi sai.</small>${this.aiOk === false ? `<p class="tk-warn">${esc(this.aiMsg || "")}</p>` : ""}</div>`}
       <div class="tk-tools"><button class="btn sm" id="tkPy" aria-pressed="${this.py}">${this.py ? "Ẩn" : "Hiện"} phiên âm</button><button class="btn sm" id="tkVi" aria-pressed="${this.vi}">${this.vi ? "Ẩn" : "Hiện"} nghĩa</button>
         <button class="btn sm" id="tkRestart">${ICON.redo}Bắt đầu lại</button></div>
@@ -2930,7 +2964,7 @@ const Talk = {
   },
   /* ---------- khung chat ---------- */
   bubbles(){ const out = [];
-    if(this.mode === "script") this.log.forEach(t => { out.push({ who: "ai", zh: t.ai[0], py: t.ai[1], vi: t.ai[2] }); if(t.said != null) out.push({ who: "me", zh: t.said }); });
+    if(this.mode === "script") this.log.forEach(t => { if(t.ai && t.ai[0]) out.push({ who: "ai", zh: t.ai[0], py: t.ai[1], vi: t.ai[2] }); if(t.said != null) out.push({ who: "me", zh: t.said }); if(t.react && t.showReact) out.push({ who: "ai", zh: t.react[0], py: t.react[1], vi: t.react[2] }); });
     else this.msgs.filter(m => !m.hidden).forEach(m => out.push(m.role === "assistant" ? { who: "ai", zh: m.content, py: m.py, vi: m.vi } : { who: "me", zh: m.content }));
     return out; },
   drawChat(){ const C = $("#tkChat"); if(!C) return;
@@ -2951,7 +2985,7 @@ const Talk = {
     const mic = $("#tkMic"); if(mic) mic.onclick = () => this.recOn ? this.stopMic(true) : this.listen(t => this.answer(t));
     const send = () => { const v = $("#tkIn").value.trim(); if(v){ $("#tkIn").value = ""; this.answer(v); } };
     $("#tkSend").onclick = send; $("#tkIn").onkeydown = e => { if(e.key === "Enter") send(); };
-    const h = $("#tkHint"); if(h){ let k = 0; h.onclick = () => { k++; $("#tkHintTx").innerHTML = k === 1 ? esc(cur.hint) : `${esc(cur.hint)} → <span class="han">${esc(cur.ans[0])}</span>`; if(k > 1) speak(cur.ans[0]); }; }
+    const h = $("#tkHint"); if(h){ let k = 0; h.onclick = () => { k++; const m = cur.say[0].ans[0]; $("#tkHintTx").innerHTML = k === 1 ? esc(cur.hint) : `${esc(cur.hint)} → <span class="han">${cur.say.map(g => esc(g.ans[0])).join(" / ")}</span>`; if(k > 1) speak(m); }; }
     const e = $("#tkEnd"); if(e) e.onclick = () => this.aiReview(); },
   /* ---------- micro ---------- */
   listen(done){
@@ -2971,17 +3005,31 @@ const Talk = {
   /* ---------- chế độ kịch bản ---------- */
   turns(){ return this.retry || this.les.talk.turns; },
   curTurn(){ const T = this.turns(); return this.i < T.length && this.log.length && this.log[this.log.length - 1].said == null ? T[this.i] : null; },
-  next(){ const T = this.turns(); if(this.i >= T.length) return this.finish();
-    const t = T[this.i]; this.log.push({ ...t, said: null }); this.drawChat(); this.drawBar(); speak(t.ai[0]); },
+  next(){ const T = this.turns(); if(this.i < 0 || this.i >= T.length) return this.finish();
+    const t = T[this.i], prev = this.log[this.log.length - 1], q = t.ai && t.ai.length ? t.ai : (prev && prev.react) || ["", "", ""];
+    this.log.push({ ...t, q, said: null }); this.drawChat(); this.drawBar(); if(t.ai && t.ai.length) speak(t.ai[0]); },
+  /* lỗi ngữ pháp thường gặp – dù câu trả lời đúng ý vẫn bị đánh dấu để sửa */
+  ERRS: [[/是(很|非常|太|也很|不)?(忙|累|好|高兴|漂亮|新鲜|贵|便宜|冷|热|饿|渴|多|小)(?!人|朋友|学生|老师|的)/, "Câu vị ngữ tính từ không dùng 是: nói 我很忙, không nói 我是忙."],
+    [/我贵姓/, "Khi trả lời không nói 我贵姓…, mà nói 我姓…"], [/二(个|口|斤|本|支|台|部|种|点|块)/, "Trước lượng từ dùng 两, không dùng 二 (两个, 两口, 两点…)."],
+    [/(什么|哪|几|谁|多少|怎么样).*吗$/, "Câu đã có từ để hỏi (什么, 哪, 几…) thì không thêm 吗."], [/不有/, "Phủ định của 有 là 没有, không nói 不有."],
+    [/(忙|累|去|喝|是)不(忙|累|去|喝|是).*吗$/, "Câu hỏi chính phản (A不A) không thêm 吗."]],
+  judge(t, said){ const n = talkNorm(said); let best = null;
+    t.say.forEach((g, gi) => { const reOk = g.re ? new RegExp(g.re).test(n) : false;
+      g.ans.forEach(a => { const P = lcsPairs(n, talkNorm(a)), e = P.A.length + P.B.length - 2 * P.len, v = talkSim(said, a), ok = reOk || e <= Math.max(1, Math.floor(P.B.length * .12));
+        const sc = (ok ? 1000 : 0) + (reOk ? 100 : 0) - e; if(!best || sc > best.sc) best = { sc, g, gi, a, ok, reOk, sim: v }; }); });
+    const er = this.ERRS.find(([r]) => r.test(n)); if(er && best){ best.ok = false; best.note = er[1]; }
+    return best; },
   scriptAnswer(said){ const L = this.log[this.log.length - 1]; if(!L || L.said != null) return;
-    L.said = said; const n = talkNorm(said); L.reOk = L.re ? new RegExp(L.re).test(n) : false;
-    let best = L.ans[0], sim = 0, err = 99; L.ans.forEach(a => { const x = talkNorm(said), y = talkNorm(a), P = lcsPairs(x, y), e = P.A.length + P.B.length - 2 * P.len, v = talkSim(said, a);
-      if(e < err || (e === err && v > sim)){ err = e; sim = v; best = a; } });
-    L.sim = sim; L.best = best; L.ok = L.reOk || err <= Math.max(1, Math.floor([...talkNorm(best)].length * .12)); this.i++; this.drawChat(); this.drawBar();
-    Games.later(() => this.next(), 700); },
+    L.said = said; const J = this.judge(L, said); L.ok = J.ok; L.reOk = J.reOk; L.best = J.a; L.sim = J.sim; L.note = J.note || "";
+    const T = this.turns(), nx = this.retry ? null : (J.g.next || L.next);
+    L.react = J.ok || J.note ? J.g.react || null : null; L.showReact = !!L.react;
+    this.i = this.retry ? this.i + 1 : nx === "end" ? -1 : nx ? T.findIndex(x => x.id === nx) : this.i + 1;
+    this.drawChat(); this.drawBar();
+    if(L.react) Games.later(() => speak(L.react[0]), 350);
+    Games.later(() => this.next(), L.react ? 1500 + [...L.react[0]].length * 180 : 700); },
   finish(){ const prev = this.prevReview && this.prevReview.items || null; this.prevReview = null;
     let items = this.log.map(x => ({ ...x }));
-    if(this.retry && prev){ const fixed = items; items = prev.map(p => { const f = fixed.find(x => x.ai[0] === p.ai[0]); return f ? { ...f, tries: (p.tries || 1) + 1 } : p; }); }
+    if(this.retry && prev){ const fixed = items; items = prev.map(p => { const f = fixed.find(x => x.q[0] === p.q[0]); return f ? { ...f, tries: (p.tries || 1) + 1 } : p; }); }
     this.review = { items }; this.retry = null;
     const ok = items.filter(x => x.ok).length;
     Track.log("talk", { mode: "script", right: ok, total: items.length });
@@ -2994,13 +3042,13 @@ const Talk = {
     if(this.mode === "ai") return this.drawAIReview();
     const wrong = it.filter(x => !x.ok), ok = it.length - wrong.length;
     R.innerHTML = `<div class="tk-rev"><div class="tk-rev-h"><b>Kết quả: ${ok}/${it.length} câu đạt</b><span>${wrong.length ? "Xem các câu cần sửa bên dưới, nghe câu mẫu rồi bấm “Sửa lỗi sai” để nói lại." : "Tuyệt vời! Bạn trả lời đúng hết. 太棒了！"}</span></div>
-      <ol>${it.map(x => { const d = this.diff(x.said, x.best || x.ans[0]); return `<li class="${x.ok ? "ok" : "no"}"><div class="tk-q"><span class="han">${esc(x.ai[0])}</span> <small>${esc(x.ai[2])}</small></div>
+      <ol>${it.map(x => { const d = this.diff(x.said, x.best || x.ans[0]); return `<li class="${x.ok ? "ok" : "no"}"><div class="tk-q"><span class="han">${esc(x.q[0])}</span> <small>${esc(x.q[2])}</small></div>
         <div>Bạn nói: <span class="han">${x.ok ? esc(x.said) : d.said}</span> ${x.ok ? "✓" : "✗"}</div>
-        ${x.ok ? (x.reOk || talkNorm(x.said) === talkNorm(x.best) ? "" : `<div class="tk-mod">Câu mẫu: <span class="han">${esc(x.best)}</span></div>`) : `<div class="tk-mod">Nên nói: <button class="say-sm" data-say="${esc(x.best || x.ans[0])}">${ICON.sound}</button><span class="han">${d.model}</span> <small>(${esc(x.hint)})</small></div>`}</li>`; }).join("")}</ol>
+        ${x.ok ? (x.reOk || talkNorm(x.said) === talkNorm(x.best) ? "" : `<div class="tk-mod">Câu mẫu: <span class="han">${esc(x.best)}</span></div>`) : `<div class="tk-mod">Nên nói: <button class="say-sm" data-say="${esc(x.best || x.ans[0])}">${ICON.sound}</button><span class="han">${d.model}</span> <small>(${esc(x.hint)})</small></div>${x.note ? `<div class="tk-note">⚠ ${esc(x.note)}</div>` : ""}`}</li>`; }).join("")}</ol>
       <div class="tk-rev-b">${wrong.length ? `<button class="btn primary" id="tkFix">🎯 Sửa lỗi sai (${wrong.length} câu)</button>` : ""}<button class="btn ${wrong.length ? "" : "primary"}" id="tkAgain">▶ Tiếp tục nói (cả bài)</button>
         ${this.canAI() ? `<button class="btn" id="tkToAI">Trò chuyện với AI ▸</button>` : ""}</div></div>`;
     R.querySelectorAll("[data-say]").forEach(b => b.onclick = () => speak(b.dataset.say));
-    const f = $("#tkFix"); if(f) f.onclick = () => { this.prevReview = this.review; this.review = null; this.retry = wrong.map(x => this.les.talk.turns.find(t => t.ai[0] === x.ai[0])); this.log = []; this.i = 0; this.render(); };
+    const f = $("#tkFix"); if(f) f.onclick = () => { this.prevReview = this.review; this.review = null; this.retry = wrong.map(x => ({ ...this.les.talk.turns.find(t => t === x || (t.id && t.id === x.id) || (t.ai && t.ai[0] && t.ai[0] === (x.ai && x.ai[0]))) || x, ai: x.q })); this.log = []; this.i = 0; this.render(); };
     $("#tkAgain").onclick = () => { this.reset(); this.render(); };
     const ta = $("#tkToAI"); if(ta) ta.onclick = () => { this.mode = "ai"; store.set("ww_talk_mode", "ai"); this.reset(); this.render(); };
     R.scrollIntoView({ behavior: "smooth", block: "start" });
