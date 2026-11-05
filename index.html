@@ -4593,7 +4593,7 @@ const AV_OPTS={
  hairM:[], /* sinh tự động từ MALE_HAIR bên dưới */
  bangs:[["blunt","Mái bằng"],["air","Mái thưa"],["side","Mái lệch"],["middle","Mái rẽ giữa"],["short","Mái ngắn"],["none","Không mái"]],
  hairColor:[["#2B2220","Đen"],["#4A3026","Nâu đen"],["#6B4226","Nâu"],["#A8743F","Nâu sáng"],["#C0602E","Cam đồng"],["#8E2F3A","Đỏ rượu"],["#E0B556","Vàng"],["#EAD9B8","Vàng kem"],["#D8D6D2","Bạch kim"],["#8A8F99","Xám khói"],["#E595AE","Hồng"],["#A992D8","Tím lavender"],["#5B86C4","Xanh"],["#6CB89C","Xanh bạc hà"]],
- outfit:[["aodai","Áo dài"],["aogam","Áo gấm"],["baba","Áo bà ba"],["tee","Áo thun"],["hoodie","Hoodie"],["uniform","Đồng phục"],["denim","Áo khoác jean"],["coat","Áo khoác dạ"],["puffer","Áo phao"],["sport","Đồ thể thao"],["overalls","Váy yếm","Quần yếm"],["suit","Blazer","Vest"],["sweater","Áo len"],["china","Sườn xám","Đường trang"]],
+ outfit:[["aodai","Áo dài"],["aogam","Áo gấm"],["baba","Áo bà ba"],["tee","Áo thun"],["hoodie","Hoodie"],["uniform","Đồng phục"],["denim","Áo khoác jean"],["coat","Áo khoác dạ"],["puffer","Áo phao"],["sport","Đồ thể thao"],["overalls","Váy yếm","Quần yếm"],["suit","Blazer","Vest"],["sweater","Áo len"],["china","Sườn xám","Đường trang"],["bomber","Bomber + jogger"],["cargo","Oversize + cargo"],["varsity","Áo bóng chày"],["jersey","Áo bóng rổ"]],
  shoes:[["sneaker","Giày thể thao"],["mesh","Giày lưới"],["hightop","Giày cổ cao"],["boots","Bốt"],["sandal","Xăng-đan"],["clog","Guốc mộc"],["slipper","Dép lê"],["loafer","Giày lười"],["maryjane","Giày búp bê"],["formal","Giày da"],["heels","Cao gót"]],
  accHead:[["none","Không"],["nonla","Nón lá"],["khandong","Khăn đóng"],["cap","Mũ lưỡi trai"],["beret","Mũ beret"],["bucket","Mũ bucket"],["beanie","Mũ len"],["bow","Nơ cài tóc"],["flower","Hoa cài tóc"],["catears","Băng đô tai mèo"],["phones","Tai nghe"]],
  accFace:[["none","Không"],["glasses","Kính tròn"],["square","Gọng vuông"],["metal","Gọng kim loại"],["halfrim","Nửa gọng"],["cateye","Mắt mèo"],["sunglasses","Kính râm"],["roundsun","Kính râm tròn"],["heart","Kính trái tim"]],
@@ -4809,7 +4809,7 @@ const mhN={
   shine:(h,d)=>`<path d="${d}" stroke="${shade(h,.55)}" stroke-opacity=".55" stroke-width="4" fill="none" stroke-linecap="round"/>`,
   shaved:(h,d)=>`<path d="${d}" fill="${h}" fill-opacity=".3" stroke="${h}" stroke-opacity=".35" stroke-width="1"/>`,
   /* chuỗi cung lồi qua các điểm – dùng cho tóc xoăn */
-  shadow:(d)=>`<path d="${d}" fill="#C98F78" opacity=".22"/>`,
+  shadow:(d)=>"",
   ring:(h,d)=>`<path d="${d}" fill="${shade(h,.5)}" fill-opacity=".45"/>`,
   dots:(h,pts)=>pts.map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2.2" fill="#fff" fill-opacity=".55"/>`).join(""),
   bumps:(pts,r)=>"M"+pts[0].join(",")+pts.slice(1).map(p=>` A${r},${r} 0 0 1 ${p.join(",")}`).join("")+"Z"
@@ -4831,7 +4831,7 @@ function fringeShadow(P){
   return `<path d="M${top.map(p=>p.join(",")).join(" L")} L${bot.map(p=>p.join(",")).join(" L")}Z" fill="#C98F78" opacity=".2" stroke="#C98F78" stroke-opacity=".2" stroke-width="6" stroke-linejoin="round"/>`;
 }
 function maleHairArt(h,P,o={}){
-  return (o.pre||"")+fringeShadow(P)+mhN.mass(hairContour(P))+(o.extra||"")
+  return (o.pre||"")+mhN.mass(hairContour(P))+(o.extra||"")
     +(o.flicks||"")+(o.lines?mhN.line(h,o.lines,.32):"")+mhN.ring(h,o.ring||"M50,-58 Q100,-84 150,-58 Q100,-70 50,-58Z")+mhN.dots(h,o.dots||[[62,-64],[138,-64]]);
 }
 Object.assign(MALE_HAIR,{
@@ -4873,7 +4873,7 @@ Object.assign(MALE_HAIR,{
        lines:"M116,-6 C122,-26 120,-48 112,-66 M82,-3 C88,-24 86,-46 78,-62 M150,3 C156,-14 158,-32 152,-48", ring:"M48,-62 Q100,-88 152,-64 Q100,-74 48,-62Z", dots:[[60,-66],[140,-68],[100,-78]]}) },
   twoblock:{ label:"Two-block", native:true,
     /* lớp trên dài, dày, mái rủ xuống trán; hai bên mai và sau gáy cắt ngắn sát */
-    front:h=>{ const sd=x=>`<path d="M${x-2},-30 C${x-4},-14 ${x-4},2 ${x},12 C${x+3},16 ${x+10},15 ${x+11},9 C${x+10},-4 ${x+11},-18 ${x+14},-30 Z" fill="url(#${G}hu)" fill-opacity=".9" ${THIN}/>`+mhN.line(h,`M${x+3},-20 l1,8 M${x+5},-14 l1,8`,.35);
+    front:h=>{ const sd=x=>`<path d="M${x-2},-30 C${x-4},-14 ${x-4},2 ${x},12 C${x+3},16 ${x+10},15 ${x+11},9 C${x+10},-4 ${x+11},-18 ${x+14},-30 Z" fill="${shade(h,-.04)}" ${THIN}/>`+mhN.line(h,`M${x+3},-20 l1,8 M${x+5},-14 l1,8`,.35);
       return sd(38)+mirror(sd(38))
       +mhN.shadow(`M40,-16 C60,-8 80,0 100,-2 C120,0 140,-6 160,-16 L160,-4 C140,6 120,10 100,8 C80,10 60,6 40,-4Z`)
       +mhN.mass(`M26,-22 C20,-72 60,-90 94,-90 Q98,-90 101,-84 Q104,-90 108,-90 C140,-90 180,-72 174,-22 C172,-16 166,-14 162,-18
@@ -5029,7 +5029,8 @@ function headAcc(c){
 const OUT={
   aodai:{f:"#F7BCD0",m:"#3E6DB5",sleeve:"long"}, aogam:{f:"#C8352E",m:"#D9A23A",sleeve:"long"}, baba:{f:"#F8EDD6",m:"#9A7A58",sleeve:"long"},
   tee:{f:"#4CC09A",m:"#4CC09A",sleeve:"short"}, hoodie:{f:"#F3E8D2",m:"#F3E8D2",sleeve:"long"}, uniform:{f:"#FFFFFF",m:"#FFFFFF",sleeve:"long"},
-  denim:{f:"#6F9BD0",m:"#6F9BD0",sleeve:"long"}, coat:{f:"#F5B9CB",m:"#C9A57C",sleeve:"long"}, puffer:{f:"#E0443E",m:"#E0443E",sleeve:"long"},
+  denim:{f:"#6F9BD0",m:"#6F9BD0",sleeve:"long"}, coat:{f:"#F5B9CB",m:"#8C6A4E",sleeve:"long"}, puffer:{f:"#E0443E",m:"#E0443E",sleeve:"long"},
+  bomber:{f:"#6E7A55",m:"#2F3A4F",sleeve:"long"}, cargo:{f:"#26262C",m:"#F2F0EA",sleeve:"short"}, varsity:{f:"#7A2E3B",m:"#1F3A68",sleeve:"long",arm:"#F1E6CF"}, jersey:{f:"#F2B33D",m:"#C8382F",sleeve:"short",cap:"#FFFFFF"},
   sport:{f:"#E85A71",m:"#2E86DE",sleeve:"long",stripe:true}, overalls:{f:"#F6D365",m:"#F6D365",sleeve:"short"},
   suit:{f:"#D9C7A7",m:"#3A3F4B",sleeve:"long"}, sweater:{f:"#F2E2BF",m:"#F2E2BF",sleeve:"long"}, china:{f:"#D2453A",m:"#C8402F",sleeve:"long",fsleeve:"short"}
 };
@@ -5039,7 +5040,7 @@ function motif(x,y,pc,r=4){ return `<circle cx="${x}" cy="${y}" r="${r}" fill="n
 function blossom(x,y){ return `<g transform="translate(${x},${y})"><circle cx="0" cy="-2.4" r="2.2" fill="#fff"/><circle cx="2.3" cy="-.7" r="2.2" fill="#fff"/><circle cx="1.4" cy="2" r="2.2" fill="#fff"/><circle cx="-1.4" cy="2" r="2.2" fill="#fff"/><circle cx="-2.3" cy="-.7" r="2.2" fill="#fff"/><circle r="1.3" fill="#F2B84B"/></g>`; }
 function lowerWear(c,l){
   const {hip,foot}=l, f=c.gender==="f", col=outCol(c);
-  const pants=(pc,len=1,wide=false)=>{ const bot=hip+(foot-9-hip)*len, w=wide?21:19; return `<path d="M${100-w-1.5},${hip-6} L${100+w+1.5},${hip-6} L${100+w+(wide?3:0)},${bot} L101.5,${bot} L100,${hip+6} L98.5,${bot} L${100-w-(wide?3:0)},${bot} Z" fill="${pc}" ${LINE}/>`; };
+  const pants=(pc,len=1,wide=false)=>{ const bot=hip+(foot-9-hip)*len, w=(wide?21:19)+(f?0:3); return `<path d="M${100-w-1.5},${hip-6} L${100+w+1.5},${hip-6} L${100+w+(wide?3:0)},${bot} L101.5,${bot} L100,${hip+6} L98.5,${bot} L${100-w-(wide?3:0)},${bot} Z" fill="${pc}" ${LINE}/>`; };
   const skirt=(sc,pleat=true)=>{ const b=hip+Math.min(19,(foot-hip)*.4); let s=`<path d="M70,${hip-6} L130,${hip-6} L142,${b} Q100,${b+5} 58,${b} Z" fill="${sc}" ${LINE}/>`;
     if(pleat) s+=[76,88,100,112,124].map((x,i)=>`<path d="M${x+ (i-2)*-1},${hip-2} L${x+(i-2)*5},${b+1}" stroke="${shade(sc,-.22)}" stroke-width="1.3"/>`).join(""); return s; };
   const panel=(pc,end,deco)=>{ let s=`<path d="M74,${hip-8} L126,${hip-8} L124,${end} Q100,${end+4} 76,${end} Z" fill="${pc}" ${LINE}/>`;
@@ -5060,6 +5061,10 @@ function lowerWear(c,l){
     case "suit": return f?skirt(col,false):pants(col);
     case "china": if(f){ const b=hip+Math.min(26,(foot-hip)*.6); return `<path d="M72,${hip-8} L128,${hip-8} L128,${b} Q100,${b+4} 72,${b} Z" fill="${col}" ${LINE}/><path d="M72,${b} Q100,${b+4} 128,${b}" stroke="${GOLD}" stroke-width="2.5" fill="none"/><path d="M122,${hip} L125,${b}" stroke="#9E2F27" stroke-width="1.8"/>`; } return pants("#2A2A2A");
     case "sweater": return pants("#4A6FA5");
+    case "bomber": { const pc=f?"#2B2B30":"#3A3D44", bot=hip+(foot-9-hip); return pants(pc)+`<rect x="${f?78:75}" y="${bot-6}" width="${f?44:50}" height="6" rx="2" fill="${shade(pc,-.3)}"/><path d="M100,${hip+4} L100,${bot-6}" stroke="${shade(pc,-.3)}" stroke-width="1.2"/>`; }
+    case "cargo": { const pc=f?"#C8B79A":"#6B6E52", w=f?21:24; return pants(pc,1,true)+`<rect x="${100-w-3}" y="${hip+8}" width="11" height="12" rx="2" fill="${shade(pc,-.12)}" ${THIN}/><rect x="${100+w-8}" y="${hip+8}" width="11" height="12" rx="2" fill="${shade(pc,-.12)}" ${THIN}/><path d="M${100-w-3},${hip+11} l11,0 M${100+w-8},${hip+11} l11,0" stroke="${shade(pc,-.3)}" stroke-width="1.2"/>`; }
+    case "varsity": return pants(f?"#2B2B30":"#2C3550");
+    case "jersey": return pants(col,.45,true)+`<path d="M${f?78:75},${hip} L${f?78:75},${hip+(foot-9-hip)*.45} M${f?122:125},${hip} L${f?122:125},${hip+(foot-9-hip)*.45}" stroke="#fff" stroke-width="2.6"/>`;
   }
   return "";
 }
@@ -5085,16 +5090,17 @@ function shoes(c,l){
     case "formal": return body(x,"#2B2B2E",12)+hole(x,12,"#00000066")+`<path d="M${x-6},${y-9} L${x+6},${y-9}" stroke="#444" stroke-width="1.6"/>`+sole(x,"#18181A",2.5)+gloss(x);
     default: { const m=c.gender==="m", S1=m?"#F4F5F7":"#F7A7BC", S2=m?"#2F4A7A":"#FBC9D6", S3=m?"#E4E7EC":"#FBD3DE"; return body(x,S1)+hole(x)+`<path d="M${x-10},${y-1} Q${x},${y-9} ${x+10},${y-1} Q${x},${y+5} ${x-10},${y-1}Z" fill="${S2}"/><rect x="${x-4}" y="${y-15}" width="8" height="10" rx="2.5" fill="${S3}" ${THIN}/>`+laces(x,y-13,3,m?"#2F4A7A":"#fff")+`<path d="M${x+sd*11},${y-9} q${-sd*5},2 ${-sd*7},6" stroke="${m?"#2F4A7A":"#fff"}" stroke-width="1.8" fill="none" stroke-linecap="round"/>`+sole(x,"#FFFFFF")+gloss(x); }
   }};
-  const at=(x,sd)=>`<g transform="translate(${x},${y}) rotate(${-sd*5}) scale(1.1) translate(${-x},${-y})">${one(x,sd)}</g>`;
-  return at(86,-1)+at(114,1);
+  const m=c.gender==="m", sc=m?1.2:1.1, at=(x,sd)=>`<g transform="translate(${x},${y}) rotate(${-sd*5}) scale(${sc}) translate(${-x},${-y})">${one(x,sd)}</g>`;
+  return m?at(84,-1)+at(116,1):at(86,-1)+at(114,1);
 }
 function torso(c,l){
   const {sy,hip,Tt}=l, f=c.gender==="f", sk=SKIN[c.skin][0], o=OUT[c.outfit]||OUT.tee, col=outCol(c);
   const sleeve=(f&&o.fsleeve)||o.sleeve, sd=shade(col,-.14);
-  const armCol={denim:"#6F9BD0",coat:col,puffer:col}[c.outfit]||col;
+  const armCol=o.arm||{denim:"#6F9BD0",coat:col,puffer:col}[c.outfit]||col;
   const puff=c.outfit==="puffer", W=puff?17:14;
   const arm=(x,rot)=>{ const cx=x+W/2, len=Tt-2; let a=`<rect x="${x}" y="${sy+2}" width="${W}" height="${len}" rx="${W/2}" fill="${sleeve==="short"?sk:armCol}" ${LINE}/>`;
-    if(sleeve==="short") a+=`<path d="M${x-1},${sy+4} Q${x-1},${sy} ${cx},${sy} Q${x+W+1},${sy} ${x+W+1},${sy+4} L${x+W+1},${sy+15} L${x-1},${sy+15} Z" fill="${col}" ${LINE}/>`;
+    if(sleeve==="short") a+=`<path d="M${x-1},${sy+4} Q${x-1},${sy} ${cx},${sy} Q${x+W+1},${sy} ${x+W+1},${sy+4} L${x+W+1},${sy+(c.outfit==="cargo"?20:15)} L${x-1},${sy+(c.outfit==="cargo"?20:15)} Z" fill="${o.cap||col}" ${LINE}/>`;
+    if(c.outfit==="bomber"||c.outfit==="varsity") a+=`<rect x="${x}" y="${sy+len-8}" width="${W}" height="6" rx="2" fill="${shade(c.outfit==="varsity"?col:armCol,-.25)}" ${THIN}/><path d="M${x+3},${sy+len-7} l0,4 M${x+7},${sy+len-7} l0,4 M${x+11},${sy+len-7} l0,4" stroke="#000" stroke-opacity=".2" stroke-width="1"/>`;
     if(o.stripe) a+=`<path d="M${cx},${sy+8} L${cx},${sy+len-4}" stroke="#fff" stroke-width="2.4"/>`;
     if(puff) a+=`<path d="M${x+1},${sy+14} L${x+W-1},${sy+14} M${x+1},${sy+26} L${x+W-1},${sy+26}" stroke="${sd}" stroke-width="1.6"/>`;
     if(sleeve!=="short") a+=`<path d="M${x+1},${sy+len-5} L${x+W-1},${sy+len-5}" stroke="${shade(armCol,-.2)}" stroke-width="1.4"/>`;
@@ -5102,10 +5108,17 @@ function torso(c,l){
   let s=arm(puff?52:56,12)+arm(puff?131:130,-12);
   const body=(fill,w=0)=>`<path d="M${72-w},${sy} Q100,${sy-4} ${128+w},${sy} Q${135+w},${sy+1} ${136+w},${sy+9} L${139+w},${hip+2} Q100,${hip+7} ${61-w},${hip+2} L${64-w},${sy+9} Q${65-w},${sy+1} ${72-w},${sy} Z" fill="${fill}" ${LINE}/>`;
   const longcoat=c.outfit==="coat"&&!f, hem=longcoat?hip+Math.round((l.foot-hip)*.55):hip;
-  if(longcoat) s+=`<path d="M72,${sy} Q100,${sy-4} 128,${sy} Q135,${sy+1} 136,${sy+9} L139,${hip} L143,${hem} Q100,${hem+5} 57,${hem} L61,${hip} L64,${sy+9} Q65,${sy+1} 72,${sy} Z" fill="${col}" ${LINE}/>`;
+  if(longcoat) s+=`<path d="M70,${sy} Q100,${sy-4} 130,${sy} Q137,${sy+1} 138,${sy+9} L141,${hem} L59,${hem} L62,${sy+9} Q63,${sy+1} 70,${sy} Z" fill="${col}" ${LINE}/>`;
   else s+=body(c.outfit==="denim"?"#FFFFFF":col,puff?4:0);
   /* bóng nhẹ bên dưới thân áo */
-  if(longcoat) s+=`<path d="M58,${hem-6} L142,${hem-6} L143,${hem} Q100,${hem+5} 57,${hem} Z" fill="${sd}" opacity=".35"/><path d="M100,${sy+20} L100,${hem+3}" stroke="${shade(col,-.22)}" stroke-width="1.6"/><path d="M62,${hip-4} Q100,${hip+1} 138,${hip-4}" stroke="${shade(col,-.25)}" stroke-width="3" fill="none"/><path d="M118,${hem-12} L120,${hem+3}" stroke="${shade(col,-.22)}" stroke-width="1.4"/><rect x="66" y="${hip+6}" width="14" height="3" rx="1.5" fill="${shade(col,-.22)}"/><rect x="120" y="${hip+6}" width="14" height="3" rx="1.5" fill="${shade(col,-.22)}"/>`;
+  if(longcoat){ const cd=shade(col,-.2), cdd=shade(col,-.38);
+    s+=`<path d="M60,${hem-5} L140,${hem-5} L141,${hem} L59,${hem} Z" fill="${cd}" opacity=".45"/>`
+      +`<path d="M88,${sy-2} L100,${sy+24} L112,${sy-2} Z" fill="#F4F0E8"/><path d="M96,${sy-1} L100,${sy+6} L104,${sy-1}" stroke="#D9D2C4" stroke-width="1.4" fill="none"/>`
+      +`<path d="M86,${sy-2} L100,${sy+24} L94,${sy+30} L84,${sy+12} L78,${sy+11} L80,${sy+1} Z" fill="${cd}" ${THIN}/><path d="M114,${sy-2} L100,${sy+24} L106,${sy+30} L116,${sy+12} L122,${sy+11} L120,${sy+1} Z" fill="${cd}" ${THIN}/>`
+      +`<path d="M100,${sy+24} L100,${hem-16}" stroke="${cdd}" stroke-width="1.6"/>`
+      +[0,1,2].map(i=>`<circle cx="92" cy="${sy+32+i*9}" r="2.4" fill="${cdd}"/><circle cx="108" cy="${sy+32+i*9}" r="2.4" fill="${cdd}"/>`).join("")
+      +`<path d="M64,${hip+2} L82,${hip+2} L82,${hip+7} L64,${hip+7} Z M118,${hip+2} L136,${hip+2} L136,${hip+7} L118,${hip+7} Z" fill="${cd}" ${THIN}/>`
+      +`<path d="M91,${hem} L100,${hem-16} L109,${hem} Z" fill="#3A3F4B" ${THIN}/>`; }
   else s+=`<path d="M${puff?58:62},${hip-6} L${puff?142:138},${hip-6} L${puff?143:139},${hip+2} Q100,${hip+7} ${puff?57:61},${hip+2} Z" fill="${sd}" opacity=".35"/>`;
   const btn=(n,x=100,c2="#bbb",st=10,gap=10)=>Array.from({length:n},(_,i)=>`<circle cx="${x}" cy="${sy+st+i*gap}" r="1.9" fill="${c2}"/>`).join("");
   const mandarin=(fill,stroke)=>`<path d="M88,${sy-3} Q100,${sy+1} 112,${sy-3} L112,${sy+3} Q100,${sy+7} 88,${sy+3} Z" fill="${fill}" stroke="${stroke||OLC}" stroke-width="1.5" stroke-linejoin="round"/>`;
@@ -5120,13 +5133,17 @@ function torso(c,l){
       (f?`<path d="M100,${sy+10} L88,${sy+4} L88,${sy+16} Z M100,${sy+10} L112,${sy+4} L112,${sy+16} Z" fill="#D2453A" ${THIN}/><circle cx="100" cy="${sy+10}" r="3.2" fill="#A3301F"/>`
          :`<path d="M97,${sy+10} L103,${sy+10} L105,${sy+30} L100,${sy+35} L95,${sy+30} Z" fill="#D2453A" ${THIN}/>`)+btn(2,100,"#bbb",24,9); break;
     case "denim": { const j="#6F9BD0", jd="#4F7DB6"; s+=`<path d="M72,${sy} Q84,${sy-2} 90,${sy} L93,${hip+5} L61,${hip+2} L64,${sy+9} Q65,${sy+1} 72,${sy}Z" fill="${j}" ${LINE}/><path d="M128,${sy} Q116,${sy-2} 110,${sy} L107,${hip+5} L139,${hip+2} L136,${sy+9} Q135,${sy+1} 128,${sy}Z" fill="${j}" ${LINE}/><path d="M90,${sy} L80,${sy+13} L91,${sy+18} M110,${sy} L120,${sy+13} L109,${sy+18}" stroke="${jd}" stroke-width="1.8" fill="${j}" stroke-linejoin="round"/><rect x="69" y="${sy+19}" width="12" height="9" rx="1.5" fill="none" stroke="${jd}" stroke-width="1.4"/><rect x="119" y="${sy+19}" width="12" height="9" rx="1.5" fill="none" stroke="${jd}" stroke-width="1.4"/><path d="M64,${hip-4} L92,${hip-2} M136,${hip-4} L108,${hip-2}" stroke="${jd}" stroke-width="1.6" stroke-dasharray="2 2"/>`; break; }
-    case "coat": { const cd=shade(col,-.18); s+=`<path d="M100,${sy+2} L100,${hip+4}" stroke="${cd}" stroke-width="1.6"/><path d="M86,${sy-2} L100,${sy+20} L80,${sy+14} Z M114,${sy-2} L100,${sy+20} L120,${sy+14} Z" fill="${cd}" ${THIN}/><path d="M90,${sy-2} L100,${sy+12} L110,${sy-2}" fill="#FFF7F0" stroke="none"/>`+[0,1].map(i=>`<circle cx="93" cy="${sy+24+i*9}" r="2.2" fill="${shade(col,-.4)}"/><circle cx="107" cy="${sy+24+i*9}" r="2.2" fill="${shade(col,-.4)}"/>`).join("")+``+(f?`<path d="M66,${hip-12} L80,${hip-12} M120,${hip-12} L134,${hip-12}" stroke="${cd}" stroke-width="1.8" stroke-linecap="round"/>`:"")+``; break; }
+    case "coat": { if(longcoat) break; const cd=shade(col,-.18); s+=`<path d="M100,${sy+2} L100,${hip+4}" stroke="${cd}" stroke-width="1.6"/><path d="M86,${sy-2} L100,${sy+20} L80,${sy+14} Z M114,${sy-2} L100,${sy+20} L120,${sy+14} Z" fill="${cd}" ${THIN}/><path d="M90,${sy-2} L100,${sy+12} L110,${sy-2}" fill="#FFF7F0" stroke="none"/>`+[0,1].map(i=>`<circle cx="93" cy="${sy+24+i*9}" r="2.2" fill="${shade(col,-.4)}"/><circle cx="107" cy="${sy+24+i*9}" r="2.2" fill="${shade(col,-.4)}"/>`).join("")+``+(f?`<path d="M66,${hip-12} L80,${hip-12} M120,${hip-12} L134,${hip-12}" stroke="${cd}" stroke-width="1.8" stroke-linecap="round"/>`:"")+``; break; }
     case "puffer": { const pd=shade(col,-.2); s+=`<path d="M78,${sy-6} Q100,${sy+2} 122,${sy-6} L124,${sy+4} Q100,${sy+12} 76,${sy+4} Z" fill="${col}" ${LINE}/>`+[.32,.62].map(t=>`<path d="M${60},${sy+Tt*t} Q100,${sy+Tt*t+5} 140,${sy+Tt*t}" stroke="${pd}" stroke-width="1.8" fill="none"/>`).join("")+`<path d="M100,${sy+6} L100,${hip+5}" stroke="${pd}" stroke-width="1.8"/><rect x="104" y="${sy+10}" width="10" height="4" rx="1" fill="#fff" opacity=".85"/><path d="M70,${sy+8} q8,-4 16,-2" stroke="#fff" stroke-opacity=".45" stroke-width="2.4" fill="none" stroke-linecap="round"/>`; break; }
     case "sport": s+=`<path d="M100,${sy+2} L100,${hip+3}" stroke="#fff" stroke-width="2"/><path d="M90,${sy-2} Q100,${sy+6} 110,${sy-2}" stroke="#fff" stroke-width="3" fill="none"/><path d="M64,${sy+14} L136,${sy+14}" stroke="#fff" stroke-opacity=".6" stroke-width="3"/>`; break;
     case "overalls": s+=`<path d="M82,${sy+14} L118,${sy+14} L120,${hip+4} L80,${hip+4} Z" fill="#5C86C2" ${LINE}/><path d="M74,${sy} L84,${sy+15} M126,${sy} L116,${sy+15}" stroke="#5C86C2" stroke-width="6" stroke-linecap="round"/><circle cx="85" cy="${sy+17}" r="2.4" fill="${GOLD}"/><circle cx="115" cy="${sy+17}" r="2.4" fill="${GOLD}"/><rect x="92" y="${sy+20}" width="16" height="10" rx="2" fill="none" stroke="#3A5F94" stroke-width="1.5"/>`; break;
     case "suit": s+=`<path d="M88,${sy-2} L100,${sy+22} L112,${sy-2} Z" fill="#fff"/>`+(f?`<path d="M94,${sy+4} Q100,${sy+12} 106,${sy+4}" stroke="${GOLD}" stroke-width="1.5" fill="none"/><circle cx="100" cy="${sy+11}" r="2.2" fill="${GOLD}"/>`:`<path d="M98,${sy+2} L102,${sy+2} L104,${sy+18} L100,${sy+22} L96,${sy+18} Z" fill="#C2513A"/>`)+`<path d="M88,${sy-2} L96,${sy+26} L84,${sy+12} Z M112,${sy-2} L104,${sy+26} L116,${sy+12} Z" fill="${shade(col,-.12)}" ${THIN}/>`+btn(2,100,shade(col,-.4),30,7); break;
     case "china": s+= f?`<path d="M90,${sy-4} L110,${sy-4} L110,${sy+2} L90,${sy+2} Z" fill="${col}" stroke="${GOLD}" stroke-width="1.5"/><path d="M100,${sy+2} Q112,${sy+8} 124,${sy+10}" stroke="${GOLD}" stroke-width="2" fill="none"/><circle cx="118" cy="${sy+20}" r="5" fill="none" stroke="${GOLD}" stroke-width="1.5"/>`
       :`<rect x="90" y="${sy-4}" width="20" height="6" rx="2" fill="#A3301F"/><path d="M100,${sy+2} L100,${hip}" stroke="#A3301F" stroke-width="1.5"/>`+[10,19,28].map(d=>`<path d="M94,${sy+d} L106,${sy+d}" stroke="${GOLD}" stroke-width="2.4" stroke-linecap="round"/><circle cx="100" cy="${sy+d}" r="2" fill="${GOLD}"/>`).join(""); break;
+    case "bomber": { const rb=shade(col,-.3); s+=`<path d="M86,${sy-3} Q100,${sy+5} 114,${sy-3} L114,${sy+3} Q100,${sy+10} 86,${sy+3} Z" fill="${rb}" ${THIN}/><path d="M62,${hip-5} L138,${hip-5} L139,${hip+2} Q100,${hip+7} 61,${hip+2} Z" fill="${rb}" ${THIN}/><path d="M68,${hip-3} l0,4 M76,${hip-3} l0,4 M84,${hip-3} l0,4 M116,${hip-3} l0,4 M124,${hip-3} l0,4 M132,${hip-3} l0,4" stroke="#000" stroke-opacity=".2" stroke-width="1"/><path d="M100,${sy+5} L100,${hip-5}" stroke="#C9CDD4" stroke-width="2"/><rect x="98" y="${sy+8}" width="4" height="6" rx="1" fill="#C9CDD4"/><rect x="110" y="${sy+12}" width="12" height="8" rx="2" fill="#E8833A" ${THIN}/>`; break; }
+    case "cargo": s+=`<path d="M62,${hip} L138,${hip} L141,${hip+7} Q100,${hip+12} 59,${hip+7} Z" fill="${col}" ${LINE}/><path d="M88,${sy-1} Q100,${sy+8} 112,${sy-1}" stroke="${shade(col,-.3)}" stroke-width="2.6" fill="none"/><rect x="82" y="${sy+10}" width="36" height="22" rx="4" fill="${f?"#F06A8A":"#2B2D33"}"/><text x="100" y="${sy+27}" text-anchor="middle" font-size="16" font-weight="700" fill="#fff" style="font-family:var(--f-han)">酷</text>`; break;
+    case "varsity": { const cr="#F1E6CF"; s+=`<path d="M86,${sy-3} Q100,${sy+5} 114,${sy-3} L114,${sy+3} Q100,${sy+10} 86,${sy+3} Z" fill="${col}" stroke="${cr}" stroke-width="2"/><path d="M62,${hip-6} L138,${hip-6} L139,${hip+2} Q100,${hip+7} 61,${hip+2} Z" fill="${col}" ${THIN}/><path d="M62,${hip-3} L138,${hip-3}" stroke="${cr}" stroke-width="2"/>`+[0,1,2,3].map(i=>`<circle cx="100" cy="${sy+10+i*7}" r="1.9" fill="${cr}"/>`).join("")+`<text x="83" y="${sy+24}" text-anchor="middle" font-size="16" font-weight="800" fill="${cr}" stroke="${shade(col,-.3)}" stroke-width=".8" style="font-family:var(--f-py)">W</text>`; break; }
+    case "jersey": s+=`<path d="M86,${sy-2} Q100,${sy+16} 114,${sy-2}" fill="#FFFFFF" stroke="#fff" stroke-width="3"/><path d="M86,${sy-2} Q100,${sy+16} 114,${sy-2}" stroke="${OLC}" stroke-width="1.2" fill="none" opacity=".5"/><path d="M66,${sy+6} Q72,${sy+18} 70,${sy+30} M134,${sy+6} Q128,${sy+18} 130,${sy+30}" stroke="#fff" stroke-width="3" fill="none"/><text x="100" y="${sy+34}" text-anchor="middle" font-size="17" font-weight="800" fill="#fff" stroke="${shade(col,-.35)}" stroke-width=".8" style="font-family:var(--f-py)">23</text>`; break;
     case "sweater": s+=`<path d="M62,${sy+Tt*.45} L138,${sy+Tt*.45} M63,${sy+Tt*.6} L137,${sy+Tt*.6}" stroke="#7CC264" stroke-width="4"/><path d="M88,${sy-1} Q100,${sy+8} 112,${sy-1}" stroke="${shade(col,-.15)}" stroke-width="4" fill="none"/>`; break;
   }
   return s;
@@ -5175,7 +5192,7 @@ function avatarSVG(c0,opt={}){
   if(clipT) s+=`<defs><clipPath id="${G}hc"><path d="${clipT} L260,400 L-60,400 Z"/></clipPath></defs>`;
   s+=`<g transform="translate(0,${l.hy})"><g${hc}>${hairBack(c)}</g></g>`;
   s+=`<g transform="translate(100,0) scale(.84,1) translate(-100,0)">${bodyAccBack(c,l)}</g>`;
-  s+=`<rect x="79" y="${l.hip-4}" width="14" height="${l.foot-l.hip}" rx="6" fill="${sk[0]}" ${LINE}/><rect x="107" y="${l.hip-4}" width="14" height="${l.foot-l.hip}" rx="5" fill="${sk[0]}" ${LINE}/>`;
+  s+=c.gender==="m"?`<rect x="76" y="${l.hip-4}" width="18" height="${l.foot-l.hip}" rx="7" fill="${sk[0]}" ${LINE}/><rect x="106" y="${l.hip-4}" width="18" height="${l.foot-l.hip}" rx="7" fill="${sk[0]}" ${LINE}/>`:`<rect x="79" y="${l.hip-4}" width="14" height="${l.foot-l.hip}" rx="6" fill="${sk[0]}" ${LINE}/><rect x="107" y="${l.hip-4}" width="14" height="${l.foot-l.hip}" rx="5" fill="${sk[0]}" ${LINE}/>`;
   s+=["aodai","aogam","baba"].includes(c.outfit)?shoes(c,l)+lowerWear(c,l):lowerWear(c,l)+shoes(c,l);
   s+=`<path d="M92.5,${l.sy-16} L107.5,${l.sy-16} L108,${l.sy+3} L92,${l.sy+3} Z" fill="${sk[0]}" ${LINE}/><path d="M93,${l.sy-10} Q100,${l.sy-4} 107,${l.sy-10} L107,${l.sy-15} L93,${l.sy-15}Z" fill="${sk[1]}" opacity=".7"/>`;
   s+=`<g transform="translate(100,0) scale(.84,1) translate(-100,0)">${torso(c,l)+bodyAccFront(c,l)+neckWrist(c,l)}</g>`;
