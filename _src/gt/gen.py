@@ -1,5 +1,6 @@
 import json, random, re, sys
 sys.path.insert(0, '/tmp/claude-0/-home-claude/c42ce2af-05ed-5ab0-9ae7-40fe1ca5a6a5/scratchpad/gt')
+import gtdata2
 from gtdata import L
 J = lambda o: json.dumps(o, ensure_ascii=False)
 HAN = re.compile(r'[一-鿿〇]')
@@ -126,10 +127,11 @@ for n in sorted(L):
     out.append(f"const GT{n}_VOCAB={J(vocab)};\nconst GT{n}_ZHVI={J(zhvi)};\nconst GT{n}_VIZH={J(vizh)};\nconst GT{n}_SPEAK={J(speak)};\nconst GT{n}_TEXT={J(texts)};\nconst GT{n}_TEST={J(test)};")
     gram[n] = L[n]['grammar']
     print(n, len(vocab), len(zhvi), len(vizh), len(speak), test['answers'], file=sys.stderr)
-les = ",\n".join(f'   {n}:{{title:"Bài {n}",theme:"",zh:{J(L[n]["zh"])},vi:{J(L[n]["vi"])},vocab:GT{n}_VOCAB,zhvi:GT{n}_ZHVI,vizh:GT{n}_VIZH,sentences:GT{n}_SPEAK,texts:GT{n}_TEXT,test:GT{n}_TEST}}' for n in sorted(L))
-js = "/* ===== 发展汉语·初级综合(I) – lớp Giao tiếp ===== */\n" + "\n".join(out) + f"\nconst GT_LESSONS1={{\n{les}\n}};\nconst GT_GRAMMAR1={J(gram)};\n"
+def les(ns): return ",\n".join(f'   {n}:{{title:"Bài {n}",theme:"",zh:{J(L[n]["zh"])},vi:{J(L[n]["vi"])},vocab:GT{n}_VOCAB,zhvi:GT{n}_ZHVI,vizh:GT{n}_VIZH,sentences:GT{n}_SPEAK,texts:GT{n}_TEXT,test:GT{n}_TEST}}' for n in ns)
+A=[n for n in sorted(L) if n<=10]; B=[n for n in sorted(L) if 11<=n<=20]
+js = "/* ===== 发展汉语·初级综合(I) – lớp Giao tiếp ===== */\n" + "\n".join(out) + f"\nconst GT_LESSONS1={{\n{les(A)}\n}};\nconst GT_GRAMMAR1={J({n:gram[n] for n in A})};\nconst GT_LESSONS2={{\n{les(B)}\n}};\nconst GT_GRAMMAR2={J({n:gram[n] for n in B})};\n"
 open('/tmp/claude-0/-home-claude/c42ce2af-05ed-5ab0-9ae7-40fe1ca5a6a5/scratchpad/gt/gt.js', 'w', encoding='utf-8').write(js)
 print(len(js), file=sys.stderr)
-for n in (1, 6):
+for n in (1, 12):
     v, z, vz, sp, tx, te, _ = build(n)
     print(n, [x['ans'] for x in vz][:6], file=sys.stderr)
