@@ -768,7 +768,7 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .gm-over-b{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 /* chém trái cây */
 .fn-wrap{position:relative;display:grid;gap:8px}
-.fn-hud{display:flex;align-items:center;gap:16px;flex-wrap:wrap;font-weight:600}.fn-hud .fn-quit{margin-left:auto}
+.fn-hud{display:flex;align-items:center;gap:16px;flex-wrap:wrap;font-weight:600}.rc-snd{min-width:40px;justify-content:center;padding-inline:8px}.fn-hud .fn-quit{margin-left:auto}
 .fn-lives span,.sh-hearts span{color:#D9D9D9;font-size:20px;margin-right:2px}.fn-lives span.on,.sh-hearts span.on{color:#E0394A}
 .fn-score b{font-size:20px;color:var(--accent)}.fn-combo{color:#D9822B;font-weight:800}
 .fn-prompt{text-align:center;display:grid;gap:2px;min-height:86px;align-content:center}
@@ -859,8 +859,15 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .rc-opts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:4px}
 .rc-opts>span{background:var(--surface-2);border-radius:10px;padding:5px 6px;font-size:15px;display:flex;gap:6px;align-items:center;justify-content:center;min-width:0}
 .rc-opts b{color:var(--accent)}.rc-opts .han{font-size:20px}
-.rc-road{position:relative;height:440px;border-radius:18px;overflow:hidden;background:#5A5F66;touch-action:manipulation;user-select:none;--spd:.55s;
-  box-shadow:inset 14px 0 0 #3D8B37,inset -14px 0 0 #3D8B37,inset 20px 0 0 #fff,inset -20px 0 0 #fff}
+.rc-scene{--spd:.55s;--side:74px;position:relative;display:grid;grid-template-columns:var(--side) minmax(0,1fr) var(--side);border-radius:18px;overflow:hidden;background:#4E9A3F;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.rc-side{position:relative;overflow:hidden;background-color:#58A847;background-image:radial-gradient(circle at 30% 40%,rgba(255,255,255,.08) 0 3px,transparent 4px),radial-gradient(circle at 70% 80%,rgba(0,0,0,.07) 0 4px,transparent 5px);background-size:22px 26px,30px 34px;animation:rcGrass calc(var(--spd) * .975) linear infinite}
+.rc-side i{--tile:calc(var(--side) * 4.815);position:absolute;top:calc(var(--tile) * -1);left:0;right:0;bottom:0;background-repeat:repeat-y;background-size:100% var(--tile);animation:rcTrees calc(var(--spd) * 3.25) linear infinite}
+.rc-side.l i{background-image:var(--treeL)}.rc-side.r i{background-image:var(--treeR);animation-delay:calc(var(--spd) * -1.4)}
+.rc-side::after{content:"";position:absolute;top:0;bottom:0;width:7px;background:repeating-linear-gradient(180deg,#E0394A 0 20px,#fff 20px 40px);animation:rcKerb var(--spd) linear infinite}
+.rc-side.l::after{right:0}.rc-side.r::after{left:0}
+@keyframes rcGrass{to{background-position:0 78px,0 68px}}@keyframes rcTrees{to{transform:translateY(var(--tile))}}@keyframes rcKerb{to{background-position:0 80px}}
+.rc-scene.boost .rc-side i{filter:blur(1.2px)}
+.rc-road{position:relative;height:440px;overflow:hidden;background:#5A5F66;touch-action:manipulation;user-select:none}
 .rc-lines{position:absolute;inset:0;background:repeating-linear-gradient(180deg,rgba(255,255,255,.75) 0 40px,transparent 40px 80px) 25% 0/4px 100% no-repeat,repeating-linear-gradient(180deg,rgba(255,255,255,.75) 0 40px,transparent 40px 80px) 50% 0/4px 100% no-repeat,repeating-linear-gradient(180deg,rgba(255,255,255,.75) 0 40px,transparent 40px 80px) 75% 0/4px 100% no-repeat;animation:rcRoad var(--spd) linear infinite}
 @keyframes rcRoad{to{background-position:25% 80px,50% 80px,75% 80px}}
 .rc-lane{position:absolute;top:0;bottom:0;width:25%}.rc-lane[data-l="0"]{left:0}.rc-lane[data-l="1"]{left:25%}.rc-lane[data-l="2"]{left:50%}.rc-lane[data-l="3"]{left:75%}
@@ -876,7 +883,7 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .rc-flag{position:absolute;inset:0;display:grid;place-items:center;font-size:120px}
 .rc-ctl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.rc-go{justify-content:center;font-size:20px;font-weight:800}.rc-go.on{background:var(--accent);color:#fff;border-color:var(--accent)}
 .rc-road .fn-pop{position:absolute}
-@media (max-width:600px){.rc-road{height:360px}.rc-qq.han{font-size:28px}.rc-qq.vi{font-size:21px}.rc-opts{grid-template-columns:repeat(2,minmax(0,1fr))}.rc-gate{padding:0 22px;gap:4px}.rc-door span{display:none}}
+@media (max-width:600px){.rc-scene{--side:40px}.rc-road{height:360px}.rc-qq.han{font-size:28px}.rc-qq.vi{font-size:21px}.rc-opts{grid-template-columns:repeat(2,minmax(0,1fr))}.rc-gate{padding:0 22px;gap:4px}.rc-door span{display:none}}
 .tx{display:grid;gap:16px}
 .tx-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.tx-head b{font-size:22px}.tx-head span{color:var(--muted)}
 .tx-tools{display:flex;gap:8px;flex-wrap:wrap}
@@ -918,6 +925,45 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .tk-rev .han{font-size:18px}.tk-q small,.tk-mod small{color:var(--muted)}.tk-rev del{color:#C0392B;text-decoration:line-through}.tk-rev ins{color:#1E8E5A;text-decoration:none;border-bottom:2px solid #1E8E5A;font-weight:700}
 .tk-mod{margin-top:2px}.tk-note{color:#6B5A3A;font-size:14px}.tk-redo{margin-top:6px}.tk-redo-r{margin-left:8px}.tk-redo-r.ok{color:#1E8E5A}.tk-redo-r.no{color:#C0392B}
 .tk-rev-b{display:flex;gap:8px;flex-wrap:wrap}
+.tk-view button{font-size:14px}
+.od-topics{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.od-topic{position:relative;overflow:hidden;text-align:left;display:grid;gap:3px;padding:16px 16px 16px 18px;border:2px solid var(--line);border-radius:18px;background:linear-gradient(135deg,#FFF6E8,#FFE9D2);cursor:pointer;font:inherit;color:var(--ink);min-height:170px;align-content:start}
+.od-topic:hover:not(.soon){border-color:#E58A3A;transform:translateY(-2px);box-shadow:0 8px 18px rgba(229,138,58,.18)}.od-topic{transition:.15s}
+.od-topic .od-ti{font-size:30px}.od-topic b{font-size:24px}.od-topic small{color:var(--muted)}.od-topic>span:not(.od-ti){font-weight:700}.od-topic em{font-style:normal;font-size:13px;color:#8A5A10;max-width:56%}.od-topic:not(.soon){min-height:200px}
+.od-topic .od-tw{position:absolute;right:-6px;bottom:-40px;height:190px;pointer-events:none}
+.od-topic.soon{background:var(--surface-2);cursor:default;opacity:.75}.od-soon{position:absolute;top:12px;right:12px;font-style:normal;font-size:12px;background:#fff;border-radius:999px;padding:2px 10px;color:var(--muted);border:1px solid var(--line)}
+.od-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.od-top b{font-size:17px}
+.od-tabs{display:flex;flex-wrap:wrap}.od-tabs button{flex:1 1 auto}
+.od-lead{margin:0;color:var(--muted)}
+.od-who{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;font-size:15px;color:#fff;flex:0 0 auto}.od-who.s{background:#C0533A}.od-who.k{background:var(--accent)}
+.od-learn{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+.od-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 14px;display:grid;gap:6px;align-content:start}
+.od-card h4{margin:0 0 2px;font-size:16px;display:flex;gap:8px;align-items:center}
+.od-line{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;text-align:left;background:var(--surface-2);border:0;border-radius:12px;padding:8px 10px;cursor:pointer;font:inherit;color:var(--ink)}
+.od-line:hover{background:#E8F3EC}.od-line>span{display:grid}.od-line .han{font-size:19px}.od-line small{color:var(--muted)}.od-line em{font-style:normal;color:#2C6E52;font-size:14px}.od-line svg{width:18px;height:18px;color:var(--accent)}
+.od-tip{margin:2px 0 0;font-size:14px;background:#FFF8E6;border-radius:10px;padding:8px 10px;color:#6B4E10}
+.od-next{display:flex;justify-content:flex-end}
+.od-board{background:linear-gradient(#FFF9EE,#FDF0DC);border:6px solid #B7834F;border-radius:20px;padding:14px;display:grid;gap:12px;box-shadow:0 8px 20px rgba(120,80,30,.15)}
+.od-bh{text-align:center;display:grid}.od-bh b{font-size:34px;color:#5A3416;letter-spacing:.3em}.od-bh span{color:#8A6A44;font-size:14px}
+.od-menu{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.od-dish{display:grid;gap:1px;justify-items:center;text-align:center;background:#fff;border:1px solid #EAD8BC;border-radius:14px;padding:6px 6px 8px;cursor:pointer;font:inherit;color:var(--ink);min-width:0}
+.od-dish:hover{border-color:#E58A3A;box-shadow:0 4px 10px rgba(229,138,58,.2)}
+.od-dish i{width:100%;aspect-ratio:10/9;border-radius:10px;background-size:400% 400%;background-repeat:no-repeat}
+.od-dish b{font-size:19px;margin-top:2px}.od-dish small{color:var(--muted);font-size:12px}.od-dish span{font-size:13px;color:#2C6E52}.od-dish em{font-style:normal;font-weight:700;color:#C0533A;font-size:14px}
+.od-menu.sm{gap:6px;grid-template-columns:repeat(4,minmax(0,1fr))}.od-menu.sm .od-dish{padding:4px 4px 5px;border-radius:10px}.od-menu.sm .od-dish b{font-size:14px}.od-menu.sm .od-dish em{font-size:12px}
+.od-mb .tk-bb{display:block;padding:8px;max-width:440px}.tk-b.od-mb{max-width:96%}
+#odMenuPop{background:#FFF9EE;border:1px solid #EAD8BC;border-radius:14px;padding:8px}
+.od-av{background:#FBE3D3}.od-av img{width:100%;height:100%;object-fit:cover}
+.od-chat .tk-b.on .tk-bb{outline:3px solid #F2C531}
+.od-sys{align-self:center;text-align:center;background:#FFF3D6;border:1px dashed #E0B85A;border-radius:12px;padding:8px 14px;color:#6B4E10;max-width:92%;margin:0}
+.od-clock{font-size:20px}
+.od-bill{background:#fff;border:1px dashed #B9A88C;border-radius:4px;padding:12px 16px;max-width:360px;margin:0 auto;font-family:ui-monospace,monospace;box-shadow:0 4px 12px rgba(0,0,0,.08);display:grid;gap:6px}
+.od-bill-h{text-align:center;border-bottom:1px dashed #B9A88C;padding-bottom:6px}.od-bill-h b{font-size:20px;margin-right:6px}
+.od-bill-r{display:flex;justify-content:space-between;gap:10px;align-items:baseline}.od-bill-r>span{display:grid}.od-bill-r .han{font-size:16px}.od-bill-r small{color:var(--muted);font-family:inherit}
+.od-bill-t{display:flex;justify-content:space-between;border-top:1px dashed #B9A88C;padding-top:6px;font-size:18px}.od-bill-t b{color:#C0533A}
+.od-drill{display:grid;gap:8px;background:var(--surface-2);border-radius:12px;padding:10px}
+@media (max-width:600px){.od-learn{grid-template-columns:minmax(0,1fr)}.od-menu{grid-template-columns:repeat(2,minmax(0,1fr))}.od-menu.sm{grid-template-columns:repeat(4,minmax(0,1fr))}.od-menu.sm .od-dish em{display:none}.od-menu.sm .od-dish b{font-size:12px}.od-tabs button{font-size:13px;padding-inline:8px}.od-topic em{max-width:58%}}
+
 </style>
 
 </head>
@@ -2941,13 +2987,16 @@ function talkSim(a, b){ a = talkNorm(a); b = talkNorm(b); if(!a || !b) return 0;
 const TALK_AI = false; /* chế độ trò chuyện AI: tạm khoá (đổi thành true khi muốn bật lại, cần AI_API_KEY trong Apps Script) */
 const Talk = {
   mode: "script", py: store.get("ww_talk_py", false), vi: store.get("ww_talk_vi", false), aiOk: null,
-  mount(les){ this.les = les; this.stopMic(); this.mode = TALK_AI ? store.get("ww_talk_mode", "script") : "script"; if(this.mode === "ai" && !this.canAI()) this.mode = "script"; this.reset(); this.render(); },
+  view: store.get("ww_talk_view", "les"),
+  viewSeg(v){ return `<div class="seg tk-view" role="group"><button data-view="les" aria-pressed="${v === "les"}">📖 Theo bài</button><button data-view="topic" aria-pressed="${v === "topic"}">🍜 Theo chủ đề</button></div>`; },
+  bindView(W){ W.querySelectorAll("[data-view]").forEach(b => b.onclick = () => { if(b.dataset.view === this.view) return; this.stopMic(); Topic.stopMic && Topic.stopMic(); this.view = b.dataset.view; store.set("ww_talk_view", this.view); this.mount(this.les); }); },
+  mount(les){ this.les = les; if(this.view === "topic"){ this.stopMic(); return Topic.mount(les); } this.stopMic(); this.mode = TALK_AI ? store.get("ww_talk_mode", "script") : "script"; if(this.mode === "ai" && !this.canAI()) this.mode = "script"; this.reset(); this.render(); },
   canAI(){ return TALK_AI && Auth.on(); },
   reset(){ this.log = []; this.i = 0; this.done = false; this.review = null; this.retry = null; this.msgs = []; this.from = 0; this.busy = false; this.topic = this.topic || ""; },
   render(){
     const W = $("#work"), T = this.les.talk;
     W.innerHTML = `<div class="tk">
-      <div class="tk-head"><div><b class="han">对话练习</b> <span>Hội thoại · luyện phản xạ nói</span></div>
+      <div class="tk-head"><div><b class="han">对话练习</b> <span>Hội thoại · luyện phản xạ nói</span></div>${this.viewSeg("les")}
         ${TALK_AI ? `<div class="seg tk-mode" role="group"><button data-m="script" aria-pressed="${this.mode === "script"}">Kịch bản Bài ${S.lesson}</button><button data-m="ai" aria-pressed="${this.mode === "ai"}">Trò chuyện với AI</button></div>` : ""}</div>
       ${this.mode === "script" ? `<p class="tk-intro"><span><b>${esc(T.title)}</b> – Tiểu Ngữ nói trước, bạn trả lời bằng giọng nói (bấm 🎤) hoặc gõ chữ Hán. Bạn có thể trả lời theo nhiều cách (có/không, bận/rảnh, tên, nghề… của chính bạn), Tiểu Ngữ sẽ đáp lại theo câu trả lời. Cuối buổi Tiểu Ngữ mới chỉ ra lỗi sai để bạn sửa.</span></p>`
         : `<div class="tk-intro"><label>Chủ đề <input id="tkTopic" value="${esc(this.topic || T.topic)}" maxlength="80"></label><small>Trò chuyện tự do với AI theo chủ đề. Bấm <b>Kết thúc & sửa lỗi</b> khi muốn xem lỗi sai.</small>${this.aiOk === false ? `<p class="tk-warn">${esc(this.aiMsg || "")}</p>` : ""}</div>`}
@@ -2956,6 +3005,7 @@ const Talk = {
       <div class="tk-chat" id="tkChat"></div>
       <div id="tkReview"></div>
       <div class="tk-bar" id="tkBar"></div></div>`;
+    this.bindView(W);
     W.querySelectorAll("[data-m]").forEach(b => b.onclick = () => { if(b.dataset.m === this.mode) return; this.stopMic(); this.mode = b.dataset.m; store.set("ww_talk_mode", this.mode); this.reset(); this.render(); });
     $("#tkPy").onclick = () => { this.py = !this.py; store.set("ww_talk_py", this.py); this.render(); };
     $("#tkVi").onclick = () => { this.vi = !this.vi; store.set("ww_talk_vi", this.vi); this.render(); };
@@ -3822,7 +3872,7 @@ const L10_TEST = {
 const Games = {
   les: null, raf: 0, timers: [],
   mount(les){ this.les = les; this.stop(); this.menu(); },
-  stop(){ cancelAnimationFrame(this.raf); this.raf = 0; this.timers.forEach(clearTimeout); this.timers = []; if(this.onKey){ document.removeEventListener("keydown", this.onKey); this.onKey = null; } },
+  stop(){ cancelAnimationFrame(this.raf); this.raf = 0; this.timers.forEach(clearTimeout); this.timers = []; if(typeof RaceSnd !== "undefined") RaceSnd.stop(); if(this.onKey){ document.removeEventListener("keydown", this.onKey); this.onKey = null; } },
   later(fn, ms){ const t = setTimeout(() => { this.timers = this.timers.filter(x => x !== t); fn(); }, ms); this.timers.push(t); return t; },
   ids(){ return Object.keys(LEVELS[S.level].lessons).map(Number).sort((a, b) => a - b); },
   range(){ const ids = this.ids(); let r = store.get("ww_game_range_" + S.level, null);
@@ -4274,29 +4324,33 @@ const Race = {
   start(){
     Games.stop(); this.pool = Games.words();
     if(this.pool.length < 4){ toast("Phạm vi bài đã chọn có ít hơn 4 từ, hãy chọn thêm bài.", "warn"); return Games.menu(); }
-    this.over = false; this.lives = 3; this.score = 0; this.right = 0; this.k = 0; this.lane = 1; this.miss = []; this.bag = []; this.t0 = performance.now(); this.streak = 0;
+    this.over = false; this.spd = 0; this.lives = 3; this.score = 0; this.right = 0; this.k = 0; this.lane = 1; this.miss = []; this.bag = []; this.t0 = performance.now(); this.streak = 0;
     const W = $("#work");
     W.innerHTML = `<div class="gm"><div class="rc-wrap" id="rcWrap">
-      <div class="fn-hud"><span class="fn-lives" id="rcLives"></span><span>Chướng ngại <b id="rcK">1</b>/${this.N}</span><span class="fn-score">Điểm <b id="rcScore">0</b></span><button class="btn sm fn-quit" id="rcQuit">Thoát</button></div>
+      <div class="fn-hud"><span class="fn-lives" id="rcLives"></span><span>Chướng ngại <b id="rcK">1</b>/${this.N}</span><span class="fn-score">Điểm <b id="rcScore">0</b></span><button class="btn sm rc-snd fn-quit" id="rcSnd" title="Bật/tắt âm thanh"></button><button class="btn sm" id="rcQuit">Thoát</button></div>
       <div class="rc-q" id="rcQ"></div>
+      <div class="rc-scene" id="rcScene" style="--treeL:${raceSideArt(0)};--treeR:${raceSideArt(1)}"><div class="rc-side l"><i></i></div>
       <div class="rc-road" id="rcRoad"><div class="rc-lines"></div>${[0, 1, 2, 3].map(i => `<div class="rc-lane" data-l="${i}"></div>`).join("")}
         <div class="rc-gate" id="rcGate">${"ABCD".split("").map(L => `<div class="rc-door" data-L="${L}"><b>${L}</b></div>`).join("")}</div>
         <div class="rc-car" id="rcCar">${raceCarSVG()}</div><div class="rc-flag" id="rcFlag" hidden>🏁</div></div>
+      <div class="rc-side r"><i></i></div></div>
       <div class="rc-ctl">${"ABCD".split("").map((L, i) => `<button class="btn rc-go" data-l="${i}">${L}</button>`).join("")}</div>
       <p class="fn-tip">Lái xe vào làn có đáp án đúng trước khi tới chướng ngại: bấm phím ← → hoặc A B C D, chạm vào làn đường, hay bấm các nút bên dưới.</p></div></div>`;
     $("#rcQuit").onclick = () => { Games.stop(); Games.menu(); };
-    const road = this.road = $("#rcRoad");
+    const sb = $("#rcSnd"), sbDraw = () => { sb.textContent = RaceSnd.muted ? "🔇" : "🔊"; sb.setAttribute("aria-label", RaceSnd.muted ? "Bật âm thanh" : "Tắt âm thanh"); };
+    sb.onclick = () => { RaceSnd.toggle(); sbDraw(); }; sbDraw(); RaceSnd.start();
+    this.scene = $("#rcScene"); const road = this.road = $("#rcRoad");
     road.onpointerdown = e => { const r = road.getBoundingClientRect(); this.steer(Math.min(3, Math.floor((e.clientX - r.left) / r.width * 4))); };
     W.querySelectorAll(".rc-go").forEach(b => b.onclick = () => this.steer(+b.dataset.l));
     Games.onKey = e => { if(/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName)) return;
       const k = e.key.toUpperCase(); if(k === "ARROWLEFT") this.steer(this.lane - 1); else if(k === "ARROWRIGHT") this.steer(this.lane + 1); else if("ABCD".includes(k) && k.length === 1) this.steer("ABCD".indexOf(k)); else return; e.preventDefault(); };
     document.addEventListener("keydown", Games.onKey);
-    this.drawLives(); this.steer(1); this.next(); $("#rcWrap").scrollIntoView({ behavior: "smooth", block: "start" });
+    this.drawLives(); this.steer(1, true); this.next(); $("#rcWrap").scrollIntoView({ behavior: "smooth", block: "start" });
     const loop = now => { if(!Games.alive(road)) return Games.stop(); this.frame(now); Games.raf = requestAnimationFrame(loop); };
     Games.raf = requestAnimationFrame(loop);
   },
   drawLives(){ $("#rcLives").innerHTML = Array.from({ length: 3 }, (_, i) => `<span class="${i < this.lives ? "on" : ""}">❤</span>`).join(""); },
-  steer(l){ if(l < 0 || l > 3 || this.over) return; this.lane = l; const c = $("#rcCar"); if(c) c.style.left = `calc(${l * 25 + 12.5}% - 30px)`;
+  steer(l, quiet){ if(l < 0 || l > 3 || this.over) return; if(!quiet && l !== this.lane) RaceSnd.swish(); this.lane = l; const c = $("#rcCar"); if(c) c.style.left = `calc(${l * 25 + 12.5}% - 30px)`;
     document.querySelectorAll(".rc-go").forEach(b => b.classList.toggle("on", +b.dataset.l === l)); },
   pick(){ if(!this.bag.length) this.bag = shuffle(this.pool); return this.bag.pop(); },
   opts(w, key){ const seen = new Set([key(w)]), out = [w];
@@ -4326,7 +4380,7 @@ const Race = {
   frame(now){
     if(this.over || !this.q) return;
     const H = this.road.clientHeight, carY = H - 110, t = (now - this.ts) / this.dur, g = $("#rcGate");
-    this.road.style.setProperty("--spd", (0.55 - Math.min(.3, this.k * .02)) + "s");
+    const spd = 0.55 - Math.min(.3, this.k * .02); if(spd !== this.spd){ this.spd = spd; this.scene.style.setProperty("--spd", spd + "s"); RaceSnd.speed(1 - (spd - .25) / .3); }
     if(!this.done){ g.style.transform = `translateY(${-70 + (carY - 40 + 70) * Math.min(1, t)}px)`; if(t >= 1) this.hit(); }
   },
   hit(){
@@ -4334,12 +4388,12 @@ const Race = {
     doors[okL].classList.add("ok");
     if(this.lane === okL){
       this.right++; this.streak++; const pts = 10 + Math.min(10, (this.streak - 1) * 2); this.score += pts; $("#rcScore").textContent = this.score;
-      $("#rcCar").classList.add("boost"); Games.later(() => $("#rcCar") && $("#rcCar").classList.remove("boost"), 600);
+      $("#rcCar").classList.add("boost"); this.scene.classList.add("boost"); RaceSnd.ding(this.streak); Games.later(() => { $("#rcCar") && $("#rcCar").classList.remove("boost"); this.scene && this.scene.classList.remove("boost"); }, 600);
       this.flash("+" + pts, "ok"); speak(q.w.h); this.k++; Games.later(() => { $("#rcGate").style.transform = "translateY(-120px)"; this.next(); }, 700);
     } else {
       doors[this.lane].classList.add("bad"); this.streak = 0; this.lives--; this.drawLives();
       const w = q.w; if(!this.miss.some(x => x.h === w.h)) this.miss.push(w);
-      $("#rcCar").classList.add("crash"); this.road.classList.add("shake");
+      $("#rcCar").classList.add("crash"); this.road.classList.add("shake"); RaceSnd.crash();
       Games.later(() => { $("#rcCar") && $("#rcCar").classList.remove("crash"); this.road.classList.remove("shake"); }, 700);
       $("#rcQ").insertAdjacentHTML("beforeend", `<em class="fn-ans">Đâm vào chướng ngại! Đáp án đúng: <b>${q.ans}</b> · <b class="han">${esc(w.h)}</b> ${esc(w.p)} = ${esc(w.vs)}</em>`);
       this.k++; Games.later(() => { $("#rcGate").style.transform = "translateY(-120px)"; this.next(); }, 2000);
@@ -4348,18 +4402,438 @@ const Race = {
   flash(t, cls){ const p = document.createElement("div"); p.className = "fn-pop " + cls; p.textContent = t; p.style.left = `calc(${this.lane * 25 + 12.5}% - 20px)`; p.style.bottom = "130px"; this.road.appendChild(p); Games.later(() => p.remove(), 900); },
   end(){
     this.over = true; cancelAnimationFrame(Games.raf); const fin = this.lives > 0, sec = Math.round((performance.now() - this.t0) / 1000);
-    if(fin){ $("#rcFlag").hidden = false; }
+    if(fin){ $("#rcFlag").hidden = false; } RaceSnd.finish(fin);
     Games.over($("#rcWrap"), `<div class="gm-over-t">${fin ? "🏁 Về đích!" : "💥 Xe hỏng rồi!"}</div>
       <div class="gm-over-s">Vượt đúng <b>${this.right}/${this.k}</b> chướng ngại · <b>${this.score}</b> điểm · thời gian ${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, "0")}</div>
       ${this.miss.length ? `<div class="gm-miss"><b>Từ cần ôn lại</b>${this.miss.map(w => `<span><b class="han">${esc(w.h)}</b> ${esc(w.p)} – ${esc(w.vs)}</span>`).join("")}</div>` : ""}`, () => { this.over = false; this.start(); });
     if(this.k >= 8) Games.reward("race", this.right / this.k * 100, `Đua xe (${this.right}/${this.k} câu đúng)`);
   }
 };
+function raceSideArt(side){
+  const tree = (x, y, s, c) => `<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="30" rx="16" ry="5" fill="rgba(0,0,0,.18)"/><rect x="-3" y="12" width="6" height="18" rx="2" fill="#7A4E2D"/><circle cx="0" cy="0" r="16" fill="${c}"/><circle cx="-8" cy="6" r="11" fill="${c}"/><circle cx="8" cy="6" r="11" fill="${c}"/><circle cx="-5" cy="-5" r="6" fill="rgba(255,255,255,.18)"/></g>`;
+  const pine = (x, y, s) => `<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="34" rx="13" ry="4" fill="rgba(0,0,0,.18)"/><rect x="-3" y="24" width="6" height="10" fill="#6B4426"/><path d="M0 -20 L14 4 L7 4 L17 24 L-17 24 L-7 4 L-14 4 Z" fill="#2E7D4A"/><path d="M0 -20 L6 -8 L-3 2 Z" fill="rgba(255,255,255,.15)"/></g>`;
+  const bush = (x, y) => `<g transform="translate(${x} ${y})"><circle cx="-6" cy="0" r="7" fill="#3E8E3A"/><circle cx="5" cy="-2" r="8" fill="#47A043"/><circle cx="-8" cy="-2" r="1.8" fill="#FF8FB1"/><circle cx="4" cy="-6" r="1.8" fill="#FFE27A"/></g>`;
+  const flowers = (x, y) => `<g transform="translate(${x} ${y})">${[[0, 0, "#FF6B8B"], [7, 4, "#FFE27A"], [-6, 5, "#fff"], [3, -6, "#B98CFF"]].map(([a, b, c]) => `<circle cx="${a}" cy="${b}" r="2.4" fill="${c}"/>`).join("")}</g>`;
+  const lamp = (x, y, flip) => `<g transform="translate(${x} ${y}) scale(${flip ? -1 : 1} 1)"><rect x="-2" y="-14" width="4" height="34" fill="#5B6470"/><rect x="-2" y="-16" width="16" height="4" rx="2" fill="#5B6470"/><ellipse cx="13" cy="-11" rx="5" ry="3" fill="#FFE27A"/></g>`;
+  const sign = (x, y) => `<g transform="translate(${x} ${y})"><rect x="-1.5" y="0" width="3" height="18" fill="#5B6470"/><rect x="-12" y="-14" width="24" height="15" rx="3" fill="#2C7BE5"/><text x="0" y="-3" font-size="10" text-anchor="middle" fill="#fff" font-family="sans-serif" font-weight="700">中</text></g>`;
+  const art = side ? tree(26, 30, .9, "#3FA34D") + flowers(14, 78) + lamp(40, 112, 1) + pine(22, 160, .85) + bush(36, 210) + flowers(16, 236)
+                   : pine(28, 28, .9) + bush(16, 82) + tree(32, 124, .85, "#4CAF50") + sign(16, 178) + flowers(38, 200) + lamp(18, 232, 0);
+  return `url('data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 260" preserveAspectRatio="xMidYMid meet">${art}</svg>`).replace(/'/g, "%27")}')`;
+}
+/* Âm thanh game đua xe – tự tổng hợp bằng WebAudio, không cần file */
+const RaceSnd = {
+  muted: (() => { try { return localStorage.getItem("ww_race_mute") === "1"; } catch(e){ return false; } })(),
+  ctx: null, master: null, eng: null, mus: 0, step: 0, nextT: 0, rate: 0,
+  ac(){ if(this.ctx) return this.ctx; const A = window.AudioContext || window.webkitAudioContext; if(!A) return null;
+    try { this.ctx = new A(); this.master = this.ctx.createGain(); this.master.gain.value = this.muted ? 0 : 1; this.master.connect(this.ctx.destination); } catch(e){ this.ctx = null; } return this.ctx; },
+  toggle(){ this.muted = !this.muted; try { localStorage.setItem("ww_race_mute", this.muted ? "1" : "0"); } catch(e){}
+    const c = this.ac(); if(c){ c.resume && c.resume(); this.master.gain.setTargetAtTime(this.muted ? 0 : 1, c.currentTime, .03); } },
+  tone(f, t, d, type, v, f2){ const c = this.ctx; if(!c) return; const o = c.createOscillator(), g = c.createGain(); o.type = type || "square"; o.frequency.setValueAtTime(f, t);
+    if(f2) o.frequency.exponentialRampToValueAtTime(f2, t + d); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v || .08, t + .01); g.gain.exponentialRampToValueAtTime(.0001, t + d);
+    o.connect(g); g.connect(this.master); o.start(t); o.stop(t + d + .02); },
+  noise(t, d, v, fq){ const c = this.ctx; if(!c) return; const b = c.createBuffer(1, Math.ceil(c.sampleRate * d), c.sampleRate), a = b.getChannelData(0);
+    for(let i = 0; i < a.length; i++) a[i] = (Math.random() * 2 - 1) * (1 - i / a.length);
+    const s = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain(); s.buffer = b; f.type = "lowpass"; f.frequency.value = fq || 1200; g.gain.value = v || .3;
+    s.connect(f); f.connect(g); g.connect(this.master); s.start(t); },
+  start(){ const c = this.ac(); if(!c) return; c.resume && c.resume(); this.stop();
+    // tiếng động cơ: sóng răng cưa trầm qua bộ lọc
+    const o = c.createOscillator(), o2 = c.createOscillator(), f = c.createBiquadFilter(), g = c.createGain();
+    o.type = "sawtooth"; o2.type = "square"; o.frequency.value = 55; o2.frequency.value = 27.5; f.type = "lowpass"; f.frequency.value = 380; g.gain.value = .045;
+    o.connect(f); o2.connect(f); f.connect(g); g.connect(this.master); o.start(); o2.start(); this.eng = { o, o2, f, g };
+    // nhạc nền: vòng lặp chiptune nhỏ
+    this.step = 0; this.nextT = c.currentTime + .1; this.rate = 0;
+    const BPM = 132, sx = 60 / BPM / 2;
+    const lead = [76, 0, 79, 81, 79, 0, 76, 74, 72, 0, 74, 76, 74, 0, 69, 0, 76, 0, 79, 81, 83, 0, 81, 79, 76, 0, 74, 72, 74, 0, 0, 0];
+    const bass = [45, 45, 52, 45, 41, 41, 48, 41, 43, 43, 50, 43, 40, 40, 47, 40];
+    const hz = m => 440 * Math.pow(2, (m - 69) / 12);
+    this.mus = setInterval(() => { const c = this.ctx; if(!c) return;
+      while(this.nextT < c.currentTime + .25){ const i = this.step, t = this.nextT, d = sx * (1 - this.rate * .25);
+        const m = lead[i % 32]; if(m) this.tone(hz(m), t, d * .9, "square", .035);
+        if(i % 2 === 0) this.tone(hz(bass[(i >> 1) % 16]), t, d * 1.8, "triangle", .09);
+        if(i % 4 === 0) this.tone(150, t, .12, "sine", .16, 45); else if(i % 4 === 2) this.noise(t, .05, .06, 6000);
+        this.nextT += d; this.step++; } }, 90);
+  },
+  speed(r){ this.rate = Math.max(0, Math.min(1, r)); const e = this.eng; if(!e || !this.ctx) return; const t = this.ctx.currentTime;
+    e.o.frequency.setTargetAtTime(55 + r * 40, t, .4); e.o2.frequency.setTargetAtTime(27.5 + r * 20, t, .4); e.f.frequency.setTargetAtTime(380 + r * 300, t, .4); },
+  ding(streak){ const c = this.ctx; if(!c) return; const t = c.currentTime, up = Math.min(5, (streak || 1) - 1) * 2;
+    this.tone(880 * Math.pow(2, up / 12), t, .12, "square", .07); this.tone(1318.5 * Math.pow(2, up / 12), t + .08, .25, "square", .07);
+    if(this.eng){ const e = this.eng; e.o.frequency.setTargetAtTime(110, t, .05); e.o.frequency.setTargetAtTime(55 + this.rate * 40, t + .3, .3); } },
+  crash(){ const c = this.ctx; if(!c) return; const t = c.currentTime; this.noise(t, .5, .5, 900); this.tone(160, t, .45, "sawtooth", .12, 40); this.tone(90, t + .05, .5, "square", .06, 30); },
+  swish(){ const c = this.ctx; if(!c) return; this.noise(c.currentTime, .12, .08, 2500); },
+  finish(ok){ const c = this.ctx; if(!c) return; this.stopLoop(); const t = c.currentTime + .05;
+    (ok ? [[72, 0, .14], [76, .14, .14], [79, .28, .14], [84, .42, .5], [79, .62, .12], [84, .74, .7]] : [[67, 0, .3], [63, .3, .3], [60, .6, .7]])
+      .forEach(([m, s, d]) => { this.tone(440 * Math.pow(2, (m - 69) / 12), t + s, d, "square", .08); this.tone(220 * Math.pow(2, (m - 69) / 12), t + s, d, "triangle", .08); }); },
+  stopLoop(){ clearInterval(this.mus); this.mus = 0; const e = this.eng; this.eng = null;
+    if(e && this.ctx){ const t = this.ctx.currentTime; e.g.gain.setTargetAtTime(0, t, .08); try { e.o.stop(t + .4); e.o2.stop(t + .4); } catch(_){} } },
+  stop(){ this.stopLoop(); }
+};
 function raceCarSVG(){
   return `<svg viewBox="0 0 60 100" aria-hidden="true"><rect x="6" y="14" width="10" height="20" rx="3" fill="#222"/><rect x="44" y="14" width="10" height="20" rx="3" fill="#222"/><rect x="6" y="66" width="10" height="20" rx="3" fill="#222"/><rect x="44" y="66" width="10" height="20" rx="3" fill="#222"/>
     <path d="M14 20 Q14 4 30 4 Q46 4 46 20 L48 82 Q48 96 30 96 Q12 96 12 82 Z" fill="#E0394A"/><path d="M19 30 Q30 24 41 30 L39 44 Q30 41 21 44 Z" fill="#9FD3F2"/><path d="M21 70 Q30 73 39 70 L40 80 Q30 83 20 80 Z" fill="#9FD3F2"/>
     <rect x="27" y="4" width="6" height="92" fill="#fff" opacity=".85"/><circle cx="18" cy="9" r="2.5" fill="#FFE27A"/><circle cx="42" cy="9" r="2.5" fill="#FFE27A"/></svg>`;
 }
+
+/* ===================== Hội thoại theo chủ đề: GỌI MÓN (点菜) ===================== */
+const OD_MEAS = { 碗: ["wǎn", "bát", 0], 份: ["fèn", "phần", 1], 杯: ["bēi", "cốc", 0], 壶: ["hú", "ấm", 0], 个: ["ge", "cái", 1], 根: ["gēn", "cây", 0], 串: ["chuàn", "xiên", 1], 只: ["zhī", "con", 0], 盘: ["pán", "đĩa", 0], 笼: ["lóng", "xửng", 0], 锅: ["guō", "nồi", 0], 条: ["tiáo", "cây", 0], 盒: ["hé", "hộp", 0] };
+/* id: vị trí trong ảnh thực đơn (4×4) */
+const OD_MENU = [
+  { h: "豆浆", p: "dòujiāng", vi: "sữa đậu nành", price: 3, m: "杯", alt: ["碗"], temp: 1, drink: 1 },
+  { h: "油条", p: "yóutiáo", vi: "quẩy", price: 2, m: "根", alt: ["个", "条"] },
+  { h: "馒头", p: "mántou", vi: "màn thầu", price: 1, m: "个", alt: [] },
+  { h: "包子", p: "bāozi", vi: "bánh bao", price: 2, m: "个", alt: ["笼"] },
+  { h: "臭豆腐", p: "chòudòufu", vi: "đậu phụ thối", price: 10, m: "份", alt: ["盒", "盘"], spicy: 1 },
+  { h: "糖葫芦", p: "tánghúlu", vi: "kẹo hồ lô", price: 5, m: "串", alt: ["根", "个"], al: ["冰糖葫芦"] },
+  { h: "红烧肉", p: "hóngshāoròu", vi: "thịt kho tàu", price: 38, m: "份", alt: ["盘"] },
+  { h: "饺子", p: "jiǎozi", vi: "sủi cảo", price: 15, m: "份", alt: ["盘", "碗"], al: ["水饺"] },
+  { h: "虾饺", p: "xiājiǎo", vi: "há cảo tôm", price: 18, m: "份", alt: ["笼", "盘"] },
+  { h: "火锅", p: "huǒguō", vi: "lẩu", price: 88, m: "个", alt: ["锅", "份"], spicy: 1 },
+  { h: "北京烤鸭", p: "Běijīng kǎoyā", vi: "vịt quay Bắc Kinh", price: 128, m: "只", alt: ["份"], al: ["烤鸭"] },
+  { h: "麻婆豆腐", p: "mápó dòufu", vi: "đậu phụ Ma Bà", price: 22, m: "份", alt: ["盘"], spicy: 1 },
+  { h: "西红柿炒鸡蛋", p: "xīhóngshì chǎo jīdàn", vi: "trứng xào cà chua", price: 20, m: "份", alt: ["盘"], al: ["番茄炒鸡蛋", "番茄炒蛋", "西红柿炒蛋", "西红柿鸡蛋"] },
+  { h: "牛肉面", p: "niúròumiàn", vi: "mì bò", price: 20, small: 16, m: "碗", alt: [], size: 1, spicy: 1, al: ["牛肉拉面"] },
+  { h: "炒饭", p: "chǎofàn", vi: "cơm rang", price: 15, m: "份", alt: ["碗", "盘"], al: ["蛋炒饭"] },
+  { h: "茶", p: "chá", vi: "trà", price: 8, m: "壶", alt: ["杯"], temp: 1, drink: 1, al: ["红茶", "绿茶", "花茶", "热茶", "冰茶"] }
+].map((d, i) => ({ ...d, id: i, al: [d.h, ...(d.al || [])] }));
+const OD_OFF = { 米饭: ["mǐfàn", "cơm trắng"], 可乐: ["kělè", "coca"], 咖啡: ["kāfēi", "cà phê"], 啤酒: ["píjiǔ", "bia"], 牛奶: ["niúnǎi", "sữa bò"], 果汁: ["guǒzhī", "nước ép"], 面包: ["miànbāo", "bánh mì"], 汉堡: ["hànbǎo", "hamburger"], 鱼: ["yú", "cá"], 鸡肉: ["jīròu", "thịt gà"], 披萨: ["pīsà", "pizza"], 寿司: ["shòusī", "sushi"], 粥: ["zhōu", "cháo"], 米粉: ["mǐfěn", "bún/phở"], 雪碧: ["xuěbì", "sprite"] };
+const OD_SPICY = [["不辣", "bú là", "không cay"], ["微辣", "wēi là", "cay nhẹ"], ["辣", "là", "cay"]];
+const odZD = "零一二三四五六七八九", odPD = ["líng", "yī", "èr", "sān", "sì", "wǔ", "liù", "qī", "bā", "jiǔ"];
+function odNum(n, two){ // [chữ Hán, pinyin]
+  if(n === 2 && two) return ["两", "liǎng"];
+  if(n < 10) return [odZD[n], odPD[n]];
+  if(n < 20) return ["十" + (n % 10 ? odZD[n % 10] : ""), "shí" + (n % 10 ? odPD[n % 10] : "")];
+  if(n < 100) return [odZD[n / 10 | 0] + "十" + (n % 10 ? odZD[n % 10] : ""), odPD[n / 10 | 0] + "shí" + (n % 10 ? odPD[n % 10] : "")];
+  const h = n / 100 | 0, r = n % 100, H = h === 2 ? ["两", "liǎng"] : [odZD[h], odPD[h]];
+  if(!r) return [H[0] + "百", H[1] + "bǎi"];
+  if(r < 10) return [H[0] + "百零" + odZD[r], H[1] + "bǎi líng " + odPD[r]];
+  const t = odNum(r); return [H[0] + "百" + (r < 20 ? "一" + t[0] : t[0]), H[1] + "bǎi " + (r < 20 ? "yī" + t[1] : t[1])];
+}
+function odParseNum(s){ if(/^\d+$/.test(s)) return +s; const v = { 一: 1, 二: 2, 两: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9 };
+  if(s === "十") return 10; const m = s.match(/^([一二两三四五六七八九])?十([一二三四五六七八九])?$/); if(m) return (m[1] ? v[m[1]] : 1) * 10 + (m[2] ? v[m[2]] : 0);
+  return v[s] || 0; }
+function odQty(n, meas){ // "一碗" + pinyin có biến điệu 一
+  const M = OD_MEAS[meas] || ["", "", 0]; if(n === 1) return ["一" + meas, (M[2] ? "yí " : "yì ") + M[0]];
+  const q = odNum(n, true); return [q[0] + meas, q[1] + " " + M[0]]; }
+function odItemTx(it){ const d = OD_MENU[it.id], [qz, qp] = odQty(it.n, d.m);
+  let zh = qz, py = qp, vi = `${it.n} ${OD_MEAS[d.m][1]}`;
+  if(d.size && it.size){ zh = qz.replace(d.m, (it.size === "L" ? "大" : "小") + d.m); py = qp.replace(OD_MEAS[d.m][0], (it.size === "L" ? "dà " : "xiǎo ") + OD_MEAS[d.m][0]); vi += it.size === "L" ? " lớn" : " nhỏ"; }
+  if(d.temp && it.temp){ zh += it.temp === "ice" ? "冰" : "热"; py += it.temp === "ice" ? " bīng" : " rè"; }
+  zh += d.h; py += " " + d.p; vi += " " + d.vi + (d.temp && it.temp ? (it.temp === "ice" ? " đá" : " nóng") : "");
+  if(d.spicy && it.spicy != null){ const S = OD_SPICY[it.spicy]; zh += `（${S[0]}）`; py += ` (${S[1]})`; vi += ` (${S[2]})`; }
+  return [zh, py, vi]; }
+function odPrice(it){ const d = OD_MENU[it.id]; return it.n * (d.size && it.size === "S" ? d.small : d.price); }
+/* tìm món trong câu học viên nói */
+function odFind(text){
+  const s = talkNorm(text).replace(/二/g, "两"), hits = [], used = [];
+  const all = OD_MENU.flatMap(d => d.al.map(a => [a, d])).sort((a, b) => b[0].length - a[0].length);
+  for(const [a, d] of all){ let k = s.indexOf(a); while(k >= 0){ if(!used.some(([x, y]) => k < y && k + a.length > x)){ used.push([k, k + a.length]); hits.push({ d, k, e: k + a.length, a }); } k = s.indexOf(a, k + 1); } }
+  hits.sort((x, y) => x.k - y.k);
+  const raw = talkNorm(text);
+  return hits.map((h, i) => { const from = i ? hits[i - 1].e : 0, before = s.slice(from, h.k), after = s.slice(h.e, i + 1 < hits.length ? hits[i + 1].k : s.length);
+    const m = before.match(/(\d+|[一两三四五六七八九十]+)([碗份杯壶个根串只盘笼锅条盒])?(?:[大小]?[碗份杯壶个根串只盘笼锅条盒])?[^一两三四五六七八九十\d]{0,4}$/);
+    const n = m ? odParseNum(m[1]) || 1 : 1, meas = m ? (m[2] || ((before.match(/[大小]([碗份杯壶个根串只盘笼锅条盒])/) || [])[1]) || "") : "";
+    const ctx = before + h.a + after, it = { id: h.d.id, n, meas, hadNum: !!m };
+    if(h.d.size){ if(/大碗|大的|大份|要大/.test(ctx)) it.size = "L"; else if(/小碗|小的|小份|要小/.test(ctx)) it.size = "S"; }
+    if(h.d.temp){ if(/冰|凉|冷/.test(ctx)) it.temp = "ice"; else if(/热|温/.test(ctx)) it.temp = "hot"; }
+    if(h.d.spicy){ const v = odSpicy(ctx); if(v != null) it.spicy = v; }
+    it.no = new RegExp("(不要|不用|别|去掉|取消)[^，,。]{0,3}" + h.a).test(raw);
+    return it; });
+}
+function odSpicy(s){ if(/不辣|不要辣|不放辣|别放辣|不能吃辣|不吃辣/.test(s)) return 0; if(/微辣|一点辣|一点点辣|少辣|有点辣|小辣|少放/.test(s)) return 1; if(/中辣|特辣|很辣|特别辣|辣一点|多放辣|要辣|辣的|^辣/.test(s)) return 2; return null; }
+function odErr(said){ const n = talkNorm(String(said).replace(/2(?=\s*[个位碗份杯壶根串只盘笼锅])/g, "两"));
+  return Talk.ERRS.find(([re]) => re.test(n.replace(/是(大|小)(?=碗|份|杯|的)/g, "是X"))); }
+function odMeasNote(it){ const d = OD_MENU[it.id]; if(!it.hadNum) return "";
+  if(!it.meas) return `Thiếu lượng từ: nói “${odQty(it.n, d.m)[0]}${d.h}”, không nói “${odNum(it.n, true)[0]}${d.h}”.`;
+  if(it.meas !== d.m && !d.alt.includes(it.meas)) return `Lượng từ của ${d.h} là “${d.m}” (${OD_MEAS[d.m][1]}): ${odQty(it.n, d.m)[0]}${d.h}.`;
+  return ""; }
+
+const OD_LEARN = [
+  { t: "Vào quán – chào hỏi", ic: "👋", L: [["服", "欢迎光临！请问几位？", "Huānyíng guānglín! Qǐngwèn jǐ wèi?", "Hoan nghênh quý khách! Xin hỏi mấy người ạ?"], ["客", "两位。/ 我们两个人。", "Liǎng wèi. / Wǒmen liǎng ge rén.", "Hai người."], ["客", "就我一个人。", "Jiù wǒ yí ge rén.", "Chỉ mình tôi thôi."], ["服", "这边请，请坐！", "Zhè biān qǐng, qǐng zuò!", "Mời đi lối này, mời ngồi!"]] },
+  { t: "Xin xem thực đơn", ic: "📋", L: [["客", "服务员，请给我看一下菜单。", "Fúwùyuán, qǐng gěi wǒ kàn yíxià càidān.", "Phục vụ ơi, cho tôi xem thực đơn một chút."], ["客", "有菜单吗？", "Yǒu càidān ma?", "Có thực đơn không?"], ["服", "给您菜单。", "Gěi nín càidān.", "Gửi anh/chị thực đơn."], ["客", "你们这儿什么菜好吃？", "Nǐmen zhèr shénme cài hǎochī?", "Ở quán món gì ngon?"]] },
+  { t: "Gọi món", ic: "🍜", L: [["服", "您想吃点儿什么？", "Nín xiǎng chī diǎnr shénme?", "Anh/chị muốn ăn gì ạ?"], ["客", "我要一碗牛肉面。", "Wǒ yào yì wǎn niúròumiàn.", "Tôi muốn một bát mì bò."], ["客", "来一份饺子、两个包子。", "Lái yí fèn jiǎozi, liǎng ge bāozi.", "Cho một phần sủi cảo, hai cái bánh bao."], ["客", "再来一只北京烤鸭。", "Zài lái yì zhī Běijīng kǎoyā.", "Thêm một con vịt quay Bắc Kinh."]],
+    tip: "Số + lượng từ + món: 一碗 (bát) · 一份 (phần) · 一杯 (cốc) · 一壶 (ấm) · 一个 (cái) · 一根 (cây quẩy) · 一串 (xiên) · 一只 (con). Số 2 trước lượng từ đọc là 两: 两碗, 两个." },
+  { t: "Bát to hay bát nhỏ?", ic: "🥣", L: [["服", "要大碗还是小碗？", "Yào dà wǎn háishi xiǎo wǎn?", "Lấy bát to hay bát nhỏ?"], ["客", "大碗。/ 要小碗的。", "Dà wǎn. / Yào xiǎo wǎn de.", "Bát to. / Lấy bát nhỏ."]], tip: "A 还是 B? = A hay B? (câu hỏi lựa chọn, không thêm 吗)." },
+  { t: "Nóng hay đá?", ic: "🧊", L: [["服", "豆浆要热的还是冰的？", "Dòujiāng yào rè de háishi bīng de?", "Sữa đậu nành lấy nóng hay đá?"], ["客", "热的。/ 我要冰的。", "Rè de. / Wǒ yào bīng de.", "Nóng. / Tôi lấy đá."], ["客", "一杯冰豆浆，一壶热茶。", "Yì bēi bīng dòujiāng, yì hú rè chá.", "Một cốc sữa đậu nành đá, một ấm trà nóng."]] },
+  { t: "Cay hay không cay?", ic: "🌶️", L: [["服", "要辣的吗？", "Yào là de ma?", "Có lấy cay không?"], ["客", "不要辣。/ 微辣。", "Bú yào là. / Wēi là.", "Không cay. / Cay nhẹ."], ["客", "我不能吃辣。", "Wǒ bù néng chī là.", "Tôi không ăn cay được."]] },
+  { t: "Còn gì nữa không?", ic: "➕", L: [["服", "还要别的吗？", "Hái yào bié de ma?", "Còn cần gì nữa không ạ?"], ["客", "不要了，就这些。", "Bú yào le, jiù zhèxiē.", "Không cần nữa, chỉ vậy thôi."], ["客", "还要一杯豆浆。", "Hái yào yì bēi dòujiāng.", "Thêm một cốc sữa đậu nành nữa."], ["服", "在这儿吃还是带走？", "Zài zhèr chī háishi dàizǒu?", "Ăn ở đây hay mang đi?"]] },
+  { t: "Xác nhận lại món", ic: "✅", L: [["服", "您点了一碗牛肉面、一杯豆浆，对吗？", "Nín diǎn le yì wǎn niúròumiàn, yì bēi dòujiāng, duì ma?", "Anh/chị đã gọi một bát mì bò, một cốc sữa đậu nành, đúng không ạ?"], ["客", "对。/ 没错。", "Duì. / Méi cuò.", "Đúng. / Không sai."], ["客", "不对，我要的是小碗。", "Bú duì, wǒ yào de shì xiǎo wǎn.", "Không đúng, tôi gọi bát nhỏ."], ["客", "不要豆浆了。", "Bú yào dòujiāng le.", "Không lấy sữa đậu nành nữa."]] },
+  { t: "Thanh toán", ic: "💳", L: [["客", "服务员，买单！", "Fúwùyuán, mǎidān!", "Phục vụ ơi, tính tiền!"], ["客", "一共多少钱？", "Yígòng duōshao qián?", "Tổng cộng bao nhiêu tiền?"], ["服", "一共五十八块。", "Yígòng wǔshíbā kuài.", "Tổng cộng 58 tệ."], ["客", "可以用微信吗？/ 可以用支付宝吗？", "Kěyǐ yòng Wēixìn ma? / Kěyǐ yòng Zhīfùbǎo ma?", "Trả bằng WeChat được không? / Alipay được không?"], ["服", "可以，请扫这儿。欢迎下次再来！", "Kěyǐ, qǐng sǎo zhèr. Huānyíng xià cì zài lái!", "Được, mời quét ở đây. Hẹn gặp lại lần sau!"]] }
+];
+const OD_SAMPLE = [["服", "欢迎光临！请问几位？", "Huānyíng guānglín! Qǐngwèn jǐ wèi?", "Hoan nghênh quý khách! Xin hỏi mấy người?"], ["客", "两位。", "Liǎng wèi.", "Hai người."], ["服", "这边请。现在点菜吗？", "Zhè biān qǐng. Xiànzài diǎn cài ma?", "Mời lối này. Gọi món luôn chứ ạ?"],
+  ["客", "请给我们看一下菜单。", "Qǐng gěi wǒmen kàn yíxià càidān.", "Cho chúng tôi xem thực đơn."], ["服", "好的，给您菜单。您想吃点儿什么？", "Hǎo de, gěi nín càidān. Nín xiǎng chī diǎnr shénme?", "Vâng, thực đơn đây ạ. Anh chị muốn ăn gì?"],
+  ["客", "我要一碗牛肉面，一份饺子。", "Wǒ yào yì wǎn niúròumiàn, yí fèn jiǎozi.", "Tôi muốn một bát mì bò, một phần sủi cảo."], ["服", "牛肉面要大碗还是小碗？", "Niúròumiàn yào dà wǎn háishi xiǎo wǎn?", "Mì bò lấy bát to hay bát nhỏ?"], ["客", "大碗。", "Dà wǎn.", "Bát to."],
+  ["服", "要辣的吗？", "Yào là de ma?", "Có lấy cay không?"], ["客", "微辣。", "Wēi là.", "Cay nhẹ."], ["服", "还要别的吗？", "Hái yào bié de ma?", "Còn cần gì nữa không?"], ["客", "再来两杯豆浆。", "Zài lái liǎng bēi dòujiāng.", "Thêm hai cốc sữa đậu nành."],
+  ["服", "豆浆要热的还是冰的？", "Dòujiāng yào rè de háishi bīng de?", "Sữa đậu nành nóng hay đá?"], ["客", "冰的。", "Bīng de.", "Đá."], ["服", "好的。您点了一大碗牛肉面（微辣）、一份饺子、两杯冰豆浆，对吗？", "Hǎo de. Nín diǎn le yí dà wǎn niúròumiàn (wēi là), yí fèn jiǎozi, liǎng bēi bīng dòujiāng, duì ma?", "Vâng. Anh chị gọi một bát to mì bò (cay nhẹ), một phần sủi cảo, hai cốc sữa đậu nành đá, đúng không ạ?"],
+  ["客", "对。", "Duì.", "Đúng."], ["服", "好的，请稍等。", "Hǎo de, qǐng shāo děng.", "Vâng, xin chờ một chút."], ["客", "服务员，买单！一共多少钱？", "Fúwùyuán, mǎidān! Yígòng duōshao qián?", "Phục vụ ơi, tính tiền! Tổng cộng bao nhiêu?"],
+  ["服", "一共四十一块。", "Yígòng sìshíyī kuài.", "Tổng cộng 41 tệ."], ["客", "可以用微信吗？", "Kěyǐ yòng Wēixìn ma?", "Trả WeChat được không?"], ["服", "可以，请扫这儿。谢谢，欢迎下次再来！", "Kěyǐ, qǐng sǎo zhèr. Xièxie, huānyíng xià cì zài lái!", "Được, mời quét ở đây. Cảm ơn, hẹn gặp lại!"], ["客", "谢谢，再见！", "Xièxie, zàijiàn!", "Cảm ơn, tạm biệt!"]];
+const TOPICS = [{ id: "order", ic: "🍜", zh: "点菜", py: "diǎn cài", vi: "Gọi món ở quán ăn", d: "Chào hỏi · xin thực đơn · gọi món · bát to/nhỏ · nóng/đá · cay · xác nhận · thanh toán" },
+  { id: "shop", ic: "🛍️", zh: "买东西", py: "mǎi dōngxi", vi: "Mua sắm, mặc cả", soon: 1 }, { id: "way", ic: "🧭", zh: "问路", py: "wèn lù", vi: "Hỏi đường", soon: 1 }, { id: "hotel", ic: "🏨", zh: "住酒店", py: "zhù jiǔdiàn", vi: "Đặt phòng khách sạn", soon: 1 }];
+
+const Topic = {
+  tab: store.get("ww_topic_tab", "learn"), py: store.get("ww_talk_py", false), vi: store.get("ww_talk_vi", false), cur: null,
+  mount(les){ this.les = les; this.stopMic(); this.render(); },
+  head(){ return `<div class="tk-head"><div><b class="han">对话练习</b> <span>Hội thoại · luyện phản xạ nói</span></div>${Talk.viewSeg("topic")}</div>`; },
+  render(){ const W = $("#work"); this.stopMic();
+    if(!this.cur){ W.innerHTML = `<div class="tk">${this.head()}<p class="tk-intro"><span>Chọn một <b>chủ đề giao tiếp</b>: học mẫu câu trước, xem hội thoại mẫu, rồi đóng vai thực hành với nhân viên phục vụ.</span></p>
+      <div class="od-topics">${TOPICS.map(t => `<button class="od-topic ${t.soon ? "soon" : ""}" data-t="${t.id}" ${t.soon ? "disabled" : ""}>${t.id === "order" ? `<img src="${Exam.img("s1_waiter")}" alt="" class="od-tw">` : ""}<span class="od-ti">${t.ic}</span><b class="han">${t.zh}</b><small>${t.py}</small><span>${t.vi}</span>${t.d ? `<em>${t.d}</em>` : ""}${t.soon ? `<i class="od-soon">Sắp có</i>` : ""}</button>`).join("")}</div></div>`;
+      Talk.bindView(W); W.querySelectorAll(".od-topic:not(.soon)").forEach(b => b.onclick = () => { this.cur = b.dataset.t; this.reset(); this.render(); }); return; }
+    W.innerHTML = `<div class="tk od">${this.head()}
+      <div class="od-top"><button class="btn sm" id="odBack">‹ Chủ đề</button><b>🍜 <span class="han">点菜</span> · Gọi món ở quán ăn</b></div>
+      <div class="seg od-tabs" role="tablist">${[["learn", "① Mẫu câu"], ["menu", "② Thực đơn"], ["sample", "③ Hội thoại mẫu"], ["play", "④ Thực hành"]].map(([k, t]) => `<button role="tab" data-tab="${k}" aria-selected="${this.tab === k}">${t}</button>`).join("")}</div>
+      <div id="odBody"></div></div>`;
+    Talk.bindView(W); $("#odBack").onclick = () => { this.cur = null; this.render(); };
+    W.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => { this.tab = b.dataset.tab; store.set("ww_topic_tab", this.tab); this.render(); });
+    ({ learn: () => this.drawLearn(), menu: () => this.drawMenu(), sample: () => this.drawSample(), play: () => this.drawPlay() })[this.tab]();
+  },
+  sayBtns(R){ R.querySelectorAll("[data-say]").forEach(b => b.onclick = e => { e.stopPropagation(); speak(b.dataset.say); }); },
+  /* ① mẫu câu */
+  drawLearn(){ const B = $("#odBody");
+    B.innerHTML = `<p class="od-lead">Bấm vào câu để nghe. Vai <b class="od-who s">服</b> = 服务员 (phục vụ), <b class="od-who k">客</b> = 顾客 (khách – là bạn).</p>
+      <div class="od-learn">${OD_LEARN.map((g, gi) => `<section class="od-card"><h4><span>${g.ic}</span>${gi + 1}. ${g.t}</h4>${g.L.map(([w, z, p, v]) => `<button class="od-line" data-say="${esc(z.replace(/\s*\/\s*/g, "，"))}"><b class="od-who ${w === "服" ? "s" : "k"}">${w}</b><span><span class="han">${esc(z)}</span><small>${esc(p)}</small><em>${esc(v)}</em></span>${ICON.sound}</button>`).join("")}${g.tip ? `<p class="od-tip">💡 ${esc(g.tip)}</p>` : ""}</section>`).join("")}</div>
+      <div class="od-next"><button class="btn primary" data-go="menu">Xem thực đơn ›</button></div>`;
+    this.sayBtns(B); B.querySelector("[data-go]").onclick = () => { this.tab = "menu"; this.render(); }; },
+  menuHTML(small){ return `<div class="od-menu ${small ? "sm" : ""}">${OD_MENU.map(d => `<button class="od-dish" data-say="${esc(d.h)}"><i style="background-image:url('${Exam.img("s1_menu")}');background-position:${(d.id % 4) * 100 / 3}% ${(d.id / 4 | 0) * 100 / 3}%"></i>
+      <b class="han">${d.h}</b>${small ? "" : `<small>${d.p}</small><span>${d.vi}</span>`}<em>${d.size ? `${d.price}/${d.small}` : d.price}元${small ? "" : ` / ${d.m}`}</em></button>`).join("")}</div>`; },
+  /* ② thực đơn */
+  drawMenu(){ const B = $("#odBody");
+    B.innerHTML = `<div class="od-board"><div class="od-bh"><b class="han">菜单</b><span>càidān · thực đơn – bấm vào món để nghe</span></div>${this.menuHTML()}
+      <p class="od-tip">💡 牛肉面: 大碗 20元 · 小碗 16元. Đồ uống (豆浆, 茶) có 热的 (nóng) / 冰的 (đá). Món có thể chọn độ cay: 麻婆豆腐, 火锅, 牛肉面, 臭豆腐.</p></div>
+      <div class="od-next"><button class="btn primary" data-go="sample">Xem hội thoại mẫu ›</button></div>`;
+    this.sayBtns(B); B.querySelector("[data-go]").onclick = () => { this.tab = "sample"; this.render(); }; },
+  /* ③ hội thoại mẫu */
+  drawSample(){ const B = $("#odBody");
+    B.innerHTML = `<div class="tk-tools"><button class="btn sm primary" id="odPlay">▶ Nghe cả bài</button><button class="btn sm" id="tkPy" aria-pressed="${this.py}">${this.py ? "Ẩn" : "Hiện"} phiên âm</button><button class="btn sm" id="tkVi" aria-pressed="${this.vi}">${this.vi ? "Ẩn" : "Hiện"} nghĩa</button></div>
+      <div class="tk-chat od-chat" id="odSam">${OD_SAMPLE.map(([w, z, p, v], i) => this.bubble({ who: w === "服" ? "ai" : "me", zh: z, py: p, vi: v, i, full: true })).join("")}</div>
+      <div class="od-next"><button class="btn primary" data-go="play">Đến lượt bạn: thực hành gọi món ›</button></div>`;
+    $("#tkPy").onclick = () => { this.py = !this.py; store.set("ww_talk_py", this.py); this.render(); };
+    $("#tkVi").onclick = () => { this.vi = !this.vi; store.set("ww_talk_vi", this.vi); this.render(); };
+    this.sayBtns(B); B.querySelector("[data-go]").onclick = () => { this.tab = "play"; this.render(); };
+    $("#odPlay").onclick = () => { const L = [...B.querySelectorAll(".tk-b")]; let k = 0; const go = () => { L.forEach(x => x.classList.remove("on")); if(k >= L.length || !document.body.contains(B)) return;
+      const el = L[k++]; el.classList.add("on"); el.scrollIntoView({ block: "nearest", behavior: "smooth" }); speak(el.dataset.zh); Games.later(go, 900 + [...el.dataset.zh].length * 230); }; go(); }; },
+  bubble(b){ const av = `<span class="tk-av od-av"><img src="${Exam.img("s1_waiterface")}" alt="服务员"></span>`;
+    if(b.who === "sys") return `<div class="od-sys">${b.html}</div>`;
+    if(b.who === "menu") return `<div class="tk-b ai od-mb">${av}<div class="tk-bb">${this.menuHTML(true)}</div></div>`;
+    const showPy = this.py, showVi = this.vi;
+    return b.who === "ai" ? `<div class="tk-b ai" data-zh="${esc(b.zh)}">${av}<div class="tk-bb"><button class="say-sm" data-say="${esc(b.zh)}" aria-label="Nghe">${ICON.sound}</button><span class="han">${esc(b.zh)}</span>${showPy && b.py ? `<small class="tk-py">${esc(b.py)}</small>` : ""}${showVi && b.vi ? `<small class="tk-vi">${esc(b.vi)}</small>` : ""}</div></div>`
+      : `<div class="tk-b me" data-zh="${esc(b.zh)}"><div class="tk-bb">${b.full ? `<button class="say-sm" data-say="${esc(b.zh)}" aria-label="Nghe">${ICON.sound}</button>` : ""}<span class="han">${esc(b.zh || "（không nói）")}</span>${b.full && showPy && b.py ? `<small class="tk-py">${esc(b.py)}</small>` : ""}${b.full && showVi && b.vi ? `<small class="tk-vi">${esc(b.vi)}</small>` : ""}</div></div>`; },
+  /* ④ thực hành – máy trạng thái */
+  reset(){ this.chat = []; this.log = []; this.st = null; this.order = []; this.ctx = { fails: 0 }; this.review = null; this.busy = false; this.drill = null; },
+  drawPlay(){ const B = $("#odBody");
+    B.innerHTML = `<p class="tk-intro"><span>Bạn là <b>khách</b>, Tiểu Vương là <b>phục vụ</b>. Trả lời bằng giọng nói (🎤) hoặc gõ chữ Hán. Hãy tự chọn món mình thích trong thực đơn – phục vụ sẽ hỏi lại bát to/nhỏ, nóng/đá, cay… theo món bạn gọi. Cuối buổi sẽ có hóa đơn và phần sửa lỗi.</span></p>
+      <div class="tk-tools"><button class="btn sm" id="tkPy" aria-pressed="${this.py}">${this.py ? "Ẩn" : "Hiện"} phiên âm</button><button class="btn sm" id="tkVi" aria-pressed="${this.vi}">${this.vi ? "Ẩn" : "Hiện"} nghĩa</button>
+        <button class="btn sm" id="odMenuBtn">📋 Thực đơn</button><button class="btn sm" id="tkRestart">${ICON.redo}Bắt đầu lại</button></div>
+      <div id="odMenuPop" hidden>${this.menuHTML(true)}</div>
+      <div class="tk-chat" id="tkChat"></div><div id="odBill"></div><div id="tkReview"></div><div class="tk-bar" id="tkBar"></div>`;
+    $("#tkPy").onclick = () => { this.py = !this.py; store.set("ww_talk_py", this.py); this.drawPlay(); };
+    $("#tkVi").onclick = () => { this.vi = !this.vi; store.set("ww_talk_vi", this.vi); this.drawPlay(); };
+    $("#odMenuBtn").onclick = () => { const p = $("#odMenuPop"); p.hidden = !p.hidden; };
+    $("#tkRestart").onclick = () => { this.stopMic(); this.reset(); this.drawPlay(); };
+    this.sayBtns($("#odMenuPop"));
+    this.drawChat(); this.drawBar();
+    if(this.review) this.drawReview(); else if(!this.st) this.go("greet");
+  },
+  drawChat(){ const C = $("#tkChat"); if(!C) return;
+    C.innerHTML = this.chat.map(b => this.bubble(b)).join("") + (this.busy ? `<div class="tk-b ai"><span class="tk-av od-av"><img src="${Exam.img("s1_waiterface")}" alt=""></span><div class="tk-bb tk-typing"><i></i><i></i><i></i></div></div>` : "");
+    this.sayBtns(C); C.scrollTop = C.scrollHeight; },
+  drawBar(){ const B = $("#tkBar"); if(!B) return; if(this.review || this.st === "end"){ B.innerHTML = ""; return; }
+    B.innerHTML = `<div class="tk-live" id="tkLive">${this.recOn ? "Đang nghe… nói xong bấm 🎤 lần nữa" : (SR ? "Bấm 🎤 rồi nói tiếng Trung" : "Trình duyệt không hỗ trợ nhận giọng nói – hãy gõ chữ Hán")}</div>
+      <div class="tk-row">${SR ? `<button class="tk-mic ${this.recOn ? "on" : ""}" id="tkMic" aria-label="Nói">🎤</button>` : ""}<input id="tkIn" class="han" placeholder="Hoặc gõ câu trả lời…" autocomplete="off"><button class="btn primary" id="tkSend">Gửi</button></div>
+      <div class="tk-row2"><button class="btn sm" id="tkHint">💡 Gợi ý</button><span class="tk-hint" id="tkHintTx"></span></div>`;
+    const mic = $("#tkMic"); if(mic) mic.onclick = () => this.recOn ? this.stopMic(true) : this.listen(t => this.answer(t));
+    const send = () => { const v = $("#tkIn").value.trim(); if(v){ $("#tkIn").value = ""; this.answer(v); } };
+    $("#tkSend").onclick = send; $("#tkIn").onkeydown = e => { if(e.key === "Enter") send(); };
+    let k = 0; $("#tkHint").onclick = () => { const S = this.S(); if(!S) return; k++; const ex = S.model(this);
+      $("#tkHintTx").innerHTML = k === 1 ? esc(S.hint) : `${esc(S.hint)} → <span class="han">${ex.map(esc).join(" / ")}</span>`; if(k > 1) speak(ex[0]); }; },
+  listen: Talk.listen, stopMic: Talk.stopMic,
+  say(zh, py, vi, delay){ this.chat.push({ who: "ai", zh, py, vi }); this.q = [zh, py, vi]; this.drawChat(); Games.later(() => speak(zh), delay || 50); },
+  sys(html){ this.chat.push({ who: "sys", html }); this.drawChat(); },
+  S(){ return this.STATES[this.st]; },
+  go(st, pre, delay){ this.st = st; this.ctx.fails = 0; this.log.forEach(x => x.open = false); const S = this.S(); if(st === "end") return this.finish();
+    let q = S.ask(this); if(q && pre){ if(/^好的/.test(pre[0]) || /改/.test(pre[0])) q = [q[0].replace(/^好的。/, ""), q[1].replace(/^Hǎo de\. /, ""), q[2].replace(/^Vâng\. /, "")]; q = [pre[0] + q[0], pre[1] + " " + q[1], pre[2] + " " + q[2]]; } else if(!q) q = pre;
+    if(q) this.say(...q, delay); this.drawBar(); },
+  /* lượt hỏi tiếp theo sau khi gọi món: hỏi bát/nóng/cay cho món còn thiếu */
+  pending(){ for(const it of this.order){ const d = OD_MENU[it.id]; if(d.size && !it.size) return [it, "size"]; if(d.temp && !it.temp) return [it, "temp"]; if(d.spicy && it.spicy == null) return [it, "spicy"]; } return null; },
+  orderTx(){ const L = this.order.map(odItemTx); return [L.map(x => x[0]).join("、"), L.map(x => x[1]).join(", "), L.map(x => x[2]).join(", ")]; },
+  total(){ return this.order.reduce((a, it) => a + odPrice(it), 0); },
+  addItems(found){ const added = [];
+    found.forEach(f => { if(f.no){ this.order = this.order.filter(o => o.id !== f.id); return; }
+      const ex = this.ctx.fixing ? this.order.find(o => o.id === f.id) : this.order.find(o => o.id === f.id && o.size === f.size && o.temp === f.temp && (o.spicy ?? null) === (f.spicy ?? null));
+      if(ex && this.ctx.fixing){ Object.assign(ex, f.hadNum ? { n: f.n } : {}, f.size ? { size: f.size } : {}, f.temp ? { temp: f.temp } : {}, f.spicy != null ? { spicy: f.spicy } : {}); added.push(ex); }
+      else if(ex){ ex.n += f.n; added.push(ex); }
+      else { const it = { id: f.id, n: f.n }; if(f.size) it.size = f.size; if(f.temp) it.temp = f.temp; if(f.spicy != null) it.spicy = f.spicy; this.order.push(it); added.push(it); } });
+    return added; },
+  /* điều chỉnh nhanh khi xác nhận: "不对，我要小碗" */
+  tweak(n){ let ch = false;
+    const nd = this.order.filter(o => OD_MENU[o.id].size), noodle = nd.length ? { set size(v){ nd.forEach(o => o.size = v); } } : null, drinks = this.order.filter(o => OD_MENU[o.id].temp), sp = this.order.filter(o => OD_MENU[o.id].spicy);
+    if(noodle){ if(/小碗|小的/.test(n)){ noodle.size = "S"; ch = true; } else if(/大碗|大的/.test(n)){ noodle.size = "L"; ch = true; } }
+    if(drinks.length === 1 || /都/.test(n)){ if(/冰的|冰/.test(n)){ drinks.forEach(d => d.temp = "ice"); ch = ch || drinks.length > 0; } else if(/热的|热/.test(n)){ drinks.forEach(d => d.temp = "hot"); ch = ch || drinks.length > 0; } }
+    const v = odSpicy(n); if(v != null && sp.length === 1){ sp[0].spicy = v; ch = true; }
+    return ch; },
+  STATES: {
+    greet: { hint: "Nói số người: Hai người / Chỉ mình tôi.", model: () => ["两位。", "我们两个人。", "就我一个人。"],
+      ask: () => ["欢迎光临！请问几位？", "Huānyíng guānglín! Qǐngwèn jǐ wèi?", "Hoan nghênh quý khách! Xin hỏi mấy người ạ?"],
+      check(T, n){ let k = 0; const m = n.match(/(\d+|[一二两三四五六七八九十]+)(位|个人|个|人|口)/) || n.match(/^(\d+|[一二两三四五六七八九十]+)$/);
+        if(m) k = odParseNum(m[1]); else if(/我一个|一个人|就我|自己|只有我/.test(n)) k = 1;
+        if(!k) return { ok: false };
+        T.ctx.people = k; const z = odNum(k, true);
+        return { ok: true, react: [`好的，${z[0]}位，这边请！`, `Hǎo de, ${z[1]} wèi, zhè biān qǐng!`, `Vâng, ${k} người, mời đi lối này!`], next: "menu" }; } },
+    menu: { hint: "Xin xem thực đơn.", model: () => ["请给我看一下菜单。", "有菜单吗？"],
+      ask: () => ["请坐。现在点菜吗？", "Qǐng zuò. Xiànzài diǎn cài ma?", "Mời ngồi. Anh/chị gọi món luôn chứ ạ?"],
+      check(T, n, raw){ if(/菜单|单子|看看|看一下|menu/i.test(raw)) return { ok: true, react: ["好的，给您菜单。", "Hǎo de, gěi nín càidān.", "Vâng, gửi anh/chị thực đơn."], menu: true, next: "order" };
+        if(odFind(raw).length) return { ok: true, order: true };
+        if(/点|好|是|可以|现在|对/.test(n)) return { ok: true, soft: "Nên xin thực đơn trước: 请给我看一下菜单。", react: ["好的，这是菜单，您看看。", "Hǎo de, zhè shì càidān, nín kànkan.", "Vâng, đây là thực đơn, anh/chị xem nhé."], menu: true, next: "order" };
+        if(/等|一会|不/.test(n)) return { ok: true, react: ["没关系，菜单在这儿，您慢慢看。", "Méi guānxi, càidān zài zhèr, nín mànmàn kàn.", "Không sao, thực đơn ở đây, anh/chị cứ từ từ xem."], menu: true, next: "order" };
+        return { ok: false }; } },
+    order: { hint: "Gọi món: 我要 / 来 + số + lượng từ + món.", model: () => ["我要一碗牛肉面。", "来一份饺子。", "我要两个包子和一杯豆浆。"],
+      ask: () => ["您想吃点儿什么？", "Nín xiǎng chī diǎnr shénme?", "Anh/chị muốn ăn gì ạ?"],
+      check: (T, n, raw) => T.orderCheck(n, raw, false) },
+    more: { hint: "Gọi thêm món, hoặc nói: Không cần nữa, vậy thôi.", model: T => ["不要了，就这些。", "还要一个馒头。"],
+      ask: () => ["还要别的吗？", "Hái yào bié de ma?", "Còn cần gì nữa không ạ?"],
+      check: (T, n, raw) => T.orderCheck(n, raw, true) },
+    drink: { hint: "Gọi đồ uống (豆浆 / 茶) hoặc nói không cần.", model: () => ["来一杯豆浆。", "不用了，谢谢。"],
+      ask: () => ["您要喝点儿什么吗？我们有豆浆和茶。", "Nín yào hē diǎnr shénme ma? Wǒmen yǒu dòujiāng hé chá.", "Anh/chị có uống gì không? Quán có sữa đậu nành và trà."],
+      check(T, n, raw){ const f = odFind(raw); if(f.length) return T.orderCheck(n, raw, true);
+        if(/不|没|算了|就这些|够了/.test(n)) return { ok: true, react: ["好的。", "Hǎo de.", "Vâng."], next: "more" };
+        if(/豆浆|茶|喝/.test(n)) return { ok: false }; return { ok: false }; } },
+    opt: { hint: "", model: T => { const [it, k] = T.ctx.cur || []; return k === "size" ? ["大碗。", "小碗。"] : k === "temp" ? ["热的。", "冰的。"] : ["不要辣。", "微辣。"]; },
+      ask(T){ const [it, k] = T.ctx.cur, d = OD_MENU[it.id];
+        this.hint = k === "size" ? "Chọn bát to (大碗) hay bát nhỏ (小碗)." : k === "temp" ? "Chọn nóng (热的) hay đá (冰的)." : "Chọn: 不要辣 (không cay) / 微辣 (cay nhẹ) / 辣 (cay).";
+        return k === "size" ? [`${d.h}要大碗还是小碗？`, `${d.p} yào dà wǎn háishi xiǎo wǎn?`, `${d.vi} lấy bát to hay bát nhỏ ạ?`]
+          : k === "temp" ? [`${d.h}要热的还是冰的？`, `${d.p} yào rè de háishi bīng de?`, `${d.vi} lấy nóng hay đá ạ?`]
+          : [`${d.h}要辣的吗？`, `${d.p} yào là de ma?`, `${d.vi} có lấy cay không ạ?`]; },
+      check(T, n, raw){ const [it, k] = T.ctx.cur;
+        if(odFind(raw).filter(x => !x.no).length) return T.orderCheck(n, raw, true);
+        const other = () => { let ch = false; T.order.forEach(o => { const d = OD_MENU[o.id];
+            if(d.size && !o.size && /大碗|小碗/.test(n)){ o.size = /小/.test(n) ? "S" : "L"; ch = true; }
+            if(d.temp && !o.temp && /冰|热/.test(n)){ o.temp = /冰/.test(n) ? "ice" : "hot"; ch = true; }
+            if(d.spicy && o.spicy == null && odSpicy(n) != null){ o.spicy = odSpicy(n); ch = true; } });
+          return ch ? { ok: true, soft: "Phục vụ đang hỏi câu khác – hãy nghe kỹ và trả lời đúng câu hỏi nhé.", react: ["好的。", "Hǎo de.", "Vâng."], after: true } : { ok: false }; };
+        if(k === "size"){ const s = /小/.test(n) ? "S" : /大/.test(n) ? "L" : null; if(!s) return other(); it.size = s; }
+        else if(k === "temp"){ const s = /冰|凉|冷/.test(n) ? "ice" : /热|温/.test(n) ? "hot" : null; if(!s) return other(); it.temp = s; }
+        else { let v = odSpicy(n); if(v == null && /^(不要|不用|不)$/.test(n)) v = 0; if(v == null && /^(要|好|可以|要的)$/.test(n)) v = 2; if(v == null) return other(); it.spicy = v; }
+        return { ok: true, react: ["好的。", "Hǎo de.", "Vâng."], after: true }; } },
+    eat: { hint: "Ăn ở đây (在这儿吃) hay mang đi (带走)?", model: () => ["在这儿吃。", "带走。"],
+      ask: () => ["在这儿吃还是带走？", "Zài zhèr chī háishi dàizǒu?", "Ăn ở đây hay mang đi ạ?"],
+      check(T, n){ if(/带走|打包|外带|拿走/.test(n)) T.ctx.away = true; else if(!/这|堂食|这里|在店/.test(n)) return { ok: false };
+        return { ok: true, next: "confirm" }; } },
+    confirm: { hint: "Đúng thì nói 对, sai thì nói 不对 + sửa (vd: 不对，我要小碗).", model: () => ["对。", "没错。", "不对，我要小碗。"],
+      ask(T){ const o = T.orderTx(); return [`好的。您点了${o[0]}，对吗？`, `Hǎo de. Nín diǎn le ${o[1]}, duì ma?`, `Vâng. Anh/chị đã gọi ${o[2]}, đúng không ạ?`]; },
+      check(T, n, raw){ const neg = /不对|不是|错了|不要|我要的是|改成|换成/.test(n);
+        if(!neg && /^(对|是|没错|没问题|好|对的|是的|对对|嗯|可以)/.test(n)) return { ok: true, react: [`好的，请稍等。`, "Hǎo de, qǐng shāo děng.", "Vâng, xin chờ một chút."], next: "pay", wait: true };
+        if(neg){ T.ctx.fixing = true; const f = odFind(raw); let ch = T.tweak(n); if(f.length){ T.addItems(f); ch = true; } T.ctx.fixing = false;
+          if(!T.order.length) return { ok: true, react: ["好的，那您要点什么？", "Hǎo de, nà nín yào diǎn shénme?", "Vâng, vậy anh/chị muốn gọi gì ạ?"], next: "order", reset: true };
+          if(ch) return { ok: true, react: ["不好意思，我改一下。", "Bù hǎo yìsi, wǒ gǎi yíxià.", "Xin lỗi, tôi sửa lại ạ."], after: true, reconfirm: true };
+          return { ok: true, react: ["不好意思，哪儿不对？", "Bù hǎo yìsi, nǎr bú duì?", "Xin lỗi, chỗ nào chưa đúng ạ?"], next: "fix" }; }
+        return { ok: false }; } },
+    fix: { hint: "Nói món cần sửa: 我要小碗 / 不要豆浆 / 再加一个包子.", model: () => ["我要小碗。", "不要豆浆了。"], ask: () => null,
+      check(T, n, raw){ T.ctx.fixing = true; const f = odFind(raw); let ch = T.tweak(n); if(f.length){ T.addItems(f); ch = true; } T.ctx.fixing = false;
+        if(!ch) return { ok: false }; return { ok: true, react: ["好的，我改一下。", "Hǎo de, wǒ gǎi yíxià.", "Vâng, tôi sửa lại."], after: true, reconfirm: true }; } },
+    pay: { hint: "Gọi phục vụ tính tiền: 服务员，买单！/ 一共多少钱？", model: () => ["服务员，买单！", "一共多少钱？"], ask: () => null,
+      check(T, n){ if(!/买单|结账|算账|多少钱|付钱|埋单/.test(n)) return { ok: false }; const t = T.total(), z = odNum(t, true);
+        return { ok: true, react: [`好的，一共${z[0]}块。`, `Hǎo de, yígòng ${z[1]} kuài.`, `Vâng, tổng cộng ${t} tệ.`], next: "pay2", bill: true }; } },
+    pay2: { hint: "Hỏi trả bằng WeChat / Alipay, hoặc đưa tiền mặt (给你钱).", model: () => ["可以用微信吗？", "可以用支付宝吗？", "给你钱。"], ask: () => null,
+      check(T, n){ if(!/微信|支付宝|刷卡|现金|给你|扫|手机|付/.test(n)) return { ok: false };
+        return { ok: true, react: /现金|给你/.test(n) && !/微信|支付宝/.test(n) ? ["收您钱，谢谢！欢迎下次再来！", "Shōu nín qián, xièxie! Huānyíng xià cì zài lái!", "Đã nhận tiền, cảm ơn! Hẹn gặp lại lần sau!"]
+          : ["可以，请扫这儿。谢谢！欢迎下次再来！", "Kěyǐ, qǐng sǎo zhèr. Xièxie! Huānyíng xià cì zài lái!", "Được ạ, mời quét ở đây. Cảm ơn! Hẹn gặp lại lần sau!"], next: "bye" }; } },
+    bye: { hint: "Chào tạm biệt: 谢谢，再见！", model: () => ["谢谢，再见！"], ask: () => null,
+      check(T, n){ if(!/谢|再见|拜拜|好吃|慢走/.test(n)) return { ok: false }; return { ok: true, react: ["再见，慢走！", "Zàijiàn, màn zǒu!", "Tạm biệt, đi cẩn thận nhé!"], next: "end" }; } }
+  },
+  orderCheck(n, raw, more){
+    const f = odFind(raw).filter(x => !x.no), rm = odFind(raw).filter(x => x.no);
+    if(!f.length && !rm.length){
+      if(more && /不要了|不用了|就这些|够了|没有了|就这样|不要|不用|没了|没有|好了|行了/.test(n)) return { ok: true, next: "eat" };
+      if(/什么.*好吃|推荐|有什么|哪个好吃|什么菜/.test(n)) return { ok: true, soft: "", react: ["我们的北京烤鸭和牛肉面都很好吃！", "Wǒmen de Běijīng kǎoyā hé niúròumiàn dōu hěn hǎochī!", "Vịt quay Bắc Kinh và mì bò của quán đều rất ngon!"], stay: true };
+      const off = Object.keys(OD_OFF).find(k => n.includes(k));
+      if(off) return { ok: false, react: [`不好意思，我们没有${off}。请看看菜单。`, `Bù hǎo yìsi, wǒmen méiyǒu ${OD_OFF[off][0]}. Qǐng kànkan càidān.`, `Xin lỗi, quán không có ${OD_OFF[off][1]}. Mời xem thực đơn ạ.`], stay: true, soft: "Món này không có trong thực đơn – hãy chọn món trong 菜单." };
+      return { ok: false };
+    }
+    rm.forEach(x => { this.order = this.order.filter(o => o.id !== x.id); });
+    const bad = f.find(x => odMeasNote(x)), notes = f.map(odMeasNote).filter(Boolean), added = this.addItems(f);
+    const L = f.map(x => odItemTx({ ...x, spicy: null, n: x.n, size: x.size, temp: x.temp }));
+    return { ok: true, note: notes[0] || "", fix: bad ? raw.replace(/[。！!.]$/, "").replace(new RegExp((bad.hadNum ? "(\\d+|[一二两三四五六七八九十]+)[碗份杯壶个根串只盘笼锅条盒]?" : "") + "(?=[^一二两三四五六七八九十\\d]{0,4}(" + OD_MENU[bad.id].al.join("|") + "))"), odQty(bad.n, OD_MENU[bad.id].m)[0]) + "。" : "", react: L.length ? [`好的，${L.map(x => x[0]).join("、")}。`, `Hǎo de, ${L.map(x => x[1]).join(", ")}.`, `Vâng, ${L.map(x => x[2]).join(", ")}.`] : ["好的。", "Hǎo de.", "Vâng."], after: true };
+  },
+  answer(said){ if(this.busy || !this.st || this.st === "end") return;
+    const S = this.S(), n = talkNorm(said).replace(/二(?=[个位碗份杯壶根串只盘笼])/g, "两"), raw = said;
+    this.chat.push({ who: "me", zh: said }); this.drawChat();
+    const model = S.model(this), hint = S.hint, r = S.check(this, n, raw) || { ok: false }, er = odErr(said);
+    const entry = { st: this.st, q: this.q, said, ok: r.ok && !er && !r.note, model: r.fix ? [r.fix, ...model] : model, hint, note: er ? er[1] : r.note || r.soft || "", open: true };
+    if(!r.ok) this.ctx.fails++;
+    // trả lời sai rồi nói lại ở cùng lượt: chỉ ghi một mục (giữ lần nói đầu, thêm lần nói lại)
+    const last = this.log[this.log.length - 1];
+    if(last && last.open && last.st === this.st && !last.ok){ last.tries = (last.tries || 1) + 1; last.later = said; if(er || r.note) last.note = entry.note; }
+    else this.log.push(entry);
+    this.busy = true; this.drawChat(); this.drawBar();
+    const t = 550;
+    Games.later(() => { this.busy = false;
+      if(!r.ok && !r.react){ const off = Object.keys(OD_OFF).find(k => n.includes(k)), q = S.ask(this);
+        if(off){ const L = this.log[this.log.length - 1]; if(L && L.said === said){ L.ok = true; L.note = "Món này không có trong thực đơn – hãy chọn món trong 菜单."; } this.ctx.fails = Math.max(0, this.ctx.fails - 1);
+          const z = [`不好意思，我们没有${off}。`, `Bù hǎo yìsi, wǒmen méiyǒu ${OD_OFF[off][0]}.`, `Xin lỗi, quán không có ${OD_OFF[off][1]}.`];
+          this.say(...(q ? [z[0] + q[0], z[1] + " " + q[1], z[2] + " " + q[2]] : z)); this.drawBar(); return; } }
+      if(!r.ok){ const R = r.react || (this.ctx.fails >= 2 ? ["不好意思，我没听懂。您可以这样说：" + S.model(this)[0], "Bù hǎo yìsi, wǒ méi tīng dǒng. Nín kěyǐ zhèyàng shuō: …", "Xin lỗi, tôi chưa hiểu. Anh/chị có thể nói: " + S.model(this)[0]] : ["不好意思，请您再说一遍。", "Bù hǎo yìsi, qǐng nín zài shuō yí biàn.", "Xin lỗi, anh/chị nói lại được không ạ?"]);
+        this.say(...R); this.drawBar(); return; }
+      if(r.order){ this.st = "order"; return this.handle(this.orderCheck(n, raw, false)); }
+      this.handle(r); }, t);
+  },
+  handle(r){
+    if(r.reset) this.order = [];
+    const pre = r.react, sayPre = () => { if(pre){ this.chat.push({ who: "ai", zh: pre[0], py: pre[1], vi: pre[2] }); this.q = pre; this.drawChat(); speak(pre[0]); } };
+    if(r.bill) Games.later(() => this.drawBill(), 300);
+    if(r.stay){ sayPre(); this.drawBar(); return; }
+    if(r.menu){ sayPre(); this.busy = true; this.drawChat(); this.drawBar();
+      return Games.later(() => { this.busy = false; this.chat.push({ who: "menu" }); this.go("order", null, 1400); }, 700); }
+    if(r.wait){ sayPre(); this.busy = true; this.drawBar();
+      return Games.later(() => { this.busy = false; this.st = "pay"; this.ctx.fails = 0; this.log.forEach(x => x.open = false); this.q = ["（Bạn ăn xong – gọi phục vụ tính tiền）", "", "Hãy gọi phục vụ để tính tiền"];
+        this.sys(`<span class="od-clock">⏳</span> Mười phút sau… món ăn đã được mang lên. <b>Bạn ăn xong rồi – hãy gọi phục vụ để tính tiền.</b>`); this.drawBar(); }, 1800); }
+    if(["pay2", "fix", "bye"].includes(r.next)){ sayPre(); this.st = r.next; this.ctx.fails = 0; this.log.forEach(x => x.open = false); this.drawBar(); return; }
+    if(r.next === "end"){ sayPre(); this.st = "end"; this.drawBar(); return Games.later(() => this.finish(), 1600); }
+    let nx = r.next;
+    if(r.after){ const p = this.pending();
+      if(p){ this.ctx.cur = p; nx = "opt"; }
+      else if(r.reconfirm || this.st === "confirm" || this.st === "fix") nx = "confirm";
+      else if(!this.order.some(it => OD_MENU[it.id].drink) && !this.ctx.drinkAsked){ this.ctx.drinkAsked = true; nx = "drink"; }
+      else nx = "more"; }
+    if(nx) return this.go(nx, pre);
+    sayPre(); this.drawBar();
+  },
+  drawBill(){ const B = $("#odBill"); if(!B) return; const t = this.total();
+    B.innerHTML = `<div class="od-bill"><div class="od-bill-h"><b class="han">小票</b> Hóa đơn${this.ctx.away ? " · 带走 (mang đi)" : ""}</div>
+      ${this.order.map(it => { const x = odItemTx(it); return `<div class="od-bill-r"><span><span class="han">${esc(x[0])}</span><small>${esc(x[2])}</small></span><b>${odPrice(it)}元</b></div>`; }).join("")}
+      <div class="od-bill-t"><span class="han">一共</span><b>${t}元</b></div></div>`; },
+  finish(){ this.st = "end"; this.drawBar();
+    const it = this.log, ok = it.filter(x => x.ok).length;
+    Track.log("talk", { mode: "topic", topic: "order", right: ok, total: it.length });
+    if(ok === it.length && it.length >= 6) Games.reward("talk", 100, `Hội thoại chủ đề Gọi món (${ok}/${it.length})`);
+    this.review = { items: it }; this.drawReview(); },
+  drawReview(){ const R = $("#tkReview"); if(!R) return; const it = this.review.items, wrong = it.filter(x => !x.ok), ok = it.length - wrong.length;
+    if(this.order.length) this.drawBill();
+    R.innerHTML = `<div class="tk-rev"><div class="tk-rev-h"><b>Kết quả: ${ok}/${it.length} lượt nói đạt</b><span>${wrong.length ? "Xem các câu cần sửa, nghe câu mẫu rồi bấm “Luyện lại câu sai”." : "Tuyệt vời! Bạn đã gọi món trôi chảy. 太棒了！"}</span></div>
+      <ol>${it.map(x => `<li class="${x.ok ? "ok" : "no"}"><div class="tk-q"><span class="han">${esc(x.q[0])}</span> <small>${esc(x.q[2])}</small></div>
+        <div>Bạn nói: <span class="han">${esc(x.said)}</span> ${x.ok ? "✓" : "✗"}${x.later ? ` → nói lại: <span class="han">${esc(x.later)}</span>` : ""}</div>
+        ${x.ok ? (x.note ? `<div class="tk-note">💡 ${esc(x.note)}</div>` : "") : `<div class="tk-mod">Có thể nói: <button class="say-sm" data-say="${esc(x.model[0])}">${ICON.sound}</button><span class="han">${x.model.map(esc).join(" / ")}</span> <small>(${esc(x.hint)})</small></div>${x.note ? `<div class="tk-note">⚠ ${esc(x.note)}</div>` : ""}`}</li>`).join("")}</ol>
+      <div id="odDrill"></div>
+      <div class="tk-rev-b">${wrong.length ? `<button class="btn primary" id="tkFix">🎯 Luyện lại câu sai (${wrong.length})</button>` : ""}<button class="btn ${wrong.length ? "" : "primary"}" id="tkAgain">▶ Gọi món lần nữa</button></div></div>`;
+    this.sayBtns(R);
+    const f = $("#tkFix"); if(f) f.onclick = () => this.startDrill(wrong);
+    $("#tkAgain").onclick = () => { this.reset(); this.drawPlay(); };
+    R.scrollIntoView({ behavior: "smooth", block: "start" }); },
+  /* luyện lại từng câu sai: hỏi lại đúng câu đó, chấm theo cùng quy tắc nhưng không đổi đơn hàng */
+  startDrill(list){ this.drill = { list, k: 0 }; this.drawDrill(); },
+  drawDrill(){ const D = $("#odDrill"), d = this.drill; if(!D || !d) return;
+    if(d.k >= d.list.length){ D.innerHTML = `<p class="od-sys">✅ Đã luyện xong các câu sai! Bấm “Gọi món lần nữa” để đóng vai lại từ đầu.</p>`; return; }
+    const x = d.list[d.k];
+    D.innerHTML = `<div class="od-drill"><b>Câu ${d.k + 1}/${d.list.length}</b><div class="tk-b ai"><span class="tk-av od-av"><img src="${Exam.img("s1_waiterface")}" alt=""></span><div class="tk-bb"><button class="say-sm" data-say="${esc(x.q[0])}">${ICON.sound}</button><span class="han">${esc(x.q[0])}</span><small class="tk-vi">${esc(x.q[2])}</small></div></div>
+      <div class="tk-row">${SR ? `<button class="tk-mic" id="odDMic">🎤</button>` : ""}<input id="odDIn" class="han" placeholder="Trả lời lại…"><button class="btn primary" id="odDSend">Gửi</button></div><div id="odDRes"></div></div>`;
+    this.sayBtns(D); speak(x.q[0]);
+    const go = said => { const T = Object.create(this); T.order = this.order.map(o => ({ ...o })); T.ctx = { ...this.ctx, cur: x.st === "opt" && this.ctx.cur ? [{ ...this.ctx.cur[0] }, this.ctx.cur[1]] : this.ctx.cur }; T.addItems = this.addItems;
+      const S = this.STATES[x.st], n = talkNorm(said).replace(/二(?=[个位碗份杯壶根串只盘笼])/g, "两"); let r = { ok: false };
+      try { r = (x.st === "order" || x.st === "more") ? T.orderCheck(n, said, x.st === "more") : S.check(T, n, said) || r; } catch(e){ r = { ok: false }; }
+      const er = odErr(said), good = r.ok && !er && !r.note;
+      $("#odDRes").innerHTML = good ? `<p class="tk-redo-r ok">✓ <span class="han">${esc(said)}</span> – Chính xác!</p>` : `<p class="tk-redo-r no">✗ <span class="han">${esc(said)}</span>${er || r.note ? ` – ${esc(er ? er[1] : r.note)}` : ""}. Thử: <span class="han">${esc(x.model[0])}</span></p>`;
+      if(good){ x.fixed = true; Games.later(() => { d.k++; this.drawDrill(); }, 1300); } };
+    const s = () => { const v = $("#odDIn").value.trim(); if(v){ $("#odDIn").value = ""; go(v); } };
+    $("#odDSend").onclick = s; $("#odDIn").onkeydown = e => { if(e.key === "Enter") s(); };
+    const m = $("#odDMic"); if(m) m.onclick = () => { const own = { drawBar: () => { m.classList.toggle("on", !!own.recOn); } }; Object.setPrototypeOf(own, this); this.listen.call(own, t => { m.classList.remove("on"); go(t); }); };
+  }
+};
 
 const Exam = {
   les: null, key: "", st: null,
