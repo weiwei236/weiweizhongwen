@@ -890,14 +890,24 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .tx-sec{background:var(--surface-2);border-radius:16px;padding:14px 16px;display:grid;gap:10px}
 .tx-sec h3{margin:0;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:20px}
 .tx-scene{margin:0;color:var(--muted)}
-.tx-lines{display:grid;gap:8px}
-.tx-line{display:grid;grid-template-columns:auto 1fr;gap:6px;align-items:start;padding:6px 8px;border-radius:10px;transition:background .2s}
-.tx-lines.narr .tx-line{grid-template-columns:1fr}
+.tx-tools{align-items:center}.tx-tl{font-weight:600;color:var(--muted);font-size:14px}.tx-seg button{min-width:56px}
+.tx-main{display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}
+.tx-sec.has-img .tx-main{grid-template-columns:minmax(0,1fr) minmax(220px,38%);align-items:start}
+.tx-fig{margin:0;background:#fff;border-radius:14px;padding:8px;box-shadow:0 2px 8px rgba(0,0,0,.08)}.tx-fig img{display:block;width:100%;height:auto;border-radius:8px}
+.tx-lines{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 0;align-content:start}
+.tx-line{grid-column:1/-1;display:grid;grid-template-columns:subgrid;align-items:start;padding:8px 10px;border-radius:12px;transition:background .2s}
+.tx-lines.narr{grid-template-columns:minmax(0,1fr)}
 .tx-line.on{background:#FFF3C4}
-.tx-who{font-weight:700;color:var(--accent);font-size:19px;white-space:nowrap;padding-top:2px}
-.tx-body{display:grid;grid-template-columns:auto 1fr;gap:2px 8px;align-items:center}
-.tx-zh{font-size:22px;line-height:1.5}.tx-py,.tx-vi{grid-column:2}.tx-py{color:var(--muted);font-size:14px}.tx-vi{font-size:14.5px;color:#2C6E52}
-.tx-q{background:var(--surface);border-radius:12px;padding:10px 14px}.tx-q ol{margin:6px 0 0;padding-left:22px;display:grid;gap:6px}.tx-q .han{font-size:17px}.tx-q small{color:var(--muted)}
+.tx-who{font-weight:700;color:var(--accent);font-size:26px;line-height:42px;white-space:nowrap;padding-right:10px}
+.tx-line>.tx-body:first-child{grid-column:2}.tx-lines.narr .tx-line>.tx-body{grid-column:1}
+.tx-body{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 10px;align-items:center}
+.tx-body .say-sm{align-self:start;margin-top:9px}.tx-sec.has-img .tx-fig.wide{grid-column:1/-1}
+.tx-zh{font-size:28px;line-height:1.5}.tx-py,.tx-vi{grid-column:2}.tx-py{color:var(--muted);font-size:17px}.tx-vi{font-size:16.5px;color:#2C6E52}
+.tx-q{background:var(--surface);border-radius:12px;padding:12px 16px}.tx-q>b{font-size:18px}.tx-q ol{margin:8px 0 0;padding-left:26px;display:grid;gap:12px;font-size:20px}
+.tx-qz{display:flex;gap:10px;align-items:center}.tx-q .han{font-size:26px;line-height:1.45}.tx-qpy{color:var(--muted);font-size:17px;margin-left:40px}
+.tx-q .tx-ansb{margin-left:40px;font-size:15px}.tx-ans{font-size:17px;margin-left:40px}.tx-ans .han{font-size:22px}
+@media (max-width:700px){.tx-sec.has-img .tx-main{grid-template-columns:minmax(0,1fr)}.tx-sec.has-img .tx-fig{order:-1;max-width:420px;justify-self:center}
+  .tx-who{font-size:20px;line-height:34px;padding-right:6px}.tx-zh{font-size:23px}.tx-py{font-size:15px}.tx-q .han{font-size:22px}.tx-line{padding:6px 4px}.tx-q ol{padding-left:20px}.tx-qpy,.tx-q .tx-ansb,.tx-ans{margin-left:0}}
 .tx-ans{margin-top:4px;color:#2C6E52}
 .lv-sw{border:1px dashed var(--line)!important;background:transparent!important;color:var(--accent)!important;font-weight:700}
 .tk{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}
@@ -2827,26 +2837,30 @@ function renderLesson(){
 function renderAll(){ stopAnyRecording(); renderLevels(); renderRail(); renderLesson(); }
 
 /* ======================= BÀI KHÓA (课文) – lớp Giao tiếp ======================= */
+const GT_TXIMG = { gt1: ["1_0", "1_2", "2_2", "3_0", "3_2", "5_0", "7_0", "7_1", "7_2", "8_2"] }; /* hình minh họa bài khóa cắt từ sách */
 const TextView = {
   py: store.get("ww_tx_py", true), vi: store.get("ww_tx_vi", false),
+  img(i){ const k = `${S.lesson}_${i}`; return (GT_TXIMG[S.level] || []).includes(k) ? Exam.img("s1_gt" + k) : ""; },
   mount(les){ this.les = les; this.render(); },
   render(){
     const W = $("#work"), T = this.les.texts || [];
     W.innerHTML = `<div class="tx">
       <div class="tx-head"><div><b class="han">课文</b> <span>Bài khóa · ${esc(this.les.vi || "")}</span></div>
-        <div class="tx-tools"><button class="btn sm" id="txPy" aria-pressed="${this.py}">${this.py ? "Ẩn" : "Hiện"} phiên âm</button><button class="btn sm" id="txVi" aria-pressed="${this.vi}">${this.vi ? "Ẩn" : "Hiện"} tiếng Việt</button></div></div>
-      ${T.map((t, i) => `<section class="tx-sec">
+        <div class="tx-tools"><span class="tx-tl">Phiên âm</span><div class="seg tx-seg" role="group"><button data-py="1" aria-pressed="${this.py}">Hiện</button><button data-py="0" aria-pressed="${!this.py}">Ẩn</button></div>
+          <span class="tx-tl">Tiếng Việt</span><div class="seg tx-seg" role="group"><button data-vi="1" aria-pressed="${this.vi}">Hiện</button><button data-vi="0" aria-pressed="${!this.vi}">Ẩn</button></div></div></div>
+      ${T.map((t, i) => { const im = this.img(i); return `<section class="tx-sec ${im ? "has-img" : ""}">
         <h3><span class="han">${esc(t.t)}</span><button class="btn sm tx-all" data-i="${i}">${ICON.sound}Nghe cả bài</button></h3>
         ${t.scene ? `<p class="tx-scene"><span class="han">（${esc(t.scene)}）</span> ${esc(t.scene_vi)}</p>` : ""}
-        <div class="tx-lines ${t.narr ? "narr" : ""}">${t.lines.map((l, j) => `<div class="tx-line" id="tx${i}_${j}">
+        <div class="tx-main"><div class="tx-lines ${t.narr ? "narr" : ""}">${t.lines.map((l, j) => `<div class="tx-line" id="tx${i}_${j}">
           ${l.who ? `<span class="tx-who han">${esc(l.who)}：</span>` : ""}
           <div class="tx-body"><button class="say-sm tx-say" data-say="${esc(l.zh)}" aria-label="Nghe">${ICON.sound}</button><span class="han tx-zh">${esc(l.zh)}</span>
             ${this.py ? `<div class="tx-py">${esc(l.py)}</div>` : ""}${this.vi ? `<div class="tx-vi">${esc(l.vi)}</div>` : ""}</div></div>`).join("")}</div>
-        ${t.q && t.q.length ? `<div class="tx-q"><b><span class="han">问题</span> Câu hỏi</b><ol>${t.q.map(q => `<li><span class="han">${esc(q.zh)}</span> <small>${esc(q.py)}</small>
+        ${im ? `<figure class="tx-fig"><img src="${im}" alt="Hình minh họa ${esc(t.t)}" loading="lazy"></figure>` : ""}</div>
+        ${t.q && t.q.length ? `<div class="tx-q"><b><span class="han">问题</span> Câu hỏi</b><ol>${t.q.map(q => `<li><div class="tx-qz"><button class="say-sm tx-say" data-say="${esc(q.zh)}" aria-label="Nghe">${ICON.sound}</button><span class="han">${esc(q.zh)}</span></div>${this.py ? `<div class="tx-qpy">${esc(q.py)}</div>` : ""}
           <button class="linkbtn tx-ansb">Xem đáp án</button><div class="tx-ans" hidden><span class="han">${esc(q.ans)}</span> – ${esc(q.vi)}</div></li>`).join("")}</ol></div>` : ""}
-      </section>`).join("")}</div>`;
-    $("#txPy").onclick = () => { this.py = !this.py; store.set("ww_tx_py", this.py); this.keep(); };
-    $("#txVi").onclick = () => { this.vi = !this.vi; store.set("ww_tx_vi", this.vi); this.keep(); };
+      </section>`; }).join("")}</div>`;
+    W.querySelectorAll("[data-py]").forEach(b => b.onclick = () => { this.py = b.dataset.py === "1"; store.set("ww_tx_py", this.py); this.keep(); });
+    W.querySelectorAll("[data-vi]").forEach(b => b.onclick = () => { this.vi = b.dataset.vi === "1"; store.set("ww_tx_vi", this.vi); this.keep(); });
     W.querySelectorAll(".tx-say").forEach(b => b.onclick = () => speak(b.dataset.say));
     W.querySelectorAll(".tx-ansb").forEach(b => b.onclick = () => { const a = b.nextElementSibling; a.hidden = !a.hidden; b.textContent = a.hidden ? "Xem đáp án" : "Ẩn đáp án"; });
     W.querySelectorAll(".tx-all").forEach(b => b.onclick = () => this.playAll(+b.dataset.i));
