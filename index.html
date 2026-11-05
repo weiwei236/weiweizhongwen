@@ -973,6 +973,14 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .od-bill-r{display:flex;justify-content:space-between;gap:10px;align-items:baseline}.od-bill-r>span{display:grid}.od-bill-r .han{font-size:16px}.od-bill-r small{color:var(--muted);font-family:inherit}
 .od-bill-t{display:flex;justify-content:space-between;border-top:1px dashed #B9A88C;padding-top:6px;font-size:18px}.od-bill-t b{color:#C0533A}
 .od-drill{display:grid;gap:8px;background:var(--surface-2);border-radius:12px;padding:10px}
+.od-tws{width:150px;height:190px;display:block;bottom:-20px!important}.od-tws svg{width:100%;height:100%}
+.od-av svg{width:44px;height:44px}
+.wy-map{position:relative;border-radius:14px;overflow:hidden;line-height:0}.wy-map img{width:100%;height:auto;display:block}
+.wy-pin{position:absolute;transform:translate(-50%,-50%);width:9%;height:6%;border:0;border-radius:10px;background:transparent;cursor:pointer;padding:0}
+.wy-pin span{position:absolute;left:-9999px}.wy-pin:hover,.wy-pin:focus-visible{outline:3px solid #F2C531;background:rgba(242,197,49,.18)}
+.wy-map.sm{max-width:440px}
+.wy-legend{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px;margin-top:10px}
+
 .od-menu.sh{grid-template-columns:repeat(6,minmax(0,1fr))}.od-menu.sh .od-dish i{aspect-ratio:200/170}
 .sh-cols{display:flex;gap:3px;justify-content:center;margin:2px 0}.sh-dot{width:12px!important;height:12px;aspect-ratio:auto!important;border-radius:50%!important;border:1px solid rgba(0,0,0,.25);display:inline-block}
 .c-红{background:#E0394A}.c-白{background:#fff}.c-黑{background:#222}.c-蓝{background:#2C7BE5}.c-黄{background:#F2C531}.c-粉{background:#F7A1C4}.c-绿{background:#3FA34D}.c-灰{background:#9AA0A6}.c-咖{background:#7A4E2D}.c-米{background:#EBDCC0}
@@ -4800,7 +4808,7 @@ const OD_SAMPLE = [["服", "欢迎光临！请问几位？", "Huānyíng guāngl
   ["客", "对。", "Duì.", "Đúng."], ["服", "好的，请稍等。", "Hǎo de, qǐng shāo děng.", "Vâng, xin chờ một chút."], ["客", "服务员，买单！一共多少钱？", "Fúwùyuán, mǎidān! Yígòng duōshao qián?", "Phục vụ ơi, tính tiền! Tổng cộng bao nhiêu?"],
   ["服", "一共四十一块。", "Yígòng sìshíyī kuài.", "Tổng cộng 41 tệ."], ["客", "可以用微信吗？", "Kěyǐ yòng Wēixìn ma?", "Trả WeChat được không?"], ["服", "可以，请扫这儿。谢谢，欢迎下次再来！", "Kěyǐ, qǐng sǎo zhèr. Xièxie, huānyíng xià cì zài lái!", "Được, mời quét ở đây. Cảm ơn, hẹn gặp lại!"], ["客", "谢谢，再见！", "Xièxie, zàijiàn!", "Cảm ơn, tạm biệt!"]];
 const TOPICS = [{ id: "order", ic: "🍜", zh: "点菜", py: "diǎn cài", vi: "Gọi món ở quán ăn", img: "s1_waiter", d: "Chào hỏi · xin thực đơn · gọi món · bát to/nhỏ · nóng/đá · cay · xác nhận · thanh toán" },
-  { id: "shop", ic: "🛍️", zh: "买东西", py: "mǎi dōngxi", vi: "Mua sắm · mặc cả · thanh toán", img: "s1_seller", d: "Chọn đồ · màu sắc · cỡ · mặc thử · hỏi giá · mặc cả · trả tiền, thối tiền" }, { id: "way", ic: "🧭", zh: "问路", py: "wèn lù", vi: "Hỏi đường", soon: 1 }, { id: "hotel", ic: "🏨", zh: "住酒店", py: "zhù jiǔdiàn", vi: "Đặt phòng khách sạn", soon: 1 }];
+  { id: "shop", ic: "🛍️", zh: "买东西", py: "mǎi dōngxi", vi: "Mua sắm · mặc cả · thanh toán", img: "s1_seller", d: "Chọn đồ · màu sắc · cỡ · mặc thử · hỏi giá · mặc cả · trả tiền, thối tiền" }, { id: "way", ic: "🧭", zh: "问路", py: "wèn lù", vi: "Hỏi đường", svg: 1, d: "Hỏi vị trí · phương hướng · chỉ đường · xa hay gần · nhắc lại để xác nhận · cảm ơn" }, { id: "hotel", ic: "🏨", zh: "住酒店", py: "zhù jiǔdiàn", vi: "Đặt phòng khách sạn", soon: 1 }];
 
 const TOPIC_DEF = {};
 const Topic = {
@@ -4809,7 +4817,7 @@ const Topic = {
   head(){ return `<div class="tk-head"><div><b class="han">对话练习</b> <span>Hội thoại · luyện phản xạ nói</span></div>${Talk.viewSeg("topic")}</div>`; },
   render(){ const W = $("#work"); this.stopMic();
     if(!this.cur){ W.innerHTML = `<div class="tk">${this.head()}<p class="tk-intro"><span>Chọn một <b>chủ đề giao tiếp</b>: học mẫu câu trước, xem hội thoại mẫu, rồi đóng vai thực hành với nhân viên phục vụ.</span></p>
-      <div class="od-topics">${TOPICS.map(t => `<button class="od-topic ${t.soon ? "soon" : ""}" data-t="${t.id}" ${t.soon ? "disabled" : ""}>${t.img ? `<img src="${Exam.img(t.img)}" alt="" class="od-tw">` : ""}<span class="od-ti">${t.ic}</span><b class="han">${t.zh}</b><small>${t.py}</small><span>${t.vi}</span>${t.d ? `<em>${t.d}</em>` : ""}${t.soon ? `<i class="od-soon">Sắp có</i>` : ""}</button>`).join("")}</div></div>`;
+      <div class="od-topics">${TOPICS.map(t => `<button class="od-topic ${t.soon ? "soon" : ""}" data-t="${t.id}" ${t.soon ? "disabled" : ""}>${t.img ? `<img src="${Exam.img(t.img)}" alt="" class="od-tw">` : t.svg ? `<span class="od-tw od-tws">${xiaoyuSVG()}</span>` : ""}<span class="od-ti">${t.ic}</span><b class="han">${t.zh}</b><small>${t.py}</small><span>${t.vi}</span>${t.d ? `<em>${t.d}</em>` : ""}${t.soon ? `<i class="od-soon">Sắp có</i>` : ""}</button>`).join("")}</div></div>`;
       Talk.bindView(W); W.querySelectorAll(".od-topic:not(.soon)").forEach(b => b.onclick = () => { this.cur = b.dataset.t; this.D = TOPIC_DEF[this.cur]; this.reset(); this.render(); }); return; }
     const D = this.D = TOPIC_DEF[this.cur];
     W.innerHTML = `<div class="tk od">${this.head()}
@@ -4820,11 +4828,12 @@ const Topic = {
     W.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => { this.tab = b.dataset.tab; store.set("ww_topic_tab", this.tab); this.render(); });
     ({ learn: () => this.drawLearn(), menu: () => this.drawMenu(), sample: () => this.drawSample(), play: () => this.drawPlay() })[this.tab]();
   },
+  faceImg(){ return this.D.avatar ? this.D.avatar() : `<img src="${Exam.img(this.D.face)}" alt="">`; },
   sayBtns(R){ R.querySelectorAll("[data-say]").forEach(b => b.onclick = e => { e.stopPropagation(); speak(b.dataset.say); }); },
   /* ① mẫu câu */
   drawLearn(){ const B = $("#odBody");
-    const D = this.D; B.innerHTML = `<p class="od-lead">Bấm vào câu để nghe. Vai <b class="od-who s">${D.role[0]}</b> = ${D.role[1]}, <b class="od-who k">客</b> = 顾客 (khách – là bạn).</p>
-      <div class="od-learn">${D.learn.map((g, gi) => `<section class="od-card"><h4><span>${g.ic}</span>${gi + 1}. ${g.t}</h4>${g.L.map(([w, z, p, v]) => `<button class="od-line" data-say="${esc(z.replace(/\s*\/\s*/g, "，"))}"><b class="od-who ${w !== "客" ? "s" : "k"}">${w}</b><span><span class="han">${esc(z)}</span><small>${esc(p)}</small><em>${esc(v)}</em></span>${ICON.sound}</button>`).join("")}${g.tip ? `<p class="od-tip">💡 ${esc(g.tip)}</p>` : ""}</section>`).join("")}</div>
+    const D = this.D; B.innerHTML = `<p class="od-lead">Bấm vào câu để nghe. Vai <b class="od-who s">${D.role[0]}</b> = ${D.role[1]}, <b class="od-who k">${D.me || "客"}</b> = ${D.meText || "顾客 (khách – là bạn)"}.</p>
+      <div class="od-learn">${D.learn.map((g, gi) => `<section class="od-card"><h4><span>${g.ic}</span>${gi + 1}. ${g.t}</h4>${g.L.map(([w, z, p, v]) => `<button class="od-line" data-say="${esc(z.replace(/\s*\/\s*/g, "，"))}"><b class="od-who ${w !== "客" ? "s" : "k"}">${w === "客" && D.me ? D.me : w}</b><span><span class="han">${esc(z)}</span><small>${esc(p)}</small><em>${esc(v)}</em></span>${ICON.sound}</button>`).join("")}${g.tip ? `<p class="od-tip">💡 ${esc(g.tip)}</p>` : ""}</section>`).join("")}</div>
       <div class="od-next"><button class="btn primary" data-go="menu">${D.boardNext}</button></div>`;
     this.sayBtns(B); B.querySelector("[data-go]").onclick = () => { this.tab = "menu"; this.render(); }; },
   menuHTML(small){ return `<div class="od-menu ${small ? "sm" : ""}">${OD_MENU.map(d => `<button class="od-dish" data-say="${esc(d.h)}"><i style="background-image:url('${Exam.img("s1_menu")}');background-position:${(d.id % 4) * 100 / 3}% ${(d.id / 4 | 0) * 100 / 3}%"></i>
@@ -4845,7 +4854,7 @@ const Topic = {
     this.sayBtns(B); B.querySelector("[data-go]").onclick = () => { this.tab = "play"; this.render(); };
     $("#odPlay").onclick = () => { const L = [...B.querySelectorAll(".tk-b")]; let k = 0; const go = () => { L.forEach(x => x.classList.remove("on")); if(k >= L.length || !document.body.contains(B)) return;
       const el = L[k++]; el.classList.add("on"); el.scrollIntoView({ block: "nearest", behavior: "smooth" }); speak(el.dataset.zh); Games.later(go, 900 + [...el.dataset.zh].length * 230); }; go(); }; },
-  bubble(b){ const av = `<span class="tk-av od-av"><img src="${Exam.img(this.D.face)}" alt="服务员"></span>`;
+  bubble(b){ const av = `<span class="tk-av od-av">${this.faceImg()}</span>`;
     if(b.who === "sys") return `<div class="od-sys">${b.html}</div>`;
     if(b.who === "menu") return `<div class="tk-b ai od-mb">${av}<div class="tk-bb">${this.D.board(true, b.ids)}</div></div>`;
     const showPy = this.py, showVi = this.vi;
@@ -4854,7 +4863,7 @@ const Topic = {
   /* ④ thực hành – máy trạng thái */
   reset(){ this.chat = []; this.log = []; this.st = null; this.order = []; this.ctx = { fails: 0 }; this.review = null; this.busy = false; this.drill = null; this.D && this.D.reset(this); },
   drawPlay(){ const B = $("#odBody");
-    B.innerHTML = `<p class="tk-intro"><span>${this.D.intro} Trả lời bằng giọng nói (🎤) hoặc gõ chữ Hán. Cuối buổi sẽ có hóa đơn và phần sửa lỗi.</span></p>
+    B.innerHTML = `<p class="tk-intro"><span>${this.D.intro} Trả lời bằng giọng nói (🎤) hoặc gõ chữ Hán. Cuối buổi sẽ có ${this.D.noBill ? "" : "hóa đơn và "}phần sửa lỗi.</span></p>
       <div class="tk-tools"><button class="btn sm" id="tkPy" aria-pressed="${this.py}">${this.py ? "Ẩn" : "Hiện"} phiên âm</button><button class="btn sm" id="tkVi" aria-pressed="${this.vi}">${this.vi ? "Ẩn" : "Hiện"} nghĩa</button>
         <button class="btn sm" id="odMenuBtn">${this.D.boardBtn}</button><button class="btn sm" id="tkRestart">${ICON.redo}Bắt đầu lại</button></div>
       <div id="odMenuPop" hidden>${this.D.board(true)}</div>
@@ -4865,10 +4874,10 @@ const Topic = {
     $("#tkRestart").onclick = () => { this.stopMic(); this.reset(); this.drawPlay(); };
     this.sayBtns($("#odMenuPop"));
     this.drawChat(); this.drawBar();
-    if(this.review) this.drawReview(); else if(!this.st) this.go("greet");
+    if(this.review) this.drawReview(); else if(!this.st) this.go(this.D.start || "greet");
   },
   drawChat(){ const C = $("#tkChat"); if(!C) return;
-    C.innerHTML = this.chat.map(b => this.bubble(b)).join("") + (this.busy ? `<div class="tk-b ai"><span class="tk-av od-av"><img src="${Exam.img(this.D.face)}" alt=""></span><div class="tk-bb tk-typing"><i></i><i></i><i></i></div></div>` : "");
+    C.innerHTML = this.chat.map(b => this.bubble(b)).join("") + (this.busy ? `<div class="tk-b ai"><span class="tk-av od-av">${this.faceImg()}</span><div class="tk-bb tk-typing"><i></i><i></i><i></i></div></div>` : "");
     this.sayBtns(C); C.scrollTop = C.scrollHeight; },
   drawBar(){ const B = $("#tkBar"); if(!B) return; if(this.review || this.st === "end"){ B.innerHTML = ""; return; }
     B.innerHTML = `<div class="tk-live" id="tkLive">${this.recOn ? "Đang nghe… nói xong bấm 🎤 lần nữa" : (SR ? "Bấm 🎤 rồi nói tiếng Trung" : "Trình duyệt không hỗ trợ nhận giọng nói – hãy gõ chữ Hán")}</div>
@@ -5056,7 +5065,7 @@ const Topic = {
   drawDrill(){ const D = $("#odDrill"), d = this.drill; if(!D || !d) return;
     if(d.k >= d.list.length){ D.innerHTML = `<p class="od-sys">✅ Đã luyện xong các câu sai! Bấm “${this.D.againBtn.replace("▶ ", "")}” để đóng vai lại từ đầu.</p>`; return; }
     const x = d.list[d.k];
-    D.innerHTML = `<div class="od-drill"><b>Câu ${d.k + 1}/${d.list.length}</b><div class="tk-b ai"><span class="tk-av od-av"><img src="${Exam.img(this.D.face)}" alt=""></span><div class="tk-bb"><button class="say-sm" data-say="${esc(x.q[0])}">${ICON.sound}</button><span class="han">${esc(x.q[0])}</span><small class="tk-vi">${esc(x.q[2])}</small></div></div>
+    D.innerHTML = `<div class="od-drill"><b>Câu ${d.k + 1}/${d.list.length}</b><div class="tk-b ai"><span class="tk-av od-av">${this.faceImg()}</span><div class="tk-bb"><button class="say-sm" data-say="${esc(x.q[0])}">${ICON.sound}</button><span class="han">${esc(x.q[0])}</span><small class="tk-vi">${esc(x.q[2])}</small></div></div>
       <div class="tk-row">${SR ? `<button class="tk-mic" id="odDMic">🎤</button>` : ""}<input id="odDIn" class="han" placeholder="Trả lời lại…"><button class="btn primary" id="odDSend">Gửi</button></div><div id="odDRes"></div></div>`;
     this.sayBtns(D); speak(x.q[0]);
     const go = said => { const T = Object.create(this); T.ctx = { ...this.ctx, cur: x.st === "opt" && this.ctx.cur ? [{ ...this.ctx.cur[0] }, this.ctx.cur[1]] : this.ctx.cur }; this.D.clone(T, this, x);
@@ -5334,6 +5343,132 @@ TOPIC_DEF.shop = {
       <div class="od-bill-t"><span class="han">一共</span><b>${t}元</b></div>${t0 > t ? `<div class="od-bill-s">🎉 Mặc cả được <b>${t0 - t}元</b> (${Math.round((t0 - t) / t0 * 100)}%)</div>` : ""}
       ${T.ctx.given ? `<div class="od-bill-r"><span>Tiền đưa / thối lại</span><b>${T.ctx.given} / ${T.ctx.given - t}元</b></div>` : ""}</div>`; },
   clone(T, src){ T.cart = (src.cart || []).map(o => ({ ...o })); T.item = src.item ? { ...src.item } : { ...(src.lastItem || { id: 3, n: 1, price: 150, price0: 150, floor: 100, size: "M", color: "灰" }) }; }
+};
+/* ===================== Hội thoại theo chủ đề: HỎI ĐƯỜNG (问路) =====================
+   Bản đồ (ảnh s1_waymap): bạn đứng ở “你在这里” (phía nam), con đường chính chạy thẳng lên phía bắc.
+   r = hàng nhà (0 bắc nhất … 3 nam nhất); c = cột (0 tây … 4 đông); đường chính nằm giữa cột 2 và 3. */
+const WAY_PL = {
+  银行: { py: "yínháng", vi: "ngân hàng", r: 0, c: 0, x: 305, y: 195 }, 医院: { py: "yīyuàn", vi: "bệnh viện", r: 0, c: 1, x: 550, y: 195 },
+  学校: { py: "xuéxiào", vi: "trường học", r: 0, c: 2, x: 895, y: 195, end: 1, al: ["大学"] }, 商店: { py: "shāngdiàn", vi: "cửa hàng", r: 0, c: 4, x: 1270, y: 215 },
+  书店: { py: "shūdiàn", vi: "hiệu sách", r: 1, c: 0, x: 175, y: 410 }, 饭馆: { py: "fànguǎn", vi: "quán ăn", r: 1, c: 1, x: 480, y: 410, al: ["餐厅", "饭店"] },
+  酒店: { py: "jiǔdiàn", vi: "khách sạn", r: 1, c: 2, x: 770, y: 425, al: ["宾馆", "hotel", "HOTEL"] }, 运动场: { py: "yùndòngchǎng", vi: "sân vận động", r: 1, c: 3, x: 1060, y: 405, al: ["操场", "足球场"] },
+  体育馆: { py: "tǐyùguǎn", vi: "nhà thi đấu", r: 1, c: 4, x: 1380, y: 415, al: ["健身房"] },
+  菜市场: { py: "càishìchǎng", vi: "chợ rau", r: 2, c: 0, x: 180, y: 635, al: ["市场", "菜场"] }, 超市: { py: "chāoshì", vi: "siêu thị", r: 2, c: 1, x: 470, y: 635 },
+  图书馆: { py: "túshūguǎn", vi: "thư viện", r: 2, c: 2, x: 770, y: 635 }, 宿舍: { py: "sùshè", vi: "ký túc xá", r: 2, c: 3, x: 1080, y: 640 },
+  大使馆: { py: "dàshǐguǎn", vi: "đại sứ quán", r: 2, c: 4, x: 1400, y: 655 },
+  电影院: { py: "diànyǐngyuàn", vi: "rạp chiếu phim", r: 3, c: 1, x: 235, y: 860, al: ["电影"] }, 商场: { py: "shāngchǎng", vi: "trung tâm thương mại", r: 3, c: 2, x: 580, y: 865, al: ["购物中心", "MALL", "mall"] }
+};
+const WAY_OFF = { 公园: ["gōngyuán", "công viên"], 邮局: ["yóujú", "bưu điện"], 火车站: ["huǒchēzhàn", "ga tàu"], 地铁站: ["dìtiězhàn", "ga tàu điện ngầm"], 咖啡馆: ["kāfēiguǎn", "quán cà phê"],
+  卫生间: ["wèishēngjiān", "nhà vệ sinh"], 厕所: ["cèsuǒ", "nhà vệ sinh"], 动物园: ["dòngwùyuán", "sở thú"], 机场: ["jīchǎng", "sân bay"], 药店: ["yàodiàn", "hiệu thuốc"] };
+function wayFind(raw){ const s = String(raw), L = Object.entries(WAY_PL).flatMap(([k, p]) => [k, ...(p.al || [])].map(a => [a, k])).sort((a, b) => b[0].length - a[0].length);
+  let best = null; for(const [a, k] of L){ const i = s.indexOf(a); if(i >= 0 && (!best || i < best.i)) best = { i, k }; } return best && best.k; }
+const capVi = s => s[0].toUpperCase() + s.slice(1);
+/* tính đường đi → [zh, py, vi] + dữ liệu để kiểm tra khi học viên nhắc lại */
+function wayRoute(name){
+  const p = WAY_PL[name], NUM = [["", "", 0], ["一", "yī", 1], ["二", "èr", 2], ["三", "sān", 3]];
+  const parts = [], add = (z, y, v) => parts.push([z, y, v]);
+  let k = 0, turn = null, N = 0;
+  const near = () => { const nb = Object.entries(WAY_PL).find(([n, q]) => q.r === p.r && q.c === (p.c <= 2 ? p.c + 1 : p.c - 1) && !q.end); return nb; };
+  const endPart = side => { const sv = side === "左" ? ["zuǒ", "trái"] : ["yòu", "phải"], nb = (p.c <= 1 || p.c >= 4) && near();
+    add(`${name}就在路的${side}边`, `${p.py} jiù zài lù de ${sv[0]}bian`, `${p.vi} ở ngay bên ${sv[1]} đường`);
+    if(nb) add(`，在${nb[0]}旁边。`, `, zài ${nb[1].py} pángbiān.`, `, cạnh ${nb[1].vi}.`); else add("。", ".", "."); };
+  if(p.end){ k = 3; add("一直往前走，走到头就是学校。", "Yìzhí wǎng qián zǒu, zǒu dào tóu jiù shì xuéxiào.", "Cứ đi thẳng, đi đến cuối đường là trường học."); }
+  else if(p.r === 3){ turn = "左"; N = 2 - p.c;
+    add("从这儿往左拐（往西走），", "Cóng zhèr wǎng zuǒ guǎi (wǎng xī zǒu), ", "Từ đây rẽ trái (đi về phía tây), ");
+    N ? add(`过${NUM[N][0] === "二" ? "两" : NUM[N][0]}个路口，`, `guò ${N === 2 ? "liǎng" : "yí"} ge lùkǒu, `, `qua ${N} ngã tư, `) : add("走一会儿，", "zǒu yíhuìr, ", "đi một đoạn, ");
+    endPart("右"); }
+  else { k = p.r === 2 ? 1 : p.r === 1 ? 2 : 3;
+    add("一直往前走，", "Yìzhí wǎng qián zǒu, ", "Cứ đi thẳng về phía trước, ");
+    if(p.r > 0 && (p.c === 2 || p.c === 3)){ add(`过了第${NUM[k][0]}个路口，`, `guòle dì-${NUM[k][1]} ge lùkǒu, `, `qua ngã tư thứ ${k}, `); endPart(p.c === 2 ? "左" : "右"); }
+    else { turn = p.c <= 2 ? "左" : "右"; N = p.c <= 2 ? 2 - p.c : p.c - 3;
+      p.r === 0 ? add("走到头", "zǒu dào tóu ", "đi đến cuối đường ") : add(`到第${NUM[k][0]}个路口`, `dào dì-${NUM[k][1]} ge lùkǒu `, `đến ngã tư thứ ${k} `);
+      add(`往${turn}拐，`, `wǎng ${turn === "左" ? "zuǒ" : "yòu"} guǎi, `, `rẽ ${turn === "左" ? "trái" : "phải"}, `);
+      N ? add(`再过${N === 2 ? "两" : "一"}个路口，`, `zài guò ${N === 2 ? "liǎng" : "yí"} ge lùkǒu, `, `đi qua thêm ${N} ngã tư nữa, `) : add("再走一会儿，", "zài zǒu yíhuìr, ", "đi thêm một đoạn, ");
+      endPart(turn === "左" ? "右" : "左"); } }
+  const min = 3 + 3 * (k + N);
+  return { name, k, turn, N, end: !!p.end, row3: p.r === 3, min, tx: [parts.map(x => x[0]).join(""), parts.map(x => x[1]).join(""), capVi(parts.map(x => x[2]).join(""))] };
+}
+function wayDist(R){ const m = R.min, z = odNum(m);
+  return m <= 6 ? [`不远，走路${z[0]}分钟就到了。`, `Bù yuǎn, zǒu lù ${z[1]} fēnzhōng jiù dào le.`, `Không xa, đi bộ ${m} phút là tới.`]
+    : m <= 9 ? [`不太远，走路大概${z[0]}分钟。`, `Bú tài yuǎn, zǒu lù dàgài ${z[1]} fēnzhōng.`, `Không xa lắm, đi bộ khoảng ${m} phút.`]
+    : [`有点儿远，走路要${z[0]}分钟，你可以骑自行车或者坐出租车。`, `Yǒudiǎnr yuǎn, zǒu lù yào ${z[1]} fēnzhōng, nǐ kěyǐ qí zìxíngchē huòzhě zuò chūzūchē.`, `Hơi xa, đi bộ mất ${m} phút, bạn có thể đi xe đạp hoặc taxi.`]; }
+/* học viên nhắc lại đường: kiểm tra hướng rẽ và ngã tư */
+function wayCheck(n, R){ const t = (n.match(/(左|右)(拐|转)|往(左|右)走|向(左|右)/) || []).slice(1).find(Boolean) || null;
+  const km = n.match(/第([一二三两])个/), kk = km ? { 一: 1, 二: 2, 两: 2, 三: 3 }[km[1]] : /到头|尽头/.test(n) ? 3 : null;
+  if(t == null && kk == null && !/一直|往前|直走/.test(n)) return null;
+  const errs = [];
+  if(R.turn && t && t !== R.turn) errs.push(`không phải rẽ ${t === "左" ? "trái" : "phải"} mà là rẽ ${R.turn === "左" ? "trái (往左拐)" : "phải (往右拐)"}`);
+  if(!R.turn && t) errs.push("không cần rẽ, cứ đi thẳng (一直往前走)");
+  if(kk && R.k && kk !== R.k) errs.push(R.k === 3 ? "phải đi đến cuối đường (走到头)" : `là ngã tư thứ ${R.k} (第${["", "一", "二", "三"][R.k]}个路口)`);
+  return { ok: !errs.length, errs }; }
+
+const WAY_LEARN = [
+  { t: "Mở lời hỏi đường", ic: "🙋", L: [["客", "请问，图书馆在哪儿？", "Qǐngwèn, túshūguǎn zài nǎr?", "Xin hỏi, thư viện ở đâu?"], ["客", "请问，去医院怎么走？", "Qǐngwèn, qù yīyuàn zěnme zǒu?", "Xin hỏi, đi bệnh viện đi thế nào?"],
+    ["客", "对不起，打扰一下，附近有超市吗？", "Duìbuqǐ, dǎrǎo yíxià, fùjìn yǒu chāoshì ma?", "Xin lỗi, làm phiền một chút, gần đây có siêu thị không?"], ["路", "不好意思，我也不知道。", "Bù hǎo yìsi, wǒ yě bù zhīdào.", "Xin lỗi, tôi cũng không biết."]],
+    tip: "Mở đầu lịch sự bằng 请问 / 对不起，打扰一下 rồi mới hỏi. 在哪儿？ hỏi vị trí · 怎么走？ hỏi cách đi." },
+  { t: "Phương hướng", ic: "🧭", L: [["路", "东、南、西、北", "dōng, nán, xī, běi", "đông, nam, tây, bắc"], ["路", "前边、后边、左边、右边", "qiánbian, hòubian, zuǒbian, yòubian", "phía trước, phía sau, bên trái, bên phải"],
+    ["路", "旁边、对面、中间", "pángbiān, duìmiàn, zhōngjiān", "bên cạnh, đối diện, ở giữa"]], tip: "Trong tiếng Trung nói 东南西北 (đông–nam–tây–bắc). Bên trái/phải đường: 路的左边 / 路的右边." },
+  { t: "Chỉ đường", ic: "➡️", L: [["路", "一直往前走。", "Yìzhí wǎng qián zǒu.", "Cứ đi thẳng về phía trước."], ["路", "到第二个路口往左拐。", "Dào dì-èr ge lùkǒu wǎng zuǒ guǎi.", "Đến ngã tư thứ hai thì rẽ trái."],
+    ["路", "过马路，再往右拐。", "Guò mǎlù, zài wǎng yòu guǎi.", "Qua đường, rồi rẽ phải."], ["路", "走到头就是学校。", "Zǒu dào tóu jiù shì xuéxiào.", "Đi đến cuối đường là trường học."], ["路", "银行就在路的右边。", "Yínháng jiù zài lù de yòubian.", "Ngân hàng ở ngay bên phải đường."]],
+    tip: "往 + hướng + 走 / 拐: 往前走 (đi thẳng), 往左拐 (rẽ trái), 往北走 (đi về phía bắc). 路口 = ngã tư, ngã rẽ." },
+  { t: "Nói vị trí", ic: "📍", L: [["路", "银行在医院旁边。", "Yínháng zài yīyuàn pángbiān.", "Ngân hàng ở bên cạnh bệnh viện."], ["路", "书店在饭馆的西边。", "Shūdiàn zài fànguǎn de xībian.", "Hiệu sách ở phía tây quán ăn."],
+    ["路", "宿舍在图书馆和大使馆中间。", "Sùshè zài túshūguǎn hé dàshǐguǎn zhōngjiān.", "Ký túc xá ở giữa thư viện và đại sứ quán."], ["路", "超市北边是饭馆。", "Chāoshì běibian shì fànguǎn.", "Phía bắc siêu thị là quán ăn."]],
+    tip: "A 在 B + 旁边/西边/对面… = A ở cạnh/phía tây/đối diện B. Nơi chốn + 是 + vật: 超市北边是饭馆." },
+  { t: "Xa hay gần?", ic: "📏", L: [["客", "离这儿远吗？", "Lí zhèr yuǎn ma?", "Cách đây có xa không?"], ["客", "走路要多长时间？", "Zǒu lù yào duō cháng shíjiān?", "Đi bộ mất bao lâu?"],
+    ["路", "不远，走路五分钟就到了。", "Bù yuǎn, zǒu lù wǔ fēnzhōng jiù dào le.", "Không xa, đi bộ năm phút là tới."], ["路", "有点儿远，你可以坐出租车。", "Yǒudiǎnr yuǎn, nǐ kěyǐ zuò chūzūchē.", "Hơi xa, bạn có thể đi taxi."]] },
+  { t: "Xác nhận & cảm ơn", ic: "🙏", L: [["客", "请您再说一遍，好吗？", "Qǐng nín zài shuō yí biàn, hǎo ma?", "Phiền bạn nói lại một lần được không?"], ["客", "往前走，到第二个路口往左拐，对吗？", "Wǎng qián zǒu, dào dì-èr ge lùkǒu wǎng zuǒ guǎi, duì ma?", "Đi thẳng, đến ngã tư thứ hai rẽ trái, đúng không?"],
+    ["路", "对，没错。", "Duì, méi cuò.", "Đúng, không sai."], ["客", "太谢谢您了！", "Tài xièxie nín le!", "Cảm ơn bạn nhiều lắm!"], ["路", "不客气！", "Bú kèqi!", "Không có gì!"]],
+    tip: "Nhắc lại đường để chắc chắn mình hiểu đúng – người chỉ đường sẽ sửa nếu bạn nhầm." }
+];
+const WAY_SAMPLE = [["客", "请问，去超市怎么走？", "Qǐngwèn, qù chāoshì zěnme zǒu?", "Xin hỏi, đi siêu thị đi thế nào?"],
+  ["路", "一直往前走，到第一个路口往左拐，再过一个路口，超市就在路的右边，在图书馆旁边。", "Yìzhí wǎng qián zǒu, dào dì-yī ge lùkǒu wǎng zuǒ guǎi, zài guò yí ge lùkǒu, chāoshì jiù zài lù de yòubian, zài túshūguǎn pángbiān.", "Cứ đi thẳng, đến ngã tư thứ nhất rẽ trái, qua thêm một ngã tư nữa, siêu thị ở ngay bên phải đường, cạnh thư viện."],
+  ["客", "离这儿远吗？", "Lí zhèr yuǎn ma?", "Cách đây có xa không?"], ["路", "不太远，走路大概九分钟。", "Bú tài yuǎn, zǒu lù dàgài jiǔ fēnzhōng.", "Không xa lắm, đi bộ khoảng chín phút."],
+  ["客", "往前走，到第一个路口往左拐，对吗？", "Wǎng qián zǒu, dào dì-yī ge lùkǒu wǎng zuǒ guǎi, duì ma?", "Đi thẳng, đến ngã tư thứ nhất rẽ trái, đúng không?"], ["路", "对，没错。", "Duì, méi cuò.", "Đúng, không sai."],
+  ["客", "太谢谢您了！", "Tài xièxie nín le!", "Cảm ơn bạn nhiều lắm!"], ["路", "不客气！", "Bú kèqi!", "Không có gì!"]];
+function wayBoard(small){ return `<div class="wy-map ${small ? "sm" : ""}"><img src="${Exam.img("s1_waymap")}" alt="Bản đồ khu phố">${Object.entries(WAY_PL).map(([n, p]) =>
+  `<button class="wy-pin" data-say="${esc(n)}" style="left:${(p.x / 15.36).toFixed(1)}%;top:${(p.y / 10.24).toFixed(1)}%" title="${esc(p.py + " – " + p.vi)}"><span>${esc(n)}</span></button>`).join("")}</div>
+  ${small ? "" : `<div class="wy-legend">${Object.entries(WAY_PL).map(([n, p]) => `<button class="od-line" data-say="${esc(n)}"><span><span class="han">${n}</span><small>${p.py}</small><em>${p.vi}</em></span>${ICON.sound}</button>`).join("")}</div>`}`; }
+function wayMission(T){ const m = T.ctx.missions[T.ctx.mi], p = WAY_PL[m];
+  T.sys(`🎯 <b>Nhiệm vụ ${T.ctx.mi + 1}/${T.ctx.missions.length}:</b> Bạn đang đứng ở chỗ <b class="han">你在这里</b> trên bản đồ. Hãy hỏi người đi đường cách đến <b class="han">${m}</b> (${p.py} – ${p.vi}).`);
+  T.q = ["（Bạn bắt đầu hỏi đường）", "", `Hỏi đường đến ${m}`]; }
+const WAY_STATES = {
+  ask: { hint: "Mở lời lịch sự rồi hỏi: 请问，…在哪儿？ / 请问，去…怎么走？", model: T => { const m = T.ctx.missions[T.ctx.mi]; return [`请问，${m}在哪儿？`, `请问，去${m}怎么走？`]; }, ask: () => null,
+    check(T, n, raw){ const pl = wayFind(raw), polite = /请问|对不起|打扰|麻烦|劳驾|你好|您好|不好意思/.test(n);
+      if(pl && /哪|怎么|去|找|有|走|到|远/.test(n)){ const R = T.ctx.route = wayRoute(pl); T.ctx.place = pl;
+        return { ok: true, soft: polite ? "" : "Nên mở đầu bằng 请问… hoặc 对不起，打扰一下 cho lịch sự.", react: /有.*吗/.test(n) ? [`有，${R.tx[0]}`, `Yǒu, ${R.tx[1]}`, `Có, ${R.tx[2]}`] : R.tx, next: "follow" }; }
+      const off = Object.keys(WAY_OFF).find(k => n.includes(k));
+      if(off) return { ok: true, stay: true, soft: "Địa điểm này không có trên bản đồ – hãy hỏi một nơi trên bản đồ.", react: [`不好意思，这儿附近没有${off}。`, `Bù hǎo yìsi, zhèr fùjìn méiyǒu ${WAY_OFF[off][0]}.`, `Xin lỗi, gần đây không có ${WAY_OFF[off][1]}.`] };
+      if(/^(你好|您好|请问|对不起|打扰一下|不好意思|麻烦你|劳驾)/.test(n) && n.length <= 8) return { ok: true, stay: true, react: ["你好！有什么事吗？", "Nǐ hǎo! Yǒu shénme shì ma?", "Chào bạn! Có việc gì không?"] };
+      if(pl) return { ok: true, stay: true, soft: "Hãy hỏi rõ: …在哪儿？ hoặc 去…怎么走？", react: [`你要去${pl}吗？`, `Nǐ yào qù ${WAY_PL[pl].py} ma?`, `Bạn muốn đến ${WAY_PL[pl].vi} à?`] };
+      return { ok: false }; } },
+  follow: { hint: "Hỏi thêm (远吗？/ 要多长时间？), nhắc lại đường để xác nhận (…往左拐，对吗？), hoặc cảm ơn (谢谢！).",
+    model: T => { const R = T.ctx.route; return ["离这儿远吗？", R.row3 ? "从这儿往左拐，对吗？" : R.turn ? `一直往前走，${R.k === 3 ? "走到头" : `到第${["", "一", "二", "三"][R.k]}个路口`}往${R.turn}拐，对吗？` : R.end ? "一直往前走，走到头，对吗？" : `一直往前走，过了第${["", "一", "二", "三"][R.k]}个路口就到了，对吗？`, "太谢谢您了！"]; }, ask: () => null,
+    check(T, n, raw){ const R = T.ctx.route;
+      if(/谢/.test(n) && !/对吗|是吗/.test(n)) return T.ctx.mi + 1 >= T.ctx.missions.length ? { ok: true, react: ["不客气！再见！", "Bú kèqi! Zàijiàn!", "Không có gì! Tạm biệt!"], next: "end" } : { ok: true, react: ["不客气！", "Bú kèqi!", "Không có gì!"], after: true, done: true };
+      const pl = wayFind(raw); if(pl && pl !== T.ctx.place && /哪|怎么|去|找/.test(n)){ const R2 = T.ctx.route = wayRoute(pl); T.ctx.place = pl; return { ok: true, stay: true, react: R2.tx }; }
+      if(/远|多长时间|多久|几分钟|近/.test(n)) return { ok: true, stay: true, react: wayDist(R) };
+      if(/再说|一遍|没听懂|听不懂|慢一点|慢点|什么/.test(n)) return { ok: true, stay: true, react: [`好的。${R.tx[0]}`, `Hǎo de. ${R.tx[1]}`, `Được. ${R.tx[2]}`] };
+      if(/坐车|出租|公交|地铁|骑|打车/.test(n)) return { ok: true, stay: true, react: R.min >= 10 ? ["可以，坐出租车五分钟就到了。", "Kěyǐ, zuò chūzūchē wǔ fēnzhōng jiù dào le.", "Được, đi taxi năm phút là tới."] : ["不用，很近，走路就行。", "Búyòng, hěn jìn, zǒu lù jiù xíng.", "Không cần đâu, gần lắm, đi bộ là được."] };
+      const c = wayCheck(n, R);
+      if(c){ T.ctx.confirmed = true; return c.ok ? { ok: true, stay: true, react: ["对，没错。", "Duì, méi cuò.", "Đúng, không sai."] }
+        : { ok: true, stay: true, note: "Nhắc lại đường chưa đúng: " + c.errs.join("; ") + ".", react: [`不对，${R.tx[0]}`, `Bú duì, ${R.tx[1]}`, `Không phải, ${R.tx[2]}`] }; }
+      if(/在哪|旁边|对面|附近/.test(n) && pl){ return { ok: true, stay: true, react: WAY_PL[pl] ? wayRoute(pl).tx : R.tx }; }
+      return { ok: false }; } }
+};
+TOPIC_DEF.way = {
+  title: ["🧭", "问路", "Hỏi đường"], avatar: () => xiaoyuSVG(), role: ["路", "路人 (người đi đường – Tiểu Ngữ)"], me: "我", meText: "bạn (người hỏi đường)", doneMsg: "Bạn đã hỏi đường rất tốt",
+  learn: WAY_LEARN, sample: WAY_SAMPLE, boardTab: "② Bản đồ", board: wayBoard, boardHead: ["地图", "dìtú · bản đồ – bấm vào địa điểm để nghe"], boardBtn: "🗺️ Bản đồ",
+  boardTip: "💡 Bạn đứng ở 你在这里 (phía nam). Con đường trước mặt chạy thẳng lên phía bắc (北). Rẽ trái = đi về phía tây (西), rẽ phải = đi về phía đông (东).",
+  intro: "Bạn là <b>người hỏi đường</b>, Tiểu Ngữ là <b>người đi đường</b>. Mỗi lượt có một nhiệm vụ: hỏi đường đến một địa điểm trên bản đồ. Hãy mở lời lịch sự, hỏi đường, hỏi xa hay gần, <b>nhắc lại đường</b> để xác nhận rồi cảm ơn. Bạn có thể bấm 🗺️ Bản đồ để dò theo.",
+  againBtn: "▶ Hỏi đường lần nữa", label: "Hỏi đường", nextBtn: "Đến lượt bạn: thực hành hỏi đường ›", boardNext: "Xem bản đồ ›",
+  STATES: WAY_STATES,
+  reset(T){ const all = shuffle(Object.keys(WAY_PL)), a = all.find(k => { const r = wayRoute(k); return r.turn && r.k; }), b = all.find(k => k !== a);
+    T.ctx.missions = [a, b]; T.ctx.mi = 0; T.chat.push({ who: "menu" }); wayMission(T); },
+  start: "ask",
+  after(T, r){ if(r.done){ T.ctx.mi++;
+      Games.later(() => { wayMission(T); T.drawBar(); }, 1400); return "ask"; } return "follow"; },
+  hasBill: () => 0, bill: () => "", noBill: 1,
+  clone(T, src){ T.ctx = { ...src.ctx, route: src.ctx.route || wayRoute(src.ctx.missions[0]), missions: [...src.ctx.missions], mi: 0 }; T.chat = []; T.sys = () => {}; }
 };
 
 const Exam = {
