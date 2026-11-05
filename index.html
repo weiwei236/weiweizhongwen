@@ -4597,7 +4597,7 @@ const AV_OPTS={
  shoes:[["sneaker","Giày thể thao"],["mesh","Giày lưới"],["hightop","Giày cổ cao"],["boots","Bốt"],["sandal","Xăng-đan"],["clog","Guốc mộc"],["slipper","Dép lê"],["loafer","Giày lười"],["maryjane","Giày búp bê"],["formal","Giày da"],["heels","Cao gót"]],
  accHead:[["none","Không"],["nonla","Nón lá"],["khandong","Khăn đóng"],["cap","Mũ lưỡi trai"],["beret","Mũ beret"],["bucket","Mũ bucket"],["beanie","Mũ len"],["bow","Nơ cài tóc"],["flower","Hoa cài tóc"],["catears","Băng đô tai mèo"],["phones","Tai nghe"]],
  accFace:[["none","Không"],["glasses","Kính tròn"],["square","Gọng vuông"],["metal","Gọng kim loại"],["halfrim","Nửa gọng"],["cateye","Mắt mèo"],["sunglasses","Kính râm"],["roundsun","Kính râm tròn"],["heart","Kính trái tim"]],
- accBody:[["none","Không"],["khanran","Khăn rằn"],["scarf","Khăn quàng cổ"],["backpack","Ba lô"],["bag","Túi đeo chéo"],["book","Ôm sách"]],
+ accBody:[["none","Không"],["khanran","Khăn rằn"],["scarf","Khăn quàng cổ"],["backpack","Ba lô"],["bag","Túi đeo chéo"],["book","Ôm sách"],["tote","Túi tote"],["waistbag","Túi bao tử"],["camera","Máy ảnh"],["handbag","Túi xách tay"],["chainbag","Túi dây xích"]],
  accNeck:[["none","Không"],["tie","Cà vạt"],["bowtie","Nơ cổ"],["necklace","Dây chuyền"]],
  accWrist:[["none","Không"],["watch","Đồng hồ thông minh"],["bracelet","Vòng tay"]],
  expr:[["smile","Vui vẻ"],["laugh","Cười tươi"],["wow","Ngạc nhiên"],["wink","Nháy mắt"],["shy","Ngại ngùng"],["fight","Quyết tâm"],["star","Lấp lánh"],["love","Mắt tim"],["tongue","Lêu lêu"],["think","Suy nghĩ"],["sweat","Bối rối"],["sleepy","Buồn ngủ"],["sad","Buồn"],["cry","Khóc"],["angry","Giận dỗi"]]
@@ -4613,7 +4613,7 @@ function avLayout(c){ const L={s:34,m:42,t:50}[c.height]||42, Tt={s:36,m:39,t:43
 function shade(hex,a){ const n=parseInt(hex.slice(1),16); let r=n>>16,g=n>>8&255,b=n&255; const f=v=>Math.max(0,Math.min(255,Math.round(a<0?v*(1+a):v+(255-v)*a))); return "#"+((1<<24)+(f(r)<<16)+(f(g)<<8)+f(b)).toString(16).slice(1); }
 const mirror=s=>`<g transform="translate(200,0) scale(-1,1)">${s}</g>`;
 let AVN=0, G="av0";
-const FEM_ACC=["bow","flower","catears"], FEM_FACE=["cateye","heart"], FEM_SHOES=["heels","maryjane"]; /* vật phẩm chỉ dành cho nhân vật nữ */
+const FEM_ACC=["bow","flower","catears"], FEM_FACE=["cateye","heart"], FEM_SHOES=["heels","maryjane"], FEM_BODY=["handbag","chainbag"]; /* vật phẩm chỉ dành cho nhân vật nữ */
 const forG=(c,list,fem)=>c.gender==="m"?list.filter(o=>!fem.includes(o[0])):list;
 function fixHair(c){
   if(c.acc&&c.acc!=="none"){ const a=c.acc, k=a==="glasses"?"accFace":(a==="scarf"||a==="book")?"accBody":"accHead"; if(!c[k]||c[k]==="none") c[k]=a; }
@@ -4623,6 +4623,7 @@ function fixHair(c){
   if(c.gender==="m"&&FEM_ACC.includes(c.accHead)) c.accHead="none";
   if(c.gender==="m"&&FEM_FACE.includes(c.accFace)) c.accFace="none";
   if(c.gender==="m"&&FEM_SHOES.includes(c.shoes)) c.shoes="sneaker";
+  if(c.gender==="m"&&FEM_BODY.includes(c.accBody)) c.accBody="none";
   for(const k of ["bangs","outfit","shoes","accHead","accFace","accBody","accNeck","accWrist","expr"]) if(!AV_OPTS[k].some(o=>o[0]===c[k])) c[k]=AV_DEF[k];
   return c;
 }
@@ -4861,8 +4862,7 @@ Object.assign(MALE_HAIR,{
     /* hai bên cạo ngắn rõ rệt; phần trên ôm sát dáng đầu, rẽ ngôi lệch trái: bên trái ít tóc, bên phải nhiều tóc vuốt lên và sang phải */
     front:h=>maleHairArt(h,[[47,-26,1],[45,-42],[50,-60],[62,-76],[74,-84],[80,-80,1],[90,-90],[112,-94],[134,-88],[150,-74],[157,-56],[157,-38],[154,-26,1],
       [148,-30],[142,-26,1],[134,-38],[124,-32,1],[114,-44],[102,-38,1],[94,-48],[86,-44],[80,-50,1],[74,-44],[66,-40,1],[59,-42],[52,-34]],
-      {pre:mhN.shaved(h,`M44,-28 C40,-14 40,0 41,8 L48,6 C47,-4 48,-16 51,-28 Z`)+mhN.shaved(h,`M156,-28 C160,-14 160,0 159,8 L152,6 C153,-4 152,-16 149,-28 Z`)
-        +`<path d="M43,-18 l3,0 M43,-8 l3,0 M43,2 l3,0 M157,-18 l-3,0 M157,-8 l-3,0 M157,2 l-3,0" stroke="${h}" stroke-opacity=".5" stroke-width="1.2" stroke-linecap="round"/>`,
+      {pre:`<path d="M47,-28 C40,-18 36,-6 35,6 L41,8 C41,-4 44,-16 51,-27 Z M153,-28 C160,-18 164,-6 165,6 L159,8 C159,-4 156,-16 149,-27 Z" fill="${shade(h,.3)}" ${THIN}/>`,
        extra:`<path d="M80,-80 C80,-70 80,-60 80,-50" stroke="${OLC}" stroke-opacity=".5" stroke-width="1.4" fill="none" stroke-linecap="round"/>`,
        lines:"M88,-46 C104,-66 128,-76 150,-66 M102,-38 C118,-56 138,-62 154,-50 M76,-46 C68,-56 60,-58 52,-50", ring:"M86,-80 Q122,-94 150,-72 Q120,-84 86,-80Z M56,-64 Q64,-74 74,-78 Q64,-70 56,-64Z", dots:[[100,-84],[142,-74]]}) },
   messy:{ label:"Rối tự nhiên", native:true,
@@ -4885,15 +4885,13 @@ Object.assign(MALE_HAIR,{
   comma:{ label:"Tóc dấu phẩy", native:true,
     /* rẽ ngôi lệch phải; mái phủ chéo trán, lọn giữa cong móc vào trong như dấu phẩy */
     front:h=>mhN.shadow(`M44,-14 C60,-10 76,-4 90,0 C104,-2 120,-10 132,-16 C142,-12 150,-8 156,-4 L156,6 C142,4 132,2 118,2 C104,8 90,10 90,10 C74,8 58,2 44,-4Z`)
-      +mhN.mass(`M30,8 C20,-58 62,-86 106,-85 Q111,-85 114,-79 Q117,-86 124,-85 C150,-82 182,-58 170,14 C167,6 163,0 157,-4
-        C150,-8 142,-12 134,-18 C128,-24 123,-32 120,-40 C116,-30 108,-20 96,-14
-        C82,-8 66,-6 54,-8 C46,-10 40,-4 36,2 C34,4 32,6 30,8 Z`)
-      +mhN.mass(`M120,-42 C114,-26 102,-14 90,-8 C82,-4 76,-2 74,-7 C72,-13 79,-16 84,-12 C86,-14 86,-17 84,-19
-        C94,-24 104,-32 108,-44 Z`)
+      +mhN.mass(`M30,8 C16,-64 56,-96 104,-93 Q111,-91 114,-81 Q117,-86 124,-85 C150,-82 182,-58 170,14 C167,6 163,0 157,-4
+        C150,-8 142,-12 134,-18 C128,-24 123,-32 120,-40 C114,-26 102,-14 90,-8 C82,-4 76,-2 74,-7 C72,-13 79,-16 84,-12 C86,-14 86,-17 84,-19
+        C78,-22 66,-14 54,-8 C46,-10 40,-4 36,2 C34,4 32,6 30,8 Z`)
       +`<path d="M84,-12 C82,-10 79,-10 78,-12" stroke="${OLC}" stroke-width="1.4" fill="none" stroke-linecap="round"/>`
-      +mhN.line(h,"M116,-38 C110,-26 100,-16 90,-11",.4)+mhN.part(114,-79,24,2)
+      +mhN.line(h,"M116,-38 C110,-26 100,-16 90,-11",.4)+mhN.part(114,-81,24,2)
       +mhN.line(h,"M157,-4 C154,-28 142,-48 124,-58 M54,-8 C52,-26 58,-44 72,-58",.35)
-      +mhN.ring(h,"M52,-56 Q96,-80 146,-60 Q98,-70 52,-56Z")+mhN.dots(h,[[64,-62],[100,-44]]) },
+      +mhN.ring(h,"M48,-60 Q80,-86 110,-84 Q80,-76 48,-60Z")+mhN.dots(h,[[60,-66],[130,-70]]) },
   softcurl:{ label:"Tóc xoăn nhẹ", native:true,
     /* tóc gợn sóng lớn, bồng tự nhiên (đỉnh đầu phồng hơn), đuôi tóc hai bên hất nhẹ ra ngoài */
     back:h=>mhN.mass(`M28,-4 C20,8 22,22 30,26 C28,18 34,12 40,10 Z`)+mhN.mass(`M172,-4 C180,8 178,22 170,26 C172,18 166,12 160,10 Z`),
@@ -5038,9 +5036,11 @@ function outCol(c){ const o=OUT[c.outfit]||OUT.tee; return o[c.gender]||o.f; }
 const GOLD="#E9B949";
 function motif(x,y,pc,r=4){ return `<circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="${pc}" stroke-width="1.4"/><path d="M${x-r*.55},${y} l${r*1.1},0 M${x},${y-r*.55} l0,${r*1.1}" stroke="${pc}" stroke-width="1"/>`; }
 function blossom(x,y){ return `<g transform="translate(${x},${y})"><circle cx="0" cy="-2.4" r="2.2" fill="#fff"/><circle cx="2.3" cy="-.7" r="2.2" fill="#fff"/><circle cx="1.4" cy="2" r="2.2" fill="#fff"/><circle cx="-1.4" cy="2" r="2.2" fill="#fff"/><circle cx="-2.3" cy="-.7" r="2.2" fill="#fff"/><circle r="1.3" fill="#F2B84B"/></g>`; }
+/* trang phục có quần dài / vạt dài: vẽ giày trước để ống quần phủ ra ngoài giày */
+function longPants(c){ const all=["aodai","aogam","baba","hoodie","denim","coat","puffer","sport","sweater","bomber","cargo","varsity"]; return all.includes(c.outfit)||(c.gender==="m"&&["uniform","overalls","suit","china"].includes(c.outfit)); }
 function lowerWear(c,l){
   const {hip,foot}=l, f=c.gender==="f", col=outCol(c);
-  const pants=(pc,len=1,wide=false)=>{ const bot=hip+(foot-9-hip)*len, w=(wide?21:19)+(f?0:3); return `<path d="M${100-w-1.5},${hip-6} L${100+w+1.5},${hip-6} L${100+w+(wide?3:0)},${bot} L101.5,${bot} L100,${hip+6} L98.5,${bot} L${100-w-(wide?3:0)},${bot} Z" fill="${pc}" ${LINE}/>`; };
+  const pants=(pc,len=1,wide=false)=>{ const bot=hip+(foot-7-hip)*len, w=wide?24:22; return `<path d="M${100-w-1.5},${hip-6} L${100+w+1.5},${hip-6} L${100+w+(wide?3:0)},${bot} L101.5,${bot} L100,${hip+6} L98.5,${bot} L${100-w-(wide?3:0)},${bot} Z" fill="${pc}" ${LINE}/>`; };
   const skirt=(sc,pleat=true)=>{ const b=hip+Math.min(19,(foot-hip)*.4); let s=`<path d="M70,${hip-6} L130,${hip-6} L142,${b} Q100,${b+5} 58,${b} Z" fill="${sc}" ${LINE}/>`;
     if(pleat) s+=[76,88,100,112,124].map((x,i)=>`<path d="M${x+ (i-2)*-1},${hip-2} L${x+(i-2)*5},${b+1}" stroke="${shade(sc,-.22)}" stroke-width="1.3"/>`).join(""); return s; };
   const panel=(pc,end,deco)=>{ let s=`<path d="M74,${hip-8} L126,${hip-8} L124,${end} Q100,${end+4} 76,${end} Z" fill="${pc}" ${LINE}/>`;
@@ -5174,6 +5174,12 @@ function bodyAccFront(c,l){
       return `<path d="M76,${sy} L122,${hip-8}" stroke="#8A5530" stroke-width="3.2" stroke-linecap="round"/><rect x="110" y="${hip-14}" width="26" height="19" rx="6" fill="#D49A5C" ${LINE}/><path d="M110,${hip-7} Q123,${hip-2} 136,${hip-7}" stroke="#8A5530" stroke-width="1.5" fill="none"/><circle cx="123" cy="${hip-4}" r="1.8" fill="${GOLD}"/>`;
     case "scarf": return `<path d="M72,${sy-3} Q100,${sy+12} 128,${sy-3} L130,${sy+8} Q100,${sy+22} 70,${sy+8} Z" fill="#E2434F" ${LINE}/><path d="M112,${sy+10} L118,${sy+34} L108,${sy+34} L104,${sy+12} Z" fill="#E2434F" ${LINE}/>`;
     case "khanran": return `<defs><pattern id="${G}kr" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#1E1E22"/><rect width="3" height="3" fill="#F4F1EA"/><rect x="3" y="3" width="3" height="3" fill="#F4F1EA"/></pattern></defs><path d="M72,${sy-3} Q100,${sy+12} 128,${sy-3} L130,${sy+8} Q100,${sy+22} 70,${sy+8} Z" fill="url(#${G}kr)" ${LINE}/><path d="M90,${sy+12} L84,${sy+32} L94,${sy+34} L98,${sy+14} Z" fill="url(#${G}kr)" ${LINE}/>`;
+    case "tote": return `<path d="M70,${sy+1} L56,${hip-14} M76,${sy+1} L76,${hip-14}" stroke="#D8CBB0" stroke-width="3" stroke-linecap="round"/><path d="M50,${hip-15} L82,${hip-15} L84,${hip+10} L48,${hip+10} Z" fill="#EFE6D2" ${LINE}/><path d="M58,${hip-4} q8,-6 16,0" stroke="#C9A97A" stroke-width="1.6" fill="none"/><text x="66" y="${hip+6}" text-anchor="middle" font-size="8" font-weight="700" fill="#5B8C6E" style="font-family:var(--f-han)">中文</text>`;
+    case "waistbag": return `<path d="M128,${sy+1} L72,${hip-6}" stroke="#2B2D33" stroke-width="4" stroke-linecap="round"/><rect x="82" y="${sy+14}" width="38" height="16" rx="8" fill="${c.gender==="m"?"#2B2D33":"#E8A0B4"}" ${LINE}/><path d="M86,${sy+20} L116,${sy+20}" stroke="#C9CDD4" stroke-width="1.4"/><rect x="108" y="${sy+18}" width="5" height="4" rx="1" fill="#C9CDD4"/>`;
+    case "camera": return `<path d="M82,${sy-1} L92,${sy+18} M118,${sy-1} L108,${sy+18}" stroke="#2B2D33" stroke-width="2.6" stroke-linecap="round"/><rect x="86" y="${sy+16}" width="28" height="18" rx="4" fill="#33363D" ${LINE}/><rect x="88" y="${sy+13}" width="8" height="4" rx="1" fill="#33363D" ${THIN}/><circle cx="100" cy="${sy+25}" r="6.5" fill="#1C1E23" stroke="#C9CDD4" stroke-width="1.6"/><circle cx="98" cy="${sy+23}" r="1.8" fill="#8FB6D8"/><circle cx="110" cy="${sy+19}" r="1.4" fill="#E2434F"/>`;
+    case "handbag": { const W=c.outfit==="puffer"?17:14, len=Tt-2, cx=(c.outfit==="puffer"?52:56)+W/2, r=12*Math.PI/180, hx=cx-Math.sin(r)*(len-2), hy=sy+6+Math.cos(r)*(len-2);
+      return `<path d="M${hx-8},${hy+8} Q${hx},${hy-8} ${hx+8},${hy+8}" stroke="#B5763F" stroke-width="2.6" fill="none"/><path d="M${hx-14},${hy+8} L${hx+14},${hy+8} L${hx+12},${hy+28} Q${hx},${hy+31} ${hx-12},${hy+28} Z" fill="#D9925A" ${LINE}/><path d="M${hx-14},${hy+8} L${hx+14},${hy+8} L${hx+13},${hy+15} Q${hx},${hy+19} ${hx-13},${hy+15} Z" fill="#C27C46" ${THIN}/><circle cx="${hx}" cy="${hy+16}" r="2" fill="${GOLD}"/><circle cx="${hx}" cy="${hy+4}" r="7" fill="${SKIN[c.skin][0]}" ${LINE}/>`; }
+    case "chainbag": return `<path d="M126,${sy+1} L78,${hip-10}" stroke="${GOLD}" stroke-width="2.4" stroke-dasharray="2.4 1.6"/><path d="M60,${hip-12} L86,${hip-12} L86,${hip+6} Q73,${hip+9} 60,${hip+6} Z" fill="#F4A9BE" ${LINE}/><path d="M60,${hip-6} L86,${hip-6} M66,${hip-12} L80,${hip+6} M80,${hip-12} L66,${hip+6}" stroke="#E07D99" stroke-width="1"/><path d="M60,${hip-12} L86,${hip-12} L86,${hip-4} Q73,${hip} 60,${hip-4} Z" fill="#F7B8CA" ${THIN}/><circle cx="73" cy="${hip-2}" r="2" fill="${GOLD}"/>`;
     case "book": return `<g transform="rotate(-10,140,${sy+Tt-6})"><rect x="126" y="${sy+Tt-24}" width="28" height="34" rx="3" fill="#2E8B62" ${LINE}/><rect x="129" y="${sy+Tt-21}" width="22" height="28" rx="2" fill="none" stroke="#fff" stroke-opacity=".5"/><text x="140" y="${sy+Tt-2}" text-anchor="middle" font-size="9" font-weight="700" fill="#fff" style="font-family:var(--f-py)">HSK</text></g><circle cx="137" cy="${sy+Tt+3}" r="7" fill="${SKIN[c.skin][0]}" ${LINE}/>`;
   }
   return "";
@@ -5193,7 +5199,7 @@ function avatarSVG(c0,opt={}){
   s+=`<g transform="translate(0,${l.hy})"><g${hc}>${hairBack(c)}</g></g>`;
   s+=`<g transform="translate(100,0) scale(.84,1) translate(-100,0)">${bodyAccBack(c,l)}</g>`;
   s+=c.gender==="m"?`<rect x="76" y="${l.hip-4}" width="18" height="${l.foot-l.hip}" rx="7" fill="${sk[0]}" ${LINE}/><rect x="106" y="${l.hip-4}" width="18" height="${l.foot-l.hip}" rx="7" fill="${sk[0]}" ${LINE}/>`:`<rect x="79" y="${l.hip-4}" width="14" height="${l.foot-l.hip}" rx="6" fill="${sk[0]}" ${LINE}/><rect x="107" y="${l.hip-4}" width="14" height="${l.foot-l.hip}" rx="5" fill="${sk[0]}" ${LINE}/>`;
-  s+=["aodai","aogam","baba"].includes(c.outfit)?shoes(c,l)+lowerWear(c,l):lowerWear(c,l)+shoes(c,l);
+  s+=longPants(c)?shoes(c,l)+lowerWear(c,l):lowerWear(c,l)+shoes(c,l);
   s+=`<path d="M92.5,${l.sy-16} L107.5,${l.sy-16} L108,${l.sy+3} L92,${l.sy+3} Z" fill="${sk[0]}" ${LINE}/><path d="M93,${l.sy-10} Q100,${l.sy-4} 107,${l.sy-10} L107,${l.sy-15} L93,${l.sy-15}Z" fill="${sk[1]}" opacity=".7"/>`;
   s+=`<g transform="translate(100,0) scale(.84,1) translate(-100,0)">${torso(c,l)+bodyAccFront(c,l)+neckWrist(c,l)}</g>`;
   const ears=`<ellipse cx="37" cy="16" rx="8" ry="10" fill="${sk[0]}" ${LINE}/><ellipse cx="163" cy="16" rx="8" ry="10" fill="${sk[0]}" ${LINE}/><path d="M35,12 q4,4 0,9 M165,12 q-4,4 0,9" stroke="${sk[1]}" stroke-width="1.6" fill="none" stroke-linecap="round"/>`;
@@ -5296,7 +5302,7 @@ function renderAv(){
     case "hair": h=avGrp("Kiểu tóc "+(c.gender==="m"?"(nam)":"(nữ)"),avTiles("hair",c.gender==="m"?AV_OPTS.hairM:AV_OPTS.hairF,"head"))+(c.gender==="m"?"":avGrp("Kiểu mái",avTiles("bangs",AV_OPTS.bangs,"head",{accHead:"none"})))+avGrp("Màu tóc",avSwatch("hairColor",AV_OPTS.hairColor,v=>v)); break;
     case "outfit": h=avGrp("Quần áo",avTiles("outfit",AV_OPTS.outfit,"body")); break;
     case "shoes": h=avGrp("Giày dép",avTiles("shoes",forG(c,AV_OPTS.shoes,FEM_SHOES),"feet",{outfit:c.gender==="f"?"tee":"hoodie"})); break;
-    case "acc": h=avGrp("Nón mũ & tai nghe",avTiles("accHead",forG(c,AV_OPTS.accHead,FEM_ACC),"head"))+avGrp("Kính",avTiles("accFace",forG(c,AV_OPTS.accFace,FEM_FACE),"head"))+avGrp("Cổ",avTiles("accNeck",AV_OPTS.accNeck,"head"))+avGrp("Cổ tay",avTiles("accWrist",AV_OPTS.accWrist,"wrist"))+avGrp("Trên người",avTiles("accBody",AV_OPTS.accBody,"full")); break;
+    case "acc": h=avGrp("Nón mũ & tai nghe",avTiles("accHead",forG(c,AV_OPTS.accHead,FEM_ACC),"head"))+avGrp("Kính",avTiles("accFace",forG(c,AV_OPTS.accFace,FEM_FACE),"head"))+avGrp("Cổ",avTiles("accNeck",AV_OPTS.accNeck,"head"))+avGrp("Cổ tay",avTiles("accWrist",AV_OPTS.accWrist,"wrist"))+avGrp("Trên người",avTiles("accBody",forG(c,AV_OPTS.accBody,FEM_BODY),"full")); break;
     case "expr": h=avGrp("Biểu cảm",avTiles("expr",AV_OPTS.expr,"head")); break;
   }
   $("#avPanel").innerHTML=h;
