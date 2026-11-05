@@ -835,6 +835,23 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .sh-go{width:100%;justify-content:center}
 .sh-ok{color:var(--good);font-weight:700}.sh-ok .han{font-size:20px}.sh-bad{color:var(--bad);font-weight:600}.sh-bad b{color:var(--ink)}
 .gm-card.race{background:linear-gradient(140deg,#1F4FA8,#21836A)}.gm-art.race{font-size:56px}
+.gm-card.link{background:linear-gradient(140deg,#E8A317,#E2434F)}.gm-art.link{font-size:52px}
+.lk-wrap{position:relative;display:grid;gap:10px}
+.lk-pick{display:grid;gap:12px}.lk-pick h3{margin:0}.lk-modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}.lk-pick>.btn{justify-self:start}
+.lk-bar{height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden}.lk-bar i{display:block;height:100%;background:linear-gradient(90deg,#21836A,#7BC67E);transition:width .25s linear}.lk-bar i.low{background:#E2434F}
+.lk-info{min-height:44px;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;background:#FFF8E6;border:1px solid #F3DFA8;border-radius:12px;padding:6px 12px;text-align:center;font-size:15px}
+.lk-info .lk-w{font-size:24px;color:#C2513A}.lk-info .py{color:var(--muted)}.lk-plus{font-style:normal;font-weight:700;color:#21836A}
+.lk-stage{background:linear-gradient(160deg,#2E8B62,#1F6C4B);border-radius:18px;padding:calc(min(5.6vw,46px)*.6);overflow:hidden}
+.lk-board{position:relative;display:grid;grid-template-columns:repeat(var(--c),1fr);gap:4px;max-width:calc(var(--c)*62px);margin:0 auto}
+.lk-t,.lk-e{aspect-ratio:4/5;border-radius:9px}
+.lk-t{border:0;padding:0;cursor:pointer;background:linear-gradient(180deg,#FFFDF6,#F3E9D2);box-shadow:0 4px 0 #C9A97A,0 5px 6px rgba(0,0,0,.25),inset 0 0 0 2px #fff;display:grid;place-items:center;transition:transform .1s}
+.lk-t span{font-size:clamp(20px,5.2vw,30px);color:#2A1A14;line-height:1}.lk-t.s2 span{font-size:clamp(14px,3.4vw,20px)}.lk-t.s3 span{font-size:clamp(11px,2.6vw,15px)}
+.lk-t:hover{transform:translateY(-2px)}
+.lk-t.on{background:linear-gradient(180deg,#FFF3B0,#F6C945);box-shadow:0 4px 0 #C99A1F,0 0 0 3px #E8434F}
+.lk-t.hint{animation:lkPulse .5s ease-in-out 3}.lk-t.bad{animation:lkShake .35s}.lk-t.ok{opacity:.35;transform:scale(.85)}
+@keyframes lkPulse{50%{box-shadow:0 4px 0 #C9A97A,0 0 0 4px #4FC3F7}}@keyframes lkShake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.lk-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+
 .rc-wrap{position:relative;display:grid;gap:10px}
 .rc-q{text-align:center;display:grid;gap:4px;min-height:120px;align-content:center}.rc-q small{color:var(--muted);font-weight:600}
 .rc-qq.han{font-size:34px;line-height:1.3}.rc-qq.vi{font-size:26px;font-weight:700}.rc-hint{color:var(--muted);font-size:14px}
@@ -3388,6 +3405,8 @@ const Games = {
           <b>Chém trái cây</b><small>Đọc đề, chém quả có đáp án đúng. Mỗi câu 3 giây, có 5 mạng.</small><em>Chơi ngay ▸</em></button>
         <button class="gm-card race" data-g="race"><span class="gm-art race">🏎️🚧</span>
           <b>Đua xe vượt chướng ngại</b><small>Mỗi chướng ngại là một câu hỏi A B C D: điền chỗ trống, chọn nghĩa, phiên âm hoặc chữ Hán. Lái vào làn đúng để vượt qua, có 3 mạng.</small><em>Xuất phát ▸</em></button>
+        <button class="gm-card link" data-g="link"><span class="gm-art link">🀄🔗</span>
+          <b>Nối chữ Pikachu</b><small>Nối 2 ô chữ Hán thành một từ có nghĩa hoặc một cụm động từ + tân ngữ. Đường nối tối đa 2 lần rẽ, dọn sạch bảng trước khi hết giờ.</small><em>Chơi ngay ▸</em></button>
         <button class="gm-card shop" data-g="shop"><span class="gm-art shop"><img src="${shopImg()}" alt=""></span>
           <b>Quán ăn Tiểu Ngữ</b><small>Đọc order bằng chữ Hán, chọn đúng món, số lượng, cỡ to/nhỏ, nóng/đá trước khi khách hết kiên nhẫn.</small><em>Mở quán ▸</em></button>
         <button class="gm-card cloth" data-g="cloth"><span class="gm-art shop"><img src="${STORES.cloth.img()}" alt=""></span>
@@ -3397,7 +3416,7 @@ const Games = {
     const save = () => { let x = +$("#gmA").value, y = +$("#gmB").value; if(x > y) [x, y] = [y, x]; store.set("ww_game_range_" + S.level, [x, y]); this.menu(); };
     $("#gmA").onchange = save; $("#gmB").onchange = save;
     $("#gmAll").onclick = () => { store.set("ww_game_range_" + S.level, [ids[0], ids[ids.length - 1]]); this.menu(); };
-    W.querySelectorAll("[data-g]").forEach(btn => btn.onclick = () => btn.dataset.g === "fruit" ? Fruit.start() : btn.dataset.g === "race" ? Race.start() : Shop.start(btn.dataset.g === "cloth" ? "cloth" : "food"));
+    W.querySelectorAll("[data-g]").forEach(btn => btn.onclick = () => btn.dataset.g === "fruit" ? Fruit.start() : btn.dataset.g === "race" ? Race.start() : btn.dataset.g === "link" ? Link.start() : Shop.start(btn.dataset.g === "cloth" ? "cloth" : "food"));
   },
   over(box, html, again){
     box.insertAdjacentHTML("beforeend", `<div class="gm-over"><div class="gm-over-in">${html}
@@ -3408,6 +3427,125 @@ const Games = {
     const d = new Date(), key = `game:${game}:${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
     Track.log("game", { game, pct: Math.round(pct), label });
     if(pct > 0 && Farm.load() && !(Farm.st.done || {})[key]) Farm.earn(pct, label, key);
+  }
+};
+
+/* ---------- 🀄 Nối chữ kiểu Pikachu (Onet) ---------- */
+const LK_VO = [["吃","饭","chī fàn","ăn cơm"],["喝","茶","hē chá","uống trà"],["喝","水","hē shuǐ","uống nước"],["喝","咖啡","hē kāfēi","uống cà phê"],["看","书","kàn shū","đọc sách"],["看","电视","kàn diànshì","xem tivi"],["看","电影","kàn diànyǐng","xem phim"],["听","音乐","tīng yīnyuè","nghe nhạc"],["打","电话","dǎ diànhuà","gọi điện thoại"],["写","字","xiě zì","viết chữ"],["说","汉语","shuō Hànyǔ","nói tiếng Hán"],["学","中文","xué Zhōngwén","học tiếng Trung"],["做","饭","zuò fàn","nấu cơm"],["开","车","kāi chē","lái xe"],["坐","飞机","zuò fēijī","đi máy bay"],["坐","出租车","zuò chūzūchē","đi taxi"],["买","东西","mǎi dōngxi","mua đồ"],["打","篮球","dǎ lánqiú","chơi bóng rổ"],["踢","足球","tī zúqiú","đá bóng"],["唱","歌","chàng gē","hát"],["跳","舞","tiào wǔ","nhảy múa"],["睡","觉","shuì jiào","ngủ"],["上","班","shàng bān","đi làm"],["上","课","shàng kè","vào học"],["洗","手","xǐ shǒu","rửa tay"],["穿","衣服","chuān yīfu","mặc quần áo"],["回","家","huí jiā","về nhà"],["起","床","qǐ chuáng","thức dậy"],["跑","步","pǎo bù","chạy bộ"],["游","泳","yóu yǒng","bơi"],["送","礼物","sòng lǐwù","tặng quà"],["打","车","dǎ chē","bắt xe"],["开","门","kāi mén","mở cửa"],["吃","水果","chī shuǐguǒ","ăn trái cây"],["坐","公交车","zuò gōngjiāochē","đi xe buýt"],["考","试","kǎo shì","thi"]];
+const Link = {
+  start(){
+    Games.stop(); const W = $("#work");
+    W.innerHTML = `<div class="gm"><div class="lk-wrap" id="lkWrap"><div class="lk-pick">
+      <h3>🀄 Nối chữ Pikachu</h3><p class="muted">Chọn chế độ chơi. Nối 2 ô bằng đường gấp khúc tối đa 2 lần rẽ, không bị ô khác chắn.</p>
+      <div class="lk-modes"><button class="gm-card link" data-m="word"><b>Ghép từ</b><small>Nối 2 chữ thành 1 từ có nghĩa, ví dụ 老 + 师 → 老师. Lấy từ vựng trong phạm vi bài đã chọn.</small><em>Chơi ▸</em></button>
+        <button class="gm-card race" data-m="vo"><b>Động từ + tân ngữ</b><small>Nối động từ với tân ngữ hợp nghĩa, ví dụ 喝 + 茶, 打 + 电话, 看 + 电影.</small><em>Chơi ▸</em></button></div>
+      <button class="btn" id="lkBack">← Chọn trò khác</button></div></div></div>`;
+    $("#lkBack").onclick = () => Games.menu();
+    W.querySelectorAll("[data-m]").forEach(b => b.onclick = () => this.play(b.dataset.m));
+  },
+  pairs(mode){
+    if(mode === "vo"){ const set = new Set(Games.words().map(w => w.h)); let L = LK_VO.filter(p => set.has(p[0] + p[1]) || set.has(p[1]) || set.has(p[0]));
+      if(L.length < 8) L = LK_VO; return L.map(p => ({ a: p[0], b: p[1], h: p[0] + p[1], p: p[2], vs: p[3] })); }
+    const ok = w => w.h && [...w.h].length === 2 && /^[一-鿿]{2}$/.test(w.h);
+    let L = Games.words().filter(ok);
+    if(L.length < 6){ const all = Object.values(LEVELS[S.level].lessons).flatMap(x => x.vocab || []).filter(ok); L = L.concat(all.filter(w => !L.some(x => x.h === w.h))).slice(0, 40); }
+    const seen = new Set(); return L.filter(w => !seen.has(w.h) && seen.add(w.h)).map(w => ({ a: w.h[0], b: w.h[1], h: w.h, p: w.p, vs: Games.short(w.vi) }));
+  },
+  play(mode){
+    Games.stop(); this.mode = mode; this.list = this.pairs(mode);
+    if(this.list.length < 3){ toast("Phạm vi bài đã chọn có quá ít từ 2 chữ, hãy chọn thêm bài.", "warn"); return this.start(); }
+    const small = window.innerWidth < 600; this.C = small ? 6 : 8; this.R = small ? 8 : 6;
+    this.valid = new Map(); this.list.forEach(x => { this.valid.set(x.a + "|" + x.b, x); this.valid.set(x.b + "|" + x.a, x); });
+    const need = this.C * this.R / 2; let bag = []; while(bag.length < need) bag = bag.concat(shuffle(this.list)); bag = bag.slice(0, need);
+    this.used = bag; const tiles = shuffle(bag.flatMap(x => [x.a, x.b]));
+    this.g = Array.from({ length: this.R + 2 }, () => Array(this.C + 2).fill(null));
+    tiles.forEach((t, i) => { this.g[1 + Math.floor(i / this.C)][1 + i % this.C] = t; });
+    this.left = tiles.length; this.sel = null; this.score = 0; this.combo = 0; this.hints = 3; this.shuf = 3; this.found = []; this.over = false;
+    this.total = need * 7 + 30; this.t0 = performance.now(); this.lastHit = 0;
+    const W = $("#work");
+    W.innerHTML = `<div class="gm"><div class="lk-wrap" id="lkWrap">
+      <div class="fn-hud"><span>⏱ <b id="lkTime"></b></span><span>Còn <b id="lkLeft"></b> cặp</span><span class="fn-score">Điểm <b id="lkScore">0</b></span>
+        <button class="btn sm" id="lkHint">💡 Gợi ý (<span>3</span>)</button><button class="btn sm" id="lkShuf">🔀 Đảo (<span>3</span>)</button><button class="btn sm fn-quit" id="lkQuit">Thoát</button></div>
+      <div class="lk-bar"><i id="lkBar"></i></div>
+      <div class="lk-info" id="lkInfo">${mode === "vo" ? "Nối <b>động từ</b> với <b>tân ngữ</b> phù hợp." : "Nối 2 chữ thành <b>một từ có nghĩa</b>."}</div>
+      <div class="lk-stage"><div class="lk-board" id="lkBoard" style="--c:${this.C};--r:${this.R}"></div></div>
+      <p class="fn-tip">Đường nối đi qua ô trống hoặc vòng ra mép bảng, tối đa 2 lần rẽ. Hết nước đi thì bảng tự đảo.</p></div></div>`;
+    $("#lkQuit").onclick = () => { Games.stop(); Games.menu(); };
+    $("#lkHint").onclick = () => this.hint(); $("#lkShuf").onclick = () => { if(this.shuf > 0){ this.shuf--; this.shuffleBoard(); } };
+    this.draw(); this.hud();
+    const tick = () => { if(this.over || !Games.alive($("#lkBoard"))) return; this.hud(); if(this.remain() <= 0) return this.end(false); Games.later(tick, 250); }; tick();
+  },
+  remain(){ return Math.max(0, this.total - (performance.now() - this.t0) / 1000); },
+  hud(){ const r = this.remain(); $("#lkTime").textContent = `${Math.floor(r / 60)}:${String(Math.floor(r % 60)).padStart(2, "0")}`;
+    $("#lkBar").style.width = (r / this.total * 100) + "%"; $("#lkBar").classList.toggle("low", r < 20);
+    $("#lkLeft").textContent = this.left / 2; $("#lkScore").textContent = this.score;
+    $("#lkHint span").textContent = this.hints; $("#lkShuf span").textContent = this.shuf;
+    $("#lkHint").disabled = !this.hints; $("#lkShuf").disabled = !this.shuf; },
+  draw(){
+    const B = $("#lkBoard"); let h = "";
+    for(let r = 1; r <= this.R; r++) for(let c = 1; c <= this.C; c++){ const t = this.g[r][c];
+      h += t ? `<button class="lk-t ${[...t].length > 2 ? "s3" : [...t].length > 1 ? "s2" : ""}" data-r="${r}" data-c="${c}"><span class="han">${esc(t)}</span></button>` : `<span class="lk-e"></span>`; }
+    B.innerHTML = h + `<svg class="lk-svg" id="lkSvg" viewBox="0 0 ${this.C} ${this.R}" preserveAspectRatio="none"></svg>`;
+    B.querySelectorAll(".lk-t").forEach(b => b.onclick = () => this.click(+b.dataset.r, +b.dataset.c, b));
+  },
+  cell(r, c){ return $(`#lkBoard .lk-t[data-r="${r}"][data-c="${c}"]`); },
+  click(r, c, el){
+    if(this.over) return; speak(this.g[r][c]);
+    if(!this.sel){ this.sel = [r, c]; el.classList.add("on"); return; }
+    const [r0, c0] = this.sel; if(r0 === r && c0 === c){ this.sel = null; el.classList.remove("on"); return; }
+    const a = this.g[r0][c0], b = this.g[r][c], P = this.valid.get(a + "|" + b), path = P && this.path(r0, c0, r, c);
+    const prev = this.cell(r0, c0);
+    if(P && path){ prev.classList.remove("on"); this.sel = null; this.hit(r0, c0, r, c, P, path); return; }
+    prev.classList.remove("on"); prev.classList.add("bad"); el.classList.add("bad"); this.combo = 0;
+    $("#lkInfo").innerHTML = P ? `<b class="han">${esc(a)}</b> + <b class="han">${esc(b)}</b> ghép đúng nhưng <b>bị chắn đường</b>, đường nối quá 2 lần rẽ.` : `<b class="han">${esc(a)}</b> + <b class="han">${esc(b)}</b> không tạo thành ${this.mode === "vo" ? "cụm động – tân" : "từ"} trong bài.`;
+    Games.later(() => { prev && prev.classList.remove("bad"); el.classList.remove("bad"); }, 450);
+    this.sel = [r, c]; el.classList.add("on");
+  },
+  /* tìm đường nối tối đa 2 lần rẽ (BFS theo số lần rẽ) */
+  path(r0, c0, r1, c1){
+    const R = this.R + 2, C = this.C + 2, D = [[-1,0],[1,0],[0,-1],[0,1]], best = {}, q = [];
+    for(let d = 0; d < 4; d++) q.push([r0, c0, d, 0, [[r0, c0]]]);
+    while(q.length){ const [r, c, d, t, pth] = q.shift(); let nr = r + D[d][0], nc = c + D[d][1];
+      while(nr >= 0 && nr < R && nc >= 0 && nc < C){
+        if(nr === r1 && nc === c1) return [...pth, [nr, nc]];
+        if(this.g[nr][nc]) break;
+        const k = nr + "," + nc + "," + d; if(!(k in best) || best[k] > t){ best[k] = t;
+          if(t < 2) for(let e = 0; e < 4; e++) if(e !== d && e !== (d ^ 1)) q.push([nr, nc, e, t + 1, [...pth, [nr, nc]]]); }
+        nr += D[d][0]; nc += D[d][1]; } }
+    return null;
+  },
+  hit(r0, c0, r1, c1, P, path){
+    const pts = path.map(([r, c]) => `${c - .5},${r - .5}`).join(" ");
+    $("#lkSvg").innerHTML = `<polyline points="${pts}" fill="none" stroke="#F6C945" stroke-width="6" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/><polyline points="${pts}" fill="none" stroke="#E8434F" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>`;
+    const e1 = this.cell(r0, c0), e2 = this.cell(r1, c1); e1.classList.add("ok"); e2.classList.add("ok");
+    this.g[r0][c0] = null; this.g[r1][c1] = null; this.left -= 2;
+    const now = performance.now(); this.combo = now - this.lastHit < 5000 ? this.combo + 1 : 1; this.lastHit = now;
+    const pts2 = 10 + Math.min(10, (this.combo - 1) * 2); this.score += pts2;
+    if(!this.found.some(x => x.h === P.h)) this.found.push(P);
+    $("#lkInfo").innerHTML = `<b class="han lk-w">${esc(P.h)}</b> <span class="py">${esc(P.p)}</span> – ${esc(P.vs)} <em class="lk-plus">+${pts2}${this.combo > 1 ? ` · combo ×${this.combo}` : ""}</em>`;
+    speak(P.h); this.hud();
+    Games.later(() => { if(!Games.alive($("#lkBoard"))) return; $("#lkSvg").innerHTML = ""; this.draw();
+      if(!this.left) return this.end(true); if(!this.anyMove()) { toast("Hết nước đi – bảng tự đảo.", "info"); this.shuffleBoard(); } }, 380);
+  },
+  moves(){ const T = []; for(let r = 1; r <= this.R; r++) for(let c = 1; c <= this.C; c++) if(this.g[r][c]) T.push([r, c]);
+    for(let i = 0; i < T.length; i++) for(let j = i + 1; j < T.length; j++){ const [a, b] = [T[i], T[j]];
+      if(this.valid.has(this.g[a[0]][a[1]] + "|" + this.g[b[0]][b[1]]) && this.path(a[0], a[1], b[0], b[1])) return [a, b]; }
+    return null; },
+  anyMove(){ return !!this.moves(); },
+  hint(){ if(!this.hints) return; const m = this.moves(); if(!m) return this.shuffleBoard(); this.hints--; this.score = Math.max(0, this.score - 5); this.hud();
+    m.forEach(([r, c]) => { const e = this.cell(r, c); e.classList.add("hint"); Games.later(() => e && e.classList.remove("hint"), 1600); }); },
+  shuffleBoard(){
+    const T = [], V = []; for(let r = 1; r <= this.R; r++) for(let c = 1; c <= this.C; c++) if(this.g[r][c]){ T.push([r, c]); V.push(this.g[r][c]); }
+    for(let k = 0; k < 30; k++){ const S2 = shuffle(V); T.forEach(([r, c], i) => this.g[r][c] = S2[i]); if(this.anyMove()) break; }
+    this.sel = null; this.draw(); this.hud();
+  },
+  end(win){
+    this.over = true; const left = Math.round(this.remain()); if(win) this.score += left;
+    const tot = this.C * this.R / 2, done = tot - this.left / 2;
+    Games.over($("#lkWrap"), `<div class="gm-over-t">${win ? "🎉 Dọn sạch bảng!" : "⏰ Hết giờ!"}</div>
+      <div class="gm-over-s">Nối được <b>${done}/${tot}</b> cặp · <b>${this.score}</b> điểm${win ? ` (thưởng ${left} điểm thời gian)` : ""}</div>
+      ${this.found.length ? `<div class="gm-miss"><b>${this.mode === "vo" ? "Cụm động – tân đã nối" : "Từ đã ghép"}</b>${this.found.map(w => `<span><b class="han">${esc(w.h)}</b> ${esc(w.p)} – ${esc(w.vs)}</span>`).join("")}</div>` : ""}`, () => this.play(this.mode));
+    Games.reward("link", done / tot * 100, `Nối chữ Pikachu (${done}/${tot} cặp)`);
   }
 };
 
