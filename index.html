@@ -893,6 +893,31 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .tx-q{background:var(--surface);border-radius:12px;padding:10px 14px}.tx-q ol{margin:6px 0 0;padding-left:22px;display:grid;gap:6px}.tx-q .han{font-size:17px}.tx-q small{color:var(--muted)}
 .tx-ans{margin-top:4px;color:#2C6E52}
 .lv-sw{border:1px dashed var(--line)!important;background:transparent!important;color:var(--accent)!important;font-weight:700}
+.tk{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}
+.tk-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.tk-head b{font-size:22px}.tk-head span{color:var(--muted)}
+.tk-intro{margin:0;background:#FFF8E6;border:1px solid #F3DFA8;border-radius:12px;padding:10px 14px;display:grid;gap:6px}
+.tk-intro label{display:flex;gap:8px;align-items:center;font-weight:600}.tk-intro input{flex:1;min-width:0;padding:6px 10px;border:1px solid var(--line);border-radius:8px;font:inherit}
+.tk-warn{margin:0;color:#B3402E;font-weight:600}
+.tk-tools{display:flex;gap:8px;flex-wrap:wrap}
+.tk-chat{background:var(--surface-2);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;min-height:220px;max-height:56vh;overflow:auto}
+.tk-b{display:flex;gap:8px;align-items:flex-end;max-width:88%}.tk-b.me{align-self:flex-end;flex-direction:row-reverse}
+.tk-av{width:38px;height:38px;flex:0 0 auto;border-radius:50%;background:#fff;overflow:hidden;display:grid;place-items:center}.tk-av svg{width:44px;height:44px}
+.tk-bb{background:#fff;border-radius:16px 16px 16px 4px;padding:8px 12px;box-shadow:0 1px 3px rgba(0,0,0,.08);display:grid;grid-template-columns:auto 1fr;gap:2px 8px;align-items:center}
+.tk-b.me .tk-bb{background:var(--accent);color:#fff;border-radius:16px 16px 4px 16px;display:block}
+.tk-bb .han{font-size:20px}.tk-py,.tk-vi{grid-column:2;color:var(--muted)}.tk-vi{color:#2C6E52}
+.tk-typing{display:flex;gap:4px;padding:12px 14px}.tk-typing i{width:7px;height:7px;border-radius:50%;background:#bbb;animation:tkDot 1s infinite}.tk-typing i:nth-child(2){animation-delay:.2s}.tk-typing i:nth-child(3){animation-delay:.4s}
+@keyframes tkDot{50%{opacity:.25;transform:translateY(-3px)}}
+.tk-bar{display:grid;gap:8px;grid-template-columns:minmax(0,1fr)}.tk-live{margin:0;text-align:center;color:var(--muted);min-height:22px}.tk-live .han{color:var(--ink);font-size:18px}
+.tk-row{display:flex;gap:8px;align-items:center}.tk-row input{flex:1;min-width:0;width:0;padding:10px 12px;border:1px solid var(--line);border-radius:12px;font-size:18px}
+.tk-mic{width:58px;height:58px;border-radius:50%;border:0;background:var(--accent);color:#fff;font-size:26px;flex:0 0 auto;cursor:pointer;box-shadow:0 3px 8px rgba(0,0,0,.2)}
+.tk-mic.on{background:#E2434F;animation:tkPulse 1s infinite}@keyframes tkPulse{50%{box-shadow:0 0 0 10px rgba(226,67,79,.2)}}
+.tk-row2{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.tk-hint{color:#8A5A10}.tk-hint .han{font-size:18px}
+.tk-rev{background:#fff;border:2px solid var(--leaf-soft,#DCEBE3);border-radius:16px;padding:14px 16px;display:grid;gap:10px}
+.tk-rev-h{display:grid;gap:2px}.tk-rev-h b{font-size:18px}.tk-rev-h span{color:var(--muted)}
+.tk-rev ol{margin:0;padding-left:22px;display:grid;gap:10px}.tk-rev li{padding:8px 10px;border-radius:10px;background:var(--surface-2)}.tk-rev li.no{background:#FDF0EC}
+.tk-rev .han{font-size:18px}.tk-q small,.tk-mod small{color:var(--muted)}.tk-rev del{color:#C0392B;text-decoration:line-through}.tk-rev ins{color:#1E8E5A;text-decoration:none;border-bottom:2px solid #1E8E5A;font-weight:700}
+.tk-mod{margin-top:2px}.tk-note{color:#6B5A3A;font-size:14px}.tk-redo{margin-top:6px}.tk-redo-r{margin-left:8px}.tk-redo-r.ok{color:#1E8E5A}.tk-redo-r.no{color:#C0392B}
+.tk-rev-b{display:flex;gap:8px;flex-wrap:wrap}
 </style>
 
 </head>
@@ -2732,6 +2757,7 @@ function renderLesson(){
     <p>${les.vocab.length} từ mới · ${les.zhvi.length+les.vizh.length} câu luyện dịch · ${new Set(les.vocab.map(w=>w.h)).size+les.sentences.length} mục luyện phát âm</p></div>
     <div class="sections" role="tablist" aria-label="Phần luyện tập">
       ${les.texts?`<button role="tab" data-s="text" aria-selected="${S.section==="text"}">${ICON.read}Bài khóa</button>`:""}
+      ${les.talk?`<button role="tab" data-s="talk" aria-selected="${S.section==="talk"}">${ICON.mic}Hội thoại</button>`:""}
       <button role="tab" data-s="flash" aria-selected="${S.section==="flash"}">${ICON.cards}Flashcard</button>
       <button role="tab" data-s="game" aria-selected="${S.section==="game"}">${ICON.game}Trò chơi</button>
       <button role="tab" data-s="trans" aria-selected="${S.section==="trans"}">${ICON.trans}Luyện dịch</button>
@@ -2745,9 +2771,11 @@ function renderLesson(){
   box.querySelector(".sections").onclick=e=>{const b=e.target.closest("button");if(!b)return;S.section=b.dataset.s;store.set("ww_section",S.section);renderLesson();};
   if(S.section==="exam"&&!les.test) S.section="flash";
   if(S.section==="text"&&!les.texts) S.section="flash";
+  if(S.section==="talk"&&!les.talk) S.section="flash";
+  if(typeof Talk!=="undefined") Talk.stopMic();
   if(S.section==="gram"&&!Grammar.has(S.level,S.lesson)) S.section="flash";
   if(typeof Games!=="undefined") Games.stop();
-  if(S.section==="text") TextView.mount(les); else if(S.section==="flash") Flash.mount(les); else if(S.section==="game") Games.mount(les); else if(S.section==="trans") Trans.mount(les); else if(S.section==="exam") Exam.mount(les); else if(S.section==="read") Reading.mount(les); else if(S.section==="gram") Grammar.mount(les); else Speak.mount(les);
+  if(S.section==="text") TextView.mount(les); else if(S.section==="talk") Talk.mount(les); else if(S.section==="flash") Flash.mount(les); else if(S.section==="game") Games.mount(les); else if(S.section==="trans") Trans.mount(les); else if(S.section==="exam") Exam.mount(les); else if(S.section==="read") Reading.mount(les); else if(S.section==="gram") Grammar.mount(les); else Speak.mount(les);
 }
 function renderAll(){ stopAnyRecording(); renderLevels(); renderRail(); renderLesson(); }
 
@@ -2783,6 +2811,236 @@ const TextView = {
       document.querySelectorAll(".tx-line.on").forEach(e => e.classList.remove("on")); const el = document.getElementById(`tx${i}_${j}`); el.classList.add("on");
       const zh = t.lines[j].zh; speak(zh); j++; setTimeout(step, 900 + [...zh].length * 330); };
     step();
+  }
+};
+
+/* Kịch bản hội thoại luyện phản xạ – lớp Giao tiếp (发展汉语 bài 1–10).
+   Mỗi lượt: ai = [chữ Hán, pinyin, tiếng Việt] Tiểu Ngữ nói; hint = gợi ý học viên cần nói gì;
+   ans = các câu trả lời mẫu (câu đầu là câu mẫu chính); re = biểu thức chấp nhận câu trả lời tự do (tên, nước…) */
+const TALK = {
+ 1: { title: "Chào hỏi", topic: "chào hỏi bạn bè và thầy cô", turns: [
+   { ai: ["你好！", "Nǐ hǎo!", "Chào bạn!"], hint: "Chào lại Tiểu Ngữ.", ans: ["你好！"] },
+   { ai: ["我是老师。", "Wǒ shì lǎoshī.", "Tôi là giáo viên."], hint: "Chào thầy/cô một cách lịch sự.", ans: ["老师好！", "您好！", "老师，您好！"] },
+   { ai: ["你们好！", "Nǐmen hǎo!", "Chào các em!"], hint: "Cả lớp chào lại thầy/cô.", ans: ["老师好！", "您好！"] },
+   { ai: ["上课！", "Shàng kè!", "Vào học!"], hint: "Chào thầy/cô khi vào học.", ans: ["老师好！", "您好！"] },
+   { ai: ["一、二、五，下一个数字是什么？", "Yī, èr, wǔ, xià yí ge shùzì shì shénme?", "Một, hai, năm, số tiếp theo (trong bài) là gì?"], hint: "Nói số 8.", ans: ["八。", "八"] },
+   { ai: ["下课！", "Xià kè!", "Tan học!"], hint: "Chào tạm biệt thầy/cô (dùng 老师好 hoặc 老师再见).", ans: ["老师再见！", "老师好！", "再见！"] }] },
+ 2: { title: "Bạn là người nước nào?", topic: "hỏi quốc tịch", turns: [
+   { ai: ["早上好！", "Zǎoshang hǎo!", "Chào buổi sáng!"], hint: "Chào buổi sáng lại.", ans: ["早上好！", "你好！"] },
+   { ai: ["你是哪国人？", "Nǐ shì nǎ guó rén?", "Bạn là người nước nào?"], hint: "Nói bạn là người Việt Nam.", ans: ["我是越南人。"], re: "^我是.{1,4}人$" },
+   { ai: ["我是中国人。你知道马丁是哪国人吗？", "Wǒ shì Zhōngguó rén. Nǐ zhīdào Mǎdīng shì nǎ guó rén ma?", "Mình là người Trung Quốc. Bạn biết Martin là người nước nào không?"], hint: "Martin là người Mỹ.", ans: ["他是美国人。", "马丁是美国人。"] },
+   { ai: ["崔浩呢？", "Cuī Hào ne?", "Còn Thôi Hạo?"], hint: "Thôi Hạo là người Hàn Quốc.", ans: ["他是韩国人。", "崔浩是韩国人。"] },
+   { ai: ["我是日本人。你呢？", "Wǒ shì Rìběn rén. Nǐ ne?", "Mình là người Nhật. Còn bạn?"], hint: "Nói lại quốc tịch của bạn.", ans: ["我是越南人。"], re: "^我是.{1,4}人$" }] },
+ 3: { title: "Làm quen, hỏi tên", topic: "làm quen, hỏi họ tên", turns: [
+   { ai: ["你好！请问，你叫什么名字？", "Nǐ hǎo! Qǐngwèn, nǐ jiào shénme míngzi?", "Chào bạn! Xin hỏi bạn tên là gì?"], hint: "Nói tên của bạn: 我叫……", ans: ["我叫阮兰。"], re: "^我叫.{1,6}$" },
+   { ai: ["你姓什么？", "Nǐ xìng shénme?", "Bạn họ gì?"], hint: "Nói họ của bạn: 我姓……", ans: ["我姓阮。"], re: "^我姓.{1,3}$" },
+   { ai: ["我叫林娜。认识你很高兴。", "Wǒ jiào Línnà. Rènshi nǐ hěn gāoxìng.", "Mình tên là Linna. Rất vui được làm quen với bạn."], hint: "Nói bạn cũng rất vui được làm quen.", ans: ["认识你我也很高兴。", "我也很高兴。"] },
+   { ai: ["我是你们的老师。", "Wǒ shì nǐmen de lǎoshī.", "Tôi là giáo viên của các em."], hint: "Hỏi họ của thầy/cô một cách lịch sự.", ans: ["老师，您贵姓？", "您贵姓？"] },
+   { ai: ["我姓王。", "Wǒ xìng Wáng.", "Cô họ Vương."], hint: "Chào cô Vương.", ans: ["王老师，您好！", "王老师好！"] }] },
+ 4: { title: "Bạn học gì?", topic: "học ngoại ngữ, bạn cùng lớp", turns: [
+   { ai: ["你学习什么？", "Nǐ xuéxí shénme?", "Bạn học gì?"], hint: "Nói bạn học tiếng Trung.", ans: ["我学习汉语。"] },
+   { ai: ["你学习英语吗？", "Nǐ xuéxí Yīngyǔ ma?", "Bạn có học tiếng Anh không?"], hint: "Trả lời có hoặc không (dùng 学习 / 不学习).", ans: ["我学习英语。", "我不学习英语。"] },
+   { ai: ["你说法语吗？", "Nǐ shuō Fǎyǔ ma?", "Bạn có nói tiếng Pháp không?"], hint: "Nói bạn không nói tiếng Pháp.", ans: ["我不说法语。"] },
+   { ai: ["他是谁？", "Tā shì shéi?", "Anh ấy là ai?"], hint: "Anh ấy là bạn cùng lớp của bạn.", ans: ["他是我同学。", "他是我的同学。"] },
+   { ai: ["他也学习汉语吗？", "Tā yě xuéxí Hànyǔ ma?", "Anh ấy cũng học tiếng Trung à?"], hint: "Anh ấy cũng học tiếng Trung.", ans: ["他也学习汉语。"] },
+   { ai: ["你们一起上课吗？", "Nǐmen yìqǐ shàng kè ma?", "Các bạn cùng lên lớp à?"], hint: "Chúng mình cùng lên lớp.", ans: ["我们一起上课。"] }] },
+ 5: { title: "Gia đình bạn", topic: "gia đình, nghề nghiệp, lớp học", turns: [
+   { ai: ["你家有几口人？", "Nǐ jiā yǒu jǐ kǒu rén?", "Nhà bạn có mấy người?"], hint: "Nói số người trong nhà: 我家有……口人。", ans: ["我家有四口人。"], re: "^我家有.{1,2}口人$" },
+   { ai: ["你家有什么人？", "Nǐ jiā yǒu shénme rén?", "Nhà bạn có những ai?"], hint: "Kể các thành viên: 爸爸、妈妈……和我。", ans: ["我家有爸爸、妈妈、哥哥和我。"], re: "^我家有.*和我$" },
+   { ai: ["你爸爸做什么工作？", "Nǐ bàba zuò shénme gōngzuò?", "Bố bạn làm nghề gì?"], hint: "Nói nghề của bố: 我爸爸是……", ans: ["我爸爸是医生。"], re: "^我爸爸是.{1,4}$" },
+   { ai: ["你妈妈呢？", "Nǐ māma ne?", "Còn mẹ bạn?"], hint: "Nói nghề của mẹ: 我妈妈是……", ans: ["我妈妈是老师。"], re: "^我妈妈是.{1,4}$" },
+   { ai: ["你们班有多少个学生？", "Nǐmen bān yǒu duōshao ge xuésheng?", "Lớp bạn có bao nhiêu học sinh?"], hint: "Nói số học sinh: 我们班有……个学生。", ans: ["我们班有十六个学生。"], re: "^我们班有.{1,4}个学生$" }] },
+ 6: { title: "Đi mua đồ", topic: "mua đồ, hỏi giá (bạn là khách, Tiểu Ngữ là người bán)", turns: [
+   { ai: ["你好！请问，你要什么？", "Nǐ hǎo! Qǐngwèn, nǐ yào shénme?", "Chào bạn! Xin hỏi bạn muốn mua gì?"], hint: "Nói bạn muốn mua táo.", ans: ["我要苹果。", "我想买苹果。"] },
+   { ai: ["你要哪种？", "Nǐ yào nǎ zhǒng?", "Bạn muốn loại nào?"], hint: "Chọn loại này và hỏi giá một cân.", ans: ["我要这种，这种多少钱一斤？", "这种多少钱一斤？"] },
+   { ai: ["这种三块五一斤。您买多少？", "Zhè zhǒng sān kuài wǔ yì jīn. Nín mǎi duōshao?", "Loại này 3,5 tệ một cân. Bạn mua bao nhiêu?"], hint: "Mua hai cân.", ans: ["我买两斤。", "我要两斤。"] },
+   { ai: ["还要别的吗？", "Hái yào bié de ma?", "Còn lấy gì khác không?"], hint: "Mua thêm ba cân chuối (再买……).", ans: ["再买三斤香蕉。", "我再买三斤香蕉。"] },
+   { ai: ["好的。", "Hǎo de.", "Được."], hint: "Hỏi tổng cộng bao nhiêu tiền.", ans: ["一共多少钱？"] },
+   { ai: ["一共十二块四。", "Yígòng shí'èr kuài sì.", "Tổng cộng 12 tệ 4."], hint: "Cảm ơn người bán.", ans: ["谢谢！", "谢谢你！"] }] },
+ 7: { title: "Hỏi đường", topic: "hỏi đường, vị trí trong trường", turns: [
+   { ai: ["你去哪儿？", "Nǐ qù nǎr?", "Bạn đi đâu đấy?"], hint: "Nói bạn đi ngân hàng.", ans: ["我去银行。"], re: "^我去.{1,5}$" },
+   { ai: ["银行在超市东边。我跟你一起去吧。", "Yínháng zài chāoshì dōngbian. Wǒ gēn nǐ yìqǐ qù ba.", "Ngân hàng ở phía đông siêu thị. Mình đi cùng bạn nhé."], hint: "Nói “Tốt quá!”.", ans: ["太好了！"] },
+   { ai: ["你知道图书馆在哪儿吗？", "Nǐ zhīdào túshūguǎn zài nǎr ma?", "Bạn có biết thư viện ở đâu không?"], hint: "Thư viện ở phía bắc giảng đường số 1.", ans: ["图书馆在教学一楼北边。", "在教学一楼北边。"] },
+   { ai: ["请问，哪儿有卫生间？", "Qǐngwèn, nǎr yǒu wèishēngjiān?", "Xin hỏi, chỗ nào có nhà vệ sinh?"], hint: "Trong cửa hàng có.", ans: ["商店里边有。"] },
+   { ai: ["商店在什么地方？", "Shāngdiàn zài shénme dìfang?", "Cửa hàng ở chỗ nào?"], hint: "Ở phía trước, bạn nhìn kìa, chính là chỗ đó.", ans: ["在前边。你看，那儿就是。", "在前边。"] },
+   { ai: ["谢谢！", "Xièxie!", "Cảm ơn!"], hint: "Đáp lại lời cảm ơn.", ans: ["不客气。"] }] },
+ 8: { title: "Ngày sinh nhật", topic: "ngày tháng, sinh nhật, mời đi ăn", turns: [
+   { ai: ["今天几号？", "Jīntiān jǐ hào?", "Hôm nay ngày mấy?"], hint: "Nói ngày hôm nay: 今天……月……号。", ans: ["今天九月二十八号。"], re: "^今天.{1,3}月.{1,3}号$" },
+   { ai: ["今天星期几？", "Jīntiān xīngqī jǐ?", "Hôm nay thứ mấy?"], hint: "Nói thứ hôm nay: 今天星期……", ans: ["今天星期二。"], re: "^今天星期.$" },
+   { ai: ["你的生日是几月几号？", "Nǐ de shēngrì shì jǐ yuè jǐ hào?", "Sinh nhật bạn là ngày mấy tháng mấy?"], hint: "我的生日是……月……号。", ans: ["我的生日是十月十号。"], re: "^我的生日是.{1,3}月.{1,3}号$" },
+   { ai: ["我们请你吃饭，怎么样？", "Wǒmen qǐng nǐ chī fàn, zěnmeyàng?", "Bọn mình mời bạn đi ăn, thế nào?"], hint: "Đồng ý và cảm ơn.", ans: ["太好了！谢谢你们！", "好啊！谢谢！"] },
+   { ai: ["祝你生日快乐！这是我们的礼物。", "Zhù nǐ shēngrì kuàilè! Zhè shì wǒmen de lǐwù.", "Chúc bạn sinh nhật vui vẻ! Đây là quà của bọn mình."], hint: "Cảm ơn và hỏi là quà gì.", ans: ["谢谢。是什么礼物？"] }] },
+ 9: { title: "Kế hoạch trong ngày", topic: "giờ giấc, sinh hoạt hằng ngày, hẹn đi xem phim", turns: [
+   { ai: ["你每天几点起床？", "Nǐ měi tiān jǐ diǎn qǐ chuáng?", "Mỗi ngày bạn dậy lúc mấy giờ?"], hint: "我每天……点起床。", ans: ["我每天六点半起床。"], re: "^我每天.{1,6}起床$" },
+   { ai: ["起床以后你做什么？", "Qǐ chuáng yǐhòu nǐ zuò shénme?", "Dậy xong bạn làm gì?"], hint: "Trước tiên tắm, sau đó ăn sáng (先……，然后……).", ans: ["我先洗澡，然后吃早饭。"] },
+   { ai: ["下午你常常做什么？", "Xiàwǔ nǐ chángcháng zuò shénme?", "Buổi chiều bạn thường làm gì?"], hint: "Đi thư viện đọc sách.", ans: ["我常常去图书馆看书。", "下午我常常去图书馆看书。"] },
+   { ai: ["你今天有什么安排？", "Nǐ jīntiān yǒu shénme ānpái?", "Hôm nay bạn có kế hoạch gì?"], hint: "Buổi chiều bạn rảnh (下午我有时间).", ans: ["下午我有时间。", "上午我上课，下午我有时间。"] },
+   { ai: ["我想请你看中国电影。", "Wǒ xiǎng qǐng nǐ kàn Zhōngguó diànyǐng.", "Mình muốn mời bạn xem phim Trung Quốc."], hint: "Đồng ý và hỏi phim mấy giờ bắt đầu.", ans: ["好啊。电影几点开始？"] },
+   { ai: ["下午两点半开始。", "Xiàwǔ liǎng diǎn bàn kāishǐ.", "Hai giờ rưỡi chiều bắt đầu."], hint: "Đề nghị hai giờ mười lăm đi (……吧).", ans: ["我们两点一刻去吧。"] }] },
+ 10: { title: "Cuối tuần đi chơi", topic: "cuối tuần, leo núi, cảm nhận (bận, mệt, đẹp…)", turns: [
+   { ai: ["这个星期天你忙不忙？", "Zhège xīngqītiān nǐ máng bu máng?", "Chủ nhật này bạn có bận không?"], hint: "Nói bạn không bận.", ans: ["我不忙。"] },
+   { ai: ["星期天我们去爬山，你去不去？", "Xīngqītiān wǒmen qù pá shān, nǐ qù bu qù?", "Chủ nhật bọn mình đi leo núi, bạn có đi không?"], hint: "Nói bạn đi, hỏi đi leo ở đâu.", ans: ["我去。你们去哪儿爬山？"] },
+   { ai: ["去西山。听说西山非常漂亮。", "Qù Xīshān. Tīngshuō Xīshān fēicháng piàoliang.", "Đi Tây Sơn. Nghe nói Tây Sơn rất đẹp."], hint: "Hỏi mấy giờ xuất phát.", ans: ["我们几点出发？", "几点出发？"] },
+   { ai: ["早上八点出发。", "Zǎoshang bā diǎn chūfā.", "Tám giờ sáng xuất phát."], hint: "Nói 7 giờ rưỡi bạn đến tìm bạn ấy.", ans: ["我七点半去找你。"] },
+   { ai: ["大家累不累？", "Dàjiā lèi bu lèi?", "Mọi người có mệt không?"], hint: "Nói bạn rất mệt, rủ nghỉ một chút (……吧).", ans: ["我很累，我们休息一下吧。"] },
+   { ai: ["前边有一个小茶馆，我们去喝点儿茶，好不好？", "Qiánbian yǒu yí ge xiǎo cháguǎn, wǒmen qù hē diǎnr chá, hǎo bu hǎo?", "Phía trước có quán trà nhỏ, chúng ta đi uống chút trà, được không?"], hint: "Đồng ý.", ans: ["好啊！"] }] }
+};
+/* ======================= HỘI THOẠI – luyện phản xạ nói (lớp Giao tiếp) =======================
+   Hai chế độ:
+   - "script": Tiểu Ngữ nói theo kịch bản của bài (TALK), học viên trả lời bằng giọng nói/gõ chữ,
+     cuối buổi chấm từng câu so với câu mẫu → sửa lỗi → nói lại → tiếp tục.
+   - "ai": trò chuyện tự do theo chủ đề với Claude qua Apps Script (action "chat").
+     Cần giáo viên đặt AI_API_KEY trong Thuộc tính tập lệnh; học viên phải đăng nhập tài khoản. */
+TALK && Object.entries(TALK).forEach(([n, t]) => { if(GT_LESSONS1[n]) GT_LESSONS1[n].talk = t; });
+const ZH_DIG = "零一二三四五六七八九";
+function zhNum(n){ n = +n; if(n < 10) return ZH_DIG[n]; if(n < 20) return "十" + (n % 10 ? ZH_DIG[n % 10] : "");
+  if(n < 100) return ZH_DIG[Math.floor(n / 10)] + "十" + (n % 10 ? ZH_DIG[n % 10] : "");
+  if(n < 1000){ const h = Math.floor(n / 100), r = n % 100; return ZH_DIG[h] + "百" + (r ? (r < 10 ? "零" + ZH_DIG[r] : (r < 20 ? "一" : "") + zhNum(r)) : ""); }
+  return String(n).split("").map(d => ZH_DIG[d]).join(""); }
+function talkNorm(s){ return String(s || "").replace(/(\d+)[:：](\d+)/g, (m, h, mi) => zhNum(h) + "点" + (+mi === 30 ? "半" : zhNum(mi)))
+  .replace(/\d+/g, d => zhNum(d)).replace(/[她它]/g, "他").replace(/[嘛么]$/, "吗").replace(/儿/g, "").replace(/[\s，。？！、,.?!；;：:“”"'（）()…·~～-]/g, ""); }
+function lcsPairs(a, b){ const A = [...a], B = [...b], m = A.length, n = B.length, d = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+  for(let i = m - 1; i >= 0; i--) for(let j = n - 1; j >= 0; j--) d[i][j] = A[i] === B[j] ? d[i + 1][j + 1] + 1 : Math.max(d[i + 1][j], d[i][j + 1]);
+  const ia = new Set(), ib = new Set(); let i = 0, j = 0; while(i < m && j < n){ if(A[i] === B[j]){ ia.add(i); ib.add(j); i++; j++; } else if(d[i + 1][j] >= d[i][j + 1]) i++; else j++; }
+  return { len: d[0][0], ia, ib, A, B }; }
+function talkSim(a, b){ a = talkNorm(a); b = talkNorm(b); if(!a || !b) return 0; return 2 * lcsPairs(a, b).len / ([...a].length + [...b].length); }
+
+const Talk = {
+  mode: "script", py: store.get("ww_talk_py", false), vi: store.get("ww_talk_vi", false), aiOk: null,
+  mount(les){ this.les = les; this.stopMic(); this.mode = store.get("ww_talk_mode", "script"); if(this.mode === "ai" && !this.canAI()) this.mode = "script"; this.reset(); this.render(); },
+  canAI(){ return Auth.on(); },
+  reset(){ this.log = []; this.i = 0; this.done = false; this.review = null; this.retry = null; this.msgs = []; this.from = 0; this.busy = false; this.topic = this.topic || ""; },
+  render(){
+    const W = $("#work"), T = this.les.talk;
+    W.innerHTML = `<div class="tk">
+      <div class="tk-head"><div><b class="han">对话练习</b> <span>Hội thoại · luyện phản xạ nói</span></div>
+        <div class="seg tk-mode" role="group"><button data-m="script" aria-pressed="${this.mode === "script"}">Kịch bản Bài ${S.lesson}</button><button data-m="ai" aria-pressed="${this.mode === "ai"}">Trò chuyện với AI</button></div></div>
+      ${this.mode === "script" ? `<p class="tk-intro"><span><b>${esc(T.title)}</b> – Tiểu Ngữ nói trước, bạn trả lời bằng giọng nói (bấm 🎤) hoặc gõ chữ Hán. Cứ nói hết hội thoại, cuối buổi Tiểu Ngữ mới chỉ ra lỗi sai để bạn sửa.</span></p>`
+        : `<div class="tk-intro"><label>Chủ đề <input id="tkTopic" value="${esc(this.topic || T.topic)}" maxlength="80"></label><small>Trò chuyện tự do với AI theo chủ đề. Bấm <b>Kết thúc & sửa lỗi</b> khi muốn xem lỗi sai.</small>${this.aiOk === false ? `<p class="tk-warn">${esc(this.aiMsg || "")}</p>` : ""}</div>`}
+      <div class="tk-tools"><button class="btn sm" id="tkPy" aria-pressed="${this.py}">${this.py ? "Ẩn" : "Hiện"} phiên âm</button><button class="btn sm" id="tkVi" aria-pressed="${this.vi}">${this.vi ? "Ẩn" : "Hiện"} nghĩa</button>
+        <button class="btn sm" id="tkRestart">${ICON.redo}Bắt đầu lại</button></div>
+      <div class="tk-chat" id="tkChat"></div>
+      <div id="tkReview"></div>
+      <div class="tk-bar" id="tkBar"></div></div>`;
+    W.querySelectorAll("[data-m]").forEach(b => b.onclick = () => { if(b.dataset.m === this.mode) return; this.stopMic(); this.mode = b.dataset.m; store.set("ww_talk_mode", this.mode); this.reset(); this.render(); });
+    $("#tkPy").onclick = () => { this.py = !this.py; store.set("ww_talk_py", this.py); this.render(); };
+    $("#tkVi").onclick = () => { this.vi = !this.vi; store.set("ww_talk_vi", this.vi); this.render(); };
+    $("#tkRestart").onclick = () => { this.stopMic(); this.reset(); this.render(); };
+    const tp = $("#tkTopic"); if(tp) tp.onchange = () => { this.topic = tp.value.trim(); };
+    this.drawChat(); this.drawBar();
+    if(this.review) this.drawReview();
+    else if(!this.log.length && !this.msgs.length) this.mode === "script" ? this.next() : this.aiStart();
+  },
+  /* ---------- khung chat ---------- */
+  bubbles(){ const out = [];
+    if(this.mode === "script") this.log.forEach(t => { out.push({ who: "ai", zh: t.ai[0], py: t.ai[1], vi: t.ai[2] }); if(t.said != null) out.push({ who: "me", zh: t.said }); });
+    else this.msgs.filter(m => !m.hidden).forEach(m => out.push(m.role === "assistant" ? { who: "ai", zh: m.content, py: m.py, vi: m.vi } : { who: "me", zh: m.content }));
+    return out; },
+  drawChat(){ const C = $("#tkChat"); if(!C) return;
+    C.innerHTML = this.bubbles().map(b => b.who === "ai" ? `<div class="tk-b ai"><span class="tk-av">${xiaoyuSVG()}</span><div class="tk-bb"><button class="say-sm" data-say="${esc(b.zh)}" aria-label="Nghe">${ICON.sound}</button><span class="han">${esc(b.zh)}</span>
+        ${this.py && b.py ? `<small class="tk-py">${esc(b.py)}</small>` : ""}${this.vi && b.vi ? `<small class="tk-vi">${esc(b.vi)}</small>` : ""}</div></div>`
+      : `<div class="tk-b me"><div class="tk-bb"><span class="han">${esc(b.zh || "（không nói）")}</span></div></div>`).join("")
+      + (this.busy ? `<div class="tk-b ai"><span class="tk-av">${xiaoyuSVG()}</span><div class="tk-bb tk-typing"><i></i><i></i><i></i></div></div>` : "");
+    C.querySelectorAll("[data-say]").forEach(b => b.onclick = () => speak(b.dataset.say));
+    C.scrollTop = C.scrollHeight; },
+  drawBar(){ const B = $("#tkBar"); if(!B) return;
+    if(this.review){ B.innerHTML = ""; return; }
+    const cur = this.mode === "script" ? this.curTurn() : null;
+    B.innerHTML = `<div class="tk-live" id="tkLive">${this.recOn ? "Đang nghe… nói xong bấm 🎤 lần nữa" : (SR ? "Bấm 🎤 rồi nói tiếng Trung" : "Trình duyệt không hỗ trợ nhận giọng nói – hãy gõ chữ Hán")}</div>
+      <div class="tk-row">${SR ? `<button class="tk-mic ${this.recOn ? "on" : ""}" id="tkMic" aria-label="Nói">🎤</button>` : ""}
+        <input id="tkIn" class="han" placeholder="Hoặc gõ câu trả lời…" autocomplete="off"><button class="btn primary" id="tkSend">Gửi</button></div>
+      <div class="tk-row2">${cur ? `<button class="btn sm" id="tkHint">💡 Gợi ý</button><span class="tk-hint" id="tkHintTx"></span>` : ""}
+        ${this.mode === "ai" && this.msgs.length - this.from > 1 ? `<button class="btn sm primary" id="tkEnd">Kết thúc & sửa lỗi</button>` : ""}</div>`;
+    const mic = $("#tkMic"); if(mic) mic.onclick = () => this.recOn ? this.stopMic(true) : this.listen(t => this.answer(t));
+    const send = () => { const v = $("#tkIn").value.trim(); if(v){ $("#tkIn").value = ""; this.answer(v); } };
+    $("#tkSend").onclick = send; $("#tkIn").onkeydown = e => { if(e.key === "Enter") send(); };
+    const h = $("#tkHint"); if(h){ let k = 0; h.onclick = () => { k++; $("#tkHintTx").innerHTML = k === 1 ? esc(cur.hint) : `${esc(cur.hint)} → <span class="han">${esc(cur.ans[0])}</span>`; if(k > 1) speak(cur.ans[0]); }; }
+    const e = $("#tkEnd"); if(e) e.onclick = () => this.aiReview(); },
+  /* ---------- micro ---------- */
+  listen(done){
+    if(this.busy) return; stopAnyRecording(); try{ if(ASR.rec) ASR.rec.abort(); }catch(e){}
+    const r = new SR(); r.lang = "zh-CN"; r.interimResults = true; r.continuous = false; r.maxAlternatives = 3;
+    let fin = "", tmp = ""; this.rec = r; this.recOn = true; this.drawBar();
+    r.onresult = e => { tmp = ""; for(let i = e.resultIndex; i < e.results.length; i++){ const t = e.results[i][0].transcript; if(e.results[i].isFinal) fin += t; else tmp += t; }
+      const L = $("#tkLive"); if(L) L.innerHTML = `Đang nghe: <span class="han">${esc(fin + tmp)}</span>`; };
+    r.onerror = e => { if(e.error === "not-allowed") toast("Hãy cho phép trình duyệt dùng micro.", "warn"); };
+    r.onend = () => { const was = this.recOn; this.recOn = false; this.rec = null; const t = (fin || tmp).trim();
+      if(this.cancel){ this.cancel = false; this.drawBar(); return; }
+      if(t) done(t); else { this.drawBar(); if(was) toast("Chưa nghe rõ, bạn nói lại nhé.", "info"); } };
+    try{ r.start(); }catch(e){ this.recOn = false; this.drawBar(); }
+  },
+  stopMic(keep){ if(this.rec){ if(!keep) this.cancel = true; try{ this.rec.stop(); }catch(e){} } },
+  answer(t){ this.mode === "script" ? this.scriptAnswer(t) : this.aiAnswer(t); },
+  /* ---------- chế độ kịch bản ---------- */
+  turns(){ return this.retry || this.les.talk.turns; },
+  curTurn(){ const T = this.turns(); return this.i < T.length && this.log.length && this.log[this.log.length - 1].said == null ? T[this.i] : null; },
+  next(){ const T = this.turns(); if(this.i >= T.length) return this.finish();
+    const t = T[this.i]; this.log.push({ ...t, said: null }); this.drawChat(); this.drawBar(); speak(t.ai[0]); },
+  scriptAnswer(said){ const L = this.log[this.log.length - 1]; if(!L || L.said != null) return;
+    L.said = said; const n = talkNorm(said); L.reOk = L.re ? new RegExp(L.re).test(n) : false;
+    let best = L.ans[0], sim = 0, err = 99; L.ans.forEach(a => { const x = talkNorm(said), y = talkNorm(a), P = lcsPairs(x, y), e = P.A.length + P.B.length - 2 * P.len, v = talkSim(said, a);
+      if(e < err || (e === err && v > sim)){ err = e; sim = v; best = a; } });
+    L.sim = sim; L.best = best; L.ok = L.reOk || err <= Math.max(1, Math.floor([...talkNorm(best)].length * .12)); this.i++; this.drawChat(); this.drawBar();
+    Games.later(() => this.next(), 700); },
+  finish(){ const prev = this.prevReview && this.prevReview.items || null; this.prevReview = null;
+    let items = this.log.map(x => ({ ...x }));
+    if(this.retry && prev){ const fixed = items; items = prev.map(p => { const f = fixed.find(x => x.ai[0] === p.ai[0]); return f ? { ...f, tries: (p.tries || 1) + 1 } : p; }); }
+    this.review = { items }; this.retry = null;
+    const ok = items.filter(x => x.ok).length;
+    Track.log("talk", { mode: "script", right: ok, total: items.length });
+    if(ok === items.length) Games.reward("talk", 100, `Hội thoại Bài ${S.lesson} (${ok}/${items.length} câu đúng)`);
+    this.drawBar(); this.drawReview(); },
+  diff(said, model){ const a = talkNorm(said), b = talkNorm(model), P = lcsPairs(a, b);
+    return { said: P.A.map((c, i) => P.ia.has(i) ? esc(c) : `<del>${esc(c)}</del>`).join("") || "（không nói）", model: P.B.map((c, j) => P.ib.has(j) ? esc(c) : `<ins>${esc(c)}</ins>`).join("") }; },
+  drawReview(){
+    const R = $("#tkReview"); if(!R) return; const it = this.review.items;
+    if(this.mode === "ai") return this.drawAIReview();
+    const wrong = it.filter(x => !x.ok), ok = it.length - wrong.length;
+    R.innerHTML = `<div class="tk-rev"><div class="tk-rev-h"><b>Kết quả: ${ok}/${it.length} câu đạt</b><span>${wrong.length ? "Xem các câu cần sửa bên dưới, nghe câu mẫu rồi bấm “Sửa lỗi sai” để nói lại." : "Tuyệt vời! Bạn trả lời đúng hết. 太棒了！"}</span></div>
+      <ol>${it.map(x => { const d = this.diff(x.said, x.best || x.ans[0]); return `<li class="${x.ok ? "ok" : "no"}"><div class="tk-q"><span class="han">${esc(x.ai[0])}</span> <small>${esc(x.ai[2])}</small></div>
+        <div>Bạn nói: <span class="han">${x.ok ? esc(x.said) : d.said}</span> ${x.ok ? "✓" : "✗"}</div>
+        ${x.ok ? (x.reOk || talkNorm(x.said) === talkNorm(x.best) ? "" : `<div class="tk-mod">Câu mẫu: <span class="han">${esc(x.best)}</span></div>`) : `<div class="tk-mod">Nên nói: <button class="say-sm" data-say="${esc(x.best || x.ans[0])}">${ICON.sound}</button><span class="han">${d.model}</span> <small>(${esc(x.hint)})</small></div>`}</li>`; }).join("")}</ol>
+      <div class="tk-rev-b">${wrong.length ? `<button class="btn primary" id="tkFix">🎯 Sửa lỗi sai (${wrong.length} câu)</button>` : ""}<button class="btn ${wrong.length ? "" : "primary"}" id="tkAgain">▶ Tiếp tục nói (cả bài)</button>
+        ${this.canAI() ? `<button class="btn" id="tkToAI">Trò chuyện với AI ▸</button>` : ""}</div></div>`;
+    R.querySelectorAll("[data-say]").forEach(b => b.onclick = () => speak(b.dataset.say));
+    const f = $("#tkFix"); if(f) f.onclick = () => { this.prevReview = this.review; this.review = null; this.retry = wrong.map(x => this.les.talk.turns.find(t => t.ai[0] === x.ai[0])); this.log = []; this.i = 0; this.render(); };
+    $("#tkAgain").onclick = () => { this.reset(); this.render(); };
+    const ta = $("#tkToAI"); if(ta) ta.onclick = () => { this.mode = "ai"; store.set("ww_talk_mode", "ai"); this.reset(); this.render(); };
+    R.scrollIntoView({ behavior: "smooth", block: "start" });
+  },
+  /* ---------- chế độ AI ---------- */
+  async ai(mode, extra = {}){
+    const a = Auth.get(); if(!Auth.on()) return { ok: false, error: "no_ai" }; if(!a) return { ok: false, error: "auth" };
+    return Auth.call("chat", { u: a.u, token: a.token, mode, topic: this.topic || this.les.talk.topic, level: S.level, lesson: S.lesson,
+      messages: (extra.from ? this.msgs.slice(Math.max(0, extra.from - 1)) : this.msgs).map(m => ({ role: m.role, content: m.content })) }, 45000); },
+  aiFail(r){ const m = { no_ai: "Giáo viên chưa bật chế độ AI (cần đặt AI_API_KEY trong Apps Script). Bạn hãy luyện theo kịch bản trước nhé.", auth: "Hãy đăng nhập tài khoản học viên để trò chuyện với AI.", limit: "Bạn đã dùng hết lượt trò chuyện AI hôm nay, mai luyện tiếp nhé!", network: "Mất kết nối, hãy thử lại." }[r.error] || "AI đang bận, hãy thử lại sau (" + r.error + ").";
+    this.aiOk = false; this.aiMsg = m; this.busy = false; toast(m, "warn"); this.render(); },
+  async aiStart(){ if(this.busy) return; this.busy = true; this.drawChat(); const r = await this.ai("talk"); if(!r.ok) return this.aiFail(r);
+    this.aiOk = true; this.busy = false; this.pushAI(r.data); },
+  pushAI(d){ const say = String(d.say || "").trim() || "你好！"; this.msgs.push({ role: "assistant", content: say, py: d.py || "", vi: d.vi || "" });
+    if(!Games.alive($("#tkChat"))) return; this.drawChat(); this.drawBar(); speak(say); },
+  async aiAnswer(t){ if(this.busy) return; this.msgs.push({ role: "user", content: t }); this.busy = true; this.drawChat(); this.drawBar();
+    const r = await this.ai("talk"); if(!r.ok) return this.aiFail(r); this.busy = false; this.pushAI(r.data); },
+  async aiReview(){ if(this.busy) return; this.stopMic(); this.busy = true; this.drawChat(); $("#tkBar").innerHTML = `<p class="tk-live">Tiểu Ngữ đang chấm bài…</p>`;
+    const r = await this.ai("review", { from: this.from }); if(!r.ok) return this.aiFail(r); this.busy = false;
+    const d = r.data || {}; this.review = { items: (d.items || []).filter(x => x && x.said), summary: d.summary || "" };
+    const ok = this.review.items.filter(x => x.ok).length; Track.log("talk", { mode: "ai", right: ok, total: this.review.items.length, topic: this.topic || this.les.talk.topic });
+    this.drawChat(); this.drawBar(); this.drawReview(); },
+  drawAIReview(){
+    const R = $("#tkReview"), it = this.review.items, wrong = it.filter(x => !x.ok);
+    R.innerHTML = `<div class="tk-rev"><div class="tk-rev-h"><b>Nhận xét của Tiểu Ngữ: ${it.length - wrong.length}/${it.length} câu đúng</b><span>${esc(this.review.summary || "")}</span></div>
+      <ol>${it.map((x, k) => `<li class="${x.ok ? "ok" : "no"}"><div>Bạn nói: <span class="han">${x.ok ? esc(x.said) : this.diff(x.said, x.fix || x.said).said}</span> ${x.ok ? "✓" : "✗"}</div>
+        ${x.ok ? "" : `<div class="tk-mod">Sửa: <button class="say-sm" data-say="${esc(x.fix)}">${ICON.sound}</button><span class="han">${this.diff(x.said, x.fix).model}</span> <small>${esc(x.py || "")}</small></div>
+        <div class="tk-note">${esc(x.vi || "")}${x.note ? " · " + esc(x.note) : ""}</div>
+        ${SR ? `<button class="btn sm tk-redo" data-k="${k}">🎤 Nói lại câu đúng</button><span class="tk-redo-r" id="tkR${k}"></span>` : ""}`}</li>`).join("")}</ol>
+      <div class="tk-rev-b"><button class="btn primary" id="tkCont">▶ Tiếp tục nói</button><button class="btn" id="tkNew">Chủ đề mới</button></div></div>`;
+    R.querySelectorAll("[data-say]").forEach(b => b.onclick = () => speak(b.dataset.say));
+    R.querySelectorAll(".tk-redo").forEach(b => b.onclick = () => { const x = it[+b.dataset.k], out = $("#tkR" + b.dataset.k); out.textContent = "Đang nghe…";
+      this.listen(t => { const s = talkSim(t, x.fix); out.innerHTML = `<span class="han">${esc(t)}</span> ${s >= .8 ? "✓ Chuẩn rồi!" : "✗ Thử lại nhé"}`; out.className = "tk-redo-r " + (s >= .8 ? "ok" : "no"); this.drawBar(); }); });
+    $("#tkCont").onclick = async () => { this.review = null; R.innerHTML = ""; this.msgs.push({ role: "user", content: "（我们继续聊吧，换一个问题。）", hidden: true }); this.from = this.msgs.length;
+      this.busy = true; this.drawChat(); this.drawBar(); const r = await this.ai("talk"); if(!r.ok) return this.aiFail(r); this.busy = false; this.pushAI(r.data); };
+    $("#tkNew").onclick = () => { this.reset(); this.render(); };
+    R.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 };
 

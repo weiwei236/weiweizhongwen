@@ -23,6 +23,14 @@
  *   Tests, TestAttempts, TestEvents – bài kiểm tra (đề + mật khẩu, bài làm của học viên, nhật ký cảnh báo gian lận).
  *   Readings – các bài đọc giáo viên soạn trên trang web (chỉ giáo viên có mật khẩu mới thêm/sửa/xoá được).
  * Mật khẩu KHÔNG được lưu dạng chữ thường, chỉ lưu bản mã hoá (SHA-256 + muối).
+ *
+ * LUYỆN HỘI THOẠI VỚI AI (tuỳ chọn – lớp Giao tiếp, tab "Hội thoại" → "Trò chuyện với AI"):
+ *   Cài đặt dự án → Thuộc tính tập lệnh → thêm:
+ *     AI_API_KEY      = API key của Anthropic (Claude), dạng sk-ant-...   ← KHÔNG dán key vào mã
+ *     AI_MODEL        = (không bắt buộc) mặc định claude-haiku-5-5
+ *     AI_DAILY_LIMIT  = (không bắt buộc) số lượt AI mỗi học viên mỗi ngày, mặc định 120
+ *   Sau đó Triển khai → Quản lý các bản triển khai → bút chì → Phiên bản mới → Triển khai.
+ *   Chưa có AI_API_KEY thì chế độ AI tự tắt, học viên vẫn luyện được hội thoại theo kịch bản.
  */
 const EVENTS = 'Events', ACCOUNTS = 'Accounts';
 const EV_HEAD = ['Thời gian', 'Mã sự kiện', 'Mã học viên', 'Họ tên', 'Lớp', 'Trình độ', 'Loại', 'Bài', 'Chi tiết (JSON)'];
@@ -81,6 +89,7 @@ function profileOf_(row) {
 function dataOf_(row) { try { return JSON.parse(row[C.data - 1] || '{}'); } catch (e) { return {}; } }
 
 function doPost(e) {
+  try { const b0 = JSON.parse(e.postData.contents || '{}'); if (b0.action === 'chat') return json_(chat_(b0)); } catch (err) { return json_({ ok: false, error: 'bad_request' }); }
   const lock = LockService.getScriptLock();
   lock.waitLock(20000);
   try {
@@ -389,4 +398,40 @@ function testAction_(act, b, ac) {
     return { ok: true, total: totalOf_(auto, manual) };
   }
   return null;
+}
+
+
+/* ================== LUYỆN HỘI THOẠI VỚI AI (Claude) ==================
+   b = { action:'chat', u, token, mode:'talk'|'review'|'ping', topic, level, lesson, messages:[{role,content}] } */
+function chat_(b) {
+  const P = PropertiesService.getScriptProperties(), key = P.getProperty('AI_API_KEY');
+  if (!key) return { ok: false, error: 'no_ai' };
+  if (b.mode === 'ping') return { ok: true };
+  const ac = sheet_(ACCOUNTS, AC_HEAD);
+  if (!authRow_(ac, b.u, b.token)) return { ok: false, error: 'auth' };
+  const limit = +(P.getProperty('AI_DAILY_LIMIT') || 120), cache = CacheService.getScriptCache();
+  const ck = 'ai:' + String(b.u).toLowerCase() + ':' + Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'yyyyMMdd');
+  const used = +(cache.get(ck) || 0); if (used >= limit) return { ok: false, error: 'limit' };
+  cache.put(ck, String(used + 1), 6 * 3600);
+  const topic = str_(b.topic, 200), msgs = (Array.isArray(b.messages) ? b.messages : []).slice(-24)
+    .map(m => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: str_(m.content, 600) }));
+  const base = 'Bạn là "Tiểu Ngữ" (小语), bạn luyện nói tiếng Trung thân thiện cho học viên Việt Nam trình độ sơ cấp (giáo trình 发展汉语·初级综合, khoảng bài ' + str_(b.lesson, 10) + '). Chủ đề hội thoại: ' + topic + '. ';
+  let system, messages;
+  if (b.mode === 'review') {
+    system = base + 'Nhiệm vụ: chấm từng câu học viên đã nói (đã chuyển giọng nói thành chữ nên có thể có lỗi nhận dạng đồng âm – bỏ qua lỗi chỉ do đồng âm). Với mỗi câu: ok=true nếu đúng ngữ pháp và tự nhiên; nếu sai, đưa câu sửa đúng ngắn gọn ở trình độ sơ cấp. Chỉ trả về JSON hợp lệ, không thêm chữ nào khác: {"items":[{"said":"...","ok":true|false,"fix":"câu đúng (chữ Hán)","py":"pinyin của câu đúng","vi":"nghĩa tiếng Việt","note":"giải thích lỗi bằng tiếng Việt, 1 câu"}],"summary":"nhận xét chung bằng tiếng Việt, 1-2 câu, khích lệ"}';
+    messages = [{ role: 'user', content: 'Hội thoại:\n' + msgs.map(m => (m.role === 'assistant' ? 'Tiểu Ngữ: ' : 'Học viên: ') + m.content).join('\n') }];
+  } else {
+    system = base + 'Chỉ dùng từ vựng và ngữ pháp đơn giản. Mỗi lượt nói tối đa 2 câu ngắn bằng chữ Hán giản thể và luôn kết thúc bằng một câu hỏi để học viên trả lời, giữ đúng chủ đề. KHÔNG sửa lỗi trong lúc nói chuyện (cuối buổi mới sửa). Chỉ trả về JSON hợp lệ: {"say":"câu tiếng Trung","py":"pinyin có dấu","vi":"dịch tiếng Việt"}';
+    messages = msgs.length ? msgs : [{ role: 'user', content: '(Bắt đầu cuộc trò chuyện: hãy chào và hỏi câu đầu tiên.)' }];
+    if (messages[0].role === 'assistant') messages.unshift({ role: 'user', content: '(Bắt đầu)' });
+  }
+  const res = UrlFetchApp.fetch('https://api.anthropic.com/v1/messages', {
+    method: 'post', contentType: 'application/json', muteHttpExceptions: true,
+    headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+    payload: JSON.stringify({ model: P.getProperty('AI_MODEL') || 'claude-haiku-5-5', max_tokens: b.mode === 'review' ? 1500 : 300, system: system, messages: messages })
+  });
+  if (res.getResponseCode() !== 200) return { ok: false, error: 'ai_http_' + res.getResponseCode() };
+  const text = (JSON.parse(res.getContentText()).content || []).map(c => c.text || '').join('');
+  const m = text.match(/\{[\s\S]*\}/);
+  try { return { ok: true, data: JSON.parse(m ? m[0] : text) }; } catch (err) { return { ok: true, data: b.mode === 'review' ? { items: [], summary: text } : { say: text, py: '', vi: '' } }; }
 }
