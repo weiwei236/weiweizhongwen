@@ -975,9 +975,9 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .od-menu.sh{grid-template-columns:repeat(6,minmax(0,1fr))}.od-menu.sh .od-dish i{aspect-ratio:200/170}
 .sh-cols{display:flex;gap:3px;justify-content:center;margin:2px 0}.sh-dot{width:12px!important;height:12px;aspect-ratio:auto!important;border-radius:50%!important;border:1px solid rgba(0,0,0,.25);display:inline-block}
 .c-红{background:#E0394A}.c-白{background:#fff}.c-黑{background:#222}.c-蓝{background:#2C7BE5}.c-黄{background:#F2C531}.c-粉{background:#F7A1C4}.c-绿{background:#3FA34D}.c-灰{background:#9AA0A6}.c-咖{background:#7A4E2D}.c-米{background:#EBDCC0}
-.od-menu.sh.sm{grid-template-columns:repeat(6,minmax(0,1fr))}
+.od-menu.sh.sm{grid-template-columns:repeat(6,minmax(0,1fr))}.od-menu.sh.few{grid-template-columns:repeat(var(--n),minmax(0,150px))}
 .od-bill s{color:var(--muted);font-weight:400;margin-right:4px}.od-bill-r b{white-space:nowrap}.od-bill-s{text-align:center;color:#1E8E5A;font-size:14px}
-@media (max-width:600px){.od-menu.sh{grid-template-columns:repeat(3,minmax(0,1fr))}.od-menu.sh.sm{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media (max-width:600px){.od-menu.sh{grid-template-columns:repeat(3,minmax(0,1fr))}.od-menu.sh.sm{grid-template-columns:repeat(6,minmax(0,1fr))}.od-menu.sh.few{grid-template-columns:repeat(min(var(--n),2),minmax(0,1fr))}}
 
 @media (max-width:600px){.od-learn{grid-template-columns:minmax(0,1fr)}.od-menu{grid-template-columns:repeat(2,minmax(0,1fr))}.od-menu.sm{grid-template-columns:repeat(4,minmax(0,1fr))}.od-menu.sm .od-dish em{display:none}.od-menu.sm .od-dish b{font-size:12px}.od-tabs button{font-size:13px;padding-inline:8px}.od-topic em{max-width:58%}}
 
@@ -4650,7 +4650,7 @@ const Topic = {
       const el = L[k++]; el.classList.add("on"); el.scrollIntoView({ block: "nearest", behavior: "smooth" }); speak(el.dataset.zh); Games.later(go, 900 + [...el.dataset.zh].length * 230); }; go(); }; },
   bubble(b){ const av = `<span class="tk-av od-av"><img src="${Exam.img(this.D.face)}" alt="服务员"></span>`;
     if(b.who === "sys") return `<div class="od-sys">${b.html}</div>`;
-    if(b.who === "menu") return `<div class="tk-b ai od-mb">${av}<div class="tk-bb">${this.D.board(true)}</div></div>`;
+    if(b.who === "menu") return `<div class="tk-b ai od-mb">${av}<div class="tk-bb">${this.D.board(true, b.ids)}</div></div>`;
     const showPy = this.py, showVi = this.vi;
     return b.who === "ai" ? `<div class="tk-b ai" data-zh="${esc(b.zh)}">${av}<div class="tk-bb"><button class="say-sm" data-say="${esc(b.zh)}" aria-label="Nghe">${ICON.sound}</button><span class="han">${esc(b.zh)}</span>${showPy && b.py ? `<small class="tk-py">${esc(b.py)}</small>` : ""}${showVi && b.vi ? `<small class="tk-vi">${esc(b.vi)}</small>` : ""}</div></div>`
       : `<div class="tk-b me" data-zh="${esc(b.zh)}"><div class="tk-bb">${b.full ? `<button class="say-sm" data-say="${esc(b.zh)}" aria-label="Nghe">${ICON.sound}</button>` : ""}<span class="han">${esc(b.zh || "（không nói）")}</span>${b.full && showPy && b.py ? `<small class="tk-py">${esc(b.py)}</small>` : ""}${b.full && showVi && b.vi ? `<small class="tk-vi">${esc(b.vi)}</small>` : ""}</div></div>`; },
@@ -4818,7 +4818,7 @@ const Topic = {
     if(r.bill) Games.later(() => this.drawBill(), 300);
     if(r.stay){ sayPre(); this.drawBar(); return; }
     if(r.menu){ sayPre(); this.busy = true; this.drawChat(); this.drawBar();
-      return Games.later(() => { this.busy = false; this.chat.push({ who: "menu" }); this.go(r.next || "order", null, 1400); }, 700); }
+      return Games.later(() => { this.busy = false; this.chat.push({ who: "menu", ids: r.ids }); this.go(r.next || "order", null, 1400); }, 700); }
     if(r.wait){ sayPre(); this.busy = true; this.drawBar();
       return Games.later(() => { this.busy = false; this.st = "pay"; this.ctx.fails = 0; this.log.forEach(x => x.open = false); this.q = ["（Bạn ăn xong – gọi phục vụ tính tiền）", "", "Hãy gọi phục vụ để tính tiền"];
         this.sys(`<span class="od-clock">⏳</span> Mười phút sau… món ăn đã được mang lên. <b>Bạn ăn xong rồi – hãy gọi phục vụ để tính tiền.</b>`); this.drawBar(); }, 1800); }
@@ -4901,8 +4901,8 @@ const SH_ITEMS = [
   { h: "大衣", p: "dàyī", vi: "áo măng tô", price: 480, m: "件", k: "top", c: "黑灰咖" },
   { h: "羽绒服", p: "yǔróngfú", vi: "áo phao lông vũ", price: 520, m: "件", k: "top", c: "蓝黑白" },
   { h: "短裤", p: "duǎnkù", vi: "quần short", price: 50, m: "条", k: "top", c: "蓝黑" },
-  { h: "长裤", p: "chángkù", vi: "quần dài", price: 130, m: "条", k: "top", c: "蓝黑灰", al: ["裤子", "牛仔裤"] },
-  { h: "半身裙", p: "bànshēnqún", vi: "chân váy", price: 110, m: "条", k: "top", c: "米黑", al: ["短裙", "裙子"] },
+  { h: "长裤", p: "chángkù", vi: "quần dài", price: 130, m: "条", k: "top", c: "蓝黑灰", al: ["牛仔裤"] },
+  { h: "半身裙", p: "bànshēnqún", vi: "chân váy", price: 110, m: "条", k: "top", c: "米黑", al: ["短裙"] },
   { h: "连衣裙", p: "liányīqún", vi: "váy liền", price: 180, m: "条", k: "top", c: "粉白蓝" },
   { h: "棉衣", p: "miányī", vi: "áo bông", price: 260, m: "件", k: "top", c: "粉米黑", al: ["棉袄"] },
   { h: "高跟鞋", p: "gāogēnxié", vi: "giày cao gót", price: 220, m: "双", k: "shoe", c: "红黑" },
@@ -4914,6 +4914,23 @@ const SH_ITEMS = [
 ].map((d, i) => ({ ...d, id: i, al: [d.h, ...(d.al || [])], cols: [...d.c].map(x => x === "咖" ? "咖" : x) }));
 const SH_OFF = { 手机: ["shǒujī", "điện thoại"], 书: ["shū", "sách"], 包: ["bāo", "túi xách"], 袜子: ["wàzi", "tất"], 围巾: ["wéijīn", "khăn quàng"], 眼镜: ["yǎnjìng", "kính"], 手表: ["shǒubiǎo", "đồng hồ"], 苹果: ["píngguǒ", "táo"], 水: ["shuǐ", "nước"], 电脑: ["diànnǎo", "máy tính"], 书包: ["shūbāo", "cặp sách"] };
 const sh5 = x => Math.round(x / 5) * 5;
+/* nhóm hàng: học viên nói chung chung (quần áo, áo, quần, váy, giày…) → đưa bảng hàng theo nhóm */
+const SH_CAT = [
+  { re: /裤子|裤/, ids: [7, 8], zh: "裤子", py: "kùzi", vi: "quần" },
+  { re: /裙子|裙/, ids: [9, 10], zh: "裙子", py: "qúnzi", vi: "váy" },
+  { re: /鞋|拖/, ids: [12, 13, 14, 15], zh: "鞋", py: "xié", vi: "giày dép" },
+  { re: /冬天|冷|暖和|保暖|厚/, ids: [0, 3, 5, 6, 11, 17], zh: "冬天的衣服", py: "dōngtiān de yīfu", vi: "đồ mùa đông" },
+  { re: /夏天|热|凉快|薄/, ids: [2, 4, 7, 9, 10, 14, 16], zh: "夏天的衣服", py: "xiàtiān de yīfu", vi: "đồ mùa hè" },
+  { re: /上衣|外衣|衬衣|衣服|衣|服装|服/, ids: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], zh: "衣服", py: "yīfu", vi: "quần áo" },
+  { re: /配饰|手套|帽/, ids: [16, 17], zh: "帽子和手套", py: "màozi hé shǒutào", vi: "mũ và găng tay" },
+  { re: /东西|商品|什么|看看|随便|逛|卖|有啥|介绍|推荐|货|全部|所有|都/, ids: null, zh: "", py: "", vi: "" }
+];
+function shCat(n){ const c = SH_CAT.find(c => c.re.test(n)); if(!c) return null;
+  const ids = c.ids || SH_ITEMS.map(d => d.id), L = ids.slice(0, 5).map(i => SH_ITEMS[i]), more = ids.length > 5;
+  const list = [L.map(d => d.h).join("、") + (more ? "等等" : ""), L.map(d => d.p).join(", ") + (more ? " děngděng" : ""), L.map(d => d.vi).join(", ") + (more ? "…" : "")];
+  const react = c.ids ? [`我们有很多${c.zh}：${list[0]}。这是我们的商品，您看看吧！`, `Wǒmen yǒu hěn duō ${c.py}: ${list[1]}. Zhè shì wǒmen de shāngpǐn, nín kànkan ba!`, `Cửa hàng có nhiều ${c.vi}: ${list[2]}. Đây là hàng của cửa hàng, anh/chị xem nhé!`]
+    : ["好的，这是我们店的商品：有衣服、裤子、裙子、鞋、帽子和手套。您随便看看！", "Hǎo de, zhè shì wǒmen diàn de shāngpǐn: yǒu yīfu, kùzi, qúnzi, xié, màozi hé shǒutào. Nín suíbiàn kànkan!", "Vâng, đây là hàng của cửa hàng: có áo, quần, váy, giày, mũ và găng tay. Anh/chị cứ xem thoải mái!"];
+  return { ok: true, react, menu: true, ids: c.ids, next: "pick" }; }
 function shZhNum(t){ const v = { 零: 0, 一: 1, 二: 2, 两: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9 }; let tot = 0, cur = 0, unit = 1, zero = false;
   for(const ch of t){ if(ch === "零"){ zero = true; unit = 1; } else if(v[ch] != null) cur = v[ch]; else { const u = { 十: 10, 百: 100, 千: 1000 }[ch]; tot += (cur || (u === 10 ? 1 : 0)) * u; cur = 0; unit = u; zero = false; } }
   if(cur) tot += !zero && unit >= 100 ? cur * unit / 10 : cur; return tot; }
@@ -4960,18 +4977,17 @@ const SH_SAMPLE = [["店", "欢迎光临！您想买点儿什么？", "Huānyín
   ["客", "太贵了！一百块行吗？", "Tài guì le! Yìbǎi kuài xíng ma?", "Đắt quá! 100 tệ được không?"], ["店", "一百块太少了。一百三吧。", "Yìbǎi kuài tài shǎo le. Yìbǎi sān ba.", "100 ít quá. 130 nhé."], ["客", "一百一，不行我就再看看。", "Yìbǎi yī, bù xíng wǒ jiù zài kànkan.", "110, không được thì tôi xem chỗ khác."],
   ["店", "好吧好吧，一百一卖给您。还要别的吗？", "Hǎo ba hǎo ba, yìbǎi yī mài gěi nín. Hái yào bié de ma?", "Thôi được, 110 bán cho anh/chị. Còn lấy gì nữa không?"], ["客", "不要了。可以用微信吗？", "Bú yào le. Kěyǐ yòng Wēixìn ma?", "Không ạ. Trả WeChat được không?"],
   ["店", "可以，请扫这儿。要袋子吗？", "Kěyǐ, qǐng sǎo zhèr. Yào dàizi ma?", "Được, mời quét ở đây. Có lấy túi không?"], ["客", "不用了，谢谢。再见！", "Bú yòng le, xièxie. Zàijiàn!", "Không cần, cảm ơn. Tạm biệt!"], ["店", "欢迎下次再来！", "Huānyíng xià cì zài lái!", "Hẹn gặp lại lần sau!"]];
-function shBoard(small){ return `<div class="od-menu sh ${small ? "sm" : ""}">${SH_ITEMS.map(d => `<button class="od-dish" data-say="${esc(d.h)}"><i style="background-image:url('${Exam.img("s1_shop")}');background-size:600% 300%;background-position:${(d.id % 6) * 20}% ${(d.id / 6 | 0) * 50}%"></i>
+function shBoard(small, ids){ if(ids && ids.length <= 7) small = false; return `<div class="od-menu sh ${small ? "sm" : ""} ${ids ? "few" : ""}" ${ids ? `style="--n:${Math.min(4, ids.length)}"` : ""}>${SH_ITEMS.filter(d => !ids || ids.includes(d.id)).map(d => `<button class="od-dish" data-say="${esc(d.h)}"><i style="background-image:url('${Exam.img("s1_shop")}');background-size:600% 300%;background-position:${(d.id % 6) * 20}% ${(d.id / 6 | 0) * 50}%"></i>
   <b class="han">${d.h}</b>${small ? "" : `<small>${d.p}</small><span>${d.vi}</span><span class="sh-cols">${d.cols.map(c => `<i class="sh-dot c-${c}" title="${SH_COL[c][2]}"></i>`).join("")}</span>`}<em>${d.price}元${small ? "" : ` / ${d.m}`}</em></button>`).join("")}</div>`; }
 const SH_STATES = {
-  greet: { hint: "Nói món muốn mua: 我想买一件… / 我随便看看.", model: () => ["我想买一件毛衣。", "我随便看看。", "有运动鞋吗？"],
+  greet: { hint: "Nói món muốn mua: 我想买一件… / 我想买衣服 / 我随便看看.", model: () => ["我想买一件毛衣。", "我想买衣服。", "我随便看看。"],
     ask: () => ["欢迎光临！您想买点儿什么？", "Huānyíng guānglín! Nín xiǎng mǎi diǎnr shénme?", "Chào mừng quý khách! Anh/chị muốn mua gì ạ?"],
     check(T, n, raw){ const f = shFind(raw); if(f) return T.shStart(f);
       if(/^(你好|您好|老板好|早上好|下午好|晚上好)$/.test(n)) return { ok: true, stay: true, react: ["您好！您想买点儿什么？", "Nín hǎo! Nín xiǎng mǎi diǎnr shénme?", "Chào anh/chị! Anh/chị muốn mua gì ạ?"] };
-      if(/看看|随便|先看|逛逛/.test(n)) return { ok: true, react: ["好的，您随便看看。这是我们的商品。", "Hǎo de, nín suíbiàn kànkan. Zhè shì wǒmen de shāngpǐn.", "Vâng, anh/chị cứ xem thoải mái. Đây là hàng của cửa hàng."], menu: true, next: "pick" };
-      return T.shOff(n); } },
-  pick: { hint: "Chọn một món trong hình: 我想看看那件外套 / 我要一双运动鞋.", model: () => ["我想看看那件外套。", "我要一双运动鞋。"],
+      return T.shOff(n).ok ? T.shOff(n) : shCat(n) || { ok: false }; } },
+  pick: { hint: "Chọn một món trong bảng: 我想看看那件外套 / 我要一双运动鞋.", model: () => ["我想看看那件外套。", "我要一双运动鞋。"],
     ask: () => ["您喜欢哪个？", "Nín xǐhuan nǎge?", "Anh/chị thích cái nào ạ?"],
-    check(T, n, raw){ const f = shFind(raw); return f ? T.shStart(f) : T.shOff(n); } },
+    check(T, n, raw){ const f = shFind(raw); if(f) return T.shStart(f); const o = T.shOff(n); return o.ok ? o : shCat(n) || o; } },
   color: { hint: "Chọn màu: 我要…色的.", model: T => [`我要${SH_COL[SH_ITEMS[T.item.id].cols[0]][0]}的。`, `有没有${SH_COL[SH_ITEMS[T.item.id].cols[1] || SH_ITEMS[T.item.id].cols[0]][0]}的？`],
     ask(T){ const d = SH_ITEMS[T.item.id], c = shColsTx(d); return [`您要什么颜色的？我们有${c[0]}。`, `Nín yào shénme yánsè de? Wǒmen yǒu ${c[1]}.`, `Anh/chị lấy màu gì? Có ${c[2]}.`]; },
     check(T, n, raw){ const c = shColor(n), d = SH_ITEMS[T.item.id]; if(!c) return { ok: false };
@@ -5031,7 +5047,7 @@ const SH_STATES = {
     check(T, n, raw){ const f = shFind(raw); if(f) return T.shStart(f);
       if(/不要|不用|就这些|没有了|没了|够了|好了|就这样|买单|结账|多少钱/.test(n)){ if(!T.cart.length) return { ok: true, react: ["好的，欢迎下次再来！", "Hǎo de, huānyíng xià cì zài lái!", "Vâng, hẹn gặp lại!"], next: "bye" };
         return { ok: true, next: "pay" }; }
-      return T.shOff(n); } },
+      const o = T.shOff(n); return o.ok ? o : shCat(n) || o; } },
   pay: { hint: "Chọn cách trả: 可以用微信吗？/ 刷卡 / 给你…块 (tiền mặt).", model: () => ["可以用微信吗？", "给你三百块。", "可以刷卡吗？"],
     ask(T){ const t = T.shTotal(), z = odNum(t, true); return [`一共${z[0]}块。您怎么付？`, `Yígòng ${z[1]} kuài. Nín zěnme fù?`, `Tổng cộng ${t} tệ. Anh/chị trả bằng gì ạ?`]; },
     check(T, n, raw){ const t = T.shTotal(), Z = x => odNum(x, true);
