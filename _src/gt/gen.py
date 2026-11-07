@@ -1,7 +1,8 @@
 import json, random, re, sys
-sys.path.insert(0, '/tmp/claude-0/-home-claude/c42ce2af-05ed-5ab0-9ae7-40fe1ca5a6a5/scratchpad/gt')
+sys.path.insert(0, '/home/claude/weiweizhongwen/_src/gt')
 import gtdata2
 from gtdata import L
+from gtex import EX as GEX
 J = lambda o: json.dumps(o, ensure_ascii=False)
 HAN = re.compile(r'[一-鿿〇]')
 PUN = re.compile(r'[，。？！、：；“”（）()\s…·,.?!]')
@@ -46,7 +47,7 @@ def build(n):
     allS = sents(n); prevS = [s for k in L if k < n for s in sents(k)]
     vocab = []; miss = []
     for v in D['vocab']:
-        h, p, pos, vi = v[:4]; ex = v[4] if len(v) > 4 else None
+        h, p, pos, vi = v[:4]; ex = GEX.get(n, {}).get(h) or (v[4] if len(v) > 4 else None)
         if not ex and h in EXS: ex = EXS[h]
         if not ex:
             cand = [s for s in allS + prevS if h in s[0] and s[1] and s[2]]
