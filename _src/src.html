@@ -3322,30 +3322,46 @@ const Talk = {
     const e = $("#tkEnd"); if(e) e.onclick = () => this.aiReview(); },
   /* ---------- micro ---------- */
   listen(done){
-    /* ghi âm liên tục: KHÔNG tự dừng khi học viên ngập ngừng; chỉ dừng khi bấm 🎤 lần nữa (hoặc quá 90 giây) */
+    /* ghi âm liên tục: KHÔNG tự dừng khi học viên ngập ngừng; chỉ dừng khi bấm 🎤 lần nữa (hoặc quá 90 giây).
+       Điện thoại / iPad: tắt loa đang đọc + nhả micro của phần Phát âm trước khi nghe (iOS/Android không cho 2 bên cùng dùng micro),
+       chờ một nhịp rồi mới bật lại khi trình duyệt tự ngắt, có hẹn giờ dự phòng nếu trình duyệt không báo kết thúc. */
     if(this.busy) return; stopAnyRecording(); try{ if(ASR.rec) ASR.rec.abort(); }catch(e){}
-    const me = this; let past = "", fins = [], tmp = "", t0 = Date.now(), fails = 0;
+    SPQ = []; SPQ_TOK++; SPQ_ON = false; stopSpeak(); if(IS_MOBILE) releaseMic();
+    const me = this, ses = me.ses = {}; let past = "", fins = [], tmp = "", t0 = Date.now(), fails = 0, started = false, ended = false, hard = "";
     me.recOn = true; me.userStop = false; me.cancel = false; me.drawBar();
     const text = () => (past + fins.join("") + tmp).trim();
-    const show = () => { const L = $("#tkLive"); if(L) L.innerHTML = `Đang nghe… <span class="han">${esc(text())}</span><br><small>Nói xong bấm 🎤 để dừng</small>`; };
-    const finish = () => { clearTimeout(me.recCap); me.recOn = false; me.rec = null; const t = text();
-      if(me.cancel){ me.cancel = false; me.drawBar(); return; }
-      if(t) done(t); else { me.drawBar(); toast("Chưa nghe rõ, bạn nói lại nhé.", "info"); } };
-    const run = () => {
-      const r = new SR(); r.lang = "zh-CN"; r.interimResults = true; r.continuous = true; r.maxAlternatives = 3; me.rec = r;
-      r.onresult = e => { fails = 0; tmp = ""; const f = [];
-        for(let i = 0; i < e.results.length; i++){ const x = e.results[i][0].transcript; if(e.results[i].isFinal){ if(f.length && x.startsWith(f[f.length - 1])) f[f.length - 1] = x; else f.push(x); } else tmp += x; }
+    const show = msg => { const L = $("#tkLive"); if(L) L.innerHTML = `${msg || (started ? "Đang nghe…" : "Đang bật micro…")} <span class="han">${esc(text())}</span><br><small>Nói xong bấm 🎤 để dừng</small>`; };
+    const finish = () => { if(ended || me.ses !== ses) return; ended = true; clearTimeout(me.recCap); clearTimeout(ses.wd); clearTimeout(ses.st);
+      me.recOn = false; const r = me.rec; me.rec = null; try{ if(r){ r.onend = r.onresult = r.onerror = null; r.abort(); } }catch(e){}
+      const t = text(); if(me.cancel){ me.cancel = false; me.drawBar(); return; }
+      if(t) done(t); else { me.drawBar(); toast(hard || "Chưa nghe rõ, bạn bấm 🎤 nói lại nhé.", hard ? "warn" : "info"); } };
+    ses.finish = finish;
+    const run = first => {
+      if(ended || me.ses !== ses) return;
+      const r = new SR(); r.lang = "zh-CN"; r.interimResults = true; r.continuous = true; r.maxAlternatives = 1; me.rec = r;
+      r.onstart = () => { started = true; clearTimeout(ses.st); show(); };
+      r.onresult = e => { fails = 0; started = true; tmp = ""; const f = [];
+        for(let i = 0; i < e.results.length; i++){ const x = e.results[i][0].transcript || ""; if(e.results[i].isFinal){ if(f.length && x.startsWith(f[f.length - 1])) f[f.length - 1] = x; else if(!f.includes(x)) f.push(x); } else tmp = x.startsWith(tmp) ? x : tmp + x; }
         fins = f; show(); };
-      r.onerror = e => { if(e.error === "not-allowed" || e.error === "service-not-allowed"){ me.userStop = true; toast("Hãy cho phép trình duyệt dùng micro.", "warn"); } else if(e.error !== "no-speech" && e.error !== "aborted") fails++; };
-      r.onend = () => { past += fins.join("") + tmp; fins = []; tmp = "";
-        if(!me.userStop && !me.cancel && me.recOn && fails < 3 && Date.now() - t0 < 90000){ try{ run(); return; }catch(e){} }
+      r.onerror = e => { const er = e.error;
+        if(er === "not-allowed" || er === "service-not-allowed"){ me.userStop = true; hard = IS_IOS ? "Hãy cho phép Micro và Nhận dạng giọng nói: Cài đặt → Safari → Micro, và bật Đọc chính tả (Cài đặt → Cài đặt chung → Bàn phím)." : "Hãy cho phép trình duyệt dùng micro (biểu tượng 🔒 cạnh địa chỉ trang)."; }
+        else if(er === "audio-capture"){ fails++; hard = "Micro đang bị ứng dụng khác dùng – hãy tắt ứng dụng đó rồi bấm 🎤 lại."; }
+        else if(er === "network"){ fails++; hard = "Nhận giọng nói cần có mạng – kiểm tra kết nối rồi thử lại."; }
+        else if(er !== "no-speech" && er !== "aborted") fails++; };
+      r.onend = () => { if(me.rec !== r) return; past += fins.join("") + tmp; fins = []; tmp = "";
+        if(!me.userStop && !me.cancel && me.recOn && fails < 4 && Date.now() - t0 < 90000){ ses.wd = setTimeout(() => run(false), IS_MOBILE ? 350 : 120); return; }
         finish(); };
-      try{ r.start(); }catch(e){ me.userStop = true; finish(); }
+      try{ r.start(); }
+      catch(e){ if(first){ ses.wd = setTimeout(() => run(false), 400); return; } fails++; if(fails < 4 && !me.userStop) ses.wd = setTimeout(() => run(false), 500); else finish(); return; }
+      /* trình duyệt không báo đã bật micro trong 4 giây → thử bật lại một lần */
+      clearTimeout(ses.st); ses.st = setTimeout(() => { if(!started && !ended && me.rec === r){ try{ r.onend = null; r.abort(); }catch(e){} fails++; if(fails < 3) run(false); else { hard = "Không bật được micro – bấm 🎤 thử lại nhé."; finish(); } } }, 4000);
     };
     me.recCap = setTimeout(() => { if(me.recOn) me.stopMic(true); }, 90000);
-    run(); show();
+    run(true); show();
   },
-  stopMic(keep){ if(this.rec || this.recOn){ this.userStop = true; if(!keep) this.cancel = true; if(this.rec){ try{ this.rec.stop(); }catch(e){} } else { this.recOn = false; } } },
+  stopMic(keep){ if(this.rec || this.recOn){ this.userStop = true; if(!keep) this.cancel = true; const ses = this.ses;
+    if(this.rec){ try{ this.rec.stop(); }catch(e){} } /* iOS đôi khi không báo kết thúc → tự chốt sau 1,5 giây */
+    if(ses && ses.finish) setTimeout(() => ses.finish(), 1500); else this.recOn = false; } },
   answer(t){ this.mode === "script" ? this.scriptAnswer(t) : this.aiAnswer(t); },
   /* ---------- chế độ kịch bản ---------- */
   turns(){ return this.retry || this.les.talk.turns; },
@@ -3700,6 +3716,10 @@ let REC=null; // active recording session
 function stopAnyRecording(){ if(REC&&REC.stop) REC.stop(true); }
 /* Xin quyền micro một lần duy nhất rồi dùng lại cho mọi lần ghi âm trong phiên học */
 let MIC=null, MIC_PENDING=null;
+const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+const IS_MOBILE = IS_IOS || /Android|Mobile/i.test(navigator.userAgent);
+/* nhả micro (luồng thu âm của phần Phát âm) để nhận dạng giọng nói dùng được micro trên điện thoại */
+function releaseMic(){ if(!MIC) return; try{ MIC.stream.getTracks().forEach(t => t.stop()); MIC.ac.close(); }catch(e){} MIC = null; }
 async function getMic(){
   if(MIC && MIC.stream.getAudioTracks().some(t=>t.readyState==="live")){ if(MIC.ac.state==="suspended") await MIC.ac.resume(); return MIC; }
   if(MIC_PENDING) return MIC_PENDING;
