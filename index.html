@@ -786,7 +786,9 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 @keyframes fnShake{25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-3px)}}
 .fn-arena canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:5}
 .fn-fruit{position:absolute;left:0;top:0;width:96px;height:96px;will-change:transform}
-.fn-fruit svg{width:96px;height:96px;filter:drop-shadow(0 0 2px rgba(255,236,200,.85)) drop-shadow(0 6px 8px rgba(0,0,0,.4))}
+.fn-fruit svg{width:96px;height:96px;filter:drop-shadow(2.5px 0 0 #FFF8EC) drop-shadow(-2.5px 0 0 #FFF8EC) drop-shadow(0 2.5px 0 #FFF8EC) drop-shadow(0 -2.5px 0 #FFF8EC) drop-shadow(0 6px 6px rgba(0,0,0,.45))}
+.fn-bomb svg{filter:drop-shadow(2.5px 0 0 #FFD54F) drop-shadow(-2.5px 0 0 #FFD54F) drop-shadow(0 2.5px 0 #FFD54F) drop-shadow(0 -2.5px 0 #FFD54F) drop-shadow(0 6px 6px rgba(0,0,0,.45))}
+.fn-half svg{filter:drop-shadow(2px 0 0 #FFF8EC) drop-shadow(-2px 0 0 #FFF8EC) drop-shadow(0 2px 0 #FFF8EC) drop-shadow(0 -2px 0 #FFF8EC)}
 .fn-lab{position:absolute;left:50%;top:50%;translate:-50% -50%;background:rgba(255,255,255,.94);color:#17332A;border-radius:10px;padding:3px 9px;font-size:16px;font-weight:700;white-space:nowrap;max-width:190px;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 6px rgba(0,0,0,.25)}
 .fn-lab.han{font-size:24px;font-weight:400}
 .fn-fruit.fn-show .fn-lab{background:#2C9A58;color:#fff;outline:3px solid #fff}
@@ -1010,6 +1012,13 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .ht-qr{width:190px;border-radius:14px;background:var(--c);padding:10px;color:#fff;text-align:center;display:grid;gap:6px}.ht-qr-h{font-weight:700;font-size:16px}.ht-qr svg{width:100%;background:#fff;border-radius:8px;padding:6px}.ht-qr-a{font-size:20px;font-weight:800}.ht-qr small{opacity:.85;font-size:11px}
 .ht-wifi{display:flex;gap:10px;align-items:center;background:#E3F2FD;border-radius:12px;padding:8px 14px}.ht-wifi svg{width:44px;height:44px}.ht-wifi div{display:grid}
 .ht-issue{position:relative;width:96px;height:90px;background:#FFF;border-radius:14px;display:grid;place-items:center}.ht-issue svg{width:70px;height:70px}.ht-issue b{position:absolute;right:4px;top:0;color:#E53935;font-size:30px}
+.pz-cash{display:grid;gap:8px}.pz-cash small{color:var(--muted)}.pz-notes{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}.pz-note{width:78px;height:40px}
+.pz-pos{display:grid;justify-items:center;gap:4px}.pz-pos svg{width:110px;height:136px}.pz-pos small{color:var(--muted)}
+.pz-table,.pz-row{display:flex;gap:12px;align-items:center}.pz-table svg{width:64px;height:56px}.pz-row svg{width:70px;height:70px}.pz-table div,.pz-row>span{display:grid}.pz-table b,.pz-row b{font-size:20px}.pz-table small,.pz-row small{color:var(--muted)}
+.pz-dishes{display:grid;gap:6px}.pz-dishes>b{font-size:17px}.pz-dishes>div{display:flex;flex-wrap:wrap;gap:8px}.pz-dish{display:grid;justify-items:center;width:96px;position:relative;gap:2px}.pz-dish i{width:96px;height:72px;border-radius:10px;background-size:400% 400%;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.pz-dish em{position:absolute;right:4px;top:4px;background:#C0533A;color:#fff;font-style:normal;font-weight:800;border-radius:99px;padding:0 7px;font-size:13px}.pz-dish .han{font-size:13px;text-align:center}
+.pz-tag{display:flex;gap:10px;align-items:center}.pz-tag svg{width:150px;height:80px}.pz-tag span{font-size:15px}.pz-tag .han{font-size:17px}
+.pz-size{display:grid;gap:4px}.pz-size b{font-size:18px}.pz-size small{color:var(--muted)}.pz-size table{border-collapse:collapse;font-size:13px;background:#fff}.pz-size th,.pz-size td{border:1px solid var(--line);padding:3px 6px;text-align:center}.pz-size th{background:#F3F8F5}
 .ht-lift{display:flex;gap:10px;align-items:center;background:#FFF;border:2px solid #2E4A7A;border-radius:12px;padding:8px 14px}.ht-lift svg{width:44px;height:44px}.ht-lift div{display:grid}.ht-lift b{font-size:20px;font-weight:600;color:#2E4A7A}.ht-lift span{font-size:15px}.ht-lift small{color:var(--muted)}
 .ht-pass{display:flex;gap:8px;align-items:center;color:var(--good);font-weight:700}.ht-pass svg{width:40px;height:40px}
 .ht-bill{max-width:420px}
@@ -2868,30 +2877,37 @@ const TTS_AUDIO=(()=>{ try{
   return new Proxy({}, { get:(t,k)=>{ const o=get(), v=o[k]; return typeof v==="function"?v.bind(o):v; }, set:(t,k,v)=>{ get()[k]=v; return true; } });
 }catch(e){ return typeof Audio!=="undefined"?new Audio():null; } })();
 function stopSpeak(){ TTS_TOKEN++; if(TTS_AUDIO){try{TTS_AUDIO.pause();}catch(e){}} if("speechSynthesis" in window) try{speechSynthesis.cancel();}catch(e){} }
-function speakOnline(text,v){
+function speakOnline(text,v,done){
   const chunks=ttsChunks(text), tok=++TTS_TOKEN, a=TTS_AUDIO; let i=0;
-  if(!chunks.length)return;
+  if(!chunks.length){ if(done)done(); return; }
   const next=()=>{
-    if(tok!==TTS_TOKEN||i>=chunks.length)return;
+    if(tok!==TTS_TOKEN)return; if(i>=chunks.length){ if(done)done(); return; }
     const q=chunks[i++];
     a.onended=()=>setTimeout(next,i<chunks.length?180:0);
-    a.onerror=()=>{ if(tok!==TTS_TOKEN)return; if(i===1){ONLINE_FAIL=true; speakDevice(chunks.slice(0).join(""));} };
+    a.onerror=()=>{ if(tok!==TTS_TOKEN)return; if(i===1){ONLINE_FAIL=true; speakDevice(chunks.slice(0).join(""),done);} else if(done) done(); };
     a.src=`https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${v.tl}&total=1&idx=0&textlen=${q.length}&q=${encodeURIComponent(q)}`;
     try{a.playbackRate=RATE<1?Math.max(.6,RATE+.05):RATE; a.preservesPitch=true;}catch(e){}
     const pr=a.play(); if(pr&&pr.catch)pr.catch(err=>{ if(tok!==TTS_TOKEN||!err||err.name==="AbortError")return;
       if(err.name==="NotAllowedError"&&!TTS_MAIN){ TTS_MAIN=new Audio(); i--; next(); return; } /* trình duyệt chặn phát trong khung ẩn → phát trực tiếp */
-      if(i===1){ONLINE_FAIL=true;speakDevice(chunks.join(""));} });
+      if(i===1){ONLINE_FAIL=true;speakDevice(chunks.join(""),done);} else if(done) done(); });
   };
   next();
 }
 /* Đọc từng cụm theo dấu câu để ngắt nghỉ rõ ràng; từ đơn đọc chậm hơn một chút */
-function speak(text){
+function speak(text,done,fromQ){
+  if(!fromQ){ SPQ=[]; SPQ_TOK++; SPQ_ON=false; }
   stopSpeak();
-  const ov=onlineVoice(); if(ov&&TTS_AUDIO){ speakOnline(text,ov); return; }
-  speakDevice(text);
+  const ov=onlineVoice(); if(ov&&TTS_AUDIO){ speakOnline(text,ov,done); return; }
+  speakDevice(text,done);
 }
-function speakDevice(text){
-  if(!("speechSynthesis" in window))return;
+/* hàng đợi lời nói: nhân vật nói nhiều câu liên tiếp thì đọc hết câu trước rồi mới đọc câu sau */
+let SPQ=[], SPQ_ON=false, SPQ_TOK=0;
+function speakQ(text){ if(!text)return; SPQ.push(text); if(!SPQ_ON) spqNext(); }
+function spqNext(){ const t=SPQ.shift(); if(!t){ SPQ_ON=false; return; } SPQ_ON=true; const tok=SPQ_TOK; let fired=false;
+  const go=()=>{ if(fired||tok!==SPQ_TOK)return; fired=true; setTimeout(()=>{ if(tok===SPQ_TOK) spqNext(); },350); };
+  speak(t,go,true); setTimeout(go,2500+[...t].length*900/Math.max(.5,RATE)); }
+function speakDevice(text,done){
+  if(!("speechSynthesis" in window)){ if(done)done(); return; }
   try{
     speechSynthesis.cancel();
     const clean=String(text).replace(/\s+/g,"");
@@ -2900,6 +2916,7 @@ function speakDevice(text){
     parts.forEach((p,k)=>{
       const u=new SpeechSynthesisUtterance(p); u.lang="zh-CN"; if(zhVoice)u.voice=zhVoice;
       u.rate=isWord?Math.max(.6,RATE-.1):RATE; u.pitch=1;
+      if(k===parts.length-1&&done){ u.onend=done; u.onerror=done; }
       speechSynthesis.speak(u);
       if(k<parts.length-1){const gap=new SpeechSynthesisUtterance("，"); gap.lang="zh-CN"; if(zhVoice)gap.voice=zhVoice; gap.volume=0; gap.rate=1; speechSynthesis.speak(gap);}
     });
@@ -4710,7 +4727,7 @@ const Shop = {
     if(P.k >= P.plan.length) return this.payDone();
     const st = P.cur = this.makeStep(P.plan[P.k]); st.done = false;
     st.opts = shuffle([...st.goods.filter(g => !g.hide).map(g => ({ t: g.t, g })), ...st.bads.map(b => ({ t: b }))]);
-    this.text = st.cust[0]; this.showOrder(); $("#shCust").className = "sh-cust in"; this.drawTalk(); speak(st.cust[0]);
+    this.text = st.cust[0]; this.showOrder(); $("#shCust").className = "sh-cust in"; this.drawTalk(); speakQ(st.cust[0]);
   },
   drawTalk(){
     const P = this.pay, st = P.cur, TK = $("#shTalk"), C = this.cfg, han = t => this.py ? rubyHTML(t) : esc(t), first = TK.hidden; TK.hidden = false; $("#shWrap").classList.add("talking");
@@ -4753,10 +4770,10 @@ const Shop = {
     const others = st.goods.filter(x => x !== use && !x.hide);
     TK.querySelector(".sh-talk-q").innerHTML = ok ? `<b class="sh-good">✓ ${said ? "Nói đúng rồi!" : "Chính xác!"}</b> <i>${esc(use.t[1])}</i>${said && onlyHan(said) !== onlyHan(use.t[0]) ? `<br><small>Câu mẫu: <span class="han">${esc(use.t[0])}</span></small>` : ""}${others.length ? `<br><small>Cũng có thể nói: ${others.map(x => `<span class="han">${esc(x.t[0])}</span>`).join(" / ")}</small>` : ""}`
       : `<b class="sh-wrong">✗ Chưa đúng.</b> Nên nói: <span class="han">${esc(use.t[0])}</span> – <i>${esc(use.t[1])}</i>${others.length ? `<br><small>hoặc: ${others.map(x => `<span class="han">${esc(x.t[0])}</span>`).join(" / ")}</small>` : ""}`;
-    ok ? RaceSnd.ding(1) : RaceSnd.buzz(); speak(use.t[0]); if(use.after) use.after();
+    ok ? RaceSnd.ding(1) : RaceSnd.buzz(); speakQ(use.t[0]); if(use.after) use.after();
     if(use.add) P.plan.splice(P.k + 1, 0, use.add);
     Games.later(() => { if(this.pay !== P) return;
-      if(use.react){ this.text = use.react[0]; this.showOrder(); speak(use.react[0]); }
+      if(use.react){ this.text = use.react[0]; this.showOrder(); speakQ(use.react[0]); }
       Games.later(() => { if(this.pay !== P) return; P.k++; this.payStep(); }, use.react ? 1700 : 300); }, ok ? 1500 : 2800);
   },
   payDone(){
@@ -4786,6 +4803,8 @@ const Shop = {
 };
 
 /* ---------- 🏎️ Đua xe vượt chướng ngại vật ---------- */
+/* từ đa loại: 家 vừa là lượng từ vừa là danh từ (nhà), 在 vừa động từ vừa giới từ… → coi như thuộc mọi loại đó */
+const RACE_MULTI = { 家: "NM", 块: "NM", 点: "MNV", 号: "MN", 天: "MN", 年: "MN", 月: "N", 门: "NM", 口: "NM", 楼: "NM", 层: "NM", 条: "MN", 张: "MN", 本: "MN", 杯: "MN", 瓶: "MN", 碗: "MN", 双: "MA", 对: "APDM", 在: "VPD", 给: "VP", 还: "DV", 跟: "PCV", 和: "CP", 到: "VP", 比: "PV", 上: "NV", 下: "NVM", 里: "NM", 外: "N", 前: "N", 后: "NC", 过: "VD", 都: "D", 也: "D", 一块儿: "DNM", 一起: "DN", 一点儿: "QNA", 一下: "QD", 不用: "DV", 可以: "VA", 好: "AD", 多: "AD", 少: "AV", 大: "A", 小: "A", 很: "D", 太: "D", 有: "V", 没有: "VD", 没: "DV", 别: "DA", 再: "D", 就: "D", 才: "D", 又: "D", 先: "DN", 最: "D", 更: "D", 真: "DA", 东西: "N", 时候: "N", 地方: "N", 工作: "NV", 学习: "NV", 生活: "NV", 电话: "N", 帮助: "NV", 问题: "N", 休息: "V", 准备: "VN", 安排: "NV", 回: "VM", 次: "M", 遍: "M", 走: "V", 开: "VA", 会: "VN", 要: "VC", 想: "V", 能: "V", 让: "VP", 叫: "VP", 被: "P" };
 const RACE_ALLOW = { N: "DMCP", V: "NMD", A: "NMC", D: "NAM", P: "NAM", M: "NVD", Q: "NVD", C: "NMA", T: "MCP", L: "DMC" };
 const Race = {
   N: 15,
@@ -4829,8 +4848,11 @@ const Race = {
     const cls = p => ({ dt: "N", rieng: "N", dai: "N", hau: "N", dong: "V", nn: "V", tt: "A", pho: "D", gioi: "P", lien: "C", lg: "M", so: "Q", sl: "Q" })[p] || "X";
     const all = sent ? new Set(this.pool.flatMap(x => x.sents || []).map(x => x.replace(/[，。？！、\s]/g, ""))) : null;
     for(const x of shuffle(this.pool)){ if(out.length >= 4) break; const v = key(x); if(x === w || !v || seen.has(v) || x.vs === w.vs) continue;
+      if(sent && !this.clsMap){ const m = this.clsMap = {}; Object.values(LEVELS).forEach(Lv => Object.values(Lv.lessons).forEach(l => (l.vocab || []).forEach(v => { (m[v.h] = m[v.h] || new Set()).add(cls2(v)); })));
+        Object.entries(RACE_MULTI).forEach(([h, c]) => [...c].forEach(k => (m[h] = m[h] || new Set()).add(k))); }
       if(sent){ const head = sent.slice(0, sent.indexOf(w.h)).replace(/^.*[：:，,。！？、—]/, ""), start = !/[一-鿿]/.test(head);
-        const ok = start ? "MPQ".replace(cls2(w), "") : RACE_ALLOW[cls2(w)] || ""; /* chỗ trống đầu câu/đầu vế: chỉ nhiễu bằng lượng từ, giới từ, số từ */ if(!ok.includes(cls2(x)) || v.includes(w.h) || w.h.includes(v)) continue;
+        const ok = start ? "MPQ".replace(cls2(w), "") : RACE_ALLOW[cls2(w)] || ""; /* chỗ trống đầu câu/đầu vế: chỉ nhiễu bằng lượng từ, giới từ, số từ */ const xs = [...(this.clsMap[x.h] || [cls2(x)])], wc = cls2(w);
+        if(!xs.every(k => ok.includes(k) && k !== wc) || v.includes(w.h) || w.h.includes(v)) continue;
         if(all.has(sent.replace(w.h, v).replace(/[，。？！、\s]/g, ""))) continue; }
       seen.add(v); out.push(x); }
     return out; },
@@ -5068,8 +5090,46 @@ const OD_SAMPLE = [["服", "欢迎光临！请问几位？", "Huānyíng guāngl
   ["客", "对。", "Duì.", "Đúng."], ["服", "好的，请稍等。", "Hǎo de, qǐng shāo děng.", "Vâng, xin chờ một chút."], ["客", "服务员，买单！一共多少钱？", "Fúwùyuán, mǎidān! Yígòng duōshao qián?", "Phục vụ ơi, tính tiền! Tổng cộng bao nhiêu?"],
   ["服", "一共四十一块。", "Yígòng sìshíyī kuài.", "Tổng cộng 41 tệ."], ["客", "可以用微信吗？", "Kěyǐ yòng Wēixìn ma?", "Trả WeChat được không?"], ["服", "可以，请扫这儿。谢谢，欢迎下次再来！", "Kěyǐ, qǐng sǎo zhèr. Xièxie, huānyíng xià cì zài lái!", "Được, mời quét ở đây. Cảm ơn, hẹn gặp lại!"], ["客", "谢谢，再见！", "Xièxie, zàijiàn!", "Cảm ơn, tạm biệt!"]];
 const TOPICS = [{ id: "order", ic: "🍜", zh: "点菜", py: "diǎn cài", vi: "Gọi món ở quán ăn", img: "s1_waiter", d: "Chào hỏi · xin thực đơn · gọi món · bát to/nhỏ · nóng/đá · cay · xác nhận · thanh toán" },
-  { id: "shop", ic: "🛍️", zh: "买东西", py: "mǎi dōngxi", vi: "Mua sắm · mặc cả · thanh toán", img: "s1_seller", d: "Chọn đồ · màu sắc · cỡ · mặc thử · hỏi giá · mặc cả · trả tiền, thối tiền" }, { id: "way", ic: "🧭", zh: "问路", py: "wèn lù", vi: "Hỏi đường", svg: 1, d: "Hỏi vị trí · phương hướng · chỉ đường · xa hay gần · nhắc lại để xác nhận · cảm ơn" },
+  { id: "shop", ic: "🛍️", zh: "买东西", py: "mǎi dōngxi", vi: "Mua sắm · mặc cả · thanh toán", img: "s1_seller", d: "Chọn đồ · màu sắc · cỡ · mặc thử · hỏi giá · mặc cả · trả tiền, thối tiền" }, { id: "way", ic: "🧭", zh: "问路", py: "wèn lù", vi: "Hỏi đường", avf: () => avatarSVG(WAY_GUY, { label: "Người đi đường" }), d: "Hỏi vị trí · phương hướng · chỉ đường · xa hay gần · nhắc lại để xác nhận · cảm ơn" },
   { id: "hotel", ic: "🏨", zh: "住酒店", py: "zhù jiǔdiàn", vi: "Khách sạn · nhận & trả phòng", avf: () => avatarSVG(HT_STAFF, { label: "Lễ tân" }), d: "Có đặt trước không · loại phòng · đặt cọc · hành lý, thang máy · nhờ lễ tân xử lý sự cố · minibar · trả phòng" }];
+
+/* ===================== Hình minh hoạ dùng chung cho hội thoại theo chủ đề (gọi món, mua sắm) ===================== */
+const PZ_NOTE = { 100: ["#D84343", "#F6B4B4"], 50: ["#2E9E6B", "#B6E3CD"], 20: ["#9C6B3F", "#E8CDAE"], 10: ["#3D6FC4", "#BCD0F2"], 5: ["#8E5CC4", "#D9C6F0"], 1: ["#6E9B3A", "#D3E7B8"] };
+function pzNotes(n){ const out = []; [100, 50, 20, 10, 5, 1].forEach(v => { while(n >= v && out.length < 9){ out.push(v); n -= v; } }); return out; }
+function pzNote(v){ const [c, l] = PZ_NOTE[v]; return `<svg class="pz-note" viewBox="0 0 90 46" aria-label="${v} tệ"><rect width="90" height="46" rx="5" fill="${l}" stroke="${c}" stroke-width="2.5"/><rect x="6" y="6" width="78" height="34" rx="3" fill="none" stroke="${c}" stroke-dasharray="3 2"/><circle cx="66" cy="23" r="12" fill="${c}" opacity=".18"/><text x="12" y="31" font-size="20" font-weight="800" fill="${c}">${v}</text><text x="66" y="28" font-size="13" font-weight="700" fill="${c}" text-anchor="middle">元</text></svg>`; }
+/* tiền mặt: khách đưa / người bán thối lại */
+function pzCash(given, change){ return `<div class="pz-cash"><div><small>Khách đưa · <span class="han">收您</span> ${given}元</small><div class="pz-notes">${pzNotes(given).map(pzNote).join("")}</div></div>
+  ${change > 0 ? `<div><small>Thối lại · <span class="han">找您</span> ${change}元</small><div class="pz-notes">${pzNotes(change).map(pzNote).join("")}</div></div>` : `<div><small>✔ <span class="han">正好</span> – vừa đủ, không phải thối</small></div>`}</div>`; }
+/* máy quẹt thẻ */
+function pzPOS(amount){ return `<div class="pz-pos"><svg viewBox="0 0 120 150" aria-label="Máy quẹt thẻ"><rect x="20" y="6" width="80" height="138" rx="12" fill="#37474F"/><rect x="30" y="18" width="60" height="38" rx="4" fill="#C8E6C9"/>
+  <text x="60" y="34" font-size="9" text-anchor="middle" fill="#1B5E20">请输入密码</text><text x="60" y="49" font-size="12" font-weight="800" text-anchor="middle" fill="#1B5E20">¥${amount}</text>
+  ${[0, 1, 2, 3].map(r => [0, 1, 2].map(c => `<rect x="${32 + c * 20}" y="${66 + r * 17}" width="16" height="12" rx="3" fill="${r === 3 && c === 2 ? "#43A047" : r === 3 && c === 0 ? "#E53935" : "#90A4AE"}"/>`).join("")).join("")}
+  <rect x="0" y="40" width="44" height="28" rx="4" fill="#1E88E5" transform="rotate(-18 22 54)"/><rect x="6" y="46" width="10" height="8" rx="1.5" fill="#FFD54F" transform="rotate(-18 22 54)"/></svg><small><span class="han">刷卡</span> · quẹt thẻ, nhập mã PIN</small></div>`; }
+/* QR thanh toán (dùng chung hàm của chủ đề khách sạn) */
+function pzPay(kind, amount, shop){ return kind === "card" ? pzPOS(amount) : htQR(kind === "ali" ? "ali" : "wx", amount, shop); }
+function pzPayKind(n){ return /支付宝/.test(n) ? "ali" : /刷卡|信用卡|银行卡/.test(n) ? "card" : /微信|扫|二维码|手机/.test(n) ? "wx" : /现金|给你|钱/.test(n) ? "cash" : null; }
+/* thẻ số bàn */
+function pzTable(no, k){ return `<div class="pz-table"><svg viewBox="0 0 70 60" aria-hidden="true"><path d="M10 50 L20 14 H50 L60 50Z" fill="#C0533A"/><rect x="18" y="20" width="34" height="22" rx="3" fill="#FFF7E6"/><text x="35" y="37" font-size="16" font-weight="800" text-anchor="middle" fill="#C0533A">${no}</text></svg>
+  <div><b class="han">${no}号桌</b><span>Bàn số ${no} · ${k} người</span><small>Tiểu Vương dẫn bạn đến bàn</small></div></div>`; }
+/* món đã gọi – lấy hình từ ảnh thực đơn */
+function pzDishes(order, title){ return `<div class="pz-dishes">${title ? `<b class="han">${title}</b>` : ""}<div>${order.map(it => { const d = OD_MENU[it.id], x = odItemTx(it);
+  return `<span class="pz-dish"><i style="background-image:url('${Exam.img("s1_menu")}');background-position:${(d.id % 4) * 100 / 3}% ${(d.id / 4 | 0) * 100 / 3}%"></i><em>×${it.n}</em><span class="han">${esc(x[0])}</span></span>`; }).join("")}</div></div>`; }
+/* hộp mang đi */
+function pzTakeaway(){ return `<div class="pz-row"><svg viewBox="0 0 80 70" aria-hidden="true"><path d="M14 22 L66 22 L58 64 L22 64Z" fill="#F5DEB3" stroke="#B98552" stroke-width="2"/><path d="M14 22 L24 8 L56 8 L66 22" fill="#EBC995" stroke="#B98552" stroke-width="2"/><path d="M30 8 q10 -10 20 0" stroke="#B98552" stroke-width="3" fill="none"/><text x="40" y="48" font-size="12" text-anchor="middle" fill="#8D5A2B">打包</text></svg><span><b class="han">带走 · 打包</b><small>Mang đi – món được đóng hộp</small></span></div>`; }
+/* nhãn giá treo trên quần áo */
+function pzTag(p0, p, deal){ return `<div class="pz-tag ${deal ? "deal" : ""}"><svg viewBox="0 0 150 80" aria-hidden="true"><path d="M20 10 H140 V70 H20 L4 40Z" fill="${deal ? "#E8F5E9" : "#FFF8E1"}" stroke="${deal ? "#2E7D32" : "#E0A526"}" stroke-width="2.5"/><circle cx="20" cy="40" r="5" fill="#fff" stroke="#999"/>
+  ${p0 !== p ? `<text x="80" y="32" font-size="15" text-anchor="middle" fill="#9E9E9E" text-decoration="line-through">¥${p0}</text><text x="80" y="58" font-size="24" font-weight="800" text-anchor="middle" fill="${deal ? "#2E7D32" : "#D84343"}">¥${p}</text>`
+    : `<text x="80" y="50" font-size="26" font-weight="800" text-anchor="middle" fill="#D84343">¥${p}</text>`}</svg><span>${deal ? `🤝 <b class="han">成交</b> · chốt giá ${p}元` : p0 !== p ? `Người bán trả giá: <b>${p}元</b>` : `Giá niêm yết · <span class="han">价格</span>`}</span></div>`; }
+/* bảng cỡ */
+function pzSize(k){ return k === "shoe" ? `<div class="pz-size"><b class="han">鞋码表</b> <small>Bảng cỡ giày</small><table><tr><th>号</th>${[35, 36, 37, 38, 39, 40, 41, 42, 43, 44].map(x => `<td>${x}</td>`).join("")}</tr><tr><th>cm</th>${[22.5, 23, 23.5, 24, 24.5, 25, 25.5, 26, 26.5, 27].map(x => `<td>${x}</td>`).join("")}</tr></table></div>`
+  : `<div class="pz-size"><b class="han">尺码表</b> <small>Bảng cỡ quần áo</small><table><tr><th></th><th>S<br><span class="han">小号</span></th><th>M<br><span class="han">中号</span></th><th>L<br><span class="han">大号</span></th><th>XL<br><span class="han">加大号</span></th></tr>
+    <tr><th>Cao (cm)</th><td>155–160</td><td>160–170</td><td>170–175</td><td>175–185</td></tr><tr><th>Nặng (kg)</th><td>45–52</td><td>52–60</td><td>60–70</td><td>70–80</td></tr></table></div>`; }
+/* phòng thử đồ */
+function pzFit(shoe){ return `<div class="pz-row"><svg viewBox="0 0 80 80" aria-hidden="true">${shoe ? `<rect x="8" y="50" width="64" height="10" rx="3" fill="#B98552"/><path d="M14 50 q0 -14 14 -16 l10 0 q4 8 20 10 q10 2 10 6z" fill="#5B8DEF"/><path d="M20 40 h10" stroke="#fff" stroke-width="2"/>`
+  : `<rect x="8" y="6" width="64" height="8" rx="3" fill="#8D6E63"/>${[0, 1, 2, 3, 4, 5].map(i => `<path d="M${12 + i * 10} 14 q5 30 0 60" stroke="#E57373" stroke-width="9" fill="none"/>`).join("")}<rect x="22" y="22" width="36" height="14" rx="3" fill="#FFF"/><text x="40" y="33" font-size="10" text-anchor="middle" fill="#C0533A">试衣间</text>`}</svg>
+  <span><b class="han">${shoe ? "试鞋" : "试衣间"}</b><small>${shoe ? "Ngồi xuống ghế thử giày" : "Phòng thử đồ"}</small></span></div>`; }
+/* túi mua hàng */
+function pzBag(){ return `<div class="pz-row"><svg viewBox="0 0 80 80" aria-hidden="true"><path d="M14 26 H66 L62 74 H18Z" fill="#F48FB1"/><path d="M28 26 q0 -18 12 -18 q12 0 12 18" stroke="#AD1457" stroke-width="4" fill="none"/><text x="40" y="58" font-size="13" font-weight="700" text-anchor="middle" fill="#fff">小美</text></svg><span><b class="han">袋子</b><small>Túi đựng đồ của cửa hàng</small></span></div>`; }
 
 const TOPIC_DEF = {};
 const Topic = {
@@ -5114,7 +5174,7 @@ const Topic = {
     $("#tkVi").onclick = () => { this.vi = !this.vi; store.set("ww_talk_vi", this.vi); this.render(); };
     this.sayBtns(B); B.querySelector("[data-go]").onclick = () => { this.tab = "play"; this.render(); };
     $("#odPlay").onclick = () => { const L = [...B.querySelectorAll(".tk-b")]; let k = 0; const go = () => { L.forEach(x => x.classList.remove("on")); if(k >= L.length || !document.body.contains(B)) return;
-      const el = L[k++]; el.classList.add("on"); el.scrollIntoView({ block: "nearest", behavior: "smooth" }); speak(el.dataset.zh); Games.later(go, 900 + [...el.dataset.zh].length * 230); }; go(); }; },
+      const el = L[k++]; el.classList.add("on"); el.scrollIntoView({ block: "nearest", behavior: "smooth" }); let f = false; const nx = () => { if(f) return; f = true; Games.later(go, 450); }; speak(el.dataset.zh, nx); Games.later(nx, 3000 + [...el.dataset.zh].length * 900); }; go(); }; },
   bubble(b){ const av = `<span class="tk-av od-av">${this.faceImg()}</span>`;
     if(b.who === "sys") return `<div class="od-sys">${b.html}</div>`;
     if(b.who === "menu") return `<div class="tk-b ai od-mb">${av}<div class="tk-bb">${this.D.board(true, b.ids)}</div></div>`;
@@ -5151,13 +5211,13 @@ const Topic = {
     let k = 0; $("#tkHint").onclick = () => { const S = this.S(); if(!S) return; k++; const ex = S.model(this);
       $("#tkHintTx").innerHTML = k === 1 ? esc(S.hint) : `${esc(S.hint)} → <span class="han">${ex.map(esc).join(" / ")}</span>`; if(k > 1) speak(ex[0]); }; },
   listen: Talk.listen, stopMic: Talk.stopMic,
-  say(zh, py, vi, delay){ this.chat.push({ who: "ai", zh, py, vi }); this.q = [zh, py, vi]; this.drawChat(); Games.later(() => speak(zh), delay || 50); },
+  say(zh, py, vi, delay){ this.chat.push({ who: "ai", zh, py, vi }); this.q = [zh, py, vi]; this.drawChat(); Games.later(() => speakQ(zh), delay || 50); },
   sys(html){ this.chat.push({ who: "sys", html }); this.drawChat(); },
   pic(html){ if(!html) return; this.chat.push({ who: "pic", html }); this.drawChat(); },
   S(){ return this.D.STATES[this.st]; },
   go(st, pre, delay){ this.st = st; this.ctx.fails = 0; this.log.forEach(x => x.open = false); const S = this.S(); if(st === "end") return this.finish();
     let q = S.ask(this); if(q && pre){ if(/^好的/.test(pre[0]) || /改/.test(pre[0])) q = [q[0].replace(/^好的。/, ""), q[1].replace(/^Hǎo de\. /, ""), q[2].replace(/^Vâng\. /, "")]; q = [pre[0] + q[0], pre[1] + " " + q[1], pre[2] + " " + q[2]]; } else if(!q) q = pre;
-    if(q) this.say(...q, delay); if(S.pic) this.pic(S.pic(this)); this.drawBar(); },
+    if(q) this.say(...q, delay); if(this._pendPic){ this.pic(this._pendPic); this._pendPic = null; } if(S.pic) this.pic(S.pic(this)); this.drawBar(); },
   /* lượt hỏi tiếp theo sau khi gọi món: hỏi bát/nóng/cay cho món còn thiếu */
   pending(){ for(const it of this.order){ const d = OD_MENU[it.id]; if(d.size && !it.size) return [it, "size"]; if(d.temp && !it.temp) return [it, "temp"]; if(d.spicy && it.spicy == null) return [it, "spicy"]; } return null; },
   orderTx(){ const L = this.order.map(odItemTx); return [L.map(x => x[0]).join("、"), L.map(x => x[1]).join(", "), L.map(x => x[2]).join(", ")]; },
@@ -5182,8 +5242,8 @@ const Topic = {
       check(T, n){ let k = 0; const m = n.match(/(\d+|[一二两三四五六七八九十]+)(位|个人|个|人|口)/) || n.match(/^(\d+|[一二两三四五六七八九十]+)$/);
         if(m) k = odParseNum(m[1]); else if(/我一个|一个人|就我|自己|只有我/.test(n)) k = 1;
         if(!k) return { ok: false };
-        T.ctx.people = k; const z = odNum(k, true);
-        return { ok: true, react: [`好的，${z[0]}位，这边请！`, `Hǎo de, ${z[1]} wèi, zhè biān qǐng!`, `Vâng, ${k} người, mời đi lối này!`], next: "menu" }; } },
+        T.ctx.people = k; const z = odNum(k, true); T.ctx.table = T.ctx.table || 3 + Math.floor(Math.random() * 9);
+        return { ok: true, react: [`好的，${z[0]}位，这边请！`, `Hǎo de, ${z[1]} wèi, zhè biān qǐng!`, `Vâng, ${k} người, mời đi lối này!`], next: "menu", pic: pzTable(T.ctx.table, k) }; } },
     menu: { hint: "Xin xem thực đơn.", model: () => ["请给我看一下菜单。", "有菜单吗？"],
       ask: () => ["请坐。现在点菜吗？", "Qǐng zuò. Xiànzài diǎn cài ma?", "Mời ngồi. Anh/chị gọi món luôn chứ ạ?"],
       check(T, n, raw){ if(/菜单|单子|看看|看一下|menu/i.test(raw)) return { ok: true, react: ["好的，给您菜单。", "Hǎo de, gěi nín càidān.", "Vâng, gửi anh/chị thực đơn."], menu: true, next: "order" };
@@ -5228,7 +5288,7 @@ const Topic = {
     eat: { hint: "Ăn ở đây (在这儿吃) hay mang đi (带走)?", model: () => ["在这儿吃。", "带走。"],
       ask: () => ["在这儿吃还是带走？", "Zài zhèr chī háishi dàizǒu?", "Ăn ở đây hay mang đi ạ?"],
       check(T, n){ if(/带走|打包|外带|拿走/.test(n)) T.ctx.away = true; else if(!/这|堂食|这里|在店/.test(n)) return { ok: false };
-        return { ok: true, next: "confirm" }; } },
+        return { ok: true, next: "confirm", pic: T.ctx.away ? pzTakeaway() : "" }; } },
     confirm: { hint: "Đúng thì nói 对, sai thì nói 不对 + sửa (vd: 不对，我要小碗).", model: () => ["对。", "没错。", "不对，我要小碗。"],
       ask(T){ const o = T.orderTx(); return [`好的。您点了${o[0]}，对吗？`, `Hǎo de. Nín diǎn le ${o[1]}, duì ma?`, `Vâng. Anh/chị đã gọi ${o[2]}, đúng không ạ?`]; },
       check(T, n, raw){ const neg = /不对|不是|错了|不要|我要的是|改成|换成/.test(n);
@@ -5243,11 +5303,15 @@ const Topic = {
         if(!ch) return { ok: false }; return { ok: true, react: ["好的，我改一下。", "Hǎo de, wǒ gǎi yíxià.", "Vâng, tôi sửa lại."], after: true, reconfirm: true }; } },
     pay: { hint: "Gọi phục vụ tính tiền: 服务员，买单！/ 一共多少钱？", model: () => ["服务员，买单！", "一共多少钱？"], ask: () => null,
       check(T, n){ if(!/买单|结账|算账|多少钱|付钱|埋单/.test(n)) return { ok: false }; const t = T.total(), z = odNum(t, true);
-        return { ok: true, react: [`好的，一共${z[0]}块。`, `Hǎo de, yígòng ${z[1]} kuài.`, `Vâng, tổng cộng ${t} tệ.`], next: "pay2", bill: true }; } },
+        return { ok: true, react: [`好的，一共${z[0]}块。`, `Hǎo de, yígòng ${z[1]} kuài.`, `Vâng, tổng cộng ${t} tệ.`], next: "pay2", bill: true, pic: T.D.bill(T) }; } },
     pay2: { hint: "Hỏi trả bằng WeChat / Alipay, hoặc đưa tiền mặt (给你钱).", model: () => ["可以用微信吗？", "可以用支付宝吗？", "给你钱。"], ask: () => null,
-      check(T, n){ if(!/微信|支付宝|刷卡|现金|给你|扫|手机|付/.test(n)) return { ok: false };
-        return { ok: true, react: /现金|给你/.test(n) && !/微信|支付宝/.test(n) ? ["收您钱，谢谢！欢迎下次再来！", "Shōu nín qián, xièxie! Huānyíng xià cì zài lái!", "Đã nhận tiền, cảm ơn! Hẹn gặp lại lần sau!"]
-          : ["可以，请扫这儿。谢谢！欢迎下次再来！", "Kěyǐ, qǐng sǎo zhèr. Xièxie! Huānyíng xià cì zài lái!", "Được ạ, mời quét ở đây. Cảm ơn! Hẹn gặp lại lần sau!"], next: "bye" }; } },
+      check(T, n){ if(!/微信|支付宝|刷卡|现金|给你|扫|手机|付|钱/.test(n)) return { ok: false };
+        const t = T.total(), k = pzPayKind(n) || "wx";
+        if(k === "cash"){ const g = zhNums(n).filter(x => x >= t)[0] || [10, 20, 50, 100, 200, 500].find(x => x >= t) || Math.ceil(t / 100) * 100, ch = g - t, Z = x => odNum(x, true);
+          return { ok: true, react: ch ? [`收您${Z(g)[0]}块，找您${Z(ch)[0]}块。谢谢！欢迎下次再来！`, `Shōu nín ${Z(g)[1]} kuài, zhǎo nín ${Z(ch)[1]} kuài. Xièxie! Huānyíng xià cì zài lái!`, `Nhận ${g} tệ, thối lại ${ch} tệ. Cảm ơn! Hẹn gặp lại lần sau!`]
+            : [`收您${Z(g)[0]}块，正好。谢谢！欢迎下次再来！`, `Shōu nín ${Z(g)[1]} kuài, zhènghǎo. Xièxie! Huānyíng xià cì zài lái!`, `Nhận ${g} tệ, vừa đủ. Cảm ơn! Hẹn gặp lại lần sau!`], next: "bye", pic: pzCash(g, ch) }; }
+        if(k === "card") return { ok: true, react: ["可以，请刷卡，输入密码。谢谢！欢迎下次再来！", "Kěyǐ, qǐng shuā kǎ, shūrù mìmǎ. Xièxie! Huānyíng xià cì zài lái!", "Được ạ, mời quẹt thẻ và nhập mã PIN. Cảm ơn! Hẹn gặp lại lần sau!"], next: "bye", pic: pzPOS(t) };
+        return { ok: true, react: ["可以，请扫这儿。谢谢！欢迎下次再来！", "Kěyǐ, qǐng sǎo zhèr. Xièxie! Huānyíng xià cì zài lái!", "Được ạ, mời quét ở đây. Cảm ơn! Hẹn gặp lại lần sau!"], next: "bye", pic: pzPay(k, t, "薇薇饭馆 · Weiwei Restaurant") }; } },
     bye: { hint: "Chào tạm biệt: 谢谢，再见！", model: () => ["谢谢，再见！"], ask: () => null,
       check(T, n){ if(!/谢|再见|拜拜|好吃|慢走/.test(n)) return { ok: false }; return { ok: true, react: ["再见，慢走！", "Zàijiàn, màn zǒu!", "Tạm biệt, đi cẩn thận nhé!"], next: "end" }; } }
   },
@@ -5289,20 +5353,20 @@ const Topic = {
   },
   handle(r){
     if(r.reset) this.order = [];
-    const pre = r.react, sayPre = () => { if(pre){ this.chat.push({ who: "ai", zh: pre[0], py: pre[1], vi: pre[2] }); this.q = pre; this.drawChat(); speak(pre[0]); } };
+    const pre = r.react, sayPre = () => { if(pre){ this.chat.push({ who: "ai", zh: pre[0], py: pre[1], vi: pre[2] }); this.q = pre; this.drawChat(); speakQ(pre[0]); } if(this._pendPic){ this.pic(this._pendPic); this._pendPic = null; } };
     if(r.bill) Games.later(() => this.drawBill(), 300);
-    if(r.pic) Games.later(() => this.pic(r.pic), 200);
+    this._pendPic = r.pic || null; Games.later(() => { if(this._pendPic){ this.pic(this._pendPic); this._pendPic = null; } }, 400);
     /* chuyển cảnh: lời đáp → khung kể chuyện (+ hình) → câu hỏi của trạng thái mới */
     if(r.scene){ const sc = r.scene; sayPre(); this.busy = true; this.drawBar();
-      return Games.later(() => { this.busy = false; this.sys(sc.html); this.pic(sc.pic); if(sc.say){ this.chat.push({ who: "ai", zh: sc.say[0], py: sc.say[1], vi: sc.say[2] }); this.q = sc.say; this.drawChat(); speak(sc.say[0]); }
+      return Games.later(() => { this.busy = false; this.sys(sc.html); this.pic(sc.pic); if(sc.say){ this.chat.push({ who: "ai", zh: sc.say[0], py: sc.say[1], vi: sc.say[2] }); this.q = sc.say; this.drawChat(); speakQ(sc.say[0]); }
         if(sc.next === "end"){ this.st = "end"; this.drawBar(); return Games.later(() => this.finish(), 1600); }
-        if(this.D.STATES[sc.next].ask(this)) this.go(sc.next, null, sc.say ? 2500 : 600); else { this.st = sc.next; this.ctx.fails = 0; this.log.forEach(x => x.open = false); this.drawBar(); } }, sc.delay || 1600); }
+        if(this.D.STATES[sc.next].ask(this)) this.go(sc.next, null, 600); else { this.st = sc.next; this.ctx.fails = 0; this.log.forEach(x => x.open = false); this.drawBar(); } }, sc.delay || 1600); }
     if(r.stay){ sayPre(); this.drawBar(); return; }
     if(r.menu){ sayPre(); this.busy = true; this.drawChat(); this.drawBar();
       return Games.later(() => { this.busy = false; this.chat.push({ who: "menu", ids: r.ids }); this.go(r.next || "order", null, 1400); }, 700); }
     if(r.wait){ sayPre(); this.busy = true; this.drawBar();
       return Games.later(() => { this.busy = false; this.st = "pay"; this.ctx.fails = 0; this.log.forEach(x => x.open = false); this.q = ["（Bạn ăn xong – gọi phục vụ tính tiền）", "", "Hãy gọi phục vụ để tính tiền"];
-        this.sys(`<span class="od-clock">⏳</span> Mười phút sau… món ăn đã được mang lên. <b>Bạn ăn xong rồi – hãy gọi phục vụ để tính tiền.</b>`); this.drawBar(); }, 1800); }
+        this.sys(`<span class="od-clock">⏳</span> Mười phút sau… món ăn đã được mang lên. <b>Bạn ăn xong rồi – hãy gọi phục vụ để tính tiền.</b>`); if(this.D.served) this.pic(this.D.served(this)); this.drawBar(); }, 1800); }
     if(r.tryOn && this.D.tryOn){ sayPre(); this.D.tryOn(this); this.busy = true; this.drawBar(); return Games.later(() => { this.busy = false; this.go(r.next); }, 1500); }
     if(r.next && r.next !== "end" && !r.after && !this.D.STATES[r.next].ask(this)){ sayPre(); this.st = r.next; this.ctx.fails = 0; this.log.forEach(x => x.open = false); this.drawBar(); return; }
     if(r.next === "end"){ sayPre(); this.st = "end"; this.drawBar(); return Games.later(() => this.finish(), 1600); }
@@ -5361,12 +5425,14 @@ TOPIC_DEF.order = {
     if(r.reconfirm || T.st === "confirm" || T.st === "fix") return "confirm";
     if(!T.order.some(it => OD_MENU[it.id].drink) && !T.ctx.drinkAsked){ T.ctx.drinkAsked = true; return "drink"; }
     return "more"; },
+  served: T => pzDishes(T.order, "上菜了！ Món đã lên"),
   hasBill: T => T.order.length,
   bill(T){ const t = T.total(); return `<div class="od-bill"><div class="od-bill-h"><b class="han">小票</b> Hóa đơn${T.ctx.away ? " · 带走 (mang đi)" : ""}</div>
       ${T.order.map(it => { const x = odItemTx(it); return `<div class="od-bill-r"><span><span class="han">${esc(x[0])}</span><small>${esc(x[2])}</small></span><b>${odPrice(it)}元</b></div>`; }).join("")}
       <div class="od-bill-t"><span class="han">一共</span><b>${t}元</b></div></div>`; },
   clone(T, src){ T.order = src.order.map(o => ({ ...o })); T.addItems = src.addItems; }
 };
+Topic.STATES.confirm.pic = T => T.order.length ? pzDishes(T.order, "您点的菜 · Món bạn đã gọi") : "";
 /* ===================== Hội thoại theo chủ đề: MUA SẮM – MẶC CẢ – THANH TOÁN (买东西) ===================== */
 const SH_COL = { 红: ["红色", "hóngsè", "đỏ"], 白: ["白色", "báisè", "trắng"], 黑: ["黑色", "hēisè", "đen"], 蓝: ["蓝色", "lánsè", "xanh dương"], 黄: ["黄色", "huángsè", "vàng"],
   粉: ["粉色", "fěnsè", "hồng"], 绿: ["绿色", "lǜsè", "xanh lá"], 灰: ["灰色", "huīsè", "xám"], 咖: ["咖啡色", "kāfēisè", "nâu"], 米: ["米色", "mǐsè", "màu be"] };
@@ -5550,12 +5616,12 @@ const SH_STATES = {
     ask(T){ const t = T.shTotal(), z = odNum(t, true); return [`一共${z[0]}块。您怎么付？`, `Yígòng ${z[1]} kuài. Nín zěnme fù?`, `Tổng cộng ${t} tệ. Anh/chị trả bằng gì ạ?`]; },
     check(T, n, raw){ const t = T.shTotal(), Z = x => odNum(x, true);
       if(/一共|多少钱/.test(n) && !/给/.test(n)) return { ok: true, stay: true, react: [`一共${Z(t)[0]}块。`, `Yígòng ${Z(t)[1]} kuài.`, `Tổng cộng ${t} tệ.`] };
-      if(/微信|支付宝|扫|手机|二维码/.test(n)){ T.ctx.paid = "扫码"; return { ok: true, react: ["可以，请扫这儿。……好了，谢谢！", "Kěyǐ, qǐng sǎo zhèr. …… Hǎo le, xièxie!", "Được, mời quét ở đây. … Xong rồi, cảm ơn!"], next: "bag", bill: true }; }
-      if(/刷卡|信用卡|银行卡|卡/.test(n)){ T.ctx.paid = "刷卡"; return { ok: true, react: ["可以，请输密码。……好了，谢谢！", "Kěyǐ, qǐng shū mìmǎ. …… Hǎo le, xièxie!", "Được, mời nhập mật khẩu. … Xong rồi, cảm ơn!"], next: "bag", bill: true }; }
+      if(/微信|支付宝|扫|手机|二维码/.test(n)){ T.ctx.paid = "扫码"; return { ok: true, react: ["可以，请扫这儿。……好了，谢谢！", "Kěyǐ, qǐng sǎo zhèr. …… Hǎo le, xièxie!", "Được, mời quét ở đây. … Xong rồi, cảm ơn!"], next: "bag", bill: true, pic: pzPay(/支付宝/.test(n) ? "ali" : "wx", t, "小美服装店 · Tiểu Mỹ") }; }
+      if(/刷卡|信用卡|银行卡|卡/.test(n)){ T.ctx.paid = "刷卡"; return { ok: true, react: ["可以，请输密码。……好了，谢谢！", "Kěyǐ, qǐng shū mìmǎ. …… Hǎo le, xièxie!", "Được, mời nhập mật khẩu. … Xong rồi, cảm ơn!"], next: "bag", bill: true, pic: pzPOS(t) }; }
       const N = shNums(raw).filter(x => x >= 1).pop();
       if(N){ if(N < t) return { ok: true, stay: true, react: [`您给我${Z(N)[0]}块，还差${Z(t - N)[0]}块。`, `Nín gěi wǒ ${Z(N)[1]} kuài, hái chà ${Z(t - N)[1]} kuài.`, `Anh/chị đưa ${N} tệ, còn thiếu ${t - N} tệ.`] };
         T.ctx.paid = "现金"; T.ctx.given = N; return { ok: true, react: N === t ? [`收您${Z(N)[0]}块，正好。谢谢！`, `Shōu nín ${Z(N)[1]} kuài, zhènghǎo. Xièxie!`, `Nhận ${N} tệ, vừa đủ. Cảm ơn!`]
-          : [`收您${Z(N)[0]}块，找您${Z(N - t)[0]}块。`, `Shōu nín ${Z(N)[1]} kuài, zhǎo nín ${Z(N - t)[1]} kuài.`, `Nhận ${N} tệ, thối lại ${N - t} tệ.`], next: "bag", bill: true }; }
+          : [`收您${Z(N)[0]}块，找您${Z(N - t)[0]}块。`, `Shōu nín ${Z(N)[1]} kuài, zhǎo nín ${Z(N - t)[1]} kuài.`, `Nhận ${N} tệ, thối lại ${N - t} tệ.`], next: "bag", bill: true, pic: pzCash(N, N - t) }; }
       if(/现金|给你|钱/.test(n)) return { ok: true, stay: true, react: ["好的，您给我多少钱？", "Hǎo de, nín gěi wǒ duōshao qián?", "Vâng, anh/chị đưa bao nhiêu ạ?"] };
       return { ok: false }; } },
   bag: { hint: "Lấy túi: 要一个，谢谢 / 不用了.", model: () => ["要一个，谢谢。", "不用了，谢谢。"],
@@ -5565,6 +5631,13 @@ const SH_STATES = {
   bye: { hint: "Chào tạm biệt: 谢谢，再见！", model: () => ["谢谢，再见！"], ask: () => null,
     check(T, n){ if(!/谢|再见|拜拜|好/.test(n)) return { ok: false }; return { ok: true, react: ["再见！慢走！", "Zàijiàn! Màn zǒu!", "Tạm biệt! Đi cẩn thận nhé!"], next: "end" }; } }
 };
+/* hình minh hoạ cho chủ đề mua sắm */
+SH_STATES.color.pic = T => T.item ? shBoard(false, [T.item.id]) : "";
+SH_STATES.size.pic = T => T.item ? pzSize(SH_ITEMS[T.item.id].k) : "";
+SH_STATES.pay.pic = T => TOPIC_DEF.shop.bill(T);
+SH_STATES.bag.pic = () => pzBag();
+["price", "bargain"].forEach(k => { const f = SH_STATES[k].check; SH_STATES[k].check = function(T, n, raw){ const it = T.item, p0 = it && it.price, r = f.call(this, T, n, raw);
+  if(r && r.ok && it && !r.pic && (k === "price" || it.price !== p0 || it.deal)) r.pic = pzTag(it.price0, it.price, !!it.deal && T.item !== it); return r; }; });
 /* các hàm riêng của chủ đề mua sắm, gắn vào Topic */
 Object.assign(Topic, {
   shTotal(){ return (this.cart || []).reduce((a, it) => a + it.price * it.n, 0); },
@@ -5604,7 +5677,7 @@ TOPIC_DEF.shop = {
     if(!it.color) return "color"; if(d.k !== "acc" && it.size == null) return "size"; if(d.k !== "acc" && !T.ctx.tried) return "try";
     if(d.k === "acc" && r.react && !/好看/.test(r.react[0])){ r.react[0] += `这${d.m}${d.h}很好看！`; r.react[1] += ` Zhè ${SH_M[d.m][0]} ${d.p} hěn hǎokàn!`; r.react[2] += ` ${d.vi[0].toUpperCase() + d.vi.slice(1)} này rất đẹp!`; }
     return "price"; },
-  tryOn(T){ const d = SH_ITEMS[T.item.id]; T.sys(`<span class="od-clock">${d.k === "shoe" ? "👟" : "👕"}</span> Bạn ${d.k === "shoe" ? "đi thử" : "vào phòng thử đồ, mặc thử"} <b class="han">${esc(shItemTx({ ...T.item, n: 1 })[0])}</b>…`); },
+  tryOn(T){ const d = SH_ITEMS[T.item.id]; Games.later(() => T.pic(pzFit(d.k === "shoe")), 50); T.sys(`<span class="od-clock">${d.k === "shoe" ? "👟" : "👕"}</span> Bạn ${d.k === "shoe" ? "đi thử" : "vào phòng thử đồ, mặc thử"} <b class="han">${esc(shItemTx({ ...T.item, n: 1 })[0])}</b>…`); },
   hasBill: T => (T.cart || []).length,
   bill(T){ const t = T.shTotal(), t0 = T.cart.reduce((a, it) => a + it.price0 * it.n, 0);
     return `<div class="od-bill"><div class="od-bill-h"><b class="han">小票</b> Hóa đơn${T.ctx.paid ? ` · ${T.ctx.paid}` : ""}</div>
@@ -5724,11 +5797,13 @@ const WAY_STATES = {
       if(/在哪|旁边|对面|附近/.test(n) && pl){ return { ok: true, stay: true, react: WAY_PL[pl] ? wayRoute(pl).tx : R.tx }; }
       return { ok: false }; } }
 };
+/* người đi đường: chàng trai đội mũ lưỡi trai, đeo ba lô – vẽ bằng bộ nhân vật chibi */
+const WAY_GUY = { gender: "m", hair: "short", hairColor: "#3A2A22", outfit: "denim", accHead: "cap", accBody: "backpack", expr: "smile", shoes: "sneaker", skin: "mid" };
 TOPIC_DEF.way = {
-  title: ["🧭", "问路", "Hỏi đường"], avatar: () => xiaoyuSVG(), role: ["路", "路人 (người đi đường – Tiểu Ngữ)"], me: "我", meText: "bạn (người hỏi đường)", doneMsg: "Bạn đã hỏi đường rất tốt",
+  title: ["🧭", "问路", "Hỏi đường"], avatar: () => avatarSVG(WAY_GUY, { view: "head", label: "Anh Đại Minh" }), role: ["路", "路人 (người đi đường – anh Đại Minh)"], me: "我", meText: "bạn (người hỏi đường)", doneMsg: "Bạn đã hỏi đường rất tốt",
   learn: WAY_LEARN, sample: WAY_SAMPLE, boardTab: "② Bản đồ", board: wayBoard, boardHead: ["地图", "dìtú · bản đồ – bấm vào địa điểm để nghe"], boardBtn: "🗺️ Bản đồ",
   boardTip: "💡 Bạn đứng ở 你在这里 (phía nam). Con đường trước mặt chạy thẳng lên phía bắc (北). Rẽ trái = đi về phía tây (西), rẽ phải = đi về phía đông (东).",
-  intro: "Bạn là <b>người hỏi đường</b>, Tiểu Ngữ là <b>người đi đường</b>. Mỗi lượt có một nhiệm vụ: hỏi đường đến một địa điểm trên bản đồ. Hãy mở lời lịch sự, hỏi đường, hỏi xa hay gần, <b>nhắc lại đường</b> để xác nhận rồi cảm ơn. Bạn có thể bấm 🗺️ Bản đồ để dò theo.",
+  intro: "Bạn là <b>người hỏi đường</b>, anh Đại Minh là <b>người đi đường</b>. Mỗi lượt có một nhiệm vụ: hỏi đường đến một địa điểm trên bản đồ. Hãy mở lời lịch sự, hỏi đường, hỏi xa hay gần, <b>nhắc lại đường</b> để xác nhận rồi cảm ơn. Bạn có thể bấm 🗺️ Bản đồ để dò theo.",
   againBtn: "▶ Hỏi đường lần nữa", label: "Hỏi đường", nextBtn: "Đến lượt bạn: thực hành hỏi đường ›", boardNext: "Xem bản đồ ›",
   STATES: WAY_STATES,
   reset(T){ const all = shuffle(Object.keys(WAY_PL)), a = all.find(k => { const r = wayRoute(k); return r.turn && r.k; }), b = all.find(k => k !== a);
@@ -5824,12 +5899,12 @@ function htIconSVG(k){
   };
   return `<svg viewBox="0 0 52 50" aria-hidden="true">${A[k]}</svg>`;
 }
-function htQR(kind, amount){ /* mã QR minh hoạ (không quét được) */
+function htQR(kind, amount, shop){ /* mã QR minh hoạ (không quét được) */
   let seed = (amount * 7919 + kind.length * 31) % 2147483647; const rnd = () => (seed = seed * 48271 % 2147483647) / 2147483647, Q = 25;
   const fin = (x, y) => `<rect x="${x}" y="${y}" width="7" height="7" fill="#111"/><rect x="${x + 1}" y="${y + 1}" width="5" height="5" fill="#fff"/><rect x="${x + 2}" y="${y + 2}" width="3" height="3" fill="#111"/>`;
   let cells = ""; for(let y = 0; y < Q; y++) for(let x = 0; x < Q; x++){ if((x < 8 && y < 8) || (x > Q - 9 && y < 8) || (x < 8 && y > Q - 9) || (x > 9 && x < 15 && y > 9 && y < 15)) continue; if(rnd() < .48) cells += `<rect x="${x}" y="${y}" width="1" height="1" fill="#111"/>`; }
   const col = kind === "ali" ? "#1677FF" : "#07C160", name = kind === "ali" ? "支付宝" : "微信支付";
-  return `<div class="ht-qr" style="--c:${col}"><div class="ht-qr-h">${kind === "ali" ? "支" : "✓"} <span class="han">${name}</span></div><svg viewBox="-1 -1 ${Q + 2} ${Q + 2}" shape-rendering="crispEdges" aria-label="Mã QR minh hoạ"><rect x="-1" y="-1" width="${Q + 2}" height="${Q + 2}" fill="#fff"/>${cells}${fin(0, 0)}${fin(Q - 7, 0)}${fin(0, Q - 7)}<rect x="10.5" y="10.5" width="4" height="4" rx="1" fill="${col}"/></svg><div class="ht-qr-a">¥ ${amount}.00</div><small>薇薇酒店 · Weiwei Hotel</small></div>`; }
+  return `<div class="ht-qr" style="--c:${col}"><div class="ht-qr-h">${kind === "ali" ? "支" : "✓"} <span class="han">${name}</span></div><svg viewBox="-1 -1 ${Q + 2} ${Q + 2}" shape-rendering="crispEdges" aria-label="Mã QR minh hoạ"><rect x="-1" y="-1" width="${Q + 2}" height="${Q + 2}" fill="#fff"/>${cells}${fin(0, 0)}${fin(Q - 7, 0)}${fin(0, Q - 7)}<rect x="10.5" y="10.5" width="4" height="4" rx="1" fill="${col}"/></svg><div class="ht-qr-a">¥ ${amount}.00</div><small>${shop || "薇薇酒店 · Weiwei Hotel"}</small></div>`; }
 function htLiftSign(){ return `<div class="ht-lift">${htIconSVG("lift")}<div><b class="han">电梯 →</b><span>往前走，右边就是</span><small>Đi thẳng, thang máy ở bên phải</small></div></div>`; }
 function htKeyCard(no){ return `<div class="ht-key"><div><b>薇薇酒店</b><small>WEIWEI HOTEL</small></div><i></i><span class="han">房间 ${no}</span><em>${String(no)[0]}楼 · 退房 12:00</em></div>`; }
 function htWifi(){ return `<div class="ht-wifi">${htIconSVG("wifi")}<div><b>WiFi: Weiwei_Hotel</b><span>密码 mìmǎ: <b>88888888</b></span></div></div>`; }
