@@ -776,7 +776,13 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .fn-ans{font-style:normal;color:var(--bad);font-weight:600}.fn-ans .han{font-size:22px;color:var(--ink)}
 .fn-timer{height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden}.fn-timer i{display:block;height:100%;background:var(--accent);transform-origin:left;transition:background .2s}.fn-timer i.hot{background:#E0394A}
 .fn-arena{position:relative;height:440px;border-radius:18px;overflow:hidden;touch-action:none;user-select:none;cursor:crosshair;
-  background:radial-gradient(ellipse at 50% 120%,#7A4A2A,#3B2416 70%),repeating-linear-gradient(90deg,transparent 0 80px,rgba(0,0,0,.15) 80px 84px)}
+  background:#BFE6FF}
+.fn-bg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.fn-fruit{z-index:2}.fn-boom{z-index:4}
+.fn-arena.flash::after{content:"";position:absolute;inset:0;background:#FFF3C4;opacity:.8;animation:fnFlash .45s forwards;z-index:7;pointer-events:none}@keyframes fnFlash{to{opacity:0}}
+.fn-bomb .fn-spark{animation:fnSpark .25s infinite alternate;transform-origin:79px 12px}@keyframes fnSpark{to{transform:scale(1.35) rotate(25deg)}}
+.fn-boom{position:absolute;width:180px;height:180px;pointer-events:none;display:grid;place-items:center}.fn-boom i{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,#FFF59D 0 18%,#FFA726 38%,rgba(229,57,53,.75) 55%,transparent 70%);animation:fnBoom .8s ease-out forwards}
+.fn-boom span{font-size:64px;animation:fnBoom .8s ease-out forwards}@keyframes fnBoom{from{transform:scale(.3);opacity:1}to{transform:scale(1.6);opacity:0}}
 .fn-arena.shake{animation:fnShake .35s}
 @keyframes fnShake{25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-3px)}}
 .fn-arena canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:5}
@@ -834,6 +840,16 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .sh-seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}.sh-seg button{border:0;background:#fff;padding:3px 10px;font-size:17px;cursor:pointer}.sh-seg button[aria-pressed="true"]{background:var(--accent);color:#fff}
 .sh-x{margin-left:auto;border:0;background:none;font-size:22px;color:var(--muted);cursor:pointer}
 .sh-go{width:100%;justify-content:center}
+.sh-sign{font-size:13px;background:#FFF7E0;border:1px solid #F0D58A;border-radius:99px;padding:2px 10px;font-weight:600}.sh-sign .han{font-size:15px}.sh-sign s{color:#B3402E}
+.sh-talk{background:#fff;border:2px solid #F0C78A;border-radius:16px;padding:12px;display:grid;gap:10px;box-shadow:var(--shadow);animation:shIn .35s}
+.sh-talk-h{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;justify-content:space-between;color:var(--muted)}.sh-talk-h i{color:var(--ink)}
+.sh-bill{background:#FFF1E6;color:#B3402E;border-radius:10px;padding:3px 10px}.sh-bill .han{font-size:16px}
+.sh-talk-q{font-weight:600}.sh-talk-q small{color:var(--muted);font-weight:400}.sh-talk-q .han{font-size:20px}.sh-good{color:var(--good)}.sh-wrong{color:var(--bad)}
+.sh-ans{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.sh-opt{border:2px solid var(--line);background:#FBFDFB;border-radius:12px;padding:10px 12px;font-size:21px;line-height:1.7;cursor:pointer;text-align:left}.sh-opt rt{font-family:var(--f-body);font-size:11px;color:var(--accent)}
+.sh-opt:hover:not(:disabled){border-color:var(--accent);background:#EEF8F2}.sh-opt.ok{border-color:#2C9A58;background:#E3F4EA}.sh-opt.no{border-color:#E0394A;background:#FDE8E8}.sh-opt:disabled{cursor:default}
+.sh-wrap.talking .sh-top{position:static}.sh-talk-f{display:flex;align-items:center;gap:10px}.sh-mic{width:48px;height:48px;font-size:22px}.sh-heard{color:var(--muted);font-size:14px}.sh-heard .han{font-size:18px;color:var(--ink)}
+@media (max-width:600px){.sh-opt{font-size:18px}.sh-ans{grid-template-columns:minmax(0,1fr)}}
 .sh-ok{color:var(--good);font-weight:700}.sh-ok .han{font-size:20px}.sh-bad{color:var(--bad);font-weight:600}.sh-bad b{color:var(--ink)}
 .gm-card.race{background:linear-gradient(140deg,#1F4FA8,#21836A)}.gm-art.race{font-size:56px}
 .gm-card.link{background:linear-gradient(140deg,#E8A317,#E2434F)}.gm-art.link{font-size:52px}
@@ -922,6 +938,7 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .tk-bb{background:#fff;border-radius:16px 16px 16px 4px;padding:8px 12px;box-shadow:0 1px 3px rgba(0,0,0,.08);display:grid;grid-template-columns:auto 1fr;gap:2px 8px;align-items:center}
 .tk-b.me .tk-bb{background:var(--accent);color:#fff;border-radius:16px 16px 4px 16px;display:block}
 .tk-bb .han{font-size:20px}.tk-py,.tk-vi{grid-column:2;color:var(--muted)}.tk-vi{color:#2C6E52}
+.tk-b.me .tk-py{display:block;color:#FFF6C9;font-size:14px;margin-top:2px}.tk-b.me .tk-vi{display:block;color:#FFFFFF;font-size:14px;opacity:.95}.tk-b.me .say-sm{background:rgba(255,255,255,.22);color:#fff;margin-right:6px}
 .tk-typing{display:flex;gap:4px;padding:12px 14px}.tk-typing i{width:7px;height:7px;border-radius:50%;background:#bbb;animation:tkDot 1s infinite}.tk-typing i:nth-child(2){animation-delay:.2s}.tk-typing i:nth-child(3){animation-delay:.4s}
 @keyframes tkDot{50%{opacity:.25;transform:translateY(-3px)}}
 .tk-bar{display:grid;gap:8px;grid-template-columns:minmax(0,1fr)}.tk-live{margin:0;text-align:center;color:var(--muted);min-height:22px}.tk-live .han{color:var(--ink);font-size:18px}
@@ -3261,18 +3278,30 @@ const Talk = {
     const e = $("#tkEnd"); if(e) e.onclick = () => this.aiReview(); },
   /* ---------- micro ---------- */
   listen(done){
+    /* ghi âm liên tục: KHÔNG tự dừng khi học viên ngập ngừng; chỉ dừng khi bấm 🎤 lần nữa (hoặc quá 90 giây) */
     if(this.busy) return; stopAnyRecording(); try{ if(ASR.rec) ASR.rec.abort(); }catch(e){}
-    const r = new SR(); r.lang = "zh-CN"; r.interimResults = true; r.continuous = false; r.maxAlternatives = 3;
-    let fin = "", tmp = ""; this.rec = r; this.recOn = true; this.drawBar();
-    r.onresult = e => { tmp = ""; for(let i = e.resultIndex; i < e.results.length; i++){ const t = e.results[i][0].transcript; if(e.results[i].isFinal) fin += t; else tmp += t; }
-      const L = $("#tkLive"); if(L) L.innerHTML = `Đang nghe: <span class="han">${esc(fin + tmp)}</span>`; };
-    r.onerror = e => { if(e.error === "not-allowed") toast("Hãy cho phép trình duyệt dùng micro.", "warn"); };
-    r.onend = () => { const was = this.recOn; this.recOn = false; this.rec = null; const t = (fin || tmp).trim();
-      if(this.cancel){ this.cancel = false; this.drawBar(); return; }
-      if(t) done(t); else { this.drawBar(); if(was) toast("Chưa nghe rõ, bạn nói lại nhé.", "info"); } };
-    try{ r.start(); }catch(e){ this.recOn = false; this.drawBar(); }
+    const me = this; let past = "", fins = [], tmp = "", t0 = Date.now(), fails = 0;
+    me.recOn = true; me.userStop = false; me.cancel = false; me.drawBar();
+    const text = () => (past + fins.join("") + tmp).trim();
+    const show = () => { const L = $("#tkLive"); if(L) L.innerHTML = `Đang nghe… <span class="han">${esc(text())}</span><br><small>Nói xong bấm 🎤 để dừng</small>`; };
+    const finish = () => { clearTimeout(me.recCap); me.recOn = false; me.rec = null; const t = text();
+      if(me.cancel){ me.cancel = false; me.drawBar(); return; }
+      if(t) done(t); else { me.drawBar(); toast("Chưa nghe rõ, bạn nói lại nhé.", "info"); } };
+    const run = () => {
+      const r = new SR(); r.lang = "zh-CN"; r.interimResults = true; r.continuous = true; r.maxAlternatives = 3; me.rec = r;
+      r.onresult = e => { fails = 0; tmp = ""; const f = [];
+        for(let i = 0; i < e.results.length; i++){ const x = e.results[i][0].transcript; if(e.results[i].isFinal){ if(f.length && x.startsWith(f[f.length - 1])) f[f.length - 1] = x; else f.push(x); } else tmp += x; }
+        fins = f; show(); };
+      r.onerror = e => { if(e.error === "not-allowed" || e.error === "service-not-allowed"){ me.userStop = true; toast("Hãy cho phép trình duyệt dùng micro.", "warn"); } else if(e.error !== "no-speech" && e.error !== "aborted") fails++; };
+      r.onend = () => { past += fins.join("") + tmp; fins = []; tmp = "";
+        if(!me.userStop && !me.cancel && me.recOn && fails < 3 && Date.now() - t0 < 90000){ try{ run(); return; }catch(e){} }
+        finish(); };
+      try{ r.start(); }catch(e){ me.userStop = true; finish(); }
+    };
+    me.recCap = setTimeout(() => { if(me.recOn) me.stopMic(true); }, 90000);
+    run(); show();
   },
-  stopMic(keep){ if(this.rec){ if(!keep) this.cancel = true; try{ this.rec.stop(); }catch(e){} } },
+  stopMic(keep){ if(this.rec || this.recOn){ this.userStop = true; if(!keep) this.cancel = true; if(this.rec){ try{ this.rec.stop(); }catch(e){} } else { this.recOn = false; } } },
   answer(t){ this.mode === "script" ? this.scriptAnswer(t) : this.aiAnswer(t); },
   /* ---------- chế độ kịch bản ---------- */
   turns(){ return this.retry || this.les.talk.turns; },
@@ -3352,7 +3381,7 @@ const Talk = {
         ${SR ? `<button class="btn sm tk-redo" data-k="${k}">🎤 Nói lại câu đúng</button><span class="tk-redo-r" id="tkR${k}"></span>` : ""}`}</li>`).join("")}</ol>
       <div class="tk-rev-b"><button class="btn primary" id="tkCont">▶ Tiếp tục nói</button><button class="btn" id="tkNew">Chủ đề mới</button></div></div>`;
     R.querySelectorAll("[data-say]").forEach(b => b.onclick = () => speak(b.dataset.say));
-    R.querySelectorAll(".tk-redo").forEach(b => b.onclick = () => { const x = it[+b.dataset.k], out = $("#tkR" + b.dataset.k); out.textContent = "Đang nghe…";
+    R.querySelectorAll(".tk-redo").forEach(b => b.onclick = () => { if(this.recOn) return this.stopMic(true); const x = it[+b.dataset.k], out = $("#tkR" + b.dataset.k); out.textContent = "Đang nghe… nói xong bấm lại nút để dừng";
       this.listen(t => { const s = talkSim(t, x.fix); out.innerHTML = `<span class="han">${esc(t)}</span> ${s >= .8 ? "✓ Chuẩn rồi!" : "✗ Thử lại nhé"}`; out.className = "tk-redo-r " + (s >= .8 ? "ok" : "no"); this.drawBar(); }); });
     $("#tkCont").onclick = async () => { this.review = null; R.innerHTML = ""; this.msgs.push({ role: "user", content: "（我们继续聊吧，换一个问题。）", hidden: true }); this.from = this.msgs.length;
       this.busy = true; this.drawChat(); this.drawBar(); const r = await this.ai("talk"); if(!r.ok) return this.aiFail(r); this.busy = false; this.pushAI(r.data); };
@@ -4264,16 +4293,64 @@ const Link = {
 };
 
 /* ---------- 🍉 Chém trái cây ---------- */
+/* mỗi loại quả: w = quả nguyên, h = mặt cắt (khi chém), j = màu nước quả */
+const fnLeaf = (x, y, r) => `<path d="M${x} ${y} q9 -10 20 -4 q-8 10 -20 4z" fill="#4CAF50" transform="rotate(${r || 0} ${x} ${y})"/>`;
+const fnStem = (x, y) => `<path d="M${x} ${y} q1 -8 6 -11" stroke="#6B4423" stroke-width="4" fill="none" stroke-linecap="round"/>`;
+const fnShine = (x, y, rx, ry) => `<ellipse cx="${x}" cy="${y}" rx="${rx || 9}" ry="${ry || 5}" fill="#fff" opacity=".5" transform="rotate(-35 ${x} ${y})"/>`;
+const fnRing = (n, r, fn) => Array.from({ length: n }, (_, k) => { const a = k / n * Math.PI * 2; return fn(50 + r * Math.cos(a), 50 + r * Math.sin(a), a * 180 / Math.PI); }).join("");
 const FN_FRUITS = [
-  { n: "dưa hấu", o: "#2E8B3D", i: "#E8434F", s: "#1E6B2C" }, { n: "cam", o: "#F59A23", i: "#FFC56B", s: "#D97C10" },
-  { n: "táo", o: "#D7263D", i: "#FFF1D6", s: "#A51428" }, { n: "chanh", o: "#E8D53A", i: "#FBF3A6", s: "#C9B417" },
-  { n: "kiwi", o: "#8A6A3B", i: "#8DC63F", s: "#6B4F27" }, { n: "đào", o: "#F48FA0", i: "#FFD8A8", s: "#E06A80" }
+  { n: "dưa hấu", j: "#F2545B",
+    w: `<circle cx="50" cy="50" r="42" fill="#3E9B3A"/>${[-30,-15,0,15,30].map(d => `<path d="M${50 + d} 9 q${d < 0 ? -6 : 6} 10 0 20 q${d < 0 ? -6 : 6} 10 0 20 q${d < 0 ? -6 : 6} 10 0 20 q${d < 0 ? -6 : 6} 10 0 20" stroke="#1E5E22" stroke-width="5" fill="none" transform="translate(${-d * .25} 0)"/>`).join("")}<circle cx="50" cy="50" r="42" fill="none" stroke="#2C7A2A" stroke-width="2"/>${fnShine(32, 28, 10, 6)}`,
+    h: `<circle cx="50" cy="50" r="42" fill="#2E7D32"/><circle cx="50" cy="50" r="37" fill="#EAF7D6"/><circle cx="50" cy="50" r="33" fill="#F2545B"/>${fnRing(8, 20, (x, y, a) => `<ellipse cx="${x}" cy="${y}" rx="2.4" ry="4" fill="#2B1B12" transform="rotate(${a + 90} ${x} ${y})"/>`)}` },
+  { n: "cam", j: "#FFA726",
+    w: `<circle cx="50" cy="53" r="40" fill="#FB8C00"/>${[[30,40],[62,36],[70,62],[40,70],[55,52],[28,60],[46,30],[64,78]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="1.6" fill="#E65100" opacity=".55"/>`).join("")}<circle cx="50" cy="14" r="3" fill="#7CB342"/>${fnLeaf(52, 14, -15)}${fnShine(34, 34)}`,
+    h: `<circle cx="50" cy="50" r="41" fill="#FB8C00"/><circle cx="50" cy="50" r="36" fill="#FFF3E0"/>${fnRing(10, 0, (x, y, a) => `<path d="M50 50 L${50 + 32 * Math.cos((a - 15) * Math.PI / 180)} ${50 + 32 * Math.sin((a - 15) * Math.PI / 180)} A32 32 0 0 1 ${50 + 32 * Math.cos((a + 15) * Math.PI / 180)} ${50 + 32 * Math.sin((a + 15) * Math.PI / 180)}Z" fill="#FFA726" stroke="#FFF3E0" stroke-width="2.4"/>`)}<circle cx="50" cy="50" r="4" fill="#FFF3E0"/>` },
+  { n: "chanh vàng", j: "#FFF176",
+    w: `<path d="M8 50 Q10 40 18 36 Q32 14 50 14 Q68 14 82 36 Q90 40 92 50 Q90 60 82 64 Q68 86 50 86 Q32 86 18 64 Q10 60 8 50z" fill="#FDD835" stroke="#F9A825" stroke-width="2"/>${[[30,40],[60,30],[70,58],[42,66],[52,48]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="1.4" fill="#F9A825"/>`).join("")}${fnShine(34, 32, 11, 5)}`,
+    h: `<ellipse cx="50" cy="50" rx="42" ry="34" fill="#FDD835"/><ellipse cx="50" cy="50" rx="37" ry="29" fill="#FFFDE7"/>${fnRing(8, 0, (x, y, a) => `<path d="M50 50 L${50 + 33 * Math.cos((a - 18) * Math.PI / 180)} ${50 + 25 * Math.sin((a - 18) * Math.PI / 180)} L${50 + 33 * Math.cos((a + 18) * Math.PI / 180)} ${50 + 25 * Math.sin((a + 18) * Math.PI / 180)}Z" fill="#FFF176" stroke="#FFFDE7" stroke-width="2"/>`)}` },
+  { n: "táo", j: "#FFE9C2",
+    w: `<path d="M50 26 C40 16 14 18 12 46 C10 72 30 92 44 88 C48 87 52 87 56 88 C70 92 90 72 88 46 C86 18 60 16 50 26z" fill="#E53935"/><path d="M50 26 C46 22 44 22 42 23" stroke="#B71C1C" stroke-width="2" fill="none"/>${fnStem(49, 27)}${fnLeaf(54, 18, -20)}${fnShine(30, 40, 8, 12)}`,
+    h: `<path d="M50 26 C40 16 14 18 12 46 C10 72 30 92 44 88 C48 87 52 87 56 88 C70 92 90 72 88 46 C86 18 60 16 50 26z" fill="#E53935"/><path d="M50 30 C42 22 19 24 17 46 C16 68 32 85 45 82 C48 81 52 81 55 82 C68 85 84 68 83 46 C81 24 58 22 50 30z" fill="#FFF3D6"/><path d="M50 40 C40 50 40 62 50 72 C60 62 60 50 50 40z" fill="none" stroke="#E8C98A" stroke-width="2"/><ellipse cx="46" cy="56" rx="2.5" ry="4.5" fill="#5D3A1A"/><ellipse cx="54" cy="56" rx="2.5" ry="4.5" fill="#5D3A1A"/>` },
+  { n: "đào", j: "#FFCC80",
+    w: `<path d="M50 20 C24 18 10 40 14 62 C18 82 36 90 50 88 C64 90 82 82 86 62 C90 40 76 18 50 20z" fill="#FF9E80"/><path d="M50 20 C24 18 10 40 14 62 C18 82 36 90 50 88 C40 70 40 40 50 20z" fill="#FF7A6B" opacity=".55"/><path d="M50 22 C42 42 42 66 50 86" stroke="#E2615A" stroke-width="2.5" fill="none"/>${fnStem(49, 21)}${fnLeaf(53, 14, -10)}${fnShine(68, 38, 6, 9)}`,
+    h: `<path d="M50 20 C24 18 10 40 14 62 C18 82 36 90 50 88 C64 90 82 82 86 62 C90 40 76 18 50 20z" fill="#FF8A65"/><path d="M50 25 C28 24 17 42 20 61 C23 78 38 84 50 83 C62 84 77 78 80 61 C83 42 72 24 50 25z" fill="#FFCC80"/><ellipse cx="50" cy="55" rx="13" ry="17" fill="#A1552D"/><path d="M44 46 q6 9 0 18 M56 46 q-6 9 0 18" stroke="#7A3B1A" stroke-width="2" fill="none"/>` },
+  { n: "dâu tây", j: "#FF5C7A",
+    w: `<path d="M50 92 C28 80 10 54 16 34 C20 22 34 20 50 24 C66 20 80 22 84 34 C90 54 72 80 50 92z" fill="#E8244B"/>${[[34,38],[50,36],[66,38],[28,52],[42,50],[58,50],[72,52],[36,64],[50,64],[64,64],[44,77],[56,77]].map(([x, y]) => `<ellipse cx="${x}" cy="${y}" rx="1.8" ry="2.8" fill="#FFE07A"/>`).join("")}<path d="M24 26 L36 22 L32 12 L44 20 L50 8 L56 20 L68 12 L64 22 L76 26 L60 30 L50 26 L40 30z" fill="#43A047"/>${fnShine(30, 42, 6, 9)}`,
+    h: `<path d="M50 92 C28 80 10 54 16 34 C20 22 34 20 50 24 C66 20 80 22 84 34 C90 54 72 80 50 92z" fill="#E8244B"/><path d="M50 84 C34 74 22 54 26 38 C30 30 40 30 50 32 C60 30 70 30 74 38 C78 54 66 74 50 84z" fill="#FF6F8C"/><path d="M50 34 C44 50 44 66 50 78 C56 66 56 50 50 34z" fill="#FFE3EA"/><path d="M24 26 L36 22 L32 12 L44 20 L50 8 L56 20 L68 12 L64 22 L76 26 L60 30 L50 26 L40 30z" fill="#43A047"/>` },
+  { n: "lê", j: "#F3F7C2",
+    w: `<path d="M50 14 C40 14 36 24 37 36 C38 44 18 52 18 70 C18 86 34 92 50 92 C66 92 82 86 82 70 C82 52 62 44 63 36 C64 24 60 14 50 14z" fill="#C0CA33"/><path d="M50 14 C40 14 36 24 37 36 C38 44 18 52 18 70 C18 86 34 92 50 92 C36 80 34 50 50 14z" fill="#9E9D24" opacity=".35"/>${fnStem(49, 15)}${fnLeaf(54, 8, -20)}${fnShine(64, 66, 6, 10)}`,
+    h: `<path d="M50 14 C40 14 36 24 37 36 C38 44 18 52 18 70 C18 86 34 92 50 92 C66 92 82 86 82 70 C82 52 62 44 63 36 C64 24 60 14 50 14z" fill="#AFB42B"/><path d="M50 19 C43 19 41 27 42 37 C43 47 23 54 23 70 C23 83 36 87 50 87 C64 87 77 83 77 70 C77 54 57 47 58 37 C59 27 57 19 50 19z" fill="#FBFBE0"/><path d="M50 56 C42 62 42 74 50 80 C58 74 58 62 50 56z" fill="none" stroke="#DCDCA0" stroke-width="2"/><ellipse cx="47" cy="68" rx="2.2" ry="4" fill="#5D3A1A"/><ellipse cx="53" cy="68" rx="2.2" ry="4" fill="#5D3A1A"/>` },
+  { n: "dứa", j: "#FFE14D",
+    w: `<path d="M50 4 L44 24 L34 10 L38 28 L26 20 L36 34 L64 34 L74 20 L62 28 L66 10 L56 24z" fill="#2E9E4F"/><ellipse cx="50" cy="64" rx="30" ry="32" fill="#F5B82E"/><g stroke="#B9770E" stroke-width="2" opacity=".75"><path d="M24 50 L62 92 M24 66 L48 94 M30 38 L76 86 M44 34 L80 72"/><path d="M76 50 L38 92 M76 66 L52 94 M70 38 L24 86 M56 34 L20 72"/></g>${fnShine(36, 52, 6, 10)}`,
+    h: `<path d="M50 4 L44 24 L34 10 L38 28 L26 20 L36 34 L64 34 L74 20 L62 28 L66 10 L56 24z" fill="#2E9E4F"/><ellipse cx="50" cy="64" rx="30" ry="32" fill="#C98A12"/><ellipse cx="50" cy="64" rx="26" ry="28" fill="#FFE14D"/><ellipse cx="50" cy="64" rx="7" ry="9" fill="#FFF3A6"/>${[0,45,90,135].map(a => `<path d="M50 64 L${50 + 25 * Math.cos(a * Math.PI / 180)} ${64 + 27 * Math.sin(a * Math.PI / 180)} M50 64 L${50 - 25 * Math.cos(a * Math.PI / 180)} ${64 - 27 * Math.sin(a * Math.PI / 180)}" stroke="#F5C518" stroke-width="1.5"/>`).join("")}` },
+  { n: "thanh long", j: "#FFFFFF",
+    w: `<ellipse cx="50" cy="54" rx="34" ry="38" fill="#E91E63"/>${[[50,14,0],[24,30,-50],[76,30,50],[16,56,-80],[84,56,80],[28,82,-130],[72,82,130],[38,46,-20],[62,46,20],[50,70,0]].map(([x, y, r]) => `<path d="M${x - 8} ${y + 6} Q${x} ${y - 12} ${x + 8} ${y + 6}z" fill="#F06292" transform="rotate(${r} ${x} ${y})"/><path d="M${x} ${y - 6} q2 -6 6 -9" stroke="#8BC34A" stroke-width="3" fill="none" stroke-linecap="round" transform="rotate(${r} ${x} ${y})"/>`).join("")}${fnShine(34, 36)}`,
+    h: `<ellipse cx="50" cy="54" rx="34" ry="38" fill="#E91E63"/><ellipse cx="50" cy="54" rx="29" ry="33" fill="#FFFFFF"/>${Array.from({ length: 34 }, (_, k) => { const a = k * 2.4, r = 4 + (k * 7.3) % 24; return `<circle cx="${50 + r * Math.cos(a)}" cy="${54 + r * 1.1 * Math.sin(a)}" r="1.3" fill="#222"/>`; }).join("")}` },
+  { n: "chuối", j: "#FFF59D",
+    w: `<path d="M14 30 C10 62 36 90 70 84 C82 82 90 74 90 70 C86 72 78 74 70 72 C44 68 28 50 24 26z" fill="#FFD54F" stroke="#E0A800" stroke-width="2"/><path d="M20 34 C22 58 40 76 70 78" stroke="#E0A800" stroke-width="2" fill="none" opacity=".7"/><path d="M14 30 L12 20 L22 18 L24 26z" fill="#6D4C41"/><path d="M88 70 L94 68 L92 74z" fill="#5D4037"/>${fnShine(30, 56, 4, 9)}`,
+    h: `<circle cx="50" cy="50" r="30" fill="#FFD54F" stroke="#E0A800" stroke-width="3"/><circle cx="50" cy="50" r="25" fill="#FFF8D2"/><path d="M50 40 L50 60 M41 45 L59 55 M41 55 L59 45" stroke="#E8D48A" stroke-width="2"/><circle cx="50" cy="50" r="3" fill="#C9A86A"/>` },
+  { n: "dừa", j: "#FFFFFF",
+    w: `<circle cx="50" cy="50" r="40" fill="#7B4B2A"/>${[[28,40],[60,30],[66,64],[36,68],[48,50],[24,58],[74,46]].map(([x, y]) => `<path d="M${x - 5} ${y} q5 -4 10 0" stroke="#5A3418" stroke-width="2" fill="none"/>`).join("")}<circle cx="44" cy="26" r="3.6" fill="#3E2412"/><circle cx="56" cy="26" r="3.6" fill="#3E2412"/><circle cx="50" cy="35" r="3.6" fill="#3E2412"/>${fnShine(30, 36, 8, 5)}`,
+    h: `<circle cx="50" cy="50" r="40" fill="#7B4B2A"/><circle cx="50" cy="50" r="34" fill="#FFFFFF"/><circle cx="50" cy="50" r="24" fill="#EAF6FB"/>` },
+  { n: "kiwi", j: "#9CCC65",
+    w: `<ellipse cx="50" cy="50" rx="40" ry="34" fill="#8D6E4A"/>${Array.from({ length: 26 }, (_, k) => { const a = k * 2.4, r = 6 + (k * 9.1) % 30; return `<path d="M${50 + r * Math.cos(a)} ${50 + r * .8 * Math.sin(a)} l2 -3" stroke="#6D5232" stroke-width="1.5"/>`; }).join("")}${fnShine(32, 36)}`,
+    h: `<ellipse cx="50" cy="50" rx="40" ry="34" fill="#8D6E4A"/><ellipse cx="50" cy="50" rx="35" ry="29" fill="#8BC34A"/><ellipse cx="50" cy="50" rx="11" ry="9" fill="#F1F8E9"/>${fnRing(18, 15, (x, y, a) => `<ellipse cx="${x}" cy="${50 + (y - 50) * .85}" rx="1.3" ry="2.6" fill="#1B1B1B" transform="rotate(${a + 90} ${x} ${50 + (y - 50) * .85})"/>`)}` }
 ];
-function fnFruitSVG(f, half){
-  const body = half ? `<circle cx="50" cy="50" r="40" fill="${f.o}"/><circle cx="50" cy="50" r="33" fill="${f.i}"/>${[0,60,120,180,240,300].map(a => `<ellipse cx="${50 + 18 * Math.cos(a * Math.PI / 180)}" cy="${50 + 18 * Math.sin(a * Math.PI / 180)}" rx="2.6" ry="4" fill="#3A2A1A" transform="rotate(${a + 90} ${50 + 18 * Math.cos(a * Math.PI / 180)} ${50 + 18 * Math.sin(a * Math.PI / 180)})"/>`).join("")}`
-    : `<circle cx="50" cy="52" r="40" fill="${f.o}"/><path d="M22 40 Q50 18 78 40" stroke="${f.s}" stroke-width="5" fill="none" opacity=".45"/><path d="M18 60 Q50 80 82 60" stroke="${f.s}" stroke-width="5" fill="none" opacity=".35"/><ellipse cx="36" cy="36" rx="10" ry="6" fill="#fff" opacity=".45" transform="rotate(-30 36 36)"/><path d="M50 13 q2 -8 9 -9" stroke="#5B3A1E" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M53 12 q10 -8 18 -1 q-9 6 -18 1z" fill="#4CAF50"/>`;
-  return `<svg viewBox="0 0 100 100" aria-hidden="true">${body}</svg>`;
-}
+function fnFruitSVG(f, half){ return `<svg viewBox="0 0 100 100" aria-hidden="true">${half ? f.h : f.w}</svg>`; }
+function fnBombSVG(){ return `<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="48" cy="58" r="34" fill="#2B2D3A"/><circle cx="48" cy="58" r="34" fill="none" stroke="#11121A" stroke-width="3"/><rect x="40" y="18" width="18" height="12" rx="3" fill="#4A4E63" transform="rotate(20 49 24)"/>
+  <path d="M56 20 q10 -14 22 -8" stroke="#8D6E4A" stroke-width="4" fill="none" stroke-linecap="round"/><g class="fn-spark"><circle cx="79" cy="12" r="6" fill="#FFD54F"/><path d="M79 0 v8 M79 16 v8 M67 12 h8 M83 12 h8 M71 4 l5 5 M82 15 l5 5 M87 4 l-5 5 M76 15 l-5 5" stroke="#FF7043" stroke-width="2.5" stroke-linecap="round"/></g>
+  <ellipse cx="34" cy="44" rx="9" ry="6" fill="#fff" opacity=".35" transform="rotate(-35 34 44)"/><path d="M36 64 l6 -6 m0 6 l-6 -6 M54 64 l6 -6 m0 6 l-6 -6" stroke="#E53935" stroke-width="3.5" stroke-linecap="round"/><path d="M40 76 q8 -6 16 0" stroke="#E53935" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`; }
+function fnBgSVG(){ return `<svg class="fn-bg" viewBox="0 0 800 440" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+  <defs><linearGradient id="fnSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9FD8FF"/><stop offset=".65" stop-color="#D9F1FF"/><stop offset="1" stop-color="#FFF4D8"/></linearGradient></defs>
+  <rect width="800" height="440" fill="url(#fnSky)"/>
+  <g transform="translate(690 178)"><circle r="56" fill="#FFE57F" opacity=".35"/><circle r="38" fill="#FFD54F"/><circle cx="-12" cy="-4" r="4" fill="#5D4037"/><circle cx="12" cy="-4" r="4" fill="#5D4037"/><path d="M-12 10 q12 10 24 0" stroke="#5D4037" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="-22" cy="8" r="6" fill="#FF8A80" opacity=".6"/><circle cx="22" cy="8" r="6" fill="#FF8A80" opacity=".6"/></g>
+  <g fill="#fff" opacity=".95"><g transform="translate(130 182)"><ellipse rx="54" ry="20"/><circle cx="-18" cy="-14" r="22"/><circle cx="16" cy="-18" r="26"/></g><g transform="translate(250 58) scale(.7)"><ellipse rx="54" ry="20"/><circle cx="-18" cy="-14" r="22"/><circle cx="16" cy="-18" r="26"/></g><g transform="translate(430 152) scale(.75)"><ellipse rx="54" ry="20"/><circle cx="-18" cy="-14" r="22"/><circle cx="16" cy="-18" r="26"/></g><g transform="translate(560 228) scale(.55)"><ellipse rx="54" ry="20"/><circle cx="-18" cy="-14" r="22"/><circle cx="16" cy="-18" r="26"/></g></g>
+  <path d="M0 330 Q120 250 250 300 Q380 345 500 290 Q640 230 800 300 V440 H0z" fill="#B7E59C"/>
+  <path d="M0 370 Q160 320 320 360 Q500 400 640 350 Q730 320 800 345 V440 H0z" fill="#8ED07A"/>
+  ${[[90,300],[210,292],[560,282],[700,292]].map(([x, y]) => `<g transform="translate(${x} ${y})"><rect x="-4" y="0" width="8" height="26" fill="#8D6E4A"/><circle cy="-6" r="20" fill="#5DBB63"/><circle cx="-10" cy="-2" r="4" fill="#FF7043"/><circle cx="8" cy="-12" r="4" fill="#FF7043"/><circle cx="10" cy="4" r="4" fill="#FFCA28"/></g>`).join("")}
+  <g stroke="#C79A6B" stroke-width="7" stroke-linecap="round">${Array.from({ length: 12 }, (_, k) => `<path d="M${30 + k * 68} 440 V392"/>`).join("")}<path d="M10 408 H790 M10 426 H790" stroke-width="5"/></g>
+  ${[[60,420,"#FF8FB1"],[180,428,"#FFD54F"],[330,418,"#FFFFFF"],[470,428,"#FF8FB1"],[610,420,"#FFD54F"],[750,428,"#FFFFFF"]].map(([x, y, c]) => `<g transform="translate(${x} ${y})">${[0,72,144,216,288].map(a => `<circle cx="${6 * Math.cos(a * Math.PI / 180)}" cy="${6 * Math.sin(a * Math.PI / 180)}" r="4.5" fill="${c}"/>`).join("")}<circle r="3.5" fill="#FFB300"/></g>`).join("")}
+</svg>`; }
 const Fruit = {
   start(){
     Games.stop(); this.pool = Games.words();
@@ -4283,8 +4360,8 @@ const Fruit = {
     W.innerHTML = `<div class="gm"><div class="fn-wrap" id="fnWrap">
       <div class="fn-hud"><span class="fn-lives" id="fnLives"></span><span class="fn-score">Điểm <b id="fnScore">0</b></span><span class="fn-combo" id="fnCombo"></span><button class="btn sm rc-snd fn-quit" id="fnSnd"></button><button class="btn sm" id="fnQuit">Thoát</button></div>
       <div class="fn-prompt" id="fnPrompt"></div><div class="fn-timer"><i id="fnBar"></i></div>
-      <div class="fn-arena" id="fnArena"><canvas id="fnTrail"></canvas></div>
-      <p class="fn-tip">Rê chuột hoặc vuốt ngón tay qua quả đúng để chém (bấm vào quả cũng được).</p></div></div>`;
+      <div class="fn-arena" id="fnArena">${fnBgSVG()}<canvas id="fnTrail"></canvas></div>
+      <p class="fn-tip">Rê chuột hoặc vuốt ngón tay qua quả đúng để chém (bấm vào quả cũng được). Cẩn thận 💣 – chém trúng bom sẽ mất 1 mạng!</p></div></div>`;
     $("#fnQuit").onclick = () => { Games.stop(); Games.menu(); };
     RaceSnd.button($("#fnSnd")); RaceSnd.start("fruit");
     this.arena = $("#fnArena"); this.canvas = $("#fnTrail"); this.trail = [];
@@ -4306,12 +4383,15 @@ const Fruit = {
     this.arena.querySelectorAll(".fn-fruit").forEach(e => e.remove());
     const q = this.q = this.question(); this.asked++; this.done = false; this.t0 = performance.now() + 250;
     $("#fnPrompt").innerHTML = `<small>${q.label}</small><span class="${q.type === "zh" ? "vi" : "zh han"}">${esc(q.ask)}</span>`;
-    const Wd = this.arena.clientWidth, H = this.arena.clientHeight, N = q.opts.length, slots = shuffle([...Array(N).keys()]);
-    this.fruits = q.opts.map((o, i) => {
-      const f = FN_FRUITS[Math.floor(Math.random() * FN_FRUITS.length)], el = document.createElement("div");
-      el.className = "fn-fruit"; el.innerHTML = fnFruitSVG(f) + `<span class="fn-lab ${q.type === "zh" ? "han" : ""}">${esc(o.t)}</span>`;
+    /* thỉnh thoảng thả thêm 1–2 quả bom (từ câu thứ 3 trở đi) để đánh lừa */
+    const rb = Math.random(), nb = this.asked < 3 ? 0 : rb < .14 && this.arena.clientWidth > 520 ? 2 : rb < .45 ? 1 : 0;
+    const items = q.opts.concat(Array.from({ length: nb }, () => ({ bomb: true })));
+    const Wd = this.arena.clientWidth, H = this.arena.clientHeight, N = items.length, slots = shuffle([...Array(N).keys()]), kinds = shuffle(FN_FRUITS.slice());
+    this.fruits = items.map((o, i) => {
+      const f = o.bomb ? null : kinds[i % kinds.length], el = document.createElement("div");
+      el.className = "fn-fruit" + (o.bomb ? " fn-bomb" : ""); el.innerHTML = o.bomb ? fnBombSVG() : fnFruitSVG(f) + `<span class="fn-lab ${q.type === "zh" ? "han" : ""}">${esc(o.t)}</span>`;
       this.arena.appendChild(el);
-      const x0 = Wd * (slots[i] + .5) / N; return { el, o, f, x0, x1: x0 + (Math.random() * 60 - 30), peak: H * (.62 + Math.random() * .14), delay: i * 90, dead: false };
+      const x0 = Wd * (slots[i] + .5) / N; return { el, o, f, bomb: !!o.bomb, x0, x1: x0 + (Math.random() * 60 - 30), peak: H * (o.bomb ? .5 + Math.random() * .25 : .62 + Math.random() * .14), delay: o.bomb ? 150 + Math.random() * 500 : i * 90, dead: false };
     });
   },
   frame(now){
@@ -4320,7 +4400,7 @@ const Fruit = {
     $("#fnBar").style.transform = `scaleX(${this.done ? 0 : left})`; $("#fnBar").classList.toggle("hot", left < .34);
     this.fruits.forEach(f => { if(f.dead) return; const t = Math.min(1, Math.max(0, (el - f.delay) / (D - f.delay)));
       const x = f.x0 + (f.x1 - f.x0) * t, y = H + 60 - (f.peak + 60) * 4 * t * (1 - t);
-      f.x = x; f.y = y; f.el.style.transform = `translate(${x - 48}px,${y - 48}px) rotate(${(t * 140 - 70) * (f.x1 > f.x0 ? 1 : -1)}deg)`; f.el.querySelector(".fn-lab").style.transform = `rotate(${-(t * 140 - 70) * (f.x1 > f.x0 ? 1 : -1)}deg)`; });
+      f.x = x; f.y = y; f.el.style.transform = `translate(${x - 48}px,${y - 48}px) rotate(${(t * 140 - 70) * (f.x1 > f.x0 ? 1 : -1)}deg)`; const lb = f.el.querySelector(".fn-lab"); if(lb) lb.style.transform = `rotate(${-(t * 140 - 70) * (f.x1 > f.x0 ? 1 : -1)}deg)`; });
     if(!this.done && el >= D) this.fail(null);
     this.drawTrail(now);
   },
@@ -4338,14 +4418,17 @@ const Fruit = {
     const g = c.getContext("2d"); g.clearRect(0, 0, c.width, c.height); this.trail = this.trail.filter(p => now - p[2] < 160);
     if(this.trail.length < 2) return; g.lineCap = "round"; g.lineJoin = "round";
     for(let i = 1; i < this.trail.length; i++){ const a = this.trail[i - 1], b = this.trail[i], k = i / this.trail.length;
-      g.strokeStyle = `rgba(255,255,255,${.85 * k})`; g.lineWidth = 2 + 6 * k; g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.stroke(); }
+      g.strokeStyle = `rgba(70,90,170,${.35 * k})`; g.lineWidth = 6 + 8 * k; g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.stroke();
+      g.strokeStyle = `rgba(255,255,255,${.95 * k})`; g.lineWidth = 2 + 5 * k; g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.stroke(); }
   },
   cut(f){
-    if(this.done || f.dead) return; f.dead = true; RaceSnd.slash(); RaceSnd.splat();
+    if(this.done || f.dead) return; f.dead = true;
+    if(f.bomb) return this.boom(f);
+    RaceSnd.slash(); RaceSnd.splat();
     const A = this.arena, ang = Math.random() * 40 - 20;
     ["l", "r"].forEach(s => { const h = document.createElement("div"); h.className = `fn-half ${s}`; h.innerHTML = fnFruitSVG(f.f, true);
       h.style.left = (f.x - 48) + "px"; h.style.top = (f.y - 48) + "px"; h.style.setProperty("--a", ang + "deg"); A.appendChild(h); Games.later(() => h.remove(), 1000); });
-    const sp = document.createElement("div"); sp.className = "fn-splat"; sp.style.left = (f.x - 60) + "px"; sp.style.top = (f.y - 60) + "px"; sp.style.background = `radial-gradient(circle, ${f.f.i} 0 30%, transparent 62%)`;
+    const sp = document.createElement("div"); sp.className = "fn-splat"; sp.style.left = (f.x - 60) + "px"; sp.style.top = (f.y - 60) + "px"; sp.style.background = `radial-gradient(circle, ${f.f.j} 0 30%, transparent 62%)`;
     A.appendChild(sp); Games.later(() => sp.remove(), 700); f.el.remove();
     if(f.o.ok) this.win(f); else this.fail(f);
   },
@@ -4356,11 +4439,17 @@ const Fruit = {
     $("#fnCombo").textContent = this.combo > 1 ? `Combo ×${this.combo}` : ""; this.pop("+" + pts, f.x, f.y - 30, "ok"); this.combo > 1 ? RaceSnd.combo(this.combo) : RaceSnd.ding(1);
     speak(this.q.w.h); Games.later(() => this.next(), 650);
   },
-  fail(f){
-    this.done = true; this.combo = 0; $("#fnCombo").textContent = ""; this.lives--; this.drawLives(); RaceSnd.buzz();
-    const w = this.q.w; if(!this.miss.some(x => x.h === w.h)) this.miss.push(w);
+  boom(f){
+    const A = this.arena; RaceSnd.boom ? RaceSnd.boom() : RaceSnd.crash(); f.el.remove();
+    const b = document.createElement("div"); b.className = "fn-boom"; b.style.left = (f.x - 90) + "px"; b.style.top = (f.y - 90) + "px"; b.innerHTML = "<i></i><span>💥</span>";
+    A.appendChild(b); Games.later(() => b.remove(), 900); A.classList.add("flash"); Games.later(() => A.classList.remove("flash"), 450);
+    this.fail(f, true);
+  },
+  fail(f, bomb){
+    this.done = true; this.combo = 0; $("#fnCombo").textContent = ""; this.lives--; this.drawLives(); if(!bomb) RaceSnd.buzz();
+    const w = this.q.w; if(!bomb && !this.miss.some(x => x.h === w.h)) this.miss.push(w);
     const right = this.fruits.find(x => x.o.ok); if(right && !right.dead) right.el.classList.add("fn-show");
-    $("#fnPrompt").insertAdjacentHTML("beforeend", `<em class="fn-ans">${f ? "Sai rồi!" : "Hết giờ!"} <b class="han">${esc(w.h)}</b> ${esc(w.p)} = ${esc(w.vs)}</em>`);
+    $("#fnPrompt").insertAdjacentHTML("beforeend", `<em class="fn-ans">${bomb ? "💣 Trúng bom rồi!" : f ? "Sai rồi!" : "Hết giờ!"} <b class="han">${esc(w.h)}</b> ${esc(w.p)} = ${esc(w.vs)}</em>`);
     this.arena.classList.add("shake"); Games.later(() => this.arena.classList.remove("shake"), 400);
     if(this.lives <= 0) return Games.later(() => this.end(), 900);
     Games.later(() => this.next(), 1500);
@@ -4422,6 +4511,7 @@ const CLOTH_MENU = [
 SHOP_MENU.forEach(x => x.attrs = [x.size && "size", x.temp && "temp"].filter(Boolean));
 const STORES = {
   food: { key: "shop", title: "Quán ăn Tiểu Ngữ", emoji: "🍜", menu: SHOP_MENU, img: () => Exam.img("s1_shop"), pos: SHOP_POS, maxQ: { kaoya: 1 },
+    pay: ["微信", "支付宝", "现金"], card: false,
     tray: "Khay món", go: "Giao món", thanks: "谢谢！真好吃！", unit: "món", cust: ["👩", "👨", "👵", "👴", "👧", "👦", "🧑‍🎓", "👩‍💼", "👨‍🍳", "🧕"],
     heads: ["你好，", "老板，", "服务员，", ""], verbs: ["我要", "请给我", "来"],
     ph: (it, l) => ZH_NUM[l.n] + (l.a.size || "") + it.m + (l.a.temp || "") + it.h,
@@ -4430,6 +4520,7 @@ const STORES = {
   cloth: { key: "cloth", title: "Shop thời trang Tiểu Ngữ", emoji: "👗", menu: CLOTH_MENU, img: () => Exam.img("s1_cloth"),
     pos: { waiyi: [122, 450, 410, 645], chenshan: [418, 450, 693, 645], txu: [705, 450, 970, 645], maoyi: [985, 450, 1260, 645], polo: [1268, 450, 1545, 645],
       dayi: [90, 662, 355, 885], yurong: [365, 662, 615, 885], duanku: [625, 662, 860, 885], changku: [868, 662, 1110, 885], banshen: [1118, 662, 1360, 885], lianyi: [1365, 662, 1610, 885] },
+    pay: ["微信", "支付宝", "现金", "刷卡"], card: true,
     maxQ: {}, tray: "Giỏ hàng", go: "Thanh toán", thanks: "谢谢！我很喜欢！", unit: "món đồ", cust: ["👩", "👨", "👵", "👴", "👧", "👦", "🧑‍🎓", "👩‍💼", "💃", "🧕"],
     heads: ["你好，", "老板，", "", "请问，"], verbs: ["我想买", "我要", "请给我拿"],
     ph: (it, l) => ZH_NUM[l.n] + it.m + l.a.cs + "的" + l.a.color + it.h,
@@ -4448,19 +4539,20 @@ const Shop = {
     Games.stop(); this.round = 0; this.hearts = 3; this.money = 0; this.served = 0; this.total = 10; this.py = false; this.log = [];
     const W = $("#work");
     W.innerHTML = `<div class="gm"><div class="sh-wrap" id="shWrap">
-      <div class="sh-hud"><span class="sh-hearts" id="shHearts"></span><span>Khách <b id="shRound">1</b>/${this.total}</span><span>Thu nhập <b id="shMoney">0</b> 元</span><button class="btn sm" id="shQuit">Thoát</button></div>
+      <div class="sh-hud"><span class="sh-hearts" id="shHearts"></span><span>Khách <b id="shRound">1</b>/${this.total}</span><span>Thu nhập <b id="shMoney">0</b> 元</span><span class="sh-sign" title="Hình thức thanh toán của cửa hàng"><span class="han">可以用：${C.pay.join(" · ")}</span>${C.card ? "" : ` <s class="han">刷卡</s>`}</span><button class="btn sm" id="shQuit">Thoát</button></div>
       <div class="sh-top"><div class="sh-counter"><div class="sh-cust" id="shCust"></div>
         <div class="sh-bubble"><div class="sh-order han" id="shOrder"></div>
           <div class="sh-obtn"><button class="btn sm" id="shSay">${ICON.sound}Nghe</button><button class="btn sm" id="shPy" aria-pressed="false">Hiện phiên âm</button></div></div></div>
-      <div class="sh-pat"><i id="shPat"></i><span id="shSec"></span></div></div>
+      <div class="sh-pat"><i id="shPat"></i><span id="shSec"></span></div></div><div class="sh-talk" id="shTalk" hidden></div>
       <div class="sh-main"><div class="sh-stall" id="shMenu"><img src="${C.img()}" alt="${esc(C.title)}" draggable="false">${C.menu.filter(it => C.pos[it.id]).map(it => { const b = C.pos[it.id];
           return `<button class="sh-spot" data-id="${it.id}" style="left:${b[0] / 16.72}%;top:${b[1] / 9.41}%;width:${(b[2] - b[0]) / 16.72}%;height:${(b[3] - b[1]) / 9.41}%" aria-label="${it.h} ${it.p} – ${it.price} 元"><span class="sh-price">${it.price}元</span><span class="sh-badge" hidden></span></button>`; }).join("")}</div>
         <div class="sh-tray"><div class="sh-tray-h"><b>${C.tray}</b><button class="btn sm" id="shClear">Xoá hết</button></div><div id="shTray"></div>
           <button class="btn primary big sh-go" id="shGo">${ICON.check}${C.go}</button><div class="sh-msg" id="shMsg"></div></div></div>
       <p class="fn-tip">${C.tip}</p></div></div>`;
-    $("#shQuit").onclick = () => { Games.stop(); Games.menu(); };
+    $("#shQuit").onclick = () => { this.micStop(); Games.stop(); Games.menu(); };
     $("#shSay").onclick = () => speak(this.text);
-    $("#shPy").onclick = () => { this.py = !this.py; $("#shPy").setAttribute("aria-pressed", this.py); $("#shPy").textContent = this.py ? "Ẩn phiên âm" : "Hiện phiên âm"; this.showOrder(); };
+    $("#shPy").onclick = () => { this.py = !this.py; $("#shPy").setAttribute("aria-pressed", this.py); $("#shPy").textContent = this.py ? "Ẩn phiên âm" : "Hiện phiên âm"; this.showOrder(); if(this.pay && this.pay.cur) this.drawTalk(); };
+    this.talkOK = 0; this.talkN = 0; this.learned = [];
     $("#shClear").onclick = () => { this.tray = []; this.drawTray(); };
     $("#shGo").onclick = () => this.deliver();
     $("#shMenu").onclick = e => { const b = e.target.closest("[data-id]"); if(!b || this.busy) return; const it = this.item(b.dataset.id);
@@ -4481,11 +4573,13 @@ const Shop = {
   },
   next(){
     if(this.round >= this.total || this.hearts <= 0) return this.end();
+    this.micStop(); this.pay = null; const TK = $("#shTalk"); if(TK){ TK.hidden = true; TK.innerHTML = ""; $("#shWrap").classList.remove("talking"); }
     const o = this.order = this.makeOrder(); this.text = o.text; this.tray = []; this.busy = false;
     this.limit = Math.min(50, 14 + o.lines.length * 9 + o.attrs * 3) * 1000; this.t0 = performance.now();
     $("#shRound").textContent = this.round + 1; $("#shMsg").innerHTML = ""; $("#shGo").disabled = false;
     $("#shCust").innerHTML = `<span class="sh-face">${this.cfg.cust[Math.floor(Math.random() * this.cfg.cust.length)]}</span>`;
     $("#shCust").className = "sh-cust in"; this.showOrder(); this.drawTray();
+    Games.later(() => { if(this.order === o && !this.busy) speak(o.text); }, 550); /* khách vào là tự nói */
   },
   showOrder(){ $("#shOrder").innerHTML = this.py ? rubyHTML(this.text) : esc(this.text); },
   tick(now){
@@ -4515,12 +4609,92 @@ const Shop = {
     for(const l of this.tray){ const it = this.item(l.id), x = it.attrs.find(x => !l.a[x]); if(x) return toast(`${it.h} chưa chọn ${SHOP_ATTR[x].need}.`, "warn"); }
     const key = arr => { const m = {}; arr.forEach(l => { const it = this.item(l.id), k = [l.id, ...it.attrs.map(x => l.a[x])].join("|"); m[k] = (m[k] || 0) + l.n; }); return JSON.stringify(Object.keys(m).sort().map(k => [k, m[k]])); };
     if(key(this.tray) === key(this.order.lines)){
-      const bill = this.price(this.order.lines), left = this.limit - (performance.now() - this.t0), tip = left > this.limit / 2 ? Math.ceil(bill * .1) : 0;
-      this.money += bill + tip; this.served++; this.busy = true; $("#shMoney").textContent = this.money;
-      $("#shCust").className = "sh-cust happy"; $("#shMsg").innerHTML = `<div class="sh-ok">✓ <span class="han">${C.thanks}</span> +${bill} 元${tip ? ` · tiền tip ${tip} 元` : ""}</div>`;
-      speak("谢谢"); this.log.push({ ok: true, o: this.order }); this.round++; $("#shGo").disabled = true;
-      Games.later(() => this.next(), 1600);
+      const bill = this.price(this.order.lines); this.busy = true; $("#shGo").disabled = true;
+      $("#shCust").className = "sh-cust happy"; $("#shMsg").innerHTML = `<div class="sh-ok">✓ Đúng ${C.key === "cloth" ? "đồ" : "món"} rồi! Giờ nói chuyện tính tiền với khách nhé 👇</div>`;
+      this.pay = { bill, base: bill, fast: this.limit - (performance.now() - this.t0) > this.limit / 2, err: 0, plan: this.payPlan(), k: 0 };
+      Games.later(() => this.payStep(), 600);
     } else this.fail(C.key === "cloth" ? "Lấy sai đồ rồi! 😣" : "Sai món rồi! 😣");
+  },
+  /* ---------- hội thoại tính tiền: hỏi giá → (mặc cả) → hình thức thanh toán → chào ---------- */
+  payPlan(){ const C = this.cfg, r = Math.random, plan = [];
+    if(C.key === "cloth" && r() < .45) plan.push("bargain");
+    plan.push("price", ["app", "app", "card", "how", "cash", "cash"][Math.floor(r() * 6)]);
+    if(r() < .6) plan.push("bye"); return plan; },
+  numOpts(n){ const c = [n + 10, n - 10, n + 1, n - 1, n + 5, n + 100, n - 100].filter(x => x > 0 && x !== n);
+    const d = String(n); if(d.length === 2 && d[0] !== d[1] && d[1] !== "0") c.unshift(+(d[1] + d[0]));
+    const sw = d.length === 2 && d[0] !== d[1] && d[1] !== "0" ? [c.shift()] : [], out = [];
+    for(const x of sw.concat(shuffle(c))) if(!out.includes(x) && out.length < 2) out.push(x); return out; },
+  kuai(n){ return odNum(n, true)[0] + "块"; },
+  makeStep(type){
+    const C = this.cfg, P = this.pay, pick = a => a[Math.floor(Math.random() * a.length)], N = P.bill, K = n => this.kuai(n);
+    const apps = C.pay.join("、") + "都可以。", appsVi = C.card ? "WeChat, Alipay, tiền mặt, quẹt thẻ đều được ạ." : "WeChat, Alipay hay tiền mặt đều được ạ.";
+    if(type === "bargain"){ const d = N >= 300 ? 30 : N >= 100 ? 10 : 5;
+      return { cust: [pick(["太贵了！能便宜一点吗？", "老板，便宜一点儿吧！"]), "Đắt quá! Bớt chút được không?"],
+        good: [`好吧，给您便宜${K(d)}。`, `Thôi được, bớt cho anh/chị ${d} tệ.`], bad: [["我们这儿没有大号。", "Ở đây không có size lớn."], ["不客气，欢迎再来！", "Không có gì, lần sau lại đến nhé!"]],
+        react: ["太好了，谢谢！", "Tuyệt quá, cảm ơn!"], after: () => { P.bill -= d; P.off = d; } }; }
+    if(type === "price"){ const n = this.numOpts(N);
+      return { bill: true, cust: P.off ? ["那一共多少钱？", "Vậy tổng cộng bao nhiêu tiền?"] : [pick(["一共多少钱？", "老板，多少钱？", "请问，一共多少钱？"]), "Tổng cộng bao nhiêu tiền?"],
+        good: [`一共${K(N)}。`, `Tổng cộng ${N} tệ.`], bad: n.map(x => [`一共${K(x)}。`, `Tổng cộng ${x} tệ.`]) }; }
+    if(type === "app"){ const a = pick(["微信", "支付宝"]);
+      return { cust: [`可以用${a}吗？`, `Trả bằng ${a === "微信" ? "WeChat" : "Alipay"} được không?`], good: ["可以，请扫这个二维码。", "Được ạ, mời quét mã QR này."],
+        bad: [["对不起，我们只收现金。", "Xin lỗi, chúng tôi chỉ nhận tiền mặt."], [`找您${K(10)}。`, "Thối lại anh/chị 10 tệ."]], react: ["好，我扫一下。……付好了。", "Được, tôi quét nhé… Trả xong rồi."] }; }
+    if(type === "card"){ const yes = ["可以，请刷卡。", "Được ạ, mời quẹt thẻ."], no = ["对不起，不能刷卡。可以用微信、支付宝或者现金。", "Xin lỗi, không quẹt thẻ được. Có thể dùng WeChat, Alipay hoặc tiền mặt."];
+      return { sign: true, cust: ["可以刷卡吗？", "Quẹt thẻ được không?"], good: C.card ? yes : no, bad: [C.card ? no : yes, ["我没有钱。", "Tôi không có tiền."]],
+        react: C.card ? ["好的，给你卡。", "Vâng, thẻ đây."] : ["那我用微信吧。……付好了。", "Vậy tôi dùng WeChat nhé… Trả xong rồi."] }; }
+    if(type === "how") return { sign: true, cust: [pick(["可以用什么付钱？", "你们这儿怎么付钱？"]), "Có thể trả tiền bằng gì?"], good: [apps, appsVi],
+      bad: [["我们只收现金。", "Chúng tôi chỉ nhận tiền mặt."], ["我想用微信。", "Tôi muốn dùng WeChat."]], react: ["那我用支付宝吧。……付好了。", "Vậy tôi dùng Alipay nhé… Trả xong rồi."] };
+    if(type === "cash"){ const notes = [10, 20, 50, 100, 200, 500, 1000]; let G = notes.find(x => x > N) || Math.ceil((N + 1) / 100) * 100;
+      if(Math.random() < .3){ const nx = notes.find(x => x > G); if(nx) G = nx; }
+      const ch = G - N, n = this.numOpts(ch);
+      return { bill: true, cust: [`我用现金吧。给您${K(G)}。`, `Tôi trả tiền mặt nhé. Gửi anh/chị ${G} tệ.`], good: [`找您${K(ch)}。`, `Thối lại anh/chị ${ch} tệ.`],
+        bad: n.map(x => [`找您${K(x)}。`, `Thối lại anh/chị ${x} tệ.`]), react: ["好的，谢谢！", "Vâng, cảm ơn!"], cash: G }; }
+    return { cust: [pick(["谢谢，再见！", "谢谢你，再见！"]), "Cảm ơn, tạm biệt!"], good: ["不客气，欢迎下次再来！", "Không có gì, lần sau lại đến nhé!"],
+      bad: [["没关系。", "Không sao đâu."], ["一共多少钱？", "Tổng cộng bao nhiêu tiền?"]] };
+  },
+  payStep(){
+    const P = this.pay; if(!P || !Games.alive($("#shWrap"))) return;
+    if(P.k >= P.plan.length) return this.payDone();
+    const st = P.cur = this.makeStep(P.plan[P.k]); st.opts = shuffle([st.good, ...st.bad]); st.done = false;
+    this.text = st.cust[0]; this.showOrder(); $("#shCust").className = "sh-cust in"; this.drawTalk(); speak(st.cust[0]);
+  },
+  drawTalk(){
+    const P = this.pay, st = P.cur, TK = $("#shTalk"), C = this.cfg, han = t => this.py ? rubyHTML(t) : esc(t), first = TK.hidden; TK.hidden = false; $("#shWrap").classList.add("talking");
+    if(first && innerWidth <= 860) Games.later(() => TK.scrollIntoView({ behavior: "smooth", block: "center" }), 50);
+    TK.innerHTML = `<div class="sh-talk-h"><span>Khách nói: <i>${esc(st.cust[1])}</i></span>
+        ${st.bill ? `<b class="sh-bill">🧾 Hoá đơn: ${P.off ? `<s>${P.base}</s> ` : ""}${P.bill} 元${st.cash ? ` · khách đưa ${st.cash} 元` : ""}</b>` : ""}
+        ${st.sign ? `<b class="sh-bill">Quầy nhận: <span class="han">${C.pay.join(" · ")}</span>${C.card ? "" : " (không quẹt thẻ)"}</b>` : ""}</div>
+      <div class="sh-talk-q">Bạn trả lời thế nào? <small>(bấm chọn hoặc 🎤 nói)</small></div>
+      <div class="sh-ans">${st.opts.map((o, i) => `<button class="sh-opt han" data-i="${i}">${han(o[0])}</button>`).join("")}</div>
+      <div class="sh-talk-f">${SR ? `<button class="tk-mic sh-mic" id="shMic" aria-label="Nói câu trả lời">🎤</button>` : ""}<span class="sh-heard" id="shHeard">${SR ? "Bấm 🎤, nói xong bấm lại để dừng." : ""}</span></div>`;
+    TK.querySelectorAll(".sh-opt").forEach(b => b.onclick = () => this.payAnswer(+b.dataset.i));
+    const m = $("#shMic"); if(m) m.onclick = () => {
+      if(this.mic && this.mic.recOn) return this.mic.stopMic(true);
+      const own = this.mic = Object.create(Talk); own.busy = false; own.drawBar = () => { m.classList.toggle("on", !!own.recOn); $("#shHeard").textContent = own.recOn ? "Đang nghe… nói xong bấm 🎤 để dừng" : ""; };
+      Talk.listen.call(own, t => { m.classList.remove("on"); if(st.done) return;
+        const sc = st.opts.map(o => talkSim(t, o[0])), best = sc.indexOf(Math.max(...sc));
+        $("#shHeard").innerHTML = `Bạn nói: <span class="han">${esc(t)}</span>`;
+        if(sc[best] < .5) return toast("Câu bạn nói chưa khớp câu trả lời nào – nói lại hoặc bấm chọn nhé.", "info");
+        this.payAnswer(best, true); }); };
+  },
+  micStop(){ if(this.mic && this.mic.recOn){ try{ this.mic.stopMic(); }catch(e){} } this.mic = null; },
+  payAnswer(i, said){
+    const P = this.pay, st = P && P.cur; if(!st || st.done) return; st.done = true; this.micStop();
+    const ok = st.opts[i] === st.good, TK = $("#shTalk"); this.talkN++; if(ok) this.talkOK++; else P.err++;
+    if(!this.learned.some(x => x[0] === st.good[0])) this.learned.push(st.good);
+    TK.querySelectorAll(".sh-opt").forEach((b, k) => { b.disabled = true; if(st.opts[k] === st.good) b.classList.add("ok"); else if(k === i) b.classList.add("no"); });
+    TK.querySelector(".sh-talk-q").innerHTML = ok ? `<b class="sh-good">✓ ${said ? "Nói đúng rồi!" : "Chính xác!"}</b> <i>${esc(st.good[1])}</i>` : `<b class="sh-wrong">✗ Chưa đúng.</b> Nên nói: <span class="han">${esc(st.good[0])}</span> – <i>${esc(st.good[1])}</i>`;
+    ok ? RaceSnd.ding(1) : RaceSnd.buzz(); speak(st.good[0]); if(st.after) st.after();
+    Games.later(() => { if(this.pay !== P) return;
+      if(st.react){ this.text = st.react[0]; this.showOrder(); speak(st.react[0]); }
+      Games.later(() => { if(this.pay !== P) return; P.k++; this.payStep(); }, st.react ? 1700 : 300); }, ok ? 1300 : 2600);
+  },
+  payDone(){
+    const P = this.pay, C = this.cfg, tip = P.fast && !P.err ? Math.ceil(P.bill * .1) : 0;
+    this.money += P.bill + tip; this.served++; $("#shMoney").textContent = this.money; this.text = C.thanks; this.showOrder();
+    $("#shTalk").hidden = true; $("#shCust").className = "sh-cust happy";
+    $("#shMsg").innerHTML = `<div class="sh-ok">✓ <span class="han">${C.thanks}</span> +${P.bill} 元${tip ? ` · tiền tip ${tip} 元` : ""}${P.err ? `<br><small>Trả lời sai ${P.err} câu nên không có tiền tip.</small>` : ""}</div>`;
+    speak(C.thanks); this.log.push({ ok: true, o: this.order }); this.round++; this.pay = null;
+    Games.later(() => this.next(), 1700);
   },
   fail(msg){
     if(this.busy) return; this.busy = true; this.hearts--; this.drawHearts(); this.round++; $("#shGo").disabled = true;
@@ -4530,10 +4704,11 @@ const Shop = {
     Games.later(() => this.next(), 3400);
   },
   end(){
-    cancelAnimationFrame(Games.raf); this.order = null; const C = this.cfg;
+    cancelAnimationFrame(Games.raf); this.order = null; this.micStop(); const C = this.cfg;
     const pct = this.round ? this.served / this.round * 100 : 0;
     Games.over($("#shWrap"), `<div class="gm-over-t">${C.emoji} ${C.endT(this.hearts > 0)}</div>
-      <div class="gm-over-s">Phục vụ đúng <b>${this.served}/${this.round}</b> khách · thu nhập <b>${this.money} 元</b></div>
+      <div class="gm-over-s">Phục vụ đúng <b>${this.served}/${this.round}</b> khách · thu nhập <b>${this.money} 元</b>${this.talkN ? ` · giao tiếp đúng <b>${this.talkOK}/${this.talkN}</b> câu` : ""}</div>
+      ${this.learned.length ? `<div class="gm-miss"><b>Câu giao tiếp khi tính tiền</b>${this.learned.map(x => `<span><button class="say-sm" data-say="${esc(x[0])}" aria-label="Nghe">${ICON.sound}</button> <span class="han">${esc(x[0])}</span><br><small>${esc(x[1])}</small></span>`).join("")}</div>` : ""}
       <div class="gm-miss"><b>Các yêu cầu hôm nay</b>${this.log.map(x => `<span>${x.ok ? "✅" : "❌"} <span class="han">${esc(x.o.text)}</span><br><small>${esc(x.o.vi)}</small></span>`).join("")}</div>`, () => this.start(C.key === "cloth" ? "cloth" : "food"));
     if(this.round >= 5) Games.reward(C.key, pct, `${C.title} (${this.served}/${this.round} khách)`);
   }
@@ -4687,6 +4862,7 @@ const RaceSnd = {
   ding(streak){ const c = this.ctx; if(!c) return; const t = c.currentTime, up = Math.min(5, (streak || 1) - 1) * 2;
     this.tone(880 * Math.pow(2, up / 12), t, .12, "square", .07); this.tone(1318.5 * Math.pow(2, up / 12), t + .08, .25, "square", .07);
     if(this.eng){ const e = this.eng; e.o.frequency.setTargetAtTime(110, t, .05); e.o.frequency.setTargetAtTime(55 + this.rate * 40, t + .3, .3); } },
+  boom(){ const c = this.ctx; if(!c) return; const t = c.currentTime; this.noise(t, .9, .8, 500); this.noise(t, .25, .5, 3000); this.tone(110, t, .7, "sawtooth", .16, 28); this.tone(60, t, .9, "sine", .25, 25); },
   crash(){ const c = this.ctx; if(!c) return; const t = c.currentTime; this.noise(t, .5, .5, 900); this.tone(160, t, .45, "sawtooth", .12, 40); this.tone(90, t + .05, .5, "square", .06, 30); },
   swish(){ const c = this.ctx; if(!c) return; this.noise(c.currentTime, .12, .08, 2500); },
   slash(){ const c = this.ctx; if(!c) return; const t = c.currentTime; this.noise(t, .18, .22, 5000); this.tone(1400, t, .12, "sine", .03, 300); },
@@ -5076,7 +5252,7 @@ const Topic = {
       if(good){ x.fixed = true; Games.later(() => { d.k++; this.drawDrill(); }, 1300); } };
     const s = () => { const v = $("#odDIn").value.trim(); if(v){ $("#odDIn").value = ""; go(v); } };
     $("#odDSend").onclick = s; $("#odDIn").onkeydown = e => { if(e.key === "Enter") s(); };
-    const m = $("#odDMic"); if(m) m.onclick = () => { const own = { drawBar: () => { m.classList.toggle("on", !!own.recOn); } }; Object.setPrototypeOf(own, this); this.listen.call(own, t => { m.classList.remove("on"); go(t); }); };
+    const m = $("#odDMic"); if(m) m.onclick = () => { if(m._own && m._own.recOn) return m._own.stopMic(true); const own = m._own = { drawBar: () => { m.classList.toggle("on", !!own.recOn); } }; Object.setPrototypeOf(own, this); this.listen.call(own, t => { m.classList.remove("on"); go(t); }); };
   }
 };
 TOPIC_DEF.order = {
