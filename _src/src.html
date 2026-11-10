@@ -775,11 +775,7 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .fn-ans{font-style:normal;color:var(--bad);font-weight:600}.fn-ans .han{font-size:22px;color:var(--ink)}
 .fn-timer{height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden}.fn-timer i{display:block;height:100%;background:var(--accent);transform-origin:left;transition:background .2s}.fn-timer i.hot{background:#E0394A}
 .fn-arena{position:relative;height:440px;border-radius:18px;overflow:hidden;touch-action:none;user-select:none;cursor:crosshair;
-  background-color:#7A4A2A;
-  background-image:linear-gradient(180deg,rgba(0,0,0,.18),transparent 22%,transparent 78%,rgba(0,0,0,.28)),
-    repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 3px,transparent 3px 19px,rgba(0,0,0,.05) 19px 21px,transparent 21px 37px),
-    repeating-linear-gradient(90deg,transparent 0 96px,#4E2D17 96px 100px),
-    repeating-linear-gradient(90deg,#86522F 0 100px,#7A4A2A 100px 200px,#8C5832 200px 300px)}
+  background:repeating-linear-gradient(90deg,transparent 0 124px,rgba(60,32,14,.35) 124px 126px),#7E4D2C}
 .fn-fruit{z-index:2}.fn-boom{z-index:4}
 .fn-arena.flash::after{content:"";position:absolute;inset:0;background:#FFF3C4;opacity:.8;animation:fnFlash .45s forwards;z-index:7;pointer-events:none}@keyframes fnFlash{to{opacity:0}}
 .fn-bomb .fn-spark{animation:fnSpark .25s infinite alternate;transform-origin:79px 12px}@keyframes fnSpark{to{transform:scale(1.35) rotate(25deg)}}
@@ -993,6 +989,29 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .od-bill-t{display:flex;justify-content:space-between;border-top:1px dashed #B9A88C;padding-top:6px;font-size:18px}.od-bill-t b{color:#C0533A}
 .od-drill{display:grid;gap:8px;background:var(--surface-2);border-radius:12px;padding:10px}
 .od-tws{width:150px;height:190px;display:block;bottom:-20px!important}.od-tws svg{width:100%;height:100%}
+.od-twa{width:120px;height:180px;bottom:-6px!important;right:10px!important}
+/* khách sạn */
+.ht-board{display:grid;gap:10px}.ht-board h5{margin:6px 0 0;font-size:16px;display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}.ht-board h5 .han{font-size:19px}.ht-board h5 small{font-weight:400;color:var(--muted);font-size:13px}
+.ht-rooms{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.ht-room,.ht-mi,.ht-am{border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:8px;display:grid;gap:1px;justify-items:center;text-align:center;cursor:pointer;font:inherit;color:var(--ink)}
+.ht-room:hover,.ht-mi:hover,.ht-am:hover{border-color:var(--accent)}
+.ht-room svg{width:100%;height:auto;border-radius:8px}.ht-room b{font-size:20px;font-weight:400;margin-top:4px}.ht-room small,.ht-mi small,.ht-am small{color:var(--muted);font-size:12px}
+.ht-room span,.ht-mi span,.ht-am span{font-size:13px;color:#2C6E52}.ht-room em,.ht-mi em{font-style:normal;font-weight:700;color:#C2513A;font-size:13px}
+.ht-mini{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}.ht-mi{position:relative}.ht-mi svg,.ht-am svg{width:46px;height:46px}.ht-mi b,.ht-am b{font-size:18px;font-weight:400}
+.ht-mi i{position:absolute;right:6px;top:6px;background:#2C9A58;color:#fff;font-style:normal;font-weight:800;border-radius:99px;padding:0 7px;font-size:14px}
+.ht-amen{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.ht-info{display:flex;flex-wrap:wrap;gap:6px 14px;background:#FFF7E0;border:1px solid #F0D58A;border-radius:12px;padding:8px 12px;font-size:14px}.ht-info .han{font-size:15px}
+.ht-board.sm{gap:6px}.ht-board.sm .ht-room span,.ht-board.sm .ht-mi span,.ht-board.sm .ht-room small{display:none}.ht-board.sm .ht-mini{grid-template-columns:repeat(6,minmax(0,1fr))}
+.od-pic .tk-bb{display:block;padding:8px;max-width:520px}.tk-b.od-pic{max-width:96%}.od-pic .ht-rooms{min-width:min(480px,70vw)}.od-pic .ht-rooms:has(.ht-room:only-child){min-width:0;grid-template-columns:200px}.od-pic .ht-mini{grid-template-columns:repeat(auto-fit,minmax(86px,110px))}
+.ht-key{width:250px;height:150px;border-radius:14px;background:linear-gradient(135deg,#2E4A7A,#1C2F52);color:#E9B949;position:relative;padding:14px 16px;box-shadow:0 4px 12px rgba(0,0,0,.25);display:grid;align-content:space-between}
+.ht-key b{font-size:20px;letter-spacing:2px}.ht-key small{display:block;font-size:10px;letter-spacing:3px;opacity:.8}.ht-key i{position:absolute;left:16px;top:62px;width:34px;height:26px;border-radius:5px;background:linear-gradient(135deg,#F6D77A,#C99A2E)}
+.ht-key span{justify-self:end;font-size:26px;color:#fff}.ht-key em{font-style:normal;font-size:12px;opacity:.85;justify-self:end}
+.ht-qr{width:190px;border-radius:14px;background:var(--c);padding:10px;color:#fff;text-align:center;display:grid;gap:6px}.ht-qr-h{font-weight:700;font-size:16px}.ht-qr svg{width:100%;background:#fff;border-radius:8px;padding:6px}.ht-qr-a{font-size:20px;font-weight:800}.ht-qr small{opacity:.85;font-size:11px}
+.ht-wifi{display:flex;gap:10px;align-items:center;background:#E3F2FD;border-radius:12px;padding:8px 14px}.ht-wifi svg{width:44px;height:44px}.ht-wifi div{display:grid}
+.ht-issue{position:relative;width:96px;height:90px;background:#FFF;border-radius:14px;display:grid;place-items:center}.ht-issue svg{width:70px;height:70px}.ht-issue b{position:absolute;right:4px;top:0;color:#E53935;font-size:30px}
+.ht-pass{display:flex;gap:8px;align-items:center;color:var(--good);font-weight:700}.ht-pass svg{width:40px;height:40px}
+.ht-bill{max-width:420px}
+@media (max-width:760px){.ht-rooms{grid-template-columns:repeat(2,minmax(0,1fr))}.ht-mini,.ht-amen,.ht-board.sm .ht-mini{grid-template-columns:repeat(3,minmax(0,1fr))}.od-pic .ht-rooms{min-width:0}}
 .od-av svg{width:44px;height:44px}
 .wy-map{position:relative;border-radius:14px;overflow:hidden;line-height:0}.wy-map img{width:100%;height:auto;display:block}
 .wy-pin{position:absolute;transform:translate(-50%,-50%);width:9%;height:6%;border:0;border-radius:10px;background:transparent;cursor:pointer;padding:0}
@@ -3317,7 +3336,7 @@ const Talk = {
     const t = T[this.i], prev = this.log[this.log.length - 1], q = t.ai && t.ai.length ? t.ai : (prev && prev.react) || ["", "", ""];
     this.log.push({ ...t, q, said: null }); this.drawChat(); this.drawBar(); if(t.ai && t.ai.length) speak(t.ai[0]); },
   /* lỗi ngữ pháp thường gặp – dù câu trả lời đúng ý vẫn bị đánh dấu để sửa */
-  ERRS: [[/是(很|非常|太|也很|不)?(忙|累|好|高兴|漂亮|新鲜|贵|便宜|冷|热|饿|渴|多|小)(?!人|朋友|学生|老师|的)/, "Câu vị ngữ tính từ không dùng 是: nói 我很忙, không nói 我是忙."],
+  ERRS: [[/是(很|非常|太|也很|不)?(忙|累|好|高兴|漂亮|新鲜|贵|便宜|冷|热|饿|渴|多|小)(?!人|朋友|学生|老师|的|少|大|久|长|远|号|时候|吃|看|喝|学)/, "Câu vị ngữ tính từ không dùng 是: nói 我很忙, không nói 我是忙."],
     [/我贵姓/, "Khi trả lời không nói 我贵姓…, mà nói 我姓…"], [/(?<![十百千万零一])二(个|口|斤|本|支|台|部|种|点|块)/, "Trước lượng từ dùng 两, không dùng 二 (两个, 两口, 两点…)."],
     [/(什么|哪|几|谁|多少|怎么样).*吗$/, "Câu đã có từ để hỏi (什么, 哪, 几…) thì không thêm 吗."], [/不有/, "Phủ định của 有 là 没有, không nói 不有."],
     [/(忙|累|去|喝|是)不(忙|累|去|喝|是).*吗$/, "Câu hỏi chính phản (A不A) không thêm 吗."]],
@@ -4154,10 +4173,12 @@ const Games = {
     if(!r || !ids.includes(r[0]) || !ids.includes(r[1]) || r[0] > r[1]) r = [S.lesson, S.lesson]; return r; },
   words(){ const [a, b] = this.range(), seen = new Set(), out = [];
     const ls = this.ids().filter(n => n >= a && n <= b).map(n => LEVELS[S.level].lessons[n]);
+    const allH = [...new Set(Object.values(LEVELS).flatMap(Lv => Object.values(Lv.lessons).flatMap(l => (l.vocab || []).map(w => w.h))))];
     const sents = [...new Set(ls.flatMap(L => [...(L.vocab || []).map(w => Array.isArray(w.ex) ? w.ex[0] : ""), ...(L.zhvi || []).map(x => x.zh), ...(L.sentences || []).map(x => x.h)]).filter(x => x && /[一-鿿]/.test(x)))];
     ls.forEach((L, i) => (L.vocab || []).forEach(w => {
       const k = w.h + "|" + w.p; if(seen.has(k)) return; seen.add(k);
-      const ss = sents.filter(x => x.includes(w.h) && x.replace(w.h, "").replace(/[，。？！、\s]/g, "").length >= 2);
+      const longer = allH.filter(h => h !== w.h && h.includes(w.h)); /* bỏ câu mà từ chỉ là một phần của từ dài hơn (学 trong 学校) */
+      const ss = sents.filter(x => x.includes(w.h) && !longer.some(h => x.includes(h)) && x.replace(w.h, "").replace(/[，。？！、\s]/g, "").length >= 2);
       out.push({ ...w, les: this.ids().filter(n => n >= a && n <= b)[i], vs: Games.short(w.vi), sents: ss }); }));
     return out; },
   short(vi){ return String(vi).split(/[,;(（]/)[0].trim(); },
@@ -4760,6 +4781,7 @@ const Shop = {
 };
 
 /* ---------- 🏎️ Đua xe vượt chướng ngại vật ---------- */
+const RACE_ALLOW = { N: "DMCP", V: "NMD", A: "NMC", D: "NAM", P: "NAM", M: "NVD", Q: "NVD", C: "NMA", T: "MCP", L: "DMC" };
 const Race = {
   N: 15,
   start(){
@@ -4793,16 +4815,28 @@ const Race = {
   steer(l, quiet){ if(l < 0 || l > 3 || this.over) return; if(!quiet && l !== this.lane) RaceSnd.swish(); this.lane = l; const c = $("#rcCar"); if(c) c.style.left = `calc(${l * 25 + 12.5}% - 30px)`;
     document.querySelectorAll(".rc-go").forEach(b => b.classList.toggle("on", +b.dataset.l === l)); },
   pick(){ if(!this.bag.length) this.bag = shuffle(this.pool); return this.bag.pop(); },
-  opts(w, key){ const seen = new Set([key(w)]), out = [w];
-    for(const x of shuffle(this.pool)){ if(out.length >= 4) break; const v = key(x); if(x === w || !v || seen.has(v) || x.vs === w.vs) continue; seen.add(v); out.push(x); }
+  /* loại từ gây nhiễu được phép cho từng loại đáp án (tránh kiểu 我喜欢（苹果）→ 看 cũng đúng) */
+  opts(w, key, sent){ const seen = new Set([key(w)]), out = [w];
+    /* điền từ: chỉ lấy từ gây nhiễu KHÁC loại từ với đáp án, để câu chỉ có 1 đáp án đúng (他在（学校）工作 – không đưa 上海 vào) */
+    const TIME = /^(现在|今天|明天|昨天|后天|前天|星期.|周末|早上|上午|中午|下午|晚上|今年|明年|去年|刚才|马上|以后|以前|每天|晚|早|.+的时候|.+点|.+号)$/,
+      PLACE = /^(这儿|那儿|哪儿|这里|那里|哪里|这边|那边|外边|里边|东边|西边|南边|北边|前边|后边|上边|下边|旁边|对面|附近|外面|里面)$/;
+    const cls2 = x => TIME.test(x.h) ? "T" : PLACE.test(x.h) ? "L" : cls(x.pos);
+    const cls = p => ({ dt: "N", rieng: "N", dai: "N", hau: "N", dong: "V", nn: "V", tt: "A", pho: "D", gioi: "P", lien: "C", lg: "M", so: "Q", sl: "Q" })[p] || "X";
+    const all = sent ? new Set(this.pool.flatMap(x => x.sents || []).map(x => x.replace(/[，。？！、\s]/g, ""))) : null;
+    for(const x of shuffle(this.pool)){ if(out.length >= 4) break; const v = key(x); if(x === w || !v || seen.has(v) || x.vs === w.vs) continue;
+      if(sent){ const head = sent.slice(0, sent.indexOf(w.h)).replace(/^.*[：:，,。！？、—]/, ""), start = !/[一-鿿]/.test(head);
+        const ok = start ? "MPQ".replace(cls2(w), "") : RACE_ALLOW[cls2(w)] || ""; /* chỗ trống đầu câu/đầu vế: chỉ nhiễu bằng lượng từ, giới từ, số từ */ if(!ok.includes(cls2(x)) || v.includes(w.h) || w.h.includes(v)) continue;
+        if(all.has(sent.replace(w.h, v).replace(/[，。？！、\s]/g, ""))) continue; }
+      seen.add(v); out.push(x); }
     return out; },
   question(){
     let w = this.pick(); const r = Math.random();
     if(r < .65 && !(w.sents || []).length){ const alt = this.pool.filter(x => (x.sents || []).length); if(alt.length) w = alt[Math.floor(Math.random() * alt.length)]; }
     const ex = (w.sents || []).length ? [w.sents[Math.floor(Math.random() * w.sents.length)]] : null;
-    let type = r < .65 && ex ? "fill" : r < .8 ? "vi" : r < .92 ? "zh" : "py";
+    const fillable = ["dt", "rieng", "dai", "hau", "dong", "nn", "tt", "pho", "gioi", "lien", "lg", "so", "sl"].includes(w.pos);
+    let type = r < .65 && ex && fillable ? "fill" : r < .8 ? "vi" : r < .92 ? "zh" : "py";
     const key = { fill: x => x.h, vi: x => x.vs, zh: x => x.h, py: x => x.p }[type];
-    let o = this.opts(w, key); if(o.length < 4){ type = "vi"; o = this.opts(w, x => x.vs); }
+    let o = this.opts(w, key, type === "fill" ? ex[0] : null); if(o.length < 4){ type = "vi"; o = this.opts(w, x => x.vs); }
     o = shuffle(o); const ans = "ABCD"[o.indexOf(w)];
     const ask = type === "fill" ? { t: "Chọn từ điền vào chỗ trống", q: ex[0].replace(w.h, "（　　）"), hint: "" }
       : type === "vi" ? { t: "Chọn nghĩa đúng của từ", q: w.h, hint: "" } : type === "zh" ? { t: "Chọn chữ Hán đúng", q: w.vs, hint: "" } : { t: "Chọn phiên âm đúng", q: w.h, hint: "" };
@@ -5029,7 +5063,8 @@ const OD_SAMPLE = [["服", "欢迎光临！请问几位？", "Huānyíng guāngl
   ["客", "对。", "Duì.", "Đúng."], ["服", "好的，请稍等。", "Hǎo de, qǐng shāo děng.", "Vâng, xin chờ một chút."], ["客", "服务员，买单！一共多少钱？", "Fúwùyuán, mǎidān! Yígòng duōshao qián?", "Phục vụ ơi, tính tiền! Tổng cộng bao nhiêu?"],
   ["服", "一共四十一块。", "Yígòng sìshíyī kuài.", "Tổng cộng 41 tệ."], ["客", "可以用微信吗？", "Kěyǐ yòng Wēixìn ma?", "Trả WeChat được không?"], ["服", "可以，请扫这儿。谢谢，欢迎下次再来！", "Kěyǐ, qǐng sǎo zhèr. Xièxie, huānyíng xià cì zài lái!", "Được, mời quét ở đây. Cảm ơn, hẹn gặp lại!"], ["客", "谢谢，再见！", "Xièxie, zàijiàn!", "Cảm ơn, tạm biệt!"]];
 const TOPICS = [{ id: "order", ic: "🍜", zh: "点菜", py: "diǎn cài", vi: "Gọi món ở quán ăn", img: "s1_waiter", d: "Chào hỏi · xin thực đơn · gọi món · bát to/nhỏ · nóng/đá · cay · xác nhận · thanh toán" },
-  { id: "shop", ic: "🛍️", zh: "买东西", py: "mǎi dōngxi", vi: "Mua sắm · mặc cả · thanh toán", img: "s1_seller", d: "Chọn đồ · màu sắc · cỡ · mặc thử · hỏi giá · mặc cả · trả tiền, thối tiền" }, { id: "way", ic: "🧭", zh: "问路", py: "wèn lù", vi: "Hỏi đường", svg: 1, d: "Hỏi vị trí · phương hướng · chỉ đường · xa hay gần · nhắc lại để xác nhận · cảm ơn" }, { id: "hotel", ic: "🏨", zh: "住酒店", py: "zhù jiǔdiàn", vi: "Đặt phòng khách sạn", soon: 1 }];
+  { id: "shop", ic: "🛍️", zh: "买东西", py: "mǎi dōngxi", vi: "Mua sắm · mặc cả · thanh toán", img: "s1_seller", d: "Chọn đồ · màu sắc · cỡ · mặc thử · hỏi giá · mặc cả · trả tiền, thối tiền" }, { id: "way", ic: "🧭", zh: "问路", py: "wèn lù", vi: "Hỏi đường", svg: 1, d: "Hỏi vị trí · phương hướng · chỉ đường · xa hay gần · nhắc lại để xác nhận · cảm ơn" },
+  { id: "hotel", ic: "🏨", zh: "住酒店", py: "zhù jiǔdiàn", vi: "Khách sạn · nhận & trả phòng", avf: () => avatarSVG(HT_STAFF, { label: "Lễ tân" }), d: "Đặt phòng · loại phòng · đặt cọc · WiFi · báo sự cố · minibar · trả phòng, thanh toán" }];
 
 const TOPIC_DEF = {};
 const Topic = {
@@ -5038,7 +5073,7 @@ const Topic = {
   head(){ return `<div class="tk-head"><div><b class="han">对话练习</b> <span>Hội thoại · luyện phản xạ nói</span></div>${Talk.viewSeg("topic")}</div>`; },
   render(){ const W = $("#work"); this.stopMic();
     if(!this.cur){ W.innerHTML = `<div class="tk">${this.head()}<p class="tk-intro"><span>Chọn một <b>chủ đề giao tiếp</b>: học mẫu câu trước, xem hội thoại mẫu, rồi đóng vai thực hành với nhân viên phục vụ.</span></p>
-      <div class="od-topics">${TOPICS.map(t => `<button class="od-topic ${t.soon ? "soon" : ""}" data-t="${t.id}" ${t.soon ? "disabled" : ""}>${t.img ? `<img src="${Exam.img(t.img)}" alt="" class="od-tw">` : t.svg ? `<span class="od-tw od-tws">${xiaoyuSVG()}</span>` : ""}<span class="od-ti">${t.ic}</span><b class="han">${t.zh}</b><small>${t.py}</small><span>${t.vi}</span>${t.d ? `<em>${t.d}</em>` : ""}${t.soon ? `<i class="od-soon">Sắp có</i>` : ""}</button>`).join("")}</div></div>`;
+      <div class="od-topics">${TOPICS.map(t => `<button class="od-topic ${t.soon ? "soon" : ""}" data-t="${t.id}" ${t.soon ? "disabled" : ""}>${t.img ? `<img src="${Exam.img(t.img)}" alt="" class="od-tw">` : t.avf ? `<span class="od-tw od-tws od-twa">${t.avf()}</span>` : t.svg ? `<span class="od-tw od-tws">${xiaoyuSVG()}</span>` : ""}<span class="od-ti">${t.ic}</span><b class="han">${t.zh}</b><small>${t.py}</small><span>${t.vi}</span>${t.d ? `<em>${t.d}</em>` : ""}${t.soon ? `<i class="od-soon">Sắp có</i>` : ""}</button>`).join("")}</div></div>`;
       Talk.bindView(W); W.querySelectorAll(".od-topic:not(.soon)").forEach(b => b.onclick = () => { this.cur = b.dataset.t; this.D = TOPIC_DEF[this.cur]; this.reset(); this.render(); }); return; }
     const D = this.D = TOPIC_DEF[this.cur];
     W.innerHTML = `<div class="tk od">${this.head()}
@@ -5078,6 +5113,7 @@ const Topic = {
   bubble(b){ const av = `<span class="tk-av od-av">${this.faceImg()}</span>`;
     if(b.who === "sys") return `<div class="od-sys">${b.html}</div>`;
     if(b.who === "menu") return `<div class="tk-b ai od-mb">${av}<div class="tk-bb">${this.D.board(true, b.ids)}</div></div>`;
+    if(b.who === "pic") return `<div class="tk-b ai od-mb od-pic">${av}<div class="tk-bb">${b.html}</div></div>`;
     const showPy = this.py, showVi = this.vi;
     return b.who === "ai" ? `<div class="tk-b ai" data-zh="${esc(b.zh)}">${av}<div class="tk-bb"><button class="say-sm" data-say="${esc(b.zh)}" aria-label="Nghe">${ICON.sound}</button><span class="han">${esc(b.zh)}</span>${showPy && b.py ? `<small class="tk-py">${esc(b.py)}</small>` : ""}${showVi && b.vi ? `<small class="tk-vi">${esc(b.vi)}</small>` : ""}</div></div>`
       : `<div class="tk-b me" data-zh="${esc(b.zh)}"><div class="tk-bb">${b.full ? `<button class="say-sm" data-say="${esc(b.zh)}" aria-label="Nghe">${ICON.sound}</button>` : ""}<span class="han">${esc(b.zh || "（không nói）")}</span>${b.full && showPy && b.py ? `<small class="tk-py">${esc(b.py)}</small>` : ""}${b.full && showVi && b.vi ? `<small class="tk-vi">${esc(b.vi)}</small>` : ""}</div></div>`; },
@@ -5112,10 +5148,11 @@ const Topic = {
   listen: Talk.listen, stopMic: Talk.stopMic,
   say(zh, py, vi, delay){ this.chat.push({ who: "ai", zh, py, vi }); this.q = [zh, py, vi]; this.drawChat(); Games.later(() => speak(zh), delay || 50); },
   sys(html){ this.chat.push({ who: "sys", html }); this.drawChat(); },
+  pic(html){ if(!html) return; this.chat.push({ who: "pic", html }); this.drawChat(); },
   S(){ return this.D.STATES[this.st]; },
   go(st, pre, delay){ this.st = st; this.ctx.fails = 0; this.log.forEach(x => x.open = false); const S = this.S(); if(st === "end") return this.finish();
     let q = S.ask(this); if(q && pre){ if(/^好的/.test(pre[0]) || /改/.test(pre[0])) q = [q[0].replace(/^好的。/, ""), q[1].replace(/^Hǎo de\. /, ""), q[2].replace(/^Vâng\. /, "")]; q = [pre[0] + q[0], pre[1] + " " + q[1], pre[2] + " " + q[2]]; } else if(!q) q = pre;
-    if(q) this.say(...q, delay); this.drawBar(); },
+    if(q) this.say(...q, delay); if(S.pic) this.pic(S.pic(this)); this.drawBar(); },
   /* lượt hỏi tiếp theo sau khi gọi món: hỏi bát/nóng/cay cho món còn thiếu */
   pending(){ for(const it of this.order){ const d = OD_MENU[it.id]; if(d.size && !it.size) return [it, "size"]; if(d.temp && !it.temp) return [it, "temp"]; if(d.spicy && it.spicy == null) return [it, "spicy"]; } return null; },
   orderTx(){ const L = this.order.map(odItemTx); return [L.map(x => x[0]).join("、"), L.map(x => x[1]).join(", "), L.map(x => x[2]).join(", ")]; },
@@ -5249,6 +5286,12 @@ const Topic = {
     if(r.reset) this.order = [];
     const pre = r.react, sayPre = () => { if(pre){ this.chat.push({ who: "ai", zh: pre[0], py: pre[1], vi: pre[2] }); this.q = pre; this.drawChat(); speak(pre[0]); } };
     if(r.bill) Games.later(() => this.drawBill(), 300);
+    if(r.pic) Games.later(() => this.pic(r.pic), 200);
+    /* chuyển cảnh: lời đáp → khung kể chuyện (+ hình) → câu hỏi của trạng thái mới */
+    if(r.scene){ const sc = r.scene; sayPre(); this.busy = true; this.drawBar();
+      return Games.later(() => { this.busy = false; this.sys(sc.html); this.pic(sc.pic); if(sc.say){ this.chat.push({ who: "ai", zh: sc.say[0], py: sc.say[1], vi: sc.say[2] }); this.q = sc.say; this.drawChat(); speak(sc.say[0]); }
+        if(sc.next === "end"){ this.st = "end"; this.drawBar(); return Games.later(() => this.finish(), 1600); }
+        if(this.D.STATES[sc.next].ask(this)) this.go(sc.next, null, sc.say ? 2500 : 600); else { this.st = sc.next; this.ctx.fails = 0; this.log.forEach(x => x.open = false); this.drawBar(); } }, sc.delay || 1600); }
     if(r.stay){ sayPre(); this.drawBar(); return; }
     if(r.menu){ sayPre(); this.busy = true; this.drawChat(); this.drawBar();
       return Games.later(() => { this.busy = false; this.chat.push({ who: "menu", ids: r.ids }); this.go(r.next || "order", null, 1400); }, 700); }
@@ -5690,6 +5733,305 @@ TOPIC_DEF.way = {
       Games.later(() => { wayMission(T); T.drawBar(); }, 1400); return "ask"; } return "follow"; },
   hasBill: () => 0, bill: () => "", noBill: 1,
   clone(T, src){ T.ctx = { ...src.ctx, route: src.ctx.route || wayRoute(src.ctx.missions[0]), missions: [...src.ctx.missions], mi: 0 }; T.chat = []; T.sys = () => {}; }
+};
+
+/* ===================== Hội thoại theo chủ đề: KHÁCH SẠN (住酒店) =====================
+   Học viên là khách: nhận phòng (đặt phòng tại quầy hoặc đã đặt trước) → gọi lễ tân báo sự cố → trả phòng, khai minibar, thanh toán.
+   Nhân viên lễ tân vẽ bằng chính bộ dựng nhân vật chibi của học viên (avatarSVG). */
+const HT_STAFF = { gender: "f", hair: "highbun", bangs: "side", hairColor: "#2B2220", outfit: "suit", outColor: "#2E4A7A", accNeck: "bowtie", accHead: "none", expr: "smile", shoes: "formal" };
+const HT_ROOMS = {
+  single: { h: "单人间", p: "dānrénjiān", vi: "phòng đơn", d: "1 giường đơn · 1 người", price: 198, bf: false, re: /单人间|单人房|单间|单人/ },
+  std: { h: "标准间", p: "biāozhǔnjiān", vi: "phòng tiêu chuẩn (双人间)", d: "2 giường đơn · 2 người", price: 268, bf: true, re: /标准间|标间|双人间|双人房|双床|两张床|标准/ },
+  king: { h: "大床房", p: "dàchuángfáng", vi: "phòng giường lớn", d: "1 giường đôi lớn · 2 người", price: 288, bf: true, re: /大床房|大床间|大床/ },
+  suite: { h: "套房", p: "tàofáng", vi: "phòng suite", d: "phòng ngủ + phòng khách", price: 588, bf: true, re: /套房|套间/ }
+};
+const HT_BF = 38, HT_DEP = 500;
+const HT_MINI = [
+  { id: "cola", h: "可乐", p: "kělè", vi: "Coca", m: "瓶", mp: "píng", price: 8, re: /可乐/ },
+  { id: "beer", h: "啤酒", p: "píjiǔ", vi: "bia", m: "瓶", mp: "píng", price: 12, re: /啤酒/ },
+  { id: "juice", h: "果汁", p: "guǒzhī", vi: "nước ép", m: "瓶", mp: "píng", price: 10, re: /果汁|橙汁/ },
+  { id: "chips", h: "薯片", p: "shǔpiàn", vi: "khoai tây chiên", m: "包", mp: "bāo", price: 15, re: /薯片/ },
+  { id: "choco", h: "巧克力", p: "qiǎokèlì", vi: "sô-cô-la", m: "块", mp: "kuài", price: 18, re: /巧克力/ },
+  { id: "water", h: "矿泉水", p: "kuàngquánshuǐ", vi: "nước khoáng", m: "瓶", mp: "píng", price: 0, re: /矿泉水|(?<![热冷开])水/ }
+];
+const HT_PAY = { wx: ["微信", "Wēixìn", "WeChat"], ali: ["支付宝", "Zhīfùbǎo", "Alipay"], card: ["刷卡", "shuā kǎ", "quẹt thẻ"], cash: ["现金", "xiànjīn", "tiền mặt"] };
+function htPayOf(n){ return /微信/.test(n) ? "wx" : /支付宝/.test(n) ? "ali" : /刷卡|信用卡|银行卡|卡/.test(n) ? "card" : /现金|给你钱|给您钱|付钱给/.test(n) ? "cash" : /扫|二维码|手机/.test(n) ? "wx" : null; }
+function htRoomOf(n){ for(const k of ["single", "suite", "king", "std"]) if(HT_ROOMS[k].re.test(n)) return k; return null; }
+function htNights(n){ if(/今晚|今天晚上|一个晚上|一晚|一夜|住一天/.test(n)) return 1;
+  const m = n.match(/(\d+|[一二两三四五六七八九十]+)\s*个?\s*(晚上|晚|夜|天)/); return m ? odParseNum(m[1]) : 0; }
+function htDigits(no){ return String(no).split("").map(d => "零一二三四五六七八九"[d]).join(""); }
+function htDigitsPy(no){ return String(no).split("").map(d => ["líng", "yāo", "èr", "sān", "sì", "wǔ", "liù", "qī", "bā", "jiǔ"][d]).join(" "); }
+function htRoomSaid(raw, no){ const s = String(raw).replace(/[零〇一幺二三四五六七八九]{3,4}/g, m => m.split("").map(c => ({ 零: 0, 〇: 0, 一: 1, 幺: 1, 二: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9 })[c]).join("")); return s.includes(String(no)); }
+function htMiniOf(raw){ const s = String(raw), out = [];
+  HT_MINI.forEach(d => { const m = s.match(d.re); if(!m) return; const i = m.index, pre = s.slice(Math.max(0, i - 5), i).match(/(\d+|[一二两三四五六七八九十])\s*(瓶|罐|听|包|袋|块|个|盒|杯)?\s*$/);
+    out.push({ id: d.id, n: pre ? odParseNum(pre[1]) : 1 }); }); return out; }
+const HT_SUR = { 王: "Wáng", 李: "Lǐ", 张: "Zhāng", 刘: "Liú", 陈: "Chén", 杨: "Yáng", 黄: "Huáng", 赵: "Zhào", 吴: "Wú", 周: "Zhōu", 徐: "Xú", 孙: "Sūn", 马: "Mǎ", 朱: "Zhū", 胡: "Hú", 林: "Lín", 何: "Hé", 高: "Gāo", 郭: "Guō", 罗: "Luó", 梁: "Liáng", 宋: "Sòng", 郑: "Zhèng", 谢: "Xiè", 韩: "Hán", 唐: "Táng", 冯: "Féng", 董: "Dǒng", 程: "Chéng", 曹: "Cáo", 袁: "Yuán", 邓: "Dèng", 许: "Xǔ", 沈: "Shěn", 曾: "Zēng", 彭: "Péng", 苏: "Sū", 卢: "Lú", 蒋: "Jiǎng", 蔡: "Cài", 丁: "Dīng", 魏: "Wèi", 叶: "Yè", 潘: "Pān", 杜: "Dù", 夏: "Xià", 钟: "Zhōng", 田: "Tián", 范: "Fàn", 方: "Fāng", 石: "Shí", 白: "Bái", 崔: "Cuī", 金: "Jīn", 陆: "Lù", 孔: "Kǒng", 毛: "Máo", 秦: "Qín", 江: "Jiāng", 黎: "Lí", 阮: "Ruǎn", 武: "Wǔ", 裴: "Péi", 山: "Shān", 安: "Ān", 玛: "Mǎ" };
+function htCall(T){ const g = ((Profile.get() || {}).avatar || {}).gender; T.ctx.namePy = HT_SUR[(T.ctx.name || "")[0]]; return T.ctx.name && T.ctx.namePy ? [T.ctx.name[0] + (g === "m" ? "先生" : "女士"), (T.ctx.namePy || "") + (g === "m" ? " xiānsheng" : " nǚshì"), (g === "m" ? "anh " : "chị ") + T.ctx.name] : ["您", "nín", "anh/chị"]; }
+function htCap(s){ return s[0].toUpperCase() + s.slice(1); }
+const htN = (n, two) => odNum(n, two !== false);
+/* ---------- hình vẽ ---------- */
+function htRoomSVG(k){
+  const bed = (x, w, col) => `<rect x="${x}" y="40" width="${w}" height="26" rx="5" fill="#8A5A3B"/><rect x="${x - 3}" y="62" width="${w + 6}" height="20" rx="5" fill="#FFFFFF" stroke="#D9CFC4"/>
+    ${w > 60 ? `<rect x="${x + 7}" y="54" width="${w / 2 - 11}" height="12" rx="6" fill="#FFFFFF" stroke="#D9CFC4"/><rect x="${x + w / 2 + 4}" y="54" width="${w / 2 - 11}" height="12" rx="6" fill="#FFFFFF" stroke="#D9CFC4"/>` : `<rect x="${x + 6}" y="54" width="${w - 12}" height="12" rx="6" fill="#FFFFFF" stroke="#D9CFC4"/>`}
+    <path d="M${x - 3} 70 h${w + 6} v14 a5 5 0 0 1 -5 5 h${-(w - 4)} a5 5 0 0 1 -5 -5z" fill="${col}"/><rect x="${x - 3}" y="68" width="${w + 6}" height="5" fill="${shade(col, .35)}"/>`;
+  const lamp = x => `<rect x="${x - 8}" y="62" width="16" height="20" rx="2" fill="#B07A52"/><path d="M${x - 7} 48 h14 l-3 -10 h-8z" fill="#FFE29A"/><rect x="${x - 1}" y="48" width="2" height="14" fill="#7A5A40"/>`;
+  const win = `<rect x="58" y="8" width="44" height="26" rx="3" fill="#BFE3F7" stroke="#FFFFFF" stroke-width="3"/><path d="M80 8v26" stroke="#FFFFFF" stroke-width="2"/>`;
+  const inner = { single: lamp(46) + bed(64, 34, "#5B8DEF"),
+    std: bed(28, 36, "#5B8DEF") + lamp(80) + bed(96, 36, "#5B8DEF"),
+    king: lamp(28) + bed(46, 70, "#E06A7A") + lamp(132),
+    suite: `<rect x="10" y="60" width="44" height="22" rx="6" fill="#7DB37A"/><rect x="10" y="52" width="44" height="12" rx="5" fill="#94C690"/><rect x="62" y="70" width="18" height="12" rx="2" fill="#B07A52"/><circle cx="71" cy="66" r="4" fill="#F27C7C"/>` + bed(94, 56, "#E8A13A") };
+  return `<svg viewBox="0 0 160 96" aria-hidden="true"><rect width="160" height="96" rx="10" fill="#F7EFE4"/><rect y="78" width="160" height="18" fill="#D8B48C"/><path d="M0 78h160" stroke="#C49A6C" stroke-width="2"/>${k === "suite" ? `<rect x="112" y="8" width="38" height="24" rx="3" fill="#BFE3F7" stroke="#fff" stroke-width="3"/>` : win}${inner[k]}</svg>`;
+}
+function htMiniSVG(id){
+  const A = {
+    cola: `<rect x="17" y="10" width="14" height="6" rx="2" fill="#B71C1C"/><path d="M15 18 q-3 6 0 12 q-3 8 0 14 h18 q3 -6 0 -14 q3 -6 0 -12z" fill="#E53935"/><rect x="15" y="28" width="18" height="8" fill="#fff"/><path d="M17 32 q7 -4 14 0" stroke="#E53935" stroke-width="2" fill="none"/>`,
+    beer: `<rect x="20" y="6" width="8" height="10" rx="2" fill="#2E7D32"/><path d="M18 16 h12 l3 8 v20 a3 3 0 0 1 -3 3 h-12 a3 3 0 0 1 -3 -3 v-20z" fill="#C88A1C"/><rect x="16" y="28" width="16" height="9" rx="1" fill="#FFF3C4"/>`,
+    juice: `<path d="M15 14 l4 -6 h10 l4 6z" fill="#FFB74D"/><rect x="15" y="14" width="18" height="32" rx="2" fill="#FF9800"/><circle cx="24" cy="30" r="6" fill="#FFE0B2"/><circle cx="24" cy="30" r="3.5" fill="#FB8C00"/>`,
+    chips: `<path d="M12 10 h24 l-2 6 l2 26 l-2 6 h-20 l-2 -6 l2 -26z" fill="#FDD835"/><path d="M14 22 h20 v14 h-20z" fill="#E53935"/><ellipse cx="24" cy="29" rx="6" ry="4" fill="#FFE082"/>`,
+    choco: `<rect x="11" y="12" width="26" height="34" rx="2" fill="#6D4C41"/><path d="M11 12 h26 v12 h-26z" fill="#8D2E2E"/>${[0, 1].map(i => [0, 1, 2].map(j => `<rect x="${14 + i * 11}" y="${27 + j * 6}" width="9" height="5" rx="1" fill="#8D6E63"/>`).join("")).join("")}`,
+    water: `<rect x="20" y="5" width="8" height="6" rx="1.5" fill="#1E88E5"/><path d="M18 11 h12 l2 6 v26 a3 3 0 0 1 -3 3 h-10 a3 3 0 0 1 -3 -3 v-26z" fill="#BBDEFB" stroke="#64B5F6"/><rect x="16" y="24" width="16" height="9" fill="#1E88E5"/>`
+  };
+  return `<svg viewBox="0 0 48 50" aria-hidden="true">${A[id]}</svg>`;
+}
+function htIconSVG(k){
+  const A = {
+    dryer: `<path d="M8 14 a12 12 0 0 1 12 -10 h16 a6 6 0 0 1 6 6 v4 a6 6 0 0 1 -6 6 h-10 l-4 22 a3 3 0 0 1 -3 2 h-2 a3 3 0 0 1 -3 -3 l2 -21 a12 12 0 0 1 -8 -6z" fill="#F48FB1"/><circle cx="18" cy="14" r="5" fill="#fff"/><path d="M44 8 h4 M44 12 h5 M44 16 h4" stroke="#90CAF9" stroke-width="2" stroke-linecap="round"/>`,
+    ac: `<rect x="4" y="10" width="44" height="18" rx="4" fill="#ECEFF1" stroke="#90A4AE"/><path d="M8 24 h36" stroke="#90A4AE" stroke-width="2"/><path d="M14 34 v6 M26 34 v8 M38 34 v6" stroke="#4FC3F7" stroke-width="2.5" stroke-linecap="round"/>`,
+    towel: `<rect x="8" y="10" width="36" height="34" rx="4" fill="#80CBC4"/><path d="M8 18 h36 M8 38 h36" stroke="#fff" stroke-width="3"/><rect x="6" y="6" width="40" height="6" rx="3" fill="#B0BEC5"/>`,
+    hot: `<path d="M10 8 h22 a6 6 0 0 1 6 6 v4" stroke="#90A4AE" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M30 18 h16 l-3 6 h-10z" fill="#B0BEC5"/>${[33, 38, 43].map(x => `<path d="M${x} 28 v14" stroke="#4FC3F7" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="3 4"/>`).join("")}`,
+    wifi: `${[30, 21, 12].map((r, i) => `<path d="M${26 - r} ${40 - r * .55} a${r} ${r} 0 0 1 ${r * 2} 0" stroke="#42A5F5" stroke-width="4" fill="none" stroke-linecap="round" opacity="${1 - i * .1}"/>`).join("")}<circle cx="26" cy="42" r="4" fill="#42A5F5"/>`,
+    key: `<rect x="4" y="12" width="44" height="28" rx="4" fill="#2E4A7A"/><rect x="9" y="18" width="9" height="7" rx="1.5" fill="#E9B949"/><text x="40" y="35" font-size="9" fill="#E9B949" text-anchor="end" font-weight="700">806</text>`,
+    lift: `<rect x="8" y="6" width="36" height="40" rx="3" fill="#B0BEC5"/><path d="M26 6 v40" stroke="#78909C" stroke-width="2"/><path d="M15 18 l4 -5 l4 5z M29 13 l4 5 l4 -5z" fill="#fff"/>`,
+    bf: `<ellipse cx="26" cy="32" rx="20" ry="10" fill="#fff" stroke="#CFD8DC"/><ellipse cx="22" cy="30" rx="9" ry="6" fill="#fff" stroke="#ECEFF1"/><circle cx="22" cy="30" r="4" fill="#FFB300"/><rect x="31" y="27" width="10" height="4" rx="2" fill="#C0602E"/>`,
+    bag: `<rect x="10" y="16" width="32" height="28" rx="5" fill="#8D6E63"/><path d="M19 16 v-5 h14 v5" stroke="#5D4037" stroke-width="3" fill="none"/><path d="M10 26 h32" stroke="#6D4C41" stroke-width="2"/>`,
+    slip: `<ellipse cx="17" cy="28" rx="8" ry="15" fill="#fff" stroke="#CFD8DC"/><ellipse cx="35" cy="28" rx="8" ry="15" fill="#fff" stroke="#CFD8DC"/><path d="M10 22 q7 -6 14 0 M28 22 q7 -6 14 0" stroke="#90A4AE" stroke-width="3" fill="none"/>`,
+    alarm: `<circle cx="26" cy="28" r="15" fill="#FFF" stroke="#EF5350" stroke-width="3"/><path d="M26 20 v8 l6 4" stroke="#37474F" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="13" cy="12" r="5" fill="#EF5350"/><circle cx="39" cy="12" r="5" fill="#EF5350"/>`,
+    pass: `<rect x="12" y="6" width="28" height="40" rx="3" fill="#8E2F3A"/><circle cx="26" cy="22" r="7" fill="none" stroke="#E9B949" stroke-width="2"/><rect x="18" y="34" width="16" height="3" rx="1.5" fill="#E9B949"/>`
+  };
+  return `<svg viewBox="0 0 52 50" aria-hidden="true">${A[k]}</svg>`;
+}
+function htQR(kind, amount){ /* mã QR minh hoạ (không quét được) */
+  let seed = (amount * 7919 + kind.length * 31) % 2147483647; const rnd = () => (seed = seed * 48271 % 2147483647) / 2147483647, Q = 25;
+  const fin = (x, y) => `<rect x="${x}" y="${y}" width="7" height="7" fill="#111"/><rect x="${x + 1}" y="${y + 1}" width="5" height="5" fill="#fff"/><rect x="${x + 2}" y="${y + 2}" width="3" height="3" fill="#111"/>`;
+  let cells = ""; for(let y = 0; y < Q; y++) for(let x = 0; x < Q; x++){ if((x < 8 && y < 8) || (x > Q - 9 && y < 8) || (x < 8 && y > Q - 9) || (x > 9 && x < 15 && y > 9 && y < 15)) continue; if(rnd() < .48) cells += `<rect x="${x}" y="${y}" width="1" height="1" fill="#111"/>`; }
+  const col = kind === "ali" ? "#1677FF" : "#07C160", name = kind === "ali" ? "支付宝" : "微信支付";
+  return `<div class="ht-qr" style="--c:${col}"><div class="ht-qr-h">${kind === "ali" ? "支" : "✓"} <span class="han">${name}</span></div><svg viewBox="-1 -1 ${Q + 2} ${Q + 2}" shape-rendering="crispEdges" aria-label="Mã QR minh hoạ"><rect x="-1" y="-1" width="${Q + 2}" height="${Q + 2}" fill="#fff"/>${cells}${fin(0, 0)}${fin(Q - 7, 0)}${fin(0, Q - 7)}<rect x="10.5" y="10.5" width="4" height="4" rx="1" fill="${col}"/></svg><div class="ht-qr-a">¥ ${amount}.00</div><small>薇薇酒店 · Weiwei Hotel</small></div>`; }
+function htKeyCard(no){ return `<div class="ht-key"><div><b>薇薇酒店</b><small>WEIWEI HOTEL</small></div><i></i><span class="han">房间 ${no}</span><em>${String(no)[0]}楼 · 退房 12:00</em></div>`; }
+function htWifi(){ return `<div class="ht-wifi">${htIconSVG("wifi")}<div><b>WiFi: Weiwei_Hotel</b><span>密码 mìmǎ: <b>88888888</b></span></div></div>`; }
+function htRoomCards(only){ return `<div class="ht-rooms">${Object.entries(HT_ROOMS).filter(([k]) => !only || only.includes(k)).map(([k, r]) => `<button class="ht-room" data-say="${r.h}">${htRoomSVG(k)}<b class="han">${r.h}</b><small>${r.p}</small><span>${htCap(r.vi)} · ${r.d}</span><em>${r.price}元/晚 · ${r.bf ? "含早餐" : "不含早餐"}</em></button>`).join("")}</div>`; }
+function htMiniCards(used){ const L = used ? used.map(u => ({ ...HT_MINI.find(d => d.id === u.id), n: u.n })) : HT_MINI;
+  return `<div class="ht-mini">${L.map(d => `<button class="ht-mi" data-say="${d.h}">${htMiniSVG(d.id)}${used ? `<i>×${d.n}</i>` : ""}<b class="han">${d.h}</b><small>${d.p}</small><span>${d.vi}</span><em>${d.price ? d.price + "元/" + d.m : "免费 miễn phí"}</em></button>`).join("")}</div>`; }
+const HT_AMEN = [["key", "房卡", "fángkǎ", "thẻ phòng"], ["dryer", "吹风机", "chuīfēngjī", "máy sấy tóc"], ["towel", "毛巾", "máojīn", "khăn tắm"], ["ac", "空调", "kōngtiáo", "điều hoà"], ["hot", "热水", "rèshuǐ", "nước nóng"],
+  ["wifi", "无线网", "wúxiànwǎng", "WiFi"], ["slip", "拖鞋", "tuōxié", "dép đi trong phòng"], ["lift", "电梯", "diàntī", "thang máy"], ["bf", "早餐", "zǎocān", "bữa sáng"], ["bag", "行李", "xíngli", "hành lý"], ["alarm", "叫醒服务", "jiàoxǐng fúwù", "gọi báo thức"], ["pass", "护照", "hùzhào", "hộ chiếu"]];
+function htBoard(small){
+  if(small) return `<div class="ht-board sm">${htRoomCards()}${htMiniCards()}</div>`;
+  return `<div class="ht-board"><h5>🛏️ <span class="han">房型</span> Loại phòng</h5>${htRoomCards()}
+    <h5>🍫 <span class="han">迷你吧</span> Minibar trong phòng <small>(迷你酒吧 · dùng xong khi trả phòng phải báo và trả tiền)</small></h5>${htMiniCards()}
+    <h5>🧴 <span class="han">设施和服务</span> Tiện nghi & dịch vụ</h5><div class="ht-amen">${HT_AMEN.map(([ic, h, p, v]) => `<button class="ht-am" data-say="${h}">${htIconSVG(ic)}<b class="han">${h}</b><small>${p}</small><span>${v}</span></button>`).join("")}</div>
+    <div class="ht-info"><span>💰 <b class="han">押金</b> (yājīn – tiền cọc): <b>${HT_DEP}元</b>, hoàn lại khi trả phòng</span><span>🍳 <b class="han">早餐</b>: 7:00–10:00 · tầng 2 · <span class="han">单人间</span> thêm ${HT_BF}元/người</span><span>🕛 <b class="han">退房</b> (trả phòng): trước 12:00 trưa</span><span>📶 WiFi: mật khẩu 88888888</span><span>💳 Nhận: <span class="han">微信 · 支付宝 · 刷卡 · 现金</span></span></div></div>`; }
+function htRoomTotal(T){ const r = HT_ROOMS[T.ctx.room]; return r.price * T.ctx.nights + (T.ctx.bfAdd ? HT_BF * T.ctx.nights : 0); }
+function htMiniTotal(T){ return T.ctx.used.reduce((a, u) => a + HT_MINI.find(d => d.id === u.id).price * u.n, 0); }
+function htBillHTML(T){ const r = HT_ROOMS[T.ctx.room], tot = htRoomTotal(T) + htMiniTotal(T), dep = T.ctx.payDep;
+  return `<div class="od-bill ht-bill"><div class="od-bill-h"><b class="han">账单</b> Hóa đơn · phòng ${T.ctx.no}${T.ctx.paid ? ` · đã trả bằng <span class="han">${HT_PAY[T.ctx.paid][0]}</span>` : ""}</div>
+    <div class="od-bill-r"><span><span class="han">房费 · ${r.h} × ${T.ctx.nights}晚</span><small>tiền phòng ${r.price}元 × ${T.ctx.nights} đêm</small></span><b>${r.price * T.ctx.nights}元</b></div>
+    ${T.ctx.bfAdd ? `<div class="od-bill-r"><span><span class="han">早餐 × ${T.ctx.nights}</span><small>bữa sáng ${HT_BF}元 × ${T.ctx.nights}</small></span><b>${HT_BF * T.ctx.nights}元</b></div>` : ""}
+    ${T.ctx.used.map(u => { const d = HT_MINI.find(x => x.id === u.id); return `<div class="od-bill-r"><span><span class="han">迷你吧 · ${d.h} × ${u.n}</span><small>${d.vi}</small></span><b>${d.price ? d.price * u.n + "元" : "免费"}</b></div>`; }).join("")}
+    <div class="od-bill-t"><span class="han">一共</span><b>${tot}元</b></div>
+    ${dep ? `<div class="od-bill-r"><span><span class="han">押金</span><small>tiền cọc (đã trả bằng ${HT_PAY[dep][2]}) – hoàn lại</small></span><b>+${HT_DEP}元</b></div>` : ""}</div>`; }
+function htIssuePic(T){ const I = HT_ISSUES.find(x => x.id === T.ctx.issue); return `<div class="ht-issue">${htIconSVG(I.ic)}<b>✗</b></div>`; }
+const HT_ISSUES = [
+  { id: "dryer", ic: "dryer", re: /吹风机|吹头发|风筒/, sys: "Bạn muốn sấy tóc nhưng <b>máy sấy tóc (<span class=\"han\">吹风机</span>) không chạy</b>.", model: no => `你好，我是${no}房间。吹风机坏了，可以给我换一个吗？`,
+    fix: ["不好意思！我们马上给您送一个新的吹风机。", "Bù hǎo yìsi! Wǒmen mǎshàng gěi nín sòng yí ge xīn de chuīfēngjī.", "Thành thật xin lỗi! Chúng tôi sẽ mang ngay một máy sấy tóc mới lên."] },
+  { id: "ac", ic: "ac", re: /空调/, sys: "Phòng rất nóng, <b>điều hoà (<span class=\"han\">空调</span>) không mát</b>.", model: no => `你好，我是${no}房间。空调坏了，房间太热了。`,
+    fix: ["不好意思，我们马上请师傅上去看看。", "Bù hǎo yìsi, wǒmen mǎshàng qǐng shīfu shàngqu kànkan.", "Xin lỗi, chúng tôi sẽ cho thợ lên xem ngay."] },
+  { id: "towel", ic: "towel", re: /毛巾|浴巾/, sys: "Trong phòng tắm <b>không có khăn tắm (<span class=\"han\">毛巾</span>)</b>.", model: no => `你好，我是${no}房间。房间里没有毛巾，能给我送两条吗？`,
+    fix: ["好的，我们马上给您送两条毛巾。", "Hǎo de, wǒmen mǎshàng gěi nín sòng liǎng tiáo máojīn.", "Vâng, chúng tôi sẽ mang ngay hai chiếc khăn lên."] },
+  { id: "hot", ic: "hot", re: /热水|洗澡|淋浴/, sys: "Bạn muốn tắm nhưng <b>không có nước nóng (<span class=\"han\">热水</span>)</b>.", model: no => `你好，我是${no}房间。没有热水，不能洗澡。`,
+    fix: ["不好意思，我们马上派人上去检查一下。", "Bù hǎo yìsi, wǒmen mǎshàng pài rén shàngqu jiǎnchá yíxià.", "Xin lỗi, chúng tôi cử người lên kiểm tra ngay."] },
+  { id: "wifi", ic: "wifi", re: /wifi|无线|网|密码/i, sys: "Điện thoại của bạn <b>không kết nối được WiFi (<span class=\"han\">连不上网</span>)</b>.", model: no => `你好，我是${no}房间。WiFi连不上，怎么办？`,
+    fix: ["WiFi密码是八个八。如果还连不上，我们派人上去看看。", "WiFi mìmǎ shì bā ge bā. Rúguǒ hái lián bu shàng, wǒmen pài rén shàngqu kànkan.", "Mật khẩu WiFi là tám số 8. Nếu vẫn không được, chúng tôi sẽ cử người lên xem."] }
+];
+const HT_LEARN = [
+  { t: "Loại phòng", ic: "🛏️", L: [["词", "单人间 / 单人房", "dānrénjiān / dānrénfáng", "phòng đơn – 1 giường đơn"], ["词", "双人间 / 标准间", "shuāngrénjiān / biāozhǔnjiān", "phòng đôi tiêu chuẩn – 2 giường đơn"],
+    ["词", "大床房", "dàchuángfáng", "phòng 1 giường đôi lớn"], ["词", "套房", "tàofáng", "phòng suite – có phòng khách riêng"], ["词", "空房间 / 客满", "kòng fángjiān / kèmǎn", "phòng trống / hết phòng"]],
+    tip: "间 và 房 đều là “phòng”: 单人间 = 单人房, 双人间 = 双人房. Ở khách sạn Trung Quốc, 标准间 (标间) thường là phòng 2 giường đơn; muốn 1 giường lớn thì nói 大床房." },
+  { t: "Đồ dùng trong phòng", ic: "🧴", L: [["词", "房卡", "fángkǎ", "thẻ phòng"], ["词", "吹风机", "chuīfēngjī", "máy sấy tóc"], ["词", "毛巾 / 浴巾", "máojīn / yùjīn", "khăn mặt / khăn tắm"], ["词", "空调", "kōngtiáo", "điều hoà"],
+    ["词", "热水", "rèshuǐ", "nước nóng"], ["词", "拖鞋", "tuōxié", "dép đi trong phòng"], ["词", "迷你吧 / 迷你酒吧", "mínǐbā / mínǐ jiǔbā", "minibar – tủ đồ uống, đồ ăn vặt trong phòng"], ["词", "矿泉水", "kuàngquánshuǐ", "nước khoáng"]] },
+  { t: "Thủ tục & dịch vụ", ic: "🛎️", L: [["词", "预订", "yùdìng", "đặt trước"], ["词", "入住", "rùzhù", "nhận phòng (check-in)"], ["词", "退房", "tuì fáng", "trả phòng (check-out)"], ["词", "押金", "yājīn", "tiền đặt cọc"],
+    ["词", "护照 / 身份证", "hùzhào / shēnfènzhèng", "hộ chiếu / căn cước"], ["词", "含早餐", "hán zǎocān", "đã gồm bữa sáng"], ["词", "WiFi密码", "WiFi mìmǎ", "mật khẩu WiFi"], ["词", "叫醒服务", "jiàoxǐng fúwù", "dịch vụ gọi báo thức"],
+    ["词", "寄存行李", "jìcún xíngli", "gửi hành lý"], ["词", "发票", "fāpiào", "hoá đơn (VAT)"], ["词", "免费", "miǎnfèi", "miễn phí"], ["词", "电梯", "diàntī", "thang máy"]] },
+  { t: "Đặt phòng", ic: "🏨", L: [["客", "你好，我想订一个房间。", "Nǐ hǎo, wǒ xiǎng dìng yí ge fángjiān.", "Xin chào, tôi muốn đặt một phòng."], ["客", "还有空房间吗？", "Hái yǒu kòng fángjiān ma?", "Còn phòng trống không?"],
+    ["台", "您要什么样的房间？", "Nín yào shénme yàng de fángjiān?", "Anh/chị muốn loại phòng nào?"], ["客", "我要一个大床房，住两晚。", "Wǒ yào yí ge dàchuángfáng, zhù liǎng wǎn.", "Tôi lấy một phòng giường lớn, ở hai đêm."],
+    ["客", "一晚多少钱？含早餐吗？", "Yì wǎn duōshao qián? Hán zǎocān ma?", "Một đêm bao nhiêu tiền? Có gồm bữa sáng không?"], ["台", "一晚两百八十八块，含早餐。", "Yì wǎn liǎngbǎi bāshíbā kuài, hán zǎocān.", "Một đêm 288 tệ, gồm bữa sáng."]],
+    tip: "Phòng dùng lượng từ 个 hoặc 间: 一个房间 / 一间房. Số đêm: 住 + số + 晚 (住两晚 = ở hai đêm)." },
+  { t: "Nhận phòng", ic: "🔑", L: [["客", "我预订了一个房间，我姓王。", "Wǒ yùdìng le yí ge fángjiān, wǒ xìng Wáng.", "Tôi đã đặt trước một phòng, tôi họ Vương."], ["台", "请出示一下您的护照。", "Qǐng chūshì yíxià nín de hùzhào.", "Xin cho xem hộ chiếu của anh/chị."],
+    ["台", "入住需要交五百块押金。", "Rùzhù xūyào jiāo wǔbǎi kuài yājīn.", "Nhận phòng cần đặt cọc 500 tệ."], ["台", "这是您的房卡，房间在八楼。", "Zhè shì nín de fángkǎ, fángjiān zài bā lóu.", "Đây là thẻ phòng, phòng ở tầng 8."],
+    ["客", "WiFi密码是多少？", "WiFi mìmǎ shì duōshao?", "Mật khẩu WiFi là gì?"], ["客", "早餐在几楼？几点到几点？", "Zǎocān zài jǐ lóu? Jǐ diǎn dào jǐ diǎn?", "Bữa sáng ở tầng mấy? Từ mấy giờ đến mấy giờ?"]] },
+  { t: "Gọi lễ tân khi có sự cố", ic: "📞", L: [["客", "你好，我是806房间。", "Nǐ hǎo, wǒ shì bā líng liù fángjiān.", "Xin chào, tôi ở phòng 806."], ["客", "吹风机坏了。", "Chuīfēngjī huài le.", "Máy sấy tóc bị hỏng rồi."],
+    ["客", "空调不凉，房间太热了。", "Kōngtiáo bù liáng, fángjiān tài rè le.", "Điều hoà không mát, phòng nóng quá."], ["客", "能再给我两条毛巾吗？", "Néng zài gěi wǒ liǎng tiáo máojīn ma?", "Cho tôi thêm hai chiếc khăn được không?"],
+    ["客", "明天早上六点请叫醒我。", "Míngtiān zǎoshang liù diǎn qǐng jiàoxǐng wǒ.", "Sáng mai 6 giờ xin gọi báo thức cho tôi."], ["台", "不好意思，我们马上派人上去看看。", "Bù hǎo yìsi, wǒmen mǎshàng pài rén shàngqu kànkan.", "Xin lỗi, chúng tôi cử người lên xem ngay."]],
+    tip: "Số phòng đọc từng chữ số: 806 = bā líng liù. Gọi lễ tân nhớ nói số phòng trước: 我是806房间." },
+  { t: "Trả phòng", ic: "🧳", L: [["客", "你好，我要退房。", "Nǐ hǎo, wǒ yào tuì fáng.", "Xin chào, tôi muốn trả phòng."], ["台", "请把房卡给我。您用了迷你吧里的东西吗？", "Qǐng bǎ fángkǎ gěi wǒ. Nín yòng le mínǐbā lǐ de dōngxi ma?", "Xin đưa tôi thẻ phòng. Anh/chị có dùng đồ trong minibar không?"],
+    ["客", "我喝了一瓶可乐和两瓶矿泉水。", "Wǒ hē le yì píng kělè hé liǎng píng kuàngquánshuǐ.", "Tôi uống một chai Coca và hai chai nước khoáng."], ["客", "可以刷卡吗？", "Kěyǐ shuā kǎ ma?", "Quẹt thẻ được không?"],
+    ["客", "可以开发票吗？", "Kěyǐ kāi fāpiào ma?", "Xuất hoá đơn được không?"], ["客", "可以帮我寄存一下行李吗？", "Kěyǐ bāng wǒ jìcún yíxià xíngli ma?", "Gửi giúp tôi hành lý được không?"]] }
+];
+const HT_SAMPLE = [["台", "您好，欢迎光临薇薇酒店！请问有什么可以帮您？", "Nín hǎo, huānyíng guānglín Wēiwēi Jiǔdiàn! Qǐngwèn yǒu shénme kěyǐ bāng nín?", "Xin chào, chào mừng đến khách sạn Vi Vi! Tôi có thể giúp gì cho anh/chị?"],
+  ["客", "你好，我想订一个房间。还有空房间吗？", "Nǐ hǎo, wǒ xiǎng dìng yí ge fángjiān. Hái yǒu kòng fángjiān ma?", "Xin chào, tôi muốn đặt một phòng. Còn phòng trống không?"],
+  ["台", "有。您要什么样的房间？我们有单人间、标准间、大床房和套房。", "Yǒu. Nín yào shénme yàng de fángjiān? Wǒmen yǒu dānrénjiān, biāozhǔnjiān, dàchuángfáng hé tàofáng.", "Có ạ. Anh/chị muốn phòng loại nào? Chúng tôi có phòng đơn, phòng tiêu chuẩn, phòng giường lớn và phòng suite."],
+  ["客", "大床房一晚多少钱？", "Dàchuángfáng yì wǎn duōshao qián?", "Phòng giường lớn một đêm bao nhiêu tiền?"],
+  ["台", "大床房一晚两百八十八块，含早餐。", "Dàchuángfáng yì wǎn liǎngbǎi bāshíbā kuài, hán zǎocān.", "Phòng giường lớn một đêm 288 tệ, gồm bữa sáng."],
+  ["客", "好，我要一个大床房，住两晚。", "Hǎo, wǒ yào yí ge dàchuángfáng, zhù liǎng wǎn.", "Được, tôi lấy một phòng giường lớn, ở hai đêm."],
+  ["台", "好的。请出示一下您的护照或者身份证。", "Hǎo de. Qǐng chūshì yíxià nín de hùzhào huòzhě shēnfènzhèng.", "Vâng. Xin cho xem hộ chiếu hoặc căn cước của anh/chị."],
+  ["客", "这是我的护照。", "Zhè shì wǒ de hùzhào.", "Đây là hộ chiếu của tôi."],
+  ["台", "谢谢。入住需要交五百块押金，退房的时候退给您。", "Xièxie. Rùzhù xūyào jiāo wǔbǎi kuài yājīn, tuì fáng de shíhou tuì gěi nín.", "Cảm ơn. Nhận phòng cần đặt cọc 500 tệ, khi trả phòng sẽ hoàn lại."],
+  ["客", "可以用微信吗？", "Kěyǐ yòng Wēixìn ma?", "Dùng WeChat được không?"],
+  ["台", "可以，请扫这个二维码。好了，这是您的房卡，房间在八楼，八零六号。", "Kěyǐ, qǐng sǎo zhège èrwéimǎ. Hǎo le, zhè shì nín de fángkǎ, fángjiān zài bā lóu, bā líng liù hào.", "Được ạ, mời quét mã QR này. Xong rồi, đây là thẻ phòng, phòng ở tầng 8, số 806."],
+  ["客", "请问，WiFi密码是多少？", "Qǐngwèn, WiFi mìmǎ shì duōshao?", "Xin hỏi, mật khẩu WiFi là gì?"],
+  ["台", "密码是八个八。早餐在二楼，早上七点到十点。", "Mìmǎ shì bā ge bā. Zǎocān zài èr lóu, zǎoshang qī diǎn dào shí diǎn.", "Mật khẩu là tám số 8. Bữa sáng ở tầng 2, từ 7 giờ đến 10 giờ sáng."],
+  ["客", "几点退房？", "Jǐ diǎn tuì fáng?", "Mấy giờ trả phòng?"],
+  ["台", "中午十二点以前。祝您入住愉快！", "Zhōngwǔ shí'èr diǎn yǐqián. Zhù nín rùzhù yúkuài!", "Trước 12 giờ trưa. Chúc anh/chị nghỉ ngơi vui vẻ!"],
+  ["客", "你好，我要退房。", "Nǐ hǎo, wǒ yào tuì fáng.", "(Hai ngày sau) Xin chào, tôi muốn trả phòng."],
+  ["台", "好的，请把房卡给我。您用了迷你吧里的东西吗？", "Hǎo de, qǐng bǎ fángkǎ gěi wǒ. Nín yòng le mínǐbā lǐ de dōngxi ma?", "Vâng, xin đưa tôi thẻ phòng. Anh/chị có dùng đồ trong minibar không?"],
+  ["客", "我喝了一瓶可乐和两瓶矿泉水。", "Wǒ hē le yì píng kělè hé liǎng píng kuàngquánshuǐ.", "Tôi uống một chai Coca và hai chai nước khoáng."],
+  ["台", "矿泉水是免费的，可乐八块。房费五百七十六块，一共五百八十四块。", "Kuàngquánshuǐ shì miǎnfèi de, kělè bā kuài. Fángfèi wǔbǎi qīshíliù kuài, yígòng wǔbǎi bāshísì kuài.", "Nước khoáng miễn phí, Coca 8 tệ. Tiền phòng 576 tệ, tổng cộng 584 tệ."],
+  ["客", "可以刷卡吗？", "Kěyǐ shuā kǎ ma?", "Quẹt thẻ được không?"],
+  ["台", "可以。押金五百块已经退到您的微信了。欢迎下次再来！", "Kěyǐ. Yājīn wǔbǎi kuài yǐjīng tuì dào nín de Wēixìn le. Huānyíng xià cì zài lái!", "Được ạ. Tiền cọc 500 tệ đã hoàn về WeChat của anh/chị. Hẹn gặp lại lần sau!"],
+  ["客", "谢谢，再见！", "Xièxie, zàijiàn!", "Cảm ơn, tạm biệt!"]];
+/* lời lễ tân khi hỏi tiếp sau khi đã có loại phòng */
+function htNextAfterRoom(T){ if(!T.ctx.nights) return "nights"; if(!HT_ROOMS[T.ctx.room].bf && T.ctx.bfAdd == null) return "bf"; return "confirm"; }
+function htRoomInfo(k){ const r = HT_ROOMS[k], z = htN(r.price); return [`${r.h}一晚${z[0]}块，${r.bf ? "含早餐" : "不含早餐"}。`, `${r.p[0].toUpperCase() + r.p.slice(1)} yì wǎn ${z[1]} kuài, ${r.bf ? "hán zǎocān" : "bù hán zǎocān"}.`, `${htCap(r.vi)} một đêm ${r.price} tệ, ${r.bf ? "gồm bữa sáng" : "không gồm bữa sáng"}.`]; }
+function htPrices(){ const L = Object.values(HT_ROOMS); return [L.map(r => `${r.h}${htN(r.price)[0]}块`).join("，") + "，都是一晚的价格。", L.map(r => `${r.p} ${htN(r.price)[1]} kuài`).join(", ") + ", dōu shì yì wǎn de jiàgé.", L.map(r => `${r.vi} ${r.price} tệ`).join(", ") + " – đều là giá một đêm."]; }
+const htJ = (...a) => [a.map(x => x[0]).join(""), a.map(x => x[1]).join(" "), a.map(x => x[2]).join(" ")];
+const HT_STATES = {
+  greet: { hint: "Nói bạn muốn đặt phòng (我想订一个房间 / 有空房间吗？) hoặc đã đặt trước (我预订了一个房间，我姓…).", model: () => ["你好，我想订一个房间。", "请问，还有空房间吗？", "你好，我预订了一个房间，我姓王。"],
+    ask: () => ["您好，欢迎光临薇薇酒店！请问有什么可以帮您？", "Nín hǎo, huānyíng guānglín Wēiwēi Jiǔdiàn! Qǐngwèn yǒu shénme kěyǐ bāng nín?", "Xin chào, chào mừng đến khách sạn Vi Vi! Tôi có thể giúp gì cho anh/chị?"],
+    check(T, n, raw){ const room = htRoomOf(n), nights = htNights(n);
+      if(/预订了|预定了|订了|订好了|已经订|有预订|有预定|网上订|在网上/.test(n)){ T.ctx.booked = true; T.ctx.room = room || T.ctx.room0; T.ctx.nights = nights || T.ctx.nights0; const nm = htName(raw); if(nm) Object.assign(T.ctx, nm);
+        return nm ? { ok: true, react: ["好的，我查一下。", "Hǎo de, wǒ chá yíxià.", "Vâng, để tôi kiểm tra."], next: "booked" } : { ok: true, react: ["好的。", "Hǎo de.", "Vâng."], next: "name" }; }
+      if(room){ T.ctx.room = room; if(nights) T.ctx.nights = nights; return { ok: true, react: htJ(["好的。", "Hǎo de.", "Vâng."], htRoomInfo(room)), next: htNextAfterRoom(T) }; }
+      if(/订|房间|住|空房|入住|开房|有房|check/i.test(n)) return { ok: true, react: ["有空房间。", "Yǒu kòng fángjiān.", "Còn phòng trống ạ."], next: "type" };
+      if(/多少钱|价格|价钱/.test(n)) return { ok: true, stay: true, react: htPrices(), pic: htRoomCards() };
+      if(/^(你好|您好|早上好|晚上好|下午好)/.test(n) && n.length <= 6) return { ok: true, stay: true, react: ["您好！请问您要住宿吗？", "Nín hǎo! Qǐngwèn nín yào zhùsù ma?", "Xin chào! Anh/chị muốn thuê phòng phải không ạ?"] };
+      return { ok: false }; } },
+  name: { hint: "Nói họ / tên: 我姓王。/ 我叫王明。", model: () => ["我姓王。", "我叫王明。"], ask: () => ["请问您贵姓？", "Qǐngwèn nín guìxìng?", "Xin hỏi anh/chị họ gì ạ?"],
+    check(T, n, raw){ const nm = htName(raw) || (/^[一-鿿]{2,3}$/.test(n) ? { name: n } : null); if(!nm) return { ok: false }; Object.assign(T.ctx, nm); return { ok: true, react: ["好的，我查一下。", "Hǎo de, wǒ chá yíxià.", "Vâng, để tôi kiểm tra."], next: "booked" }; } },
+  booked: { hint: "Đúng thì nói 对 / 没错; sai thì nói 不对 + sửa (vd: 不对，我订的是标准间).", model: () => ["对，没错。", "不对，我订的是标准间。"],
+    ask(T){ const c = htCall(T), r = HT_ROOMS[T.ctx.room], z = htN(T.ctx.nights);
+      return [`${c[0]}，您预订了一间${r.h}，住${z[0]}晚，对吗？`, `${c[1]}, nín yùdìng le yì jiān ${r.p}, zhù ${z[1]} wǎn, duì ma?`, `${htCap(c[2])} đã đặt một ${r.vi}, ở ${T.ctx.nights} đêm, đúng không ạ?`]; },
+    pic: T => htRoomCards([T.ctx.room]),
+    check(T, n){ const neg = /不对|不是|错了|改成|换成/.test(n), room = htRoomOf(n), nights = htNights(n);
+      if(!neg && /^(对|是|没错|没问题|好|对的|是的|嗯)/.test(n)) return { ok: true, react: ["好的。", "Hǎo de.", "Vâng."], next: HT_ROOMS[T.ctx.room].bf ? "id" : "bf" };
+      if(room || nights){ if(room) T.ctx.room = room; if(nights) T.ctx.nights = nights; return { ok: true, react: ["不好意思，我帮您改一下。", "Bù hǎo yìsi, wǒ bāng nín gǎi yíxià.", "Xin lỗi, tôi sửa lại cho anh/chị."], next: "confirm" }; }
+      if(neg) return { ok: true, react: ["不好意思，那您要什么房间？", "Bù hǎo yìsi, nà nín yào shénme fángjiān?", "Xin lỗi, vậy anh/chị muốn phòng nào ạ?"], next: "type" };
+      return { ok: false }; } },
+  type: { hint: "Chọn loại phòng: 单人间 / 标准间 (双人间) / 大床房 / 套房. Có thể hỏi giá trước: …一晚多少钱？", model: () => ["我要一个大床房。", "我要一间标准间，住三晚。", "单人间一晚多少钱？"],
+    ask: () => ["您要什么样的房间？我们有单人间、标准间、大床房和套房。", "Nín yào shénme yàng de fángjiān? Wǒmen yǒu dānrénjiān, biāozhǔnjiān, dàchuángfáng hé tàofáng.", "Anh/chị muốn loại phòng nào? Chúng tôi có phòng đơn, phòng tiêu chuẩn, phòng giường lớn và phòng suite."],
+    pic: () => htRoomCards(),
+    check(T, n){ const room = htRoomOf(n), nights = htNights(n);
+      if(room && /多少钱|价格|几块|贵吗|含早|早餐/.test(n) && !/我要|要一|订一|就要|我订/.test(n)) return { ok: true, stay: true, react: htRoomInfo(room) };
+      if(room){ T.ctx.room = room; if(nights) T.ctx.nights = nights; return { ok: true, react: htJ(["好的。", "Hǎo de.", "Vâng."], htRoomInfo(room)), next: htNextAfterRoom(T) }; }
+      if(/多少钱|价格|价钱|便宜|贵/.test(n)) return { ok: true, stay: true, react: htPrices() };
+      if(/区别|不一样|什么意思|有什么不同/.test(n)) return { ok: true, stay: true, react: ["标准间有两张床，大床房有一张大床，套房有客厅。", "Biāozhǔnjiān yǒu liǎng zhāng chuáng, dàchuángfáng yǒu yì zhāng dà chuáng, tàofáng yǒu kètīng.", "Phòng tiêu chuẩn có hai giường, phòng giường lớn có một giường lớn, phòng suite có phòng khách."] };
+      if(/早餐|早饭/.test(n)) return { ok: true, stay: true, react: ["单人间不含早餐，别的房间都含早餐。", "Dānrénjiān bù hán zǎocān, bié de fángjiān dōu hán zǎocān.", "Phòng đơn không gồm bữa sáng, các phòng khác đều gồm bữa sáng."] };
+      return { ok: false }; } },
+  nights: { hint: "Nói số đêm: 住两晚。/ 住三个晚上。", model: () => ["住两晚。", "我住三个晚上。"], ask: () => ["请问您住几晚？", "Qǐngwèn nín zhù jǐ wǎn?", "Anh/chị ở mấy đêm ạ?"],
+    check(T, n){ const k = htNights(n) || ((/^(\d+|[一二两三四五六七八九十]+)$/.test(n)) ? odParseNum(n) : 0); if(!k) return { ok: false }; T.ctx.nights = k; const z = htN(k);
+      return { ok: true, react: [`好的，住${z[0]}晚。`, `Hǎo de, zhù ${z[1]} wǎn.`, `Vâng, ở ${k} đêm.`], next: htNextAfterRoom(T), soft: /晚|夜/.test(n) ? "" : "Ở khách sạn thường đếm theo đêm: 住两晚 (ở hai đêm)." }; } },
+  bf: { hint: "Có cần bữa sáng không: 要，谢谢。/ 不用了。", model: () => ["要，谢谢。", "不用了，谢谢。"],
+    ask: () => [`单人间不含早餐，早餐${htN(HT_BF)[0]}块一位。您需要早餐吗？`, `Dānrénjiān bù hán zǎocān, zǎocān ${htN(HT_BF)[1]} kuài yí wèi. Nín xūyào zǎocān ma?`, `Phòng đơn không gồm bữa sáng, bữa sáng ${HT_BF} tệ một người. Anh/chị có cần bữa sáng không?`],
+    check(T, n){ if(/不要|不用|不需要|算了|不吃/.test(n)) T.ctx.bfAdd = false; else if(/要|需要|好|可以|吃/.test(n)) T.ctx.bfAdd = true; else return { ok: false };
+      return { ok: true, react: ["好的。", "Hǎo de.", "Vâng."], next: T.ctx.booked ? "id" : "confirm" }; } },
+  confirm: { hint: "Đúng thì nói 对 / 可以; muốn đổi thì nói 我想换… / 有便宜一点的吗？", model: () => ["可以，没问题。", "有便宜一点儿的吗？"],
+    ask(T){ const r = HT_ROOMS[T.ctx.room], t = htRoomTotal(T), z = htN(T.ctx.nights), zt = htN(t);
+      return [`您要一间${r.h}，住${z[0]}晚${T.ctx.bfAdd ? "，加早餐" : ""}，一共${zt[0]}块，可以吗？`, `Nín yào yì jiān ${r.p}, zhù ${z[1]} wǎn${T.ctx.bfAdd ? ", jiā zǎocān" : ""}, yígòng ${zt[1]} kuài, kěyǐ ma?`, `Anh/chị lấy một ${r.vi}, ở ${T.ctx.nights} đêm${T.ctx.bfAdd ? ", thêm bữa sáng" : ""}, tổng cộng ${t} tệ, được không ạ?`]; },
+    check(T, n){ const room = htRoomOf(n), nights = htNights(n);
+      if(room && room !== T.ctx.room || nights && nights !== T.ctx.nights){ if(room) T.ctx.room = room; if(nights) T.ctx.nights = nights; if(HT_ROOMS[T.ctx.room].bf) T.ctx.bfAdd = null;
+        return { ok: true, react: ["好的，我帮您改一下。", "Hǎo de, wǒ bāng nín gǎi yíxià.", "Vâng, tôi đổi lại cho anh/chị."], next: htNextAfterRoom(T) }; }
+      if(/便宜|太贵|贵了/.test(n)) return { ok: true, stay: true, react: ["单人间便宜一点，一晚一百九十八块。您要换吗？", "Dānrénjiān piányi yìdiǎn, yì wǎn yìbǎi jiǔshíbā kuài. Nín yào huàn ma?", "Phòng đơn rẻ hơn một chút, 198 tệ một đêm. Anh/chị có muốn đổi không?"] };
+      if(/不对|不是|不要|算了/.test(n)) return { ok: true, react: ["没关系，那您要什么房间？", "Méi guānxi, nà nín yào shénme fángjiān?", "Không sao, vậy anh/chị muốn phòng nào?"], next: "type" };
+      if(/^(对|是|好|可以|行|没问题|没错|嗯|就这样)/.test(n)) return { ok: true, react: ["好的。", "Hǎo de.", "Vâng."], next: "id" };
+      return { ok: false }; } },
+  id: { hint: "Đưa giấy tờ: 好的，这是我的护照。/ 给您。", model: () => ["好的，这是我的护照。", "给您，这是我的身份证。"],
+    ask: () => ["请出示一下您的护照或者身份证。", "Qǐng chūshì yíxià nín de hùzhào huòzhě shēnfènzhèng.", "Xin cho xem hộ chiếu hoặc căn cước của anh/chị."],
+    check(T, n){ if(/为什么|干什么|一定要/.test(n)) return { ok: true, stay: true, react: ["入住要登记，这是规定。", "Rùzhù yào dēngjì, zhè shì guīdìng.", "Nhận phòng phải đăng ký, đây là quy định ạ."] };
+      if(/护照|身份证|给你|给您|这是|在这儿|好的|好|可以/.test(n)) return { ok: true, react: ["谢谢，好了。", "Xièxie, hǎo le.", "Cảm ơn, xong rồi ạ."], next: "deposit", pic: `<div class="ht-pass">${htIconSVG("pass")}<span>✔ Đã đăng ký</span></div>` };
+      return { ok: false }; } },
+  deposit: { hint: "Chọn cách trả tiền cọc: 可以用微信吗？/ 我刷卡。/ 我付现金。 (Có thể hỏi: 押金退吗？)", model: () => ["可以用微信吗？", "我刷卡吧。", "我付现金。"],
+    ask: () => [`入住需要交${htN(HT_DEP)[0]}块押金，退房的时候退给您。您怎么付？`, `Rùzhù xūyào jiāo ${htN(HT_DEP)[1]} kuài yājīn, tuì fáng de shíhou tuì gěi nín. Nín zěnme fù?`, `Nhận phòng cần đặt cọc ${HT_DEP} tệ, khi trả phòng sẽ hoàn lại. Anh/chị thanh toán bằng gì ạ?`],
+    check(T, n){ if(/什么是押金|为什么|退吗|还给|退不退/.test(n)) return { ok: true, stay: true, react: ["押金退房的时候全部退给您。", "Yājīn tuì fáng de shíhou quánbù tuì gěi nín.", "Tiền cọc sẽ hoàn lại toàn bộ khi trả phòng."] };
+      if(/不交|不要押金|没有钱|没钱/.test(n)) return { ok: true, stay: true, react: ["不好意思，入住都需要交押金。可以用微信、支付宝、刷卡或者现金。", "Bù hǎo yìsi, rùzhù dōu xūyào jiāo yājīn. Kěyǐ yòng Wēixìn, Zhīfùbǎo, shuā kǎ huòzhě xiànjīn.", "Xin lỗi, nhận phòng đều cần đặt cọc. Có thể dùng WeChat, Alipay, quẹt thẻ hoặc tiền mặt."] };
+      const m = htPayOf(n.replace(/房卡/g, "")); if(!m) return { ok: false }; T.ctx.payDep = m;
+      return { ok: true, react: m === "wx" || m === "ali" ? ["可以，请扫这个二维码。", "Kěyǐ, qǐng sǎo zhège èrwéimǎ.", "Được ạ, mời quét mã QR này."] : m === "card" ? ["好的，请刷卡，输入密码。", "Hǎo de, qǐng shuā kǎ, shūrù mìmǎ.", "Vâng, mời quẹt thẻ và nhập mã PIN."] : ["好的，收您五百块押金。", "Hǎo de, shōu nín wǔbǎi kuài yājīn.", "Vâng, đã nhận 500 tệ tiền cọc."],
+        pic: m === "wx" || m === "ali" ? htQR(m, HT_DEP) : "", scene: { html: `<span class="od-clock">✅</span> Đã trả <b>${HT_DEP}元</b> tiền cọc bằng <b class="han">${HT_PAY[m][0]}</b>.`, next: "key", delay: 1900 } }; } },
+  key: { hint: "Hỏi thêm: WiFi密码是多少？/ 电梯在哪儿？/ 几点退房？/ 请帮我拿行李 — hỏi xong thì nói 谢谢！", model: () => ["WiFi密码是多少？", "几点退房？", "好的，谢谢！"],
+    ask(T){ const no = T.ctx.no, fl = String(no)[0], z = "零一二三四五六七八九"[fl], zp = ["líng", "yī", "èr", "sān", "sì", "wǔ", "liù", "qī", "bā", "jiǔ"][fl];
+      return [`这是您的房卡，房间在${z}楼，${htDigits(no)}号。早餐在二楼，早上七点到十点。`, `Zhè shì nín de fángkǎ, fángjiān zài ${zp} lóu, ${htDigitsPy(no)} hào. Zǎocān zài èr lóu, zǎoshang qī diǎn dào shí diǎn.`, `Đây là thẻ phòng, phòng ở tầng ${fl}, số ${no}. Bữa sáng ở tầng 2, từ 7 giờ đến 10 giờ sáng.`]; },
+    pic: T => htKeyCard(T.ctx.no),
+    check(T, n){ T.ctx.asks = T.ctx.asks || 0;
+      if(/wifi|无线|网|密码/i.test(n)){ T.ctx.asks++; return { ok: true, stay: true, react: ["WiFi密码是八个八。", "WiFi mìmǎ shì bā ge bā.", "Mật khẩu WiFi là tám số 8."], pic: htWifi() }; }
+      if(/电梯/.test(n)){ T.ctx.asks++; return { ok: true, stay: true, react: ["电梯在那边，大门的右边。", "Diàntī zài nàbiān, dàmén de yòubian.", "Thang máy ở bên kia, bên phải cửa chính."] }; }
+      if(/几点退房|退房时间|什么时候退房|几点.*走|退房/.test(n)){ T.ctx.asks++; return { ok: true, stay: true, react: ["退房时间是中午十二点以前。", "Tuì fáng shíjiān shì zhōngwǔ shí'èr diǎn yǐqián.", "Giờ trả phòng là trước 12 giờ trưa."] }; }
+      if(/早餐|早饭/.test(n)){ T.ctx.asks++; return { ok: true, stay: true, react: ["早餐在二楼的餐厅，早上七点到十点。", "Zǎocān zài èr lóu de cāntīng, zǎoshang qī diǎn dào shí diǎn.", "Bữa sáng ở nhà hàng tầng 2, từ 7 đến 10 giờ sáng."] }; }
+      if(/行李|拿|搬/.test(n)){ T.ctx.asks++; return { ok: true, stay: true, react: ["好的，服务员会帮您把行李送到房间。", "Hǎo de, fúwùyuán huì bāng nín bǎ xíngli sòng dào fángjiān.", "Vâng, nhân viên sẽ mang hành lý lên phòng giúp anh/chị."] }; }
+      if(/叫醒|叫我|起床/.test(n)){ T.ctx.asks++; return { ok: true, stay: true, react: ["好的，明天早上叫醒您。", "Hǎo de, míngtiān zǎoshang jiàoxǐng nín.", "Vâng, sáng mai chúng tôi sẽ gọi báo thức cho anh/chị."] }; }
+      if(/谢|好的|知道了|明白/.test(n)){ const I = HT_ISSUES.find(x => x.id === T.ctx.issue);
+        return { ok: true, soft: T.ctx.asks ? "" : "Mẹo: trước khi lên phòng có thể hỏi thêm WiFi密码是多少？/ 几点退房？", react: ["不客气，祝您入住愉快！", "Bú kèqi, zhù nín rùzhù yúkuài!", "Không có gì, chúc anh/chị nghỉ ngơi vui vẻ!"],
+          scene: { html: `<span class="od-clock">🌙</span> Buổi tối, trong phòng <b>${T.ctx.no}</b>… ${I.sys} <b>Hãy gọi điện xuống lễ tân (<span class="han">前台</span>) để báo.</b>`, pic: htIssuePic(T), next: "issue", delay: 1700 } }; }
+      return { ok: false }; } },
+  issue: { hint: "Nói số phòng + sự cố: 你好，我是…房间。…坏了 / 没有… / …连不上。", model: T => [HT_ISSUES.find(x => x.id === T.ctx.issue).model(T.ctx.no)],
+    ask: () => ["您好，前台。请问有什么需要？", "Nín hǎo, qiántái. Qǐngwèn yǒu shénme xūyào?", "Xin chào, lễ tân xin nghe. Anh/chị cần gì ạ?"],
+    check(T, n, raw){ const I = HT_ISSUES.find(x => x.id === T.ctx.issue), said = htRoomSaid(raw, T.ctx.no);
+      if(I.re.test(n)) return { ok: true, soft: said ? "" : `Khi gọi lễ tân nên nói số phòng: 我是${T.ctx.no}房间。`, react: said ? I.fix : htJ(["好的，您是" + htDigits(T.ctx.no) + "房间吧？", `Hǎo de, nín shì ${htDigitsPy(T.ctx.no)} fángjiān ba?`, `Vâng, anh/chị ở phòng ${T.ctx.no} phải không?`], I.fix),
+        scene: { html: `<span class="od-clock">☀️</span> Ngày trả phòng. Tối qua bạn đã dùng trong <b>minibar (<span class="han">迷你吧</span>)</b>: ${T.ctx.used.map(u => { const d = HT_MINI.find(x => x.id === u.id); return `<b class="han">${htN(u.n)[0]}${d.m}${d.h}</b>`; }).join(" và ")}. Bạn mang hành lý xuống quầy lễ tân để <b>trả phòng</b>.`, pic: htMiniCards(T.ctx.used), next: "out", delay: 2200 } };
+      if(htRoomSaid(raw, T.ctx.no) || /房间/.test(n)) return { ok: true, stay: true, react: [`好的，${htDigits(T.ctx.no)}房间，请问有什么问题？`, `Hǎo de, ${htDigitsPy(T.ctx.no)} fángjiān, qǐngwèn yǒu shénme wèntí?`, `Vâng, phòng ${T.ctx.no}, có vấn đề gì ạ?`] };
+      if(HT_ISSUES.some(x => x.re.test(n))) return { ok: false, soft: "Đó không phải sự cố trong phòng bạn – đọc lại khung vàng ở trên nhé." };
+      return { ok: false }; } },
+  out: { hint: "Nói muốn trả phòng: 你好，我要退房。", model: () => ["你好，我要退房。"],
+    ask: () => ["早上好！请问有什么可以帮您？", "Zǎoshang hǎo! Qǐngwèn yǒu shénme kěyǐ bāng nín?", "Chào buổi sáng! Tôi có thể giúp gì cho anh/chị?"],
+    check(T, n){ if(!/退房|结账|离开|走了|check/i.test(n)) return { ok: false };
+      return { ok: true, react: ["好的，请把房卡给我。您用了迷你吧里的东西吗？", "Hǎo de, qǐng bǎ fángkǎ gěi wǒ. Nín yòng le mínǐbā lǐ de dōngxi ma?", "Vâng, xin đưa tôi thẻ phòng. Anh/chị có dùng đồ trong minibar không ạ?"], next: "mini" }; } },
+  mini: { hint: "Kể những gì đã dùng trong minibar (xem khung vàng): 我喝了一瓶可乐… / 我吃了一包薯片…", model: T => [`我${T.ctx.used.map(u => { const d = HT_MINI.find(x => x.id === u.id); return (["chips", "choco"].includes(d.id) ? "吃了" : "喝了") + htN(u.n)[0] + d.m + d.h; }).join("，")}。`], ask: () => null,
+    check(T, n, raw){ const said = htMiniOf(raw), used = T.ctx.used;
+      if(!said.length && !/没|没有|没用|没吃|没喝/.test(n)) return { ok: false };
+      const miss = used.filter(u => !said.some(s => s.id === u.id && s.n === u.n)), extra = said.filter(s => !used.some(u => u.id === s.id));
+      const parts = used.map(u => { const d = HT_MINI.find(x => x.id === u.id), z = htN(u.n);
+        return d.price ? [`${z[0]}${d.m}${d.h}${htN(d.price * u.n)[0]}块`, `${z[1]} ${d.mp} ${d.p} ${htN(d.price * u.n)[1]} kuài`, `${u.n} ${d.vi} ${d.price * u.n} tệ`] : [`${d.h}是免费的`, `${d.p} shì miǎnfèi de`, `${d.vi} miễn phí`]; });
+      const note = !said.length ? "Bạn đã dùng đồ trong minibar – khi trả phòng phải khai thật nhé." : miss.length || extra.length ? "Chưa khớp với những gì bạn đã dùng: " + used.map(u => { const d = HT_MINI.find(x => x.id === u.id); return htN(u.n)[0] + d.m + d.h; }).join("、") + "." : "";
+      return { ok: true, note, react: [(said.length ? "好的，" : "我们查了一下，") + parts.map(x => x[0]).join("，") + "。", (said.length ? "Hǎo de, " : "Wǒmen chá le yíxià, ") + parts.map(x => x[1]).join(", ") + ".", (said.length ? "Vâng, " : "Chúng tôi đã kiểm tra, ") + parts.map(x => x[2]).join(", ") + "."], next: "billq" }; } },
+  billq: { hint: "Chọn cách thanh toán: 可以刷卡吗？/ 用微信吧。/ 用支付宝。 (Có thể hỏi: 可以开发票吗？)", model: () => ["可以刷卡吗？", "我用支付宝。", "可以开发票吗？"],
+    ask(T){ const rt = htRoomTotal(T), mt = htMiniTotal(T), t = rt + mt;
+      return [`房费${htN(rt)[0]}块${mt ? `，迷你吧${htN(mt)[0]}块` : ""}，一共${htN(t)[0]}块。您怎么付？`, `Fángfèi ${htN(rt)[1]} kuài${mt ? `, mínǐbā ${htN(mt)[1]} kuài` : ""}, yígòng ${htN(t)[1]} kuài. Nín zěnme fù?`, `Tiền phòng ${rt} tệ${mt ? `, minibar ${mt} tệ` : ""}, tổng cộng ${t} tệ. Anh/chị thanh toán bằng gì ạ?`]; },
+    pic: T => htBillHTML(T),
+    check(T, n){ if(/发票/.test(n)) return { ok: true, stay: true, react: ["可以，请稍等，我给您开发票。", "Kěyǐ, qǐng shāo děng, wǒ gěi nín kāi fāpiào.", "Được ạ, xin chờ một chút, tôi xuất hoá đơn cho anh/chị."] };
+      if(/多少|怎么这么贵|为什么/.test(n)) return { ok: true, stay: true, react: ["您看，这是账单。", "Nín kàn, zhè shì zhàngdān.", "Anh/chị xem, đây là hoá đơn."], pic: htBillHTML(T) };
+      const m = htPayOf(n.replace(/房卡/g, "")); if(!m) return { ok: false }; T.ctx.paid = m; const t = htRoomTotal(T) + htMiniTotal(T), dep = HT_PAY[T.ctx.payDep || "cash"];
+      const back = T.ctx.payDep === "cash" || !T.ctx.payDep ? ["这是退给您的五百块押金。", "Zhè shì tuì gěi nín de wǔbǎi kuài yājīn.", "Đây là 500 tệ tiền cọc hoàn lại cho anh/chị."]
+        : [`押金五百块已经退到您的${T.ctx.payDep === "card" ? "卡上" : dep[0]}了。`, `Yājīn wǔbǎi kuài yǐjīng tuì dào nín de ${T.ctx.payDep === "card" ? "kǎ shang" : dep[1]} le.`, `Tiền cọc 500 tệ đã hoàn về ${T.ctx.payDep === "card" ? "thẻ" : dep[2]} của anh/chị.`];
+      const first = m === "wx" || m === "ali" ? ["可以，请扫这个二维码。", "Kěyǐ, qǐng sǎo zhège èrwéimǎ.", "Được ạ, mời quét mã QR này."] : m === "card" ? ["可以，请刷卡。", "Kěyǐ, qǐng shuā kǎ.", "Được ạ, mời quẹt thẻ."] : ["好的，收您现金。", "Hǎo de, shōu nín xiànjīn.", "Vâng, nhận tiền mặt của anh/chị."];
+      return { ok: true, react: first, pic: m === "wx" || m === "ali" ? htQR(m, t) : "", bill: true,
+        scene: { html: `<span class="od-clock">✅</span> Đã thanh toán <b>${t}元</b> bằng <b class="han">${HT_PAY[m][0]}</b>.`, say: htJ(["好了，谢谢！", "Hǎo le, xièxie!", "Xong rồi, cảm ơn!"], back, ["欢迎下次再来！", "Huānyíng xià cì zài lái!", "Hẹn gặp lại lần sau!"]), next: "bye", delay: 1900 } }; } },
+  bye: { hint: "Cảm ơn và chào: 谢谢，再见！ (Có thể nhờ gửi hành lý: 可以帮我寄存一下行李吗？)", model: () => ["谢谢，再见！", "可以帮我寄存一下行李吗？"], ask: () => null,
+    check(T, n){ if(/寄存|行李|放一下/.test(n)) return { ok: true, stay: true, react: ["可以，请把行李给我。这是您的行李牌。", "Kěyǐ, qǐng bǎ xíngli gěi wǒ. Zhè shì nín de xínglipái.", "Được ạ, xin đưa hành lý cho tôi. Đây là thẻ gửi hành lý của anh/chị."] };
+      if(/发票/.test(n)) return { ok: true, stay: true, react: ["好的，这是您的发票。", "Hǎo de, zhè shì nín de fāpiào.", "Vâng, đây là hoá đơn của anh/chị."] };
+      if(!/谢|再见|拜拜|好的/.test(n)) return { ok: false }; return { ok: true, react: ["不客气，再见！一路平安！", "Bú kèqi, zàijiàn! Yílù píng'ān!", "Không có gì, tạm biệt! Thượng lộ bình an!"], next: "end" }; } }
+};
+function htName(raw){ const s = String(raw), m = s.match(/姓\s*([一-鿿]{1,2}?)(?=[，。,.！!\s]|$|叫|名)/) || s.match(/姓\s*([一-鿿])/), k = s.match(/我叫\s*([一-鿿]{2,4})/) || s.match(/我是\s*([一-鿿]{2,3})(?![房间])/);
+  if(m) return { name: m[1] }; if(k && !/房间|客人/.test(k[1])) return { name: k[1] }; return null; }
+TOPIC_DEF.hotel = {
+  title: ["🏨", "住酒店", "Khách sạn · nhận phòng · trả phòng"], avatar: () => avatarSVG(HT_STAFF, { view: "head", label: "Lễ tân Tiểu Tuyết" }), role: ["台", "前台 (lễ tân – chị Tiểu Tuyết)"], me: "客", meText: "客人 (khách – là bạn)", doneMsg: "Bạn đã nhận phòng và trả phòng rất trôi chảy",
+  learn: HT_LEARN, sample: HT_SAMPLE, boardTab: "② Phòng & dịch vụ", board: htBoard, boardHead: ["房型和服务", "fángxíng hé fúwù · loại phòng & dịch vụ – bấm vào để nghe"], boardBtn: "🛏️ Phòng & giá",
+  boardTip: "💡 标准间 (双人间) = 2 giường đơn, 大床房 = 1 giường lớn. Minibar: nước khoáng miễn phí, các món khác dùng rồi phải trả tiền khi trả phòng.",
+  intro: "Bạn là <b>khách</b>, chị Tiểu Tuyết là <b>lễ tân</b> khách sạn 薇薇酒店. Hãy <b>nhận phòng</b> (đặt phòng tại quầy hoặc nói đã đặt trước), đặt cọc, hỏi WiFi/giờ trả phòng; buổi tối <b>gọi lễ tân báo sự cố</b>; hôm sau <b>trả phòng</b>, khai đồ đã dùng trong minibar và thanh toán.",
+  againBtn: "▶ Ở khách sạn lần nữa", label: "Khách sạn", nextBtn: "Đến lượt bạn: thực hành nhận & trả phòng ›", boardNext: "Xem phòng & dịch vụ ›",
+  STATES: HT_STATES, start: "greet",
+  reset(T){ const fl = 2 + Math.floor(Math.random() * 8), rm = [0, 2, 3, 5, 6, 8, 9][Math.floor(Math.random() * 7)] + (Math.random() < .5 ? 0 : 20);
+    T.ctx.no = fl * 100 + rm; T.ctx.issue = HT_ISSUES[Math.floor(Math.random() * HT_ISSUES.length)].id; T.ctx.room0 = ["std", "king", "single"][Math.floor(Math.random() * 3)]; T.ctx.nights0 = 2 + Math.floor(Math.random() * 2);
+    const pool = shuffle(HT_MINI.slice()); T.ctx.used = pool.slice(0, 2).map(d => ({ id: d.id, n: 1 + Math.floor(Math.random() * 2) })); if(!T.ctx.used.some(u => HT_MINI.find(d => d.id === u.id).price)) T.ctx.used[0] = { id: "cola", n: 1 };
+    T.ctx.bfAdd = null; T.ctx.nights = 0;
+    T.sys(`🎯 Bạn kéo vali đến quầy lễ tân khách sạn <b class="han">薇薇酒店</b>. Bạn có thể <b>đặt phòng ngay tại quầy</b>, hoặc nói bạn <b>đã đặt trước</b> (<span class="han">我预订了…</span>). Bấm “🛏️ Phòng & giá” để xem bảng giá.`); },
+  after(T, r){ return r.next || null; },
+  hasBill: T => !!T.ctx.paid, bill: T => htBillHTML(T), noBill: 0,
+  clone(T, src){ T.ctx = { ...src.ctx, room: src.ctx.room || "king", nights: src.ctx.nights || 2, used: (src.ctx.used || []).map(u => ({ ...u })) }; T.chat = []; T.sys = () => {}; T.pic = () => {}; }
 };
 
 const Exam = {
@@ -6942,7 +7284,7 @@ const OUT={
   sport:{f:"#E85A71",m:"#2E86DE",sleeve:"long",stripe:true}, overalls:{f:"#F6D365",m:"#F6D365",sleeve:"short"},
   suit:{f:"#D9C7A7",m:"#3A3F4B",sleeve:"long"}, sweater:{f:"#F2E2BF",m:"#F2E2BF",sleeve:"long"}, china:{f:"#D2453A",m:"#C8402F",sleeve:"long",fsleeve:"short"}
 };
-function outCol(c){ const o=OUT[c.outfit]||OUT.tee; return o[c.gender]||o.f; }
+function outCol(c){ if(c.outColor) return c.outColor; const o=OUT[c.outfit]||OUT.tee; return o[c.gender]||o.f; }
 const GOLD="#E9B949";
 function motif(x,y,pc,r=4){ return `<circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="${pc}" stroke-width="1.4"/><path d="M${x-r*.55},${y} l${r*1.1},0 M${x},${y-r*.55} l0,${r*1.1}" stroke="${pc}" stroke-width="1"/>`; }
 function blossom(x,y){ return `<g transform="translate(${x},${y})"><circle cx="0" cy="-2.4" r="2.2" fill="#fff"/><circle cx="2.3" cy="-.7" r="2.2" fill="#fff"/><circle cx="1.4" cy="2" r="2.2" fill="#fff"/><circle cx="-1.4" cy="2" r="2.2" fill="#fff"/><circle cx="-2.3" cy="-.7" r="2.2" fill="#fff"/><circle r="1.3" fill="#F2B84B"/></g>`; }
