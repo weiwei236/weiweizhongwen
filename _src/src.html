@@ -1028,6 +1028,7 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .px-q{display:grid;gap:2px}.px-q .han{font-size:22px}.px-q small{color:var(--accent)}.px-q i{color:#2C6E52;font-size:14px}
 .px-a{display:grid;grid-template-columns:auto 1fr;column-gap:8px;align-items:center}.px-a .han{font-size:19px}.px-a small,.px-a i{grid-column:2;font-size:13px}.px-a small{color:var(--accent)}.px-a i{color:#2C6E52}
 .px-mode{display:flex;margin:6px 0 10px}.px-mode button{display:grid;text-align:left;padding:8px 14px}.px-mode small{font-weight:400;font-size:12px;color:var(--muted)}.px-ex{background:#FFF1E6;color:#B3402E;border-radius:99px;padding:2px 10px;font-size:13px;font-weight:700}
+.px-set em{font-style:normal;font-size:12px;font-weight:700;color:var(--accent)}.px-diff{font-size:24px;line-height:1.6}.px-diff .ok{color:#1F7A4D}.px-diff .miss{color:#E0394A;text-decoration:underline wavy}.px-py2{color:var(--accent)}.px-say{justify-self:start}
 .px-verdict{font-weight:700;border-radius:10px;padding:6px 12px}.px-verdict.ok{background:#E3F4EA;color:#1F7A4D}.px-verdict.no{background:#FDE8E8;color:#B3283A}
 .px-score{font-size:42px;font-weight:800;color:#C2513A}.px-score small{font-size:18px;color:var(--muted);margin-left:4px}
 .px-r{border:1px solid var(--line);border-radius:12px;padding:6px 10px;margin:6px 0;background:#fff}.px-r summary{display:flex;gap:10px;align-items:center;cursor:pointer;list-style:none}.px-r summary::-webkit-details-marker{display:none}
@@ -5219,10 +5220,27 @@ const PX_SETS = [
     { zh: "你常常去超市买东西吗？", py: "Nǐ chángcháng qù chāoshì mǎi dōngxi ma?", need: [[/去|常常|有时候|超市|是|对|不/, "Trả lời có/không: 我常常去超市买东西。/ 我不常去。"]], ans: [["我常常去超市买东西。", "Wǒ chángcháng qù chāoshì mǎi dōngxi."], ["我不常去超市。", "Wǒ bù cháng qù chāoshì."]] },
     { zh: "周末你收拾房间吗？跟谁一块儿收拾？", py: "Zhōumò nǐ shōushi fángjiān ma? Gēn shéi yíkuàir shōushi?", pass: /不收拾/, need: [[/收拾|打扫|是|对/, "Trả lời có dọn phòng không."], [PXR.who, "Nói dọn cùng ai: 跟同屋一块儿收拾 / 自己收拾。"]], ans: [["收拾，我跟同屋一块儿收拾。", "Shōushi, wǒ gēn tóngwū yíkuàir shōushi."], ["周末我自己收拾房间。", "Zhōumò wǒ zìjǐ shōushi fángjiān."]] },
     { zh: "你的手机号码是多少？", py: "Nǐ de shǒujī hàomǎ shì duōshao?", fn: s => (s.match(/[0-9零一二三四五六七八九幺]/g) || []).length >= 7 ? "" : "Đọc số điện thoại từng chữ số (số 1 đọc là yāo): 零九幺二…", ans: [["我的手机号码是零九一二三四五六七八。", "Wǒ de shǒujī hàomǎ shì líng jiǔ yāo èr sān sì wǔ liù qī bā."]] }
-  ] }
+  ] },
+  { id: "gt11r", kind: "rep", title: "Bài 11 · Nghe – nhắc lại 15 câu", cls: "gt", les: 11, base: "px/rep11/", n: 15, items: [
+    ["你在哪儿工作？", "Nǐ zài nǎr gōngzuò?"], ["我在学校食堂吃饭。", "Wǒ zài xuéxiào shítáng chī fàn."], ["他不在，他在朋友家。", "Tā bú zài, tā zài péngyou jiā."],
+    ["你的手机号码是多少？", "Nǐ de shǒujī hàomǎ shì duōshao?"], ["谢谢你！——不用谢。", "Xièxie nǐ! —— Bú yòng xiè."], ["我每天八点上班，五点下班。", "Wǒ měi tiān bā diǎn shàngbān, wǔ diǎn xiàbān."],
+    ["平时我很忙，周末不太忙。", "Píngshí wǒ hěn máng, zhōumò bú tài máng."], ["休息的时候，我喜欢听音乐。", "Xiūxi de shíhou, wǒ xǐhuan tīng yīnyuè."], ["周末我一般在家看书、上网。", "Zhōumò wǒ yìbān zài jiā kàn shū, shàngwǎng."],
+    ["今天晚上我们一块儿吃饭吧！", "Jīntiān wǎnshang wǒmen yíkuàir chī fàn ba!"], ["我从星期一到星期五都很忙，没有时间做饭。", "Wǒ cóng xīngqīyī dào xīngqīwǔ dōu hěn máng, méiyǒu shíjiān zuò fàn."],
+    ["我的同屋是中国人，他在一家汽车公司工作。", "Wǒ de tóngwū shì Zhōngguó rén, tā zài yì jiā qìchē gōngsī gōngzuò."], ["我做越南菜，他做中国菜，我们一起吃饭、聊天儿。", "Wǒ zuò Yuènán cài, tā zuò Zhōngguó cài, wǒmen yìqǐ chī fàn, liáotiānr."],
+    ["周末我和同屋一块儿收拾房间，有时候也去超市买东西。", "Zhōumò wǒ hé tóngwū yíkuàir shōushi fángjiān, yǒu shíhou yě qù chāoshì mǎi dōngxi."],
+    ["喂，你好！请问崔浩在吗？——他不在，现在他在朋友家吃晚饭。", "Wèi, nǐ hǎo! Qǐngwèn Cuī Hào zài ma? —— Tā bú zài, xiànzài tā zài péngyou jiā chī wǎnfàn."]
+  ].map(([zh, py]) => ({ zh, py })) }
 ];
 /* chấm câu trả lời: phải có chữ Hán, không lặp lại câu hỏi, không dùng 你 làm chủ ngữ, và có đủ ý câu hỏi cần */
-function pxCheck(it, said){
+/* nghe – nhắc lại: so từng chữ với câu gốc (bỏ dấu câu; 她/他, số viết bằng chữ số đều tính đúng) */
+function pxRepeat(it, said){
+  const ref = [...it.zh].map(c => ({ c, n: /[\u4e00-\u9fff]/.test(c) ? (c === "她" || c === "它" ? "他" : c === "儿" ? "" : c) : "" })), keep = ref.filter(x => x.n);
+  const P = lcsPairs(keep.map(x => x.n).join(""), talkNorm(said)), rec = keep.length ? P.len / keep.length : 0, prec = P.B.length ? P.len / P.B.length : 0;
+  keep.forEach((x, i) => x.hit = P.ia.has(i)); const score = Math.round(100 * (rec * .85 + Math.min(prec, 1) * .15));
+  const miss = keep.filter(x => !x.hit).map(x => x.c).join("");
+  return { ok: score >= 85, score, tip: score >= 85 ? "" : miss ? `Còn thiếu / sai chữ: ${miss}` : "Bạn nói thừa nhiều chữ – nghe lại và nhắc đúng câu nhé.",
+    html: ref.map(x => !x.n ? (x.c === "儿" ? `<span class="ok">儿</span>` : esc(x.c)) : `<span class="${x.hit ? "ok" : "miss"}">${esc(x.c)}</span>`).join("") }; }
+function pxCheck(it, said, rep){ if(rep && it) return pxRepeat(it, said);
   const s = String(said || "").replace(/[，。？！、,.?!\s]/g, "");
   if(!it) return { ok: true };
   if(!/[一-鿿\d]/.test(s)) return { ok: false, tip: "Chưa nghe được câu trả lời bằng tiếng Trung." };
@@ -5237,6 +5255,7 @@ function pxCheck(it, said){
 const Reflex = {
   set: null, i: 0, phase: "idle", log: [], audio: null, t0: 0,
   auto: store.get("ww_px_auto", true), next: store.get("ww_px_next", true), showTx: store.get("ww_px_tx", false), exam: store.get("ww_px_exam", false),
+  rep(){ return this.set && this.set.kind === "rep"; },
   url(k){ return this.set.base + String(k + 1).padStart(2, "0") + ".mp3"; },
   item(k){ return (this.set.items || [])[k] || null; },
   mount(){ this.stop(); this.set = this.set || PX_SETS[0]; this.phase = "idle"; this.render(); },
@@ -5246,14 +5265,14 @@ const Reflex = {
     const W = $("#work"), S = this.set;
     if(this.phase === "idle"){
       W.innerHTML = `<div class="tk">${this.head()}
-        <div class="px-intro"><div class="px-ic">🎧💬</div><div><h3>Luyện phản xạ · <span class="han">听问题，回答问题</span></h3>
-          <p>Nghe từng câu hỏi rồi <b>trả lời ngay bằng tiếng Trung</b>. Nói xong bấm 🎤 để dừng – trả lời xong mới sang câu tiếp theo. Máy đo <b>thời gian phản xạ</b> (từ lúc hết câu hỏi đến lúc bạn bắt đầu nói).</p></div></div>
-        <div class="px-sets">${PX_SETS.map(x => `<button class="px-set ${x === S ? "on" : ""}" data-set="${x.id}"><b>${esc(x.title)}</b><small>${x.cls === "gt" ? "Giao tiếp" : "HSK"} · ${x.n} câu · có chấm câu trả lời</small></button>`).join("")}</div>
+        <div class="px-intro"><div class="px-ic">🎧💬</div><div><h3>Luyện phản xạ · <span class="han">${this.rep() ? "听后重复" : "听问题，回答问题"}</span></h3>
+          <p>${this.rep() ? "Nghe từng câu rồi <b>nhắc lại thật giống</b>. Nói xong bấm 🎤 để dừng – máy chấm từng chữ, nhắc xong mới sang câu tiếp theo." : "Nghe từng câu hỏi rồi <b>trả lời ngay bằng tiếng Trung</b>. Nói xong bấm 🎤 để dừng – trả lời xong mới sang câu tiếp theo."} Máy đo <b>thời gian phản xạ</b> (từ lúc nghe xong đến lúc bạn bắt đầu nói).</p></div></div>
+        <div class="px-sets">${PX_SETS.map(x => `<button class="px-set ${x === S ? "on" : ""}" data-set="${x.id}"><em>${x.kind === "rep" ? "🔁 Nghe – nhắc lại" : "❓ Nghe – trả lời"}</em><b>${esc(x.title)}</b><small>${x.cls === "gt" ? "Giao tiếp" : "HSK"} · ${x.n} câu · ${x.kind === "rep" ? "chấm từng chữ" : "chấm câu trả lời"}</small></button>`).join("")}</div>
         <div class="seg px-mode" role="group"><button data-mode="0" aria-pressed="${!this.exam}">📝 Luyện tập<small>chấm & gợi ý ngay sau mỗi câu</small></button><button data-mode="1" aria-pressed="${this.exam}">🎯 Kiểm tra<small>không nghe lại, không xem chữ – chấm điểm cuối bài</small></button></div>
         <div class="px-opts">
           <label><input type="checkbox" id="pxAuto" ${this.auto ? "checked" : ""}> Tự bật micro khi nghe xong câu hỏi${IS_IOS ? " <small>(iPhone/iPad cần bấm 🎤)</small>" : ""}</label>
           ${this.exam ? "" : `<label><input type="checkbox" id="pxNext" ${this.next ? "checked" : ""}> Trả lời xong tự phát câu tiếp</label>
-          <label><input type="checkbox" id="pxTx" ${this.showTx ? "checked" : ""}> Hiện chữ câu hỏi ngay khi nghe <small>(dễ hơn)</small></label>`}</div>
+          <label><input type="checkbox" id="pxTx" ${this.showTx ? "checked" : ""}> Hiện chữ ${this.rep() ? "câu" : "câu hỏi"} ngay khi nghe <small>(dễ hơn)</small></label>`}</div>
         <button class="btn primary px-go" id="pxGo">▶ Bắt đầu</button></div>`;
       Talk.bindView(W);
       W.querySelectorAll("[data-set]").forEach(b => b.onclick = () => { this.set = PX_SETS.find(x => x.id === b.dataset.set); this.render(); });
@@ -5290,8 +5309,8 @@ const Reflex = {
     own.onHeard = () => { if(!this.heardAt){ this.heardAt = performance.now(); clearInterval(this.tick); } };
     Talk.listen.call(own, t => { if(this.i !== k) return; this.answered(t); });
     own.drawBar(); },
-  answered(t){ clearInterval(this.tick); const rt = ((this.heardAt || performance.now()) - this.t0) / 1000, c = pxCheck(this.item(this.i), t);
-    this.log[this.i] = { k: this.i, said: t, rt: Math.max(0, rt), ok: c.ok, tip: c.tip || "" };
+  answered(t){ clearInterval(this.tick); const rt = ((this.heardAt || performance.now()) - this.t0) / 1000, c = pxCheck(this.item(this.i), t, this.rep());
+    this.log[this.i] = { k: this.i, said: t, rt: Math.max(0, rt), ok: c.ok, tip: c.tip || "", score: c.score, html: c.html };
     if(this.exam){ this.phase = "saved"; this.drawStage(); this.drawHist(); return Games.later(() => { if(this.phase === "saved") this.go(); }, 900); }
     this.phase = "fb"; this.drawStage(); this.drawHist(); c.ok ? RaceSnd.ding(1) : RaceSnd.buzz();
     if(this.next && c.ok) Games.later(() => { if(this.phase === "fb") this.go(); }, 3200); },
@@ -5305,28 +5324,31 @@ const Reflex = {
     let body = "";
     const tx = this.showTx && !this.exam;
     if(ph === "saved") body = `<p class="px-st">✓ Đã ghi lại câu trả lời</p><div class="px-said"><span class="han">${esc(L.said)}</span></div>`;
-    if(ph === "listen" || ph === "tap") body = `${wave}<p class="px-st">${ph === "tap" ? "Bấm ▶ để nghe câu hỏi" : "🎧 Nghe câu hỏi…"}</p>${tx ? this.qText(k, true) : ""}
+    if(ph === "listen" || ph === "tap") body = `${wave}<p class="px-st">${ph === "tap" ? "Bấm ▶ để nghe" : this.rep() ? "🎧 Nghe kỹ câu này…" : "🎧 Nghe câu hỏi…"}</p>${tx ? this.qText(k, true) : ""}
       <div class="px-btns">${ph === "tap" ? `<button class="btn primary" id="pxPlay">▶ Nghe câu hỏi</button>` : ""}<button class="btn sm" id="pxSkip">Bỏ qua ⏭</button></div>`;
-    if(ph === "answer") body = `<p class="px-st">💬 Đến lượt bạn trả lời! <b id="pxTime">0.0s</b></p>${tx ? this.qText(k, true) : ""}
+    if(ph === "answer") body = `<p class="px-st">${this.rep() ? "🔁 Nhắc lại câu vừa nghe!" : "💬 Đến lượt bạn trả lời!"} <b id="pxTime">0.0s</b></p>${tx ? this.qText(k, true) : ""}
       <button class="px-mic" id="pxMic"><b>🎤</b><span>Bấm để trả lời</span></button><div class="px-live" id="tkLive"></div>
       <div class="px-btns">${this.exam ? "" : `<button class="btn sm" id="pxRe">🔁 Nghe lại</button>`}<button class="btn sm" id="pxSkip">Bỏ qua ⏭</button></div>`;
-    if(ph === "fb") body = `<div class="px-said"><small>Bạn trả lời</small><span class="han">${esc(L.said)}</span>
-        <div class="px-verdict ${L.ok ? "ok" : "no"}">${L.ok ? "✅ Trả lời đúng ý câu hỏi!" : `❌ Chưa đúng ý: ${esc(L.tip)}`}</div><em>⚡ phản xạ ${L.rt.toFixed(1)} giây ${L.rt <= 3 ? "– rất nhanh!" : L.rt <= 6 ? "– tốt" : "– cố nhanh hơn nhé"}</em></div>
-      ${it ? `<div class="px-fb"><b>Câu hỏi:</b>${this.qText(k, true)}${(it.ans || []).length ? `<b>Gợi ý trả lời:</b>${this.ansHTML(it)}` : ""}</div>` : ""}
-      <div class="px-btns"><button class="btn sm" id="pxRe">🔁 Nghe lại câu hỏi</button><button class="btn sm" id="pxAgain">🎤 Trả lời lại</button><button class="btn primary" id="pxNextBtn">${k + 1 >= this.set.n ? "Xem kết quả" : "Câu tiếp ▶"}</button></div>`;
+    if(ph === "fb") body = `<div class="px-said"><small>${this.rep() ? "Bạn nói" : "Bạn trả lời"}</small><span class="han">${esc(L.said)}</span>
+        <div class="px-verdict ${L.ok ? "ok" : "no"}">${this.rep() ? (L.ok ? `✅ Nhắc lại đúng ${L.score}%!` : `❌ Đúng ${L.score}% – ${esc(L.tip)}`) : L.ok ? "✅ Trả lời đúng ý câu hỏi!" : `❌ Chưa đúng ý: ${esc(L.tip)}`}</div><em>⚡ phản xạ ${L.rt.toFixed(1)} giây ${L.rt <= 3 ? "– rất nhanh!" : L.rt <= 6 ? "– tốt" : "– cố nhanh hơn nhé"}</em></div>
+      ${it && this.rep() ? `<div class="px-fb"><b>Câu gốc</b> <small>(chữ đỏ = bạn nói thiếu/sai)</small><div class="px-diff han">${L.html}</div><small class="px-py2">${esc(it.py)}</small><button class="btn sm px-say" data-say="${esc(it.zh)}">🔊 Nghe máy đọc câu này</button></div>`
+        : it ? `<div class="px-fb"><b>Câu hỏi:</b>${this.qText(k, true)}${(it.ans || []).length ? `<b>Gợi ý trả lời:</b>${this.ansHTML(it)}` : ""}</div>` : ""}
+      <div class="px-btns"><button class="btn sm" id="pxRe2">🔁 Nghe lại</button><button class="btn sm" id="pxAgain">🎤 ${this.rep() ? "Nhắc lại lần nữa" : "Trả lời lại"}</button><button class="btn primary" id="pxNextBtn">${k + 1 >= this.set.n ? "Xem kết quả" : "Câu tiếp ▶"}</button></div>`;
     St.innerHTML = body;
     const on = (id, f) => { const b = $("#" + id); if(b) b.onclick = f; };
     on("pxPlay", () => this.play()); on("pxSkip", () => this.skip()); on("pxMic", () => this.listen());
     on("pxRe", () => { this.stop(); if(this.phase === "fb") this.phase = "answer"; this.play(); });
     on("pxAgain", () => { this.phase = "answer"; this.t0 = performance.now(); this.heardAt = 0; this.drawStage(); this.listen(); });
+    on("pxRe2", () => { this.stop(); this.phase = "answer"; this.play(); });
     on("pxNextBtn", () => { this.phase = "x"; this.go(); });
     St.querySelectorAll("[data-say]").forEach(b => b.onclick = () => speak(b.dataset.say)); },
   drawHist(){ const H = $("#pxHist"); if(!H) return; const L = this.log.filter(Boolean);
     if(this.phase === "done"){ /* bảng chữa bài cuối buổi */
       H.innerHTML = `<h4>Chữa bài từng câu</h4>${Array.from({ length: this.set.n }, (_, k) => { const x = this.log[k], it = this.item(k), st = !x || x.skip ? "skip" : x.ok ? "ok" : "no";
         return `<details class="px-r ${st}" ${st === "ok" ? "" : "open"}><summary><button class="px-hp" data-k="${k}" aria-label="Nghe câu ${k + 1}">▶</button><b>${k + 1}</b><span class="han">${it ? esc(it.zh) : "Câu " + (k + 1)}</span><i>${st === "ok" ? "✅" : st === "no" ? "❌" : "⏭"}</i></summary>
-          ${it ? `<small class="px-py">${esc(it.py)}</small>` : ""}<div class="px-you">Bạn trả lời: <span class="han">${x && !x.skip ? esc(x.said) : "(bỏ qua)"}</span>${x && x.rt != null ? ` · ${x.rt.toFixed(1)}s` : ""}</div>
-          ${x && x.tip ? `<div class="px-tip">💡 ${esc(x.tip)}</div>` : ""}${it ? `<div class="px-sample">${this.ansHTML(it)}</div>` : ""}</details>`; }).join("")}`;
+          ${it ? `<small class="px-py">${esc(it.py)}</small>` : ""}<div class="px-you">${this.rep() ? "Bạn nói" : "Bạn trả lời"}: <span class="han">${x && !x.skip ? esc(x.said) : "(bỏ qua)"}</span>${x && x.rt != null ? ` · ${x.rt.toFixed(1)}s` : ""}${x && x.score != null ? ` · đúng ${x.score}%` : ""}</div>
+          ${x && x.html ? `<div class="px-sample px-diff han">${x.html}</div>` : ""}
+          ${x && x.tip ? `<div class="px-tip">💡 ${esc(x.tip)}</div>` : ""}${it && it.ans ? `<div class="px-sample">${this.ansHTML(it)}</div>` : ""}</details>`; }).join("")}`;
     } else H.innerHTML = L.length ? `<h4>Đã trả lời</h4>${L.slice().reverse().map(x => `<div class="px-h"><button class="px-hp" data-k="${x.k}" aria-label="Nghe câu ${x.k + 1}">▶</button><b>${x.k + 1}</b><span class="han">${x.skip ? "<em>(bỏ qua)</em>" : esc(x.said)}</span>${this.exam || x.skip ? "" : `<i>${x.ok ? "✅" : "❌"}</i>`}${x.rt != null ? `<small>${x.rt.toFixed(1)}s</small>` : ""}</div>`).join("")}` : "";
     H.querySelectorAll("[data-say]").forEach(b => b.onclick = e => { e.preventDefault(); speak(b.dataset.say); });
     H.querySelectorAll(".px-hp").forEach(b => b.onclick = e => { e.preventDefault(); const a = new Audio(this.url(+b.dataset.k)); a.play().catch(() => {}); }); },
@@ -5334,7 +5356,7 @@ const Reflex = {
     Track.log("talk", { mode: "px", set: this.set.id, right: ok, total: n, exam: this.exam });
     if(ok >= n * .9) Games.reward("talk", Math.round(ok / n * 100), `Luyện phản xạ ${this.set.title} (${ok}/${n})`);
     const St = $("#pxStage"); if(!St) return; const score = Math.round(ok / n * 100) / 10;
-    St.innerHTML = `<div class="px-end">${this.exam ? `<div class="px-score">${score.toFixed(1).replace(".0", "")}<small>/10 điểm</small></div>` : ""}<div class="px-big">${ok}<small>/${n}</small></div><p>câu trả lời đúng ý · đã trả lời ${ans.length}/${n} câu · phản xạ trung bình <b>${avg.toFixed(1)} giây</b>${slow ? ` · ${slow} câu chậm (> 6 giây)` : ""}</p>
+    St.innerHTML = `<div class="px-end">${this.exam ? `<div class="px-score">${score.toFixed(1).replace(".0", "")}<small>/10 điểm</small></div>` : ""}<div class="px-big">${ok}<small>/${n}</small></div><p>${this.rep() ? "câu nhắc lại đúng (≥ 85%)" : "câu trả lời đúng ý"} · đã trả lời ${ans.length}/${n} câu · phản xạ trung bình <b>${avg.toFixed(1)} giây</b>${slow ? ` · ${slow} câu chậm (> 6 giây)` : ""}</p>
       <div class="px-btns"><button class="btn primary" id="pxAll">↻ Làm lại từ đầu</button>${ok < n || slow ? `<button class="btn" id="pxSlow">⚡ Luyện lại câu sai / chậm</button>` : ""}<button class="btn sm" id="pxHome">‹ Chọn chế độ khác</button></div></div>`;
     $("#pxAll").onclick = () => this.start(0);
     $("#pxHome").onclick = () => { this.phase = "idle"; this.render(); };
