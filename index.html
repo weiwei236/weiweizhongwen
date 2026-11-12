@@ -1012,7 +1012,7 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .ht-qr{width:190px;border-radius:14px;background:var(--c);padding:10px;color:#fff;text-align:center;display:grid;gap:6px}.ht-qr-h{font-weight:700;font-size:16px}.ht-qr svg{width:100%;background:#fff;border-radius:8px;padding:6px}.ht-qr-a{font-size:20px;font-weight:800}.ht-qr small{opacity:.85;font-size:11px}
 .ht-wifi{display:flex;gap:10px;align-items:center;background:#E3F2FD;border-radius:12px;padding:8px 14px}.ht-wifi svg{width:44px;height:44px}.ht-wifi div{display:grid}
 .ht-issue{position:relative;width:96px;height:90px;background:#FFF;border-radius:14px;display:grid;place-items:center}.ht-issue svg{width:70px;height:70px}.ht-issue b{position:absolute;right:4px;top:0;color:#E53935;font-size:30px}
-.px-intro{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,#EAF6EF,#FFF7E6);border-radius:18px;padding:16px 18px;margin:12px 0}.px-ic{font-size:44px}.px-intro h3{margin:0 0 4px}.px-intro h3 .han{font-size:20px}.px-intro p{margin:0;color:var(--muted)}
+.px-intro{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,#EAF6EF,#FFF7E6);border-radius:18px;padding:16px 18px;margin:12px 0}.px-ic{font-size:44px;white-space:nowrap}.px-intro h3{margin:0 0 4px}.px-intro h3 .han{font-size:20px}.px-intro p{margin:0;color:var(--muted)}
 .px-sets{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}.px-set{border:2px solid var(--line);background:#fff;border-radius:14px;padding:10px 16px;display:grid;text-align:left;cursor:pointer;font:inherit}.px-set.on{border-color:var(--accent);background:#EEF8F2}.px-set small{color:var(--muted)}
 .px-opts{display:grid;gap:6px;margin:8px 0 14px}.px-opts small{color:var(--muted)}.px-go{font-size:18px;padding:12px 28px}
 .px-bar{display:flex;align-items:center;gap:12px;margin:10px 0}.px-prog{flex:1;height:8px;background:var(--line);border-radius:99px;overflow:hidden}.px-prog i{display:block;height:100%;background:var(--accent);transition:width .3s}
@@ -1028,6 +1028,14 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .px-fb{display:grid;gap:6px;text-align:left;background:#F6FAF8;border-radius:12px;padding:10px 14px;width:min(560px,100%)}
 .px-q{display:grid;gap:2px}.px-q .han{font-size:22px}.px-q small{color:var(--accent)}.px-q i{color:#2C6E52;font-size:14px}
 .px-a{display:grid;grid-template-columns:auto 1fr;column-gap:8px;align-items:center}.px-a .han{font-size:19px}.px-a small,.px-a i{grid-column:2;font-size:13px}.px-a small{color:var(--accent)}.px-a i{color:#2C6E52}
+.px-mode{display:flex;margin:6px 0 10px}.px-mode button{display:grid;text-align:left;padding:8px 14px}.px-mode small{font-weight:400;font-size:12px;color:var(--muted)}.px-ex{background:#FFF1E6;color:#B3402E;border-radius:99px;padding:2px 10px;font-size:13px;font-weight:700}
+.px-verdict{font-weight:700;border-radius:10px;padding:6px 12px}.px-verdict.ok{background:#E3F4EA;color:#1F7A4D}.px-verdict.no{background:#FDE8E8;color:#B3283A}
+.px-score{font-size:42px;font-weight:800;color:#C2513A}.px-score small{font-size:18px;color:var(--muted);margin-left:4px}
+.px-r{border:1px solid var(--line);border-radius:12px;padding:6px 10px;margin:6px 0;background:#fff}.px-r summary{display:flex;gap:10px;align-items:center;cursor:pointer;list-style:none}.px-r summary::-webkit-details-marker{display:none}
+.px-r summary .han{flex:1;font-size:18px}.px-r summary b{width:22px;color:var(--muted)}.px-r summary i{font-style:normal}.px-r.no{border-color:#F3B3BB}.px-r.skip{border-color:#F0D58A}
+.px-py{display:block;color:var(--accent);margin:4px 0 0 64px}.px-you{margin:6px 0 0 64px}.px-you .han{font-size:17px}.px-tip{margin:4px 0 0 64px;color:#B3402E;font-size:14px}.px-sample{margin:6px 0 4px 64px;display:grid;gap:4px}
+@media (max-width:600px){.px-py,.px-you,.px-tip,.px-sample{margin-left:0}}
+.px-h i{font-style:normal}
 .px-hist{margin-top:14px}.px-hist h4{margin:0 0 6px;color:var(--muted);font-size:14px}.px-h{display:flex;gap:10px;align-items:center;padding:6px 0;border-bottom:1px dashed var(--line)}.px-h b{width:22px;color:var(--muted)}.px-h .han{flex:1;font-size:17px}.px-h small{color:var(--accent);font-weight:600}
 .px-hp{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:#fff;cursor:pointer}
 .px-end{display:grid;gap:8px;justify-items:center}.px-big{font-size:56px;font-weight:800;color:var(--accent)}.px-big small{font-size:24px;color:var(--muted)}
@@ -5174,12 +5182,65 @@ function pzBag(){ return `<div class="pz-row"><svg viewBox="0 0 80 80" aria-hidd
 /* ===================== Hội thoại · LUYỆN PHẢN XẠ: nghe câu hỏi → trả lời ngay =====================
    Mỗi bộ là các file mp3 tách sẵn theo từng câu (px/<bộ>/01.mp3 …). Nghe hết câu → học viên trả lời (ghi âm) → mới phát câu sau.
    items[i] (không bắt buộc): { zh, py, vi, ans: [[zh, py, vi], …] } – có lời thì hiện chữ câu hỏi + gợi ý trả lời sau khi học viên nói xong. */
+/* nhóm từ dùng để chấm câu trả lời */
+const PXR = {
+  yn: /是|对|不|没|有|会|喜欢|常常|有时候|当然/,
+  time: /\d|点|半|刻/,
+  place: /家|宿舍|食堂|饭馆|饭店|餐厅|外边|外面|公司|学校|学生|超市|商店|银行|医院|咖啡|楼|里/,
+  who: /朋友|家人|家里人|爸爸|妈妈|父母|哥哥|姐姐|弟弟|妹妹|同学|同事|同屋|男朋友|女朋友|老公|丈夫|妻子|老婆|孩子|儿子|女儿|爷爷|奶奶|一个人|自己|老师|大家|室友/,
+  act: /看|听|打|玩|去|睡|做|唱|跑|游泳|上网|学习|逛|休息|运动|散步|旅游|画|读|写|喝|吃|买|收拾|聊天|在家|出去|见/,
+  food: /饺子|包子|面|鸭|豆腐|鱼|肉|鸡|米饭|火锅|菜|粥|汤|河粉|春卷|蛋|饼|面包|牛奶|咖啡|茶|豆浆|饭|水果|没吃/
+};
 const PX_SETS = [
-  { id: "set1", title: "Bộ 1 · 30 câu hỏi", base: "px/set1/", n: 30, items: [] }
+  { id: "gt11", title: "Bài 11 · 30 câu hỏi", cls: "gt", les: 11, base: "px/set1/", n: 30, items: [
+    { zh: "你住宿舍吗？", py: "Nǐ zhù sùshè ma?", need: [[/住|宿舍|家|是|对|不/, "Trả lời có/không: 我住宿舍。/ 我不住宿舍。"]], ans: [["我住宿舍。", "Wǒ zhù sùshè."], ["我不住宿舍，我住在家里。", "Wǒ bú zhù sùshè, wǒ zhù zài jiā lǐ."]] },
+    { zh: "你有同屋吗？他是哪国人？", py: "Nǐ yǒu tóngwū ma? Tā shì nǎ guó rén?", pass: /没有|没/, need: [[/有|是/, "Trả lời có/không có bạn cùng phòng."], [/人|国/, "Nói bạn cùng phòng là người nước nào: …是越南人。"]], ans: [["有，我的同屋是韩国人。", "Yǒu, wǒ de tóngwū shì Hánguó rén."], ["我没有同屋。", "Wǒ méiyǒu tóngwū."]] },
+    { zh: "你的房间大不大？", py: "Nǐ de fángjiān dà bu dà?", need: [[/大|小|还可以|一般/, "Trả lời phòng to hay nhỏ: 很大 / 不太大 / 很小。"]], ans: [["我的房间不太大。", "Wǒ de fángjiān bú tài dà."], ["我的房间很大。", "Wǒ de fángjiān hěn dà."]] },
+    { zh: "你的房间是多少号？", py: "Nǐ de fángjiān shì duōshao hào?", need: [[/\d|[零一二三四五六七八九幺]{2,}/, "Nói số phòng, đọc từng số: 三零五号。"]], ans: [["我的房间是三零五号。", "Wǒ de fángjiān shì sān líng wǔ hào."]] },
+    { zh: "你们学校有食堂吗？食堂的菜怎么样？", py: "Nǐmen xuéxiào yǒu shítáng ma? Shítáng de cài zěnmeyàng?", pass: /没有/, need: [[/有|是/, "Trả lời trường có nhà ăn không."], [/好吃|不错|还可以|一般|便宜|贵|好|难吃|多|少/, "Nói món ăn ở nhà ăn thế nào: 很好吃 / 还可以 / 不太好吃。"]], ans: [["有，食堂的菜很好吃，也很便宜。", "Yǒu, shítáng de cài hěn hǎochī, yě hěn piányi."], ["有，食堂的菜还可以。", "Yǒu, shítáng de cài hái kěyǐ."]] },
+    { zh: "你一般在哪儿吃饭？在食堂还是在家？", py: "Nǐ yìbān zài nǎr chī fàn? Zài shítáng háishi zài jiā?", need: [[PXR.place, "Nói nơi bạn ăn: 在食堂 / 在家。"]], ans: [["我一般在食堂吃饭。", "Wǒ yìbān zài shítáng chī fàn."], ["我一般在家吃饭。", "Wǒ yìbān zài jiā chī fàn."]] },
+    { zh: "你在哪儿工作？", py: "Nǐ zài nǎr gōngzuò?", pass: /不工作|没有工作|学生|没工作/, need: [[PXR.place, "Nói nơi làm việc: 我在一家公司工作。(hoặc 我是学生，我不工作。)"]], ans: [["我在一家公司工作。", "Wǒ zài yì jiā gōngsī gōngzuò."], ["我是学生，我不工作。", "Wǒ shì xuésheng, wǒ bù gōngzuò."]] },
+    { zh: "你在一家什么公司工作？", py: "Nǐ zài yì jiā shénme gōngsī gōngzuò?", pass: /不工作|没有工作|学生|没工作/, need: [[/公司|银行|学校|医院|饭店|商店/, "Nói loại công ty: 我在一家贸易公司工作。"]], ans: [["我在一家贸易公司工作。", "Wǒ zài yì jiā màoyì gōngsī gōngzuò."], ["我在一家中国公司工作。", "Wǒ zài yì jiā Zhōngguó gōngsī gōngzuò."]] },
+    { zh: "你每天几点上班？几点下班？", py: "Nǐ měi tiān jǐ diǎn shàngbān? Jǐ diǎn xiàbān?", pass: /不上班|学生|不工作/, fn: s => (s.match(/点|\d+:\d+/g) || []).length >= 2 ? "" : "Nói cả giờ đi làm và giờ tan làm: 八点上班，五点下班。", ans: [["我每天八点上班，五点下班。", "Wǒ měi tiān bā diǎn shàngbān, wǔ diǎn xiàbān."]] },
+    { zh: "你从几点到几点工作？", py: "Nǐ cóng jǐ diǎn dào jǐ diǎn gōngzuò?", pass: /不工作|学生/, fn: s => /到/.test(s) && (s.match(/点|\d+:\d+/g) || []).length >= 2 ? "" : "Dùng 从…到…: 从八点到五点工作。", ans: [["我从早上八点到下午五点工作。", "Wǒ cóng zǎoshang bā diǎn dào xiàwǔ wǔ diǎn gōngzuò."]] },
+    { zh: "你周末也上班吗？", py: "Nǐ zhōumò yě shàngbān ma?", need: [[/上班|休息|工作|是|对|不/, "Trả lời có/không: 我周末不上班。/ 星期六也上班。"]], ans: [["不，我周末不上班。", "Bù, wǒ zhōumò bú shàngbān."], ["星期六也上班。", "Xīngqīliù yě shàngbān."]] },
+    { zh: "你有汽车吗？你坐什么去公司？", py: "Nǐ yǒu qìchē ma? Nǐ zuò shénme qù gōngsī?", need: [[/有|没|坐|开|骑|走|打车|地铁|公交/, "Trả lời có/không có ô tô."], [/坐|开|骑|走|打车|地铁|公共汽车|公交|出租|自行车|摩托|不去|学生/, "Nói thêm đi làm bằng gì: 坐公共汽车 / 开车 / 骑摩托车。"]], ans: [["我没有汽车，我坐公共汽车去公司。", "Wǒ méiyǒu qìchē, wǒ zuò gōnggòng qìchē qù gōngsī."], ["有，我开车去公司。", "Yǒu, wǒ kāi chē qù gōngsī."]] },
+    { zh: "你平时忙不忙？", py: "Nǐ píngshí máng bu máng?", need: [[/忙|还可以|一般|有时候|空/, "Trả lời bận hay không: 很忙 / 不太忙。"]], ans: [["我平时很忙。", "Wǒ píngshí hěn máng."], ["我平时不太忙。", "Wǒ píngshí bú tài máng."]] },
+    { zh: "你从星期几到星期几上班？", py: "Nǐ cóng xīngqī jǐ dào xīngqī jǐ shàngbān?", pass: /不上班|学生|不工作/, fn: s => (s.match(/星期|周|礼拜/g) || []).length >= 2 || /每天/.test(s) ? "" : "Dùng 从星期…到星期…: 从星期一到星期五上班。", ans: [["我从星期一到星期五上班。", "Wǒ cóng xīngqīyī dào xīngqīwǔ shàngbān."]] },
+    { zh: "你一般几点起床？", py: "Nǐ yìbān jǐ diǎn qǐ chuáng?", need: [[PXR.time, "Nói giờ thức dậy: 我一般六点半起床。"]], ans: [["我一般六点半起床。", "Wǒ yìbān liù diǎn bàn qǐ chuáng."]] },
+    { zh: "你一般几点吃晚饭？在哪儿吃？", py: "Nǐ yìbān jǐ diǎn chī wǎnfàn? Zài nǎr chī?", need: [[PXR.time, "Nói giờ ăn tối: 七点吃晚饭。"], [PXR.place, "Nói ăn ở đâu: 在家吃 / 在食堂吃。"]], ans: [["我一般七点吃晚饭，在家吃。", "Wǒ yìbān qī diǎn chī wǎnfàn, zài jiā chī."]] },
+    { zh: "休息的时候，你喜欢干什么？", py: "Xiūxi de shíhou, nǐ xǐhuan gàn shénme?", need: [[PXR.act, "Nói việc bạn thích làm: 我喜欢看电影 / 听音乐。"]], ans: [["休息的时候，我喜欢看电影。", "Xiūxi de shíhou, wǒ xǐhuan kàn diànyǐng."], ["我喜欢听音乐。", "Wǒ xǐhuan tīng yīnyuè."]] },
+    { zh: "没事的时候，你常常看手机吗？", py: "Méi shì de shíhou, nǐ chángcháng kàn shǒujī ma?", need: [[/看|常常|有时候|是|对|不/, "Trả lời có/không: 我常常看手机。/ 我不常看手机。"]], ans: [["是，我常常看手机。", "Shì, wǒ chángcháng kàn shǒujī."], ["我不常看手机。", "Wǒ bù cháng kàn shǒujī."]] },
+    { zh: "你常常做饭吗？", py: "Nǐ chángcháng zuò fàn ma?", need: [[/做|常常|有时候|会|是|对|不/, "Trả lời có/không: 我常常做饭。/ 我不常做饭。"]], ans: [["我常常做饭。", "Wǒ chángcháng zuò fàn."], ["我不常做饭。", "Wǒ bù cháng zuò fàn."]] },
+    { zh: "你会做什么菜？中国菜还是越南菜？", py: "Nǐ huì zuò shénme cài? Zhōngguó cài háishi Yuènán cài?", pass: /不会/, need: [[/菜|饭|面|汤|饺子|春卷|河粉|鱼|肉|鸡/, "Nói món bạn biết nấu: 我会做越南菜。"]], ans: [["我会做越南菜。", "Wǒ huì zuò Yuènán cài."], ["我会做中国菜，也会做越南菜。", "Wǒ huì zuò Zhōngguó cài, yě huì zuò Yuènán cài."]] },
+    { zh: "你喜欢吃什么中国菜呢？", py: "Nǐ xǐhuan chī shénme Zhōngguó cài ne?", pass: /不喜欢/, need: [[PXR.food, "Nói món Trung Quốc bạn thích: 我喜欢吃饺子。"]], ans: [["我喜欢吃饺子。", "Wǒ xǐhuan chī jiǎozi."], ["我喜欢吃北京烤鸭。", "Wǒ xǐhuan chī Běijīng kǎoyā."]] },
+    { zh: "你今天早饭吃什么？", py: "Nǐ jīntiān zǎofàn chī shénme?", need: [[PXR.food, "Nói bữa sáng hôm nay ăn gì: 我吃面包，喝牛奶。"]], ans: [["我今天早饭吃面包，喝牛奶。", "Wǒ jīntiān zǎofàn chī miànbāo, hē niúnǎi."], ["我今天早饭吃河粉。", "Wǒ jīntiān zǎofàn chī héfěn."]] },
+    { zh: "吃饭的时候，你喜欢跟谁聊天儿？", py: "Chī fàn de shíhou, nǐ xǐhuan gēn shéi liáotiānr?", need: [[PXR.who, "Nói nói chuyện với ai: 我喜欢跟朋友聊天儿。"]], ans: [["吃饭的时候，我喜欢跟家人聊天儿。", "Chī fàn de shíhou, wǒ xǐhuan gēn jiārén liáotiānr."], ["我喜欢跟朋友聊天儿。", "Wǒ xǐhuan gēn péngyou liáotiānr."]] },
+    { zh: "周末你干什么？", py: "Zhōumò nǐ gàn shénme?", need: [[PXR.act, "Nói cuối tuần làm gì: 周末我去看电影 / 在家休息。"]], ans: [["周末我去看电影。", "Zhōumò wǒ qù kàn diànyǐng."], ["周末我在家休息。", "Zhōumò wǒ zài jiā xiūxi."]] },
+    { zh: "周末你跟谁一块儿出去？", py: "Zhōumò nǐ gēn shéi yíkuàir chūqu?", pass: /不出去/, need: [[PXR.who, "Nói đi chơi với ai: 我跟朋友一块儿出去。"]], ans: [["周末我跟朋友一块儿出去。", "Zhōumò wǒ gēn péngyou yíkuàir chūqu."], ["我跟家人一块儿出去。", "Wǒ gēn jiārén yíkuàir chūqu."]] },
+    { zh: "你喜欢听音乐吗？喜欢听什么音乐？", py: "Nǐ xǐhuan tīng yīnyuè ma? Xǐhuan tīng shénme yīnyuè?", pass: /不喜欢|不太喜欢/, need: [[/喜欢|听/, "Trả lời có thích nghe nhạc không."], [/音乐|歌|流行|古典|中国|越南|韩国|英文|美国|日本|摇滚|爵士/, "Nói thích nghe loại nhạc gì: 我喜欢听中国音乐。"]], ans: [["喜欢，我喜欢听中国音乐。", "Xǐhuan, wǒ xǐhuan tīng Zhōngguó yīnyuè."], ["我不太喜欢听音乐。", "Wǒ bú tài xǐhuan tīng yīnyuè."]] },
+    { zh: "你喜欢画画儿吗？你喜欢中国画吗？", py: "Nǐ xǐhuan huà huàr ma? Nǐ xǐhuan Zhōngguó huà ma?", need: [[/喜欢|会|画|是|对|不/, "Trả lời có thích vẽ / tranh Trung Quốc không."]], ans: [["我喜欢画画儿，也喜欢中国画。", "Wǒ xǐhuan huà huàr, yě xǐhuan Zhōngguó huà."], ["我不喜欢画画儿，可是我喜欢中国画。", "Wǒ bù xǐhuan huà huàr, kěshì wǒ xǐhuan Zhōngguó huà."]] },
+    { zh: "你常常去超市买东西吗？", py: "Nǐ chángcháng qù chāoshì mǎi dōngxi ma?", need: [[/去|常常|有时候|超市|是|对|不/, "Trả lời có/không: 我常常去超市买东西。/ 我不常去。"]], ans: [["我常常去超市买东西。", "Wǒ chángcháng qù chāoshì mǎi dōngxi."], ["我不常去超市。", "Wǒ bù cháng qù chāoshì."]] },
+    { zh: "周末你收拾房间吗？跟谁一块儿收拾？", py: "Zhōumò nǐ shōushi fángjiān ma? Gēn shéi yíkuàir shōushi?", pass: /不收拾/, need: [[/收拾|打扫|是|对/, "Trả lời có dọn phòng không."], [PXR.who, "Nói dọn cùng ai: 跟同屋一块儿收拾 / 自己收拾。"]], ans: [["收拾，我跟同屋一块儿收拾。", "Shōushi, wǒ gēn tóngwū yíkuàir shōushi."], ["周末我自己收拾房间。", "Zhōumò wǒ zìjǐ shōushi fángjiān."]] },
+    { zh: "你的手机号码是多少？", py: "Nǐ de shǒujī hàomǎ shì duōshao?", fn: s => (s.match(/[0-9零一二三四五六七八九幺]/g) || []).length >= 7 ? "" : "Đọc số điện thoại từng chữ số (số 1 đọc là yāo): 零九幺二…", ans: [["我的手机号码是零九一二三四五六七八。", "Wǒ de shǒujī hàomǎ shì líng jiǔ yāo èr sān sì wǔ liù qī bā."]] }
+  ] }
 ];
+/* chấm câu trả lời: phải có chữ Hán, không lặp lại câu hỏi, không dùng 你 làm chủ ngữ, và có đủ ý câu hỏi cần */
+function pxCheck(it, said){
+  const s = String(said || "").replace(/[，。？！、,.?!\s]/g, "");
+  if(!it) return { ok: true };
+  if(!/[一-鿿\d]/.test(s)) return { ok: false, tip: "Chưa nghe được câu trả lời bằng tiếng Trung." };
+  if(s.replace(/呢$/, "") === it.zh.replace(/[，。？！、\s]/g, "").replace(/呢$/, "")) return { ok: false, tip: "Bạn đang đọc lại câu hỏi – hãy trả lời câu hỏi nhé." };
+  if(/^你/.test(s) && !/我/.test(s)) return { ok: false, tip: "Trả lời về bản thân thì dùng 我, không dùng 你." };
+  if(it.pass && it.pass.test(s)) return { ok: true };
+  if(it.fn){ const t = it.fn(s); if(t) return { ok: false, tip: t }; }
+  for(const [re, tip] of it.need || []) if(!re.test(s)) return { ok: false, tip };
+  if(s.length < 2) return { ok: false, tip: "Câu trả lời quá ngắn – hãy nói thành câu đầy đủ." };
+  return { ok: true };
+}
 const Reflex = {
   set: null, i: 0, phase: "idle", log: [], audio: null, t0: 0,
-  auto: store.get("ww_px_auto", true), next: store.get("ww_px_next", true), showTx: store.get("ww_px_tx", false),
+  auto: store.get("ww_px_auto", true), next: store.get("ww_px_next", true), showTx: store.get("ww_px_tx", false), exam: store.get("ww_px_exam", false),
   url(k){ return this.set.base + String(k + 1).padStart(2, "0") + ".mp3"; },
   item(k){ return (this.set.items || [])[k] || null; },
   mount(){ this.stop(); this.set = this.set || PX_SETS[0]; this.phase = "idle"; this.render(); },
@@ -5191,22 +5252,24 @@ const Reflex = {
       W.innerHTML = `<div class="tk">${this.head()}
         <div class="px-intro"><div class="px-ic">🎧💬</div><div><h3>Luyện phản xạ · <span class="han">听问题，回答问题</span></h3>
           <p>Nghe từng câu hỏi rồi <b>trả lời ngay bằng tiếng Trung</b>. Nói xong bấm 🎤 để dừng – trả lời xong mới sang câu tiếp theo. Máy đo <b>thời gian phản xạ</b> (từ lúc hết câu hỏi đến lúc bạn bắt đầu nói).</p></div></div>
-        <div class="px-sets">${PX_SETS.map(x => `<button class="px-set ${x === S ? "on" : ""}" data-set="${x.id}"><b>${esc(x.title)}</b><small>${x.n} câu${x.items && x.items.length ? " · có chữ & gợi ý trả lời" : ""}</small></button>`).join("")}</div>
+        <div class="px-sets">${PX_SETS.map(x => `<button class="px-set ${x === S ? "on" : ""}" data-set="${x.id}"><b>${esc(x.title)}</b><small>${x.cls === "gt" ? "Giao tiếp" : "HSK"} · ${x.n} câu · có chấm câu trả lời</small></button>`).join("")}</div>
+        <div class="seg px-mode" role="group"><button data-mode="0" aria-pressed="${!this.exam}">📝 Luyện tập<small>chấm & gợi ý ngay sau mỗi câu</small></button><button data-mode="1" aria-pressed="${this.exam}">🎯 Kiểm tra<small>không nghe lại, không xem chữ – chấm điểm cuối bài</small></button></div>
         <div class="px-opts">
           <label><input type="checkbox" id="pxAuto" ${this.auto ? "checked" : ""}> Tự bật micro khi nghe xong câu hỏi${IS_IOS ? " <small>(iPhone/iPad cần bấm 🎤)</small>" : ""}</label>
-          <label><input type="checkbox" id="pxNext" ${this.next ? "checked" : ""}> Trả lời xong tự phát câu tiếp</label>
-          <label><input type="checkbox" id="pxTx" ${this.showTx ? "checked" : ""}> Hiện chữ câu hỏi ngay khi nghe <small>(dễ hơn)</small></label></div>
+          ${this.exam ? "" : `<label><input type="checkbox" id="pxNext" ${this.next ? "checked" : ""}> Trả lời xong tự phát câu tiếp</label>
+          <label><input type="checkbox" id="pxTx" ${this.showTx ? "checked" : ""}> Hiện chữ câu hỏi ngay khi nghe <small>(dễ hơn)</small></label>`}</div>
         <button class="btn primary px-go" id="pxGo">▶ Bắt đầu</button></div>`;
       Talk.bindView(W);
       W.querySelectorAll("[data-set]").forEach(b => b.onclick = () => { this.set = PX_SETS.find(x => x.id === b.dataset.set); this.render(); });
       $("#pxAuto").onchange = e => store.set("ww_px_auto", this.auto = e.target.checked);
-      $("#pxNext").onchange = e => store.set("ww_px_next", this.next = e.target.checked);
-      $("#pxTx").onchange = e => store.set("ww_px_tx", this.showTx = e.target.checked);
+      W.querySelectorAll("[data-mode]").forEach(b => b.onclick = () => { store.set("ww_px_exam", this.exam = b.dataset.mode === "1"); this.render(); });
+      if($("#pxNext")) $("#pxNext").onchange = e => store.set("ww_px_next", this.next = e.target.checked);
+      if($("#pxTx")) $("#pxTx").onchange = e => store.set("ww_px_tx", this.showTx = e.target.checked);
       $("#pxGo").onclick = () => this.start(0);
       return;
     }
     W.innerHTML = `<div class="tk">${this.head()}
-      <div class="px-bar"><button class="btn sm" id="pxBack">‹ Dừng</button><div class="px-prog"><i style="width:${this.i / S.n * 100}%"></i></div><b>Câu ${Math.min(this.i + 1, S.n)}/${S.n}</b></div>
+      <div class="px-bar"><button class="btn sm" id="pxBack">‹ Dừng</button><div class="px-prog"><i style="width:${this.i / S.n * 100}%"></i></div><b>Câu ${Math.min(this.i + 1, S.n)}/${S.n}</b>${this.exam ? `<span class="px-ex">🎯 Kiểm tra</span>` : ""}</div>
       <div class="px-stage" id="pxStage"></div>
       <div class="px-hist" id="pxHist"></div></div>`;
     Talk.bindView(W); $("#pxBack").onclick = () => { this.stop(); this.phase === "done" ? (this.phase = "idle", this.render()) : this.finish(); };
@@ -5231,23 +5294,29 @@ const Reflex = {
     own.onHeard = () => { if(!this.heardAt){ this.heardAt = performance.now(); clearInterval(this.tick); } };
     Talk.listen.call(own, t => { if(this.i !== k) return; this.answered(t); });
     own.drawBar(); },
-  answered(t){ clearInterval(this.tick); const rt = ((this.heardAt || performance.now()) - this.t0) / 1000;
-    this.log[this.i] = { k: this.i, said: t, rt: Math.max(0, rt) }; this.phase = "fb"; this.drawStage(); this.drawHist();
-    if(this.next) Games.later(() => { if(this.phase === "fb") this.go(); }, this.item(this.i) ? 3200 : 1500); },
+  answered(t){ clearInterval(this.tick); const rt = ((this.heardAt || performance.now()) - this.t0) / 1000, c = pxCheck(this.item(this.i), t);
+    this.log[this.i] = { k: this.i, said: t, rt: Math.max(0, rt), ok: c.ok, tip: c.tip || "" };
+    if(this.exam){ this.phase = "saved"; this.drawStage(); this.drawHist(); return Games.later(() => { if(this.phase === "saved") this.go(); }, 900); }
+    this.phase = "fb"; this.drawStage(); this.drawHist(); c.ok ? RaceSnd.ding(1) : RaceSnd.buzz();
+    if(this.next && c.ok) Games.later(() => { if(this.phase === "fb") this.go(); }, 3200); },
   skip(){ this.stop(); this.log[this.i] = { k: this.i, said: "", rt: null, skip: true }; this.drawHist(); this.go(); },
   go(){ if(this.i + 1 >= this.set.n) return this.finish(); this.i++; const b = document.querySelector(".px-bar b"), pr = document.querySelector(".px-prog i");
     if(b) b.textContent = `Câu ${this.i + 1}/${this.set.n}`; if(pr) pr.style.width = this.i / this.set.n * 100 + "%"; this.play(); },
-  qText(k, open){ const it = this.item(k); if(!it) return ""; return `<div class="px-q ${open ? "" : "hide"}"><span class="han">${esc(it.zh)}</span><small>${esc(it.py || "")}</small><i>${esc(it.vi || "")}</i></div>`; },
+  qText(k, open){ const it = this.item(k); if(!it) return ""; return `<div class="px-q ${open ? "" : "hide"}"><span class="han">${esc(it.zh)}</span><small>${esc(it.py || "")}</small>${it.vi ? `<i>${esc(it.vi)}</i>` : ""}</div>`; },
+  ansHTML(it){ return (it.ans || []).map(a => `<div class="px-a"><button class="say-sm" data-say="${esc(a[0])}" aria-label="Nghe">${ICON.sound}</button><span class="han">${esc(a[0])}</span><small>${esc(a[1] || "")}</small>${a[2] ? `<i>${esc(a[2])}</i>` : ""}</div>`).join(""); },
   drawStage(){ const St = $("#pxStage"); if(!St) return; const k = this.i, L = this.log[k], it = this.item(k), ph = this.phase;
     const wave = `<div class="px-wave ${ph === "listen" ? "on" : ""}">${"<i></i>".repeat(7)}</div>`;
     let body = "";
-    if(ph === "listen" || ph === "tap") body = `${wave}<p class="px-st">${ph === "tap" ? "Bấm ▶ để nghe câu hỏi" : "🎧 Nghe câu hỏi…"}</p>${this.showTx ? this.qText(k, true) : ""}
+    const tx = this.showTx && !this.exam;
+    if(ph === "saved") body = `<p class="px-st">✓ Đã ghi lại câu trả lời</p><div class="px-said"><span class="han">${esc(L.said)}</span></div>`;
+    if(ph === "listen" || ph === "tap") body = `${wave}<p class="px-st">${ph === "tap" ? "Bấm ▶ để nghe câu hỏi" : "🎧 Nghe câu hỏi…"}</p>${tx ? this.qText(k, true) : ""}
       <div class="px-btns">${ph === "tap" ? `<button class="btn primary" id="pxPlay">▶ Nghe câu hỏi</button>` : ""}<button class="btn sm" id="pxSkip">Bỏ qua ⏭</button></div>`;
-    if(ph === "answer") body = `<p class="px-st">💬 Đến lượt bạn trả lời! <b id="pxTime">0.0s</b></p>${this.showTx ? this.qText(k, true) : ""}
+    if(ph === "answer") body = `<p class="px-st">💬 Đến lượt bạn trả lời! <b id="pxTime">0.0s</b></p>${tx ? this.qText(k, true) : ""}
       <button class="px-mic" id="pxMic"><b>🎤</b><span>Bấm để trả lời</span></button><div class="px-live" id="tkLive"></div>
-      <div class="px-btns"><button class="btn sm" id="pxRe">🔁 Nghe lại</button><button class="btn sm" id="pxSkip">Bỏ qua ⏭</button></div>`;
-    if(ph === "fb") body = `<div class="px-said"><small>Bạn trả lời</small><span class="han">${esc(L.said)}</span><em>⚡ phản xạ ${L.rt.toFixed(1)} giây ${L.rt <= 3 ? "– rất nhanh!" : L.rt <= 6 ? "– tốt" : "– cố nhanh hơn nhé"}</em></div>
-      ${it ? `<div class="px-fb"><b>Câu hỏi:</b>${this.qText(k, true)}${(it.ans || []).length ? `<b>Gợi ý trả lời:</b>${it.ans.map(a => `<div class="px-a"><button class="say-sm" data-say="${esc(a[0])}" aria-label="Nghe">${ICON.sound}</button><span class="han">${esc(a[0])}</span><small>${esc(a[1] || "")}</small><i>${esc(a[2] || "")}</i></div>`).join("")}` : ""}</div>` : ""}
+      <div class="px-btns">${this.exam ? "" : `<button class="btn sm" id="pxRe">🔁 Nghe lại</button>`}<button class="btn sm" id="pxSkip">Bỏ qua ⏭</button></div>`;
+    if(ph === "fb") body = `<div class="px-said"><small>Bạn trả lời</small><span class="han">${esc(L.said)}</span>
+        <div class="px-verdict ${L.ok ? "ok" : "no"}">${L.ok ? "✅ Trả lời đúng ý câu hỏi!" : `❌ Chưa đúng ý: ${esc(L.tip)}`}</div><em>⚡ phản xạ ${L.rt.toFixed(1)} giây ${L.rt <= 3 ? "– rất nhanh!" : L.rt <= 6 ? "– tốt" : "– cố nhanh hơn nhé"}</em></div>
+      ${it ? `<div class="px-fb"><b>Câu hỏi:</b>${this.qText(k, true)}${(it.ans || []).length ? `<b>Gợi ý trả lời:</b>${this.ansHTML(it)}` : ""}</div>` : ""}
       <div class="px-btns"><button class="btn sm" id="pxRe">🔁 Nghe lại câu hỏi</button><button class="btn sm" id="pxAgain">🎤 Trả lời lại</button><button class="btn primary" id="pxNextBtn">${k + 1 >= this.set.n ? "Xem kết quả" : "Câu tiếp ▶"}</button></div>`;
     St.innerHTML = body;
     const on = (id, f) => { const b = $("#" + id); if(b) b.onclick = f; };
@@ -5257,18 +5326,24 @@ const Reflex = {
     on("pxNextBtn", () => { this.phase = "x"; this.go(); });
     St.querySelectorAll("[data-say]").forEach(b => b.onclick = () => speak(b.dataset.say)); },
   drawHist(){ const H = $("#pxHist"); if(!H) return; const L = this.log.filter(Boolean);
-    H.innerHTML = L.length ? `<h4>Đã trả lời</h4>${L.slice().reverse().map(x => `<div class="px-h"><button class="px-hp" data-k="${x.k}" aria-label="Nghe câu ${x.k + 1}">▶</button><b>${x.k + 1}</b><span class="han">${x.skip ? "<em>(bỏ qua)</em>" : esc(x.said)}</span>${x.rt != null ? `<small>${x.rt.toFixed(1)}s</small>` : ""}</div>`).join("")}` : "";
-    H.querySelectorAll(".px-hp").forEach(b => b.onclick = () => { const a = new Audio(this.url(+b.dataset.k)); a.play().catch(() => {}); }); },
-  finish(){ this.stop(); this.phase = "done"; const L = this.log.filter(Boolean), ans = L.filter(x => !x.skip), rts = ans.map(x => x.rt), avg = rts.length ? rts.reduce((a, b) => a + b, 0) / rts.length : 0, slow = ans.filter(x => x.rt > 6).length;
-    Track.log("talk", { mode: "px", set: this.set.id, right: ans.length, total: this.set.n });
-    if(ans.length >= this.set.n * .9) Games.reward("talk", Math.round(ans.length / this.set.n * 100), `Luyện phản xạ ${this.set.title} (${ans.length}/${this.set.n})`);
-    const St = $("#pxStage"); if(!St) return;
-    St.innerHTML = `<div class="px-end"><div class="px-big">${ans.length}<small>/${this.set.n}</small></div><p>câu đã trả lời · phản xạ trung bình <b>${avg.toFixed(1)} giây</b>${slow ? ` · ${slow} câu chậm (> 6 giây)` : ""}</p>
-      <div class="px-btns"><button class="btn primary" id="pxAll">↻ Luyện lại từ đầu</button>${slow || L.length < ans.length || ans.length < this.set.n ? `<button class="btn" id="pxSlow">⚡ Luyện lại câu chậm / bỏ qua</button>` : ""}<button class="btn sm" id="pxHome">‹ Chọn bộ khác</button></div></div>`;
+    if(this.phase === "done"){ /* bảng chữa bài cuối buổi */
+      H.innerHTML = `<h4>Chữa bài từng câu</h4>${Array.from({ length: this.set.n }, (_, k) => { const x = this.log[k], it = this.item(k), st = !x || x.skip ? "skip" : x.ok ? "ok" : "no";
+        return `<details class="px-r ${st}" ${st === "ok" ? "" : "open"}><summary><button class="px-hp" data-k="${k}" aria-label="Nghe câu ${k + 1}">▶</button><b>${k + 1}</b><span class="han">${it ? esc(it.zh) : "Câu " + (k + 1)}</span><i>${st === "ok" ? "✅" : st === "no" ? "❌" : "⏭"}</i></summary>
+          ${it ? `<small class="px-py">${esc(it.py)}</small>` : ""}<div class="px-you">Bạn trả lời: <span class="han">${x && !x.skip ? esc(x.said) : "(bỏ qua)"}</span>${x && x.rt != null ? ` · ${x.rt.toFixed(1)}s` : ""}</div>
+          ${x && x.tip ? `<div class="px-tip">💡 ${esc(x.tip)}</div>` : ""}${it ? `<div class="px-sample">${this.ansHTML(it)}</div>` : ""}</details>`; }).join("")}`;
+    } else H.innerHTML = L.length ? `<h4>Đã trả lời</h4>${L.slice().reverse().map(x => `<div class="px-h"><button class="px-hp" data-k="${x.k}" aria-label="Nghe câu ${x.k + 1}">▶</button><b>${x.k + 1}</b><span class="han">${x.skip ? "<em>(bỏ qua)</em>" : esc(x.said)}</span>${this.exam || x.skip ? "" : `<i>${x.ok ? "✅" : "❌"}</i>`}${x.rt != null ? `<small>${x.rt.toFixed(1)}s</small>` : ""}</div>`).join("")}` : "";
+    H.querySelectorAll("[data-say]").forEach(b => b.onclick = e => { e.preventDefault(); speak(b.dataset.say); });
+    H.querySelectorAll(".px-hp").forEach(b => b.onclick = e => { e.preventDefault(); const a = new Audio(this.url(+b.dataset.k)); a.play().catch(() => {}); }); },
+  finish(){ this.stop(); this.phase = "done"; const n = this.set.n, L = this.log.filter(Boolean), ans = L.filter(x => !x.skip), ok = ans.filter(x => x.ok).length, rts = ans.map(x => x.rt), avg = rts.length ? rts.reduce((a, b) => a + b, 0) / rts.length : 0, slow = ans.filter(x => x.rt > 6).length;
+    Track.log("talk", { mode: "px", set: this.set.id, right: ok, total: n, exam: this.exam });
+    if(ok >= n * .9) Games.reward("talk", Math.round(ok / n * 100), `Luyện phản xạ ${this.set.title} (${ok}/${n})`);
+    const St = $("#pxStage"); if(!St) return; const score = Math.round(ok / n * 100) / 10;
+    St.innerHTML = `<div class="px-end">${this.exam ? `<div class="px-score">${score.toFixed(1).replace(".0", "")}<small>/10 điểm</small></div>` : ""}<div class="px-big">${ok}<small>/${n}</small></div><p>câu trả lời đúng ý · đã trả lời ${ans.length}/${n} câu · phản xạ trung bình <b>${avg.toFixed(1)} giây</b>${slow ? ` · ${slow} câu chậm (> 6 giây)` : ""}</p>
+      <div class="px-btns"><button class="btn primary" id="pxAll">↻ Làm lại từ đầu</button>${ok < n || slow ? `<button class="btn" id="pxSlow">⚡ Luyện lại câu sai / chậm</button>` : ""}<button class="btn sm" id="pxHome">‹ Chọn chế độ khác</button></div></div>`;
     $("#pxAll").onclick = () => this.start(0);
     $("#pxHome").onclick = () => { this.phase = "idle"; this.render(); };
-    const sb = $("#pxSlow"); if(sb) sb.onclick = () => { const ks = []; for(let k = 0; k < this.set.n; k++){ const x = this.log[k]; if(!x || x.skip || x.rt > 6) ks.push(k); } this.queue = ks; this.redo(); };
-    const pr = document.querySelector(".px-prog i"); if(pr) pr.style.width = "100%"; },
+    const sb = $("#pxSlow"); if(sb) sb.onclick = () => { const ks = []; for(let k = 0; k < n; k++){ const x = this.log[k]; if(!x || x.skip || !x.ok || x.rt > 6) ks.push(k); } this.queue = ks; this.redo(); };
+    const pr = document.querySelector(".px-prog i"); if(pr) pr.style.width = "100%"; this.drawHist(); },
   /* luyện lại các câu chậm: dùng cùng màn hình, nhảy qua các câu đã ổn */
   redo(){ const k = this.queue.shift(); if(k == null) return this.finish(); this.phase = "listen"; this.i = k; this.render(); this.play();
     const g = this.go; this.go = () => { this.go = g; this.redo(); }; }
