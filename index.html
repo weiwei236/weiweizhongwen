@@ -5227,12 +5227,12 @@ const PX_SETS = [
   ] },
   { id: "gt11r", kind: "rep", title: "Bài 11 · Nghe – nhắc lại 15 câu", cls: "gt", les: 11, base: "px/rep11/", n: 15, items: [
     ["你在哪儿工作？", "Nǐ zài nǎr gōngzuò?"], ["我在学校食堂吃饭。", "Wǒ zài xuéxiào shítáng chī fàn."], ["他不在，他在朋友家。", "Tā bú zài, tā zài péngyou jiā."],
-    ["你的手机号码是多少？", "Nǐ de shǒujī hàomǎ shì duōshao?"], ["谢谢你！——不用谢。", "Xièxie nǐ! —— Bú yòng xiè."], ["我每天八点上班，五点下班。", "Wǒ měi tiān bā diǎn shàngbān, wǔ diǎn xiàbān."],
+    ["你的手机号码是多少？", "Nǐ de shǒujī hàomǎ shì duōshao?"], ["我们都是朋友，不用客气。", "Wǒmen dōu shì péngyou, bú yòng kèqi."], ["我每天八点上班，五点下班。", "Wǒ měi tiān bā diǎn shàngbān, wǔ diǎn xiàbān."],
     ["平时我很忙，周末不太忙。", "Píngshí wǒ hěn máng, zhōumò bú tài máng."], ["休息的时候，我喜欢听音乐。", "Xiūxi de shíhou, wǒ xǐhuan tīng yīnyuè."], ["周末我一般在家看书、上网。", "Zhōumò wǒ yìbān zài jiā kàn shū, shàngwǎng."],
-    ["今天晚上我们一块儿吃饭吧！", "Jīntiān wǎnshang wǒmen yíkuàir chī fàn ba!"], ["我从星期一到星期五都很忙，没有时间做饭。", "Wǒ cóng xīngqīyī dào xīngqīwǔ dōu hěn máng, méiyǒu shíjiān zuò fàn."],
-    ["我的同屋是中国人，他在一家汽车公司工作。", "Wǒ de tóngwū shì Zhōngguó rén, tā zài yì jiā qìchē gōngsī gōngzuò."], ["我做越南菜，他做中国菜，我们一起吃饭、聊天儿。", "Wǒ zuò Yuènán cài, tā zuò Zhōngguó cài, wǒmen yìqǐ chī fàn, liáotiānr."],
-    ["周末我和同屋一块儿收拾房间，有时候也去超市买东西。", "Zhōumò wǒ hé tóngwū yíkuàir shōushi fángjiān, yǒu shíhou yě qù chāoshì mǎi dōngxi."],
-    ["喂，你好！请问崔浩在吗？——他不在，现在他在朋友家吃晚饭。", "Wèi, nǐ hǎo! Qǐngwèn Cuī Hào zài ma? —— Tā bú zài, xiànzài tā zài péngyou jiā chī wǎnfàn."]
+    ["今天晚上我们一块儿吃饭吧！", "Jīntiān wǎnshang wǒmen yíkuàir chī fàn ba!"], ["山田不在，现在他在朋友家吃晚饭。", "Shāntián bú zài, xiànzài tā zài péngyou jiā chī wǎnfàn."],
+    ["我从星期一到星期五都很忙，没有时间做饭。", "Wǒ cóng xīngqīyī dào xīngqīwǔ dōu hěn máng, méiyǒu shíjiān zuò fàn."], ["我的同屋是中国人，他在一家汽车公司工作。", "Wǒ de tóngwū shì Zhōngguó rén, tā zài yì jiā qìchē gōngsī gōngzuò."],
+    ["我做越南菜，他做中国菜，我们一起吃饭、聊天儿。", "Wǒ zuò Yuènán cài, tā zuò Zhōngguó cài, wǒmen yìqǐ chī fàn, liáotiānr."],
+    ["周末我和同屋一块儿收拾房间，有时候也去超市买东西。", "Zhōumò wǒ hé tóngwū yíkuàir shōushi fángjiān, yǒu shíhou yě qù chāoshì mǎi dōngxi."]
   ].map(([zh, py]) => ({ zh, py })) }
 ];
 /* chấm câu trả lời: phải có chữ Hán, không lặp lại câu hỏi, không dùng 你 làm chủ ngữ, và có đủ ý câu hỏi cần */
@@ -5300,6 +5300,8 @@ const Reflex = {
   /* phát câu hỏi bằng MỘT thẻ audio duy nhất (iOS chỉ cho phát tự động nếu thẻ đó đã từng được bấm phát) */
   play(){ const a = this.audio, k = this.i; this.stop(); this.phase = "listen"; this.drawStage();
     SPQ = []; SPQ_TOK++; SPQ_ON = false; stopSpeak();
+    const it = this.item(k); if(it && it.tts){ let f = false; const end = () => { if(f) return; f = true; if(this.i === k && this.phase === "listen") this.toAnswer(); };
+      speak(it.zh, end); Games.later(end, 2500 + [...it.zh].length * 700); return; }
     a.src = this.url(k); a.playbackRate = 1; a.onended = () => { if(this.i === k && this.phase === "listen") this.toAnswer(); };
     a.onerror = () => { if(this.i === k) toast("Không tải được âm thanh câu " + (k + 1) + ".", "warn"); };
     const p = a.play(); if(p && p.catch) p.catch(() => { this.phase = "tap"; this.drawStage(); }); },
@@ -5355,7 +5357,7 @@ const Reflex = {
           ${x && x.tip ? `<div class="px-tip">💡 ${esc(x.tip)}</div>` : ""}${it && it.ans ? `<div class="px-sample">${this.ansHTML(it)}</div>` : ""}</details>`; }).join("")}`;
     } else H.innerHTML = L.length ? `<h4>Đã trả lời</h4>${L.slice().reverse().map(x => `<div class="px-h"><button class="px-hp" data-k="${x.k}" aria-label="Nghe câu ${x.k + 1}">▶</button><b>${x.k + 1}</b><span class="han">${x.skip ? "<em>(bỏ qua)</em>" : esc(x.said)}</span>${this.exam || x.skip ? "" : `<i>${x.ok ? "✅" : "❌"}</i>`}${x.rt != null ? `<small>${x.rt.toFixed(1)}s</small>` : ""}</div>`).join("")}` : "";
     H.querySelectorAll("[data-say]").forEach(b => b.onclick = e => { e.preventDefault(); speak(b.dataset.say); });
-    H.querySelectorAll(".px-hp").forEach(b => b.onclick = e => { e.preventDefault(); const a = new Audio(this.url(+b.dataset.k)); a.play().catch(() => {}); }); },
+    H.querySelectorAll(".px-hp").forEach(b => b.onclick = e => { e.preventDefault(); const it = this.item(+b.dataset.k); if(it && it.tts) return speak(it.zh); const a = new Audio(this.url(+b.dataset.k)); a.play().catch(() => {}); }); },
   finish(){ this.stop(); this.phase = "done"; const n = this.set.n, L = this.log.filter(Boolean), ans = L.filter(x => !x.skip), ok = ans.filter(x => x.ok).length, rts = ans.map(x => x.rt), avg = rts.length ? rts.reduce((a, b) => a + b, 0) / rts.length : 0, slow = ans.filter(x => x.rt > 6).length;
     Track.log("talk", { mode: "px", set: this.set.id, right: ok, total: n, exam: this.exam });
     if(ok >= n * .9) Games.reward("talk", Math.round(ok / n * 100), `Luyện phản xạ ${this.set.title} (${ok}/${n})`);
