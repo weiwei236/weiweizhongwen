@@ -209,7 +209,7 @@ def main():
         gram[n] = B[n]["grammar"]
         print(n, "sort", len(trsort), "type", len(trtype), file=sys.stderr)
     les = ",\n".join(f'   {n}:{{title:"Bài {n}",theme:"",zh:{J(B[n]["zh"])},vi:{J(B[n]["vi"])},intro:{J(B[n].get("intro", ""))},vocab:GB{n}_VOCAB,zhvi:GB{n}_ZHVI,vizh:GB{n}_VIZH,sentences:GB{n}_SPEAK,texts:GB{n}_TEXT,test:GB{n}_TEST,tr:GB{n}_TR,px:true,needPy:true}}' for n in sorted(B))
-    js = "/* ===== 发展汉语·初级综合(II) Bài 1–10 – lớp Giao tiếp sơ cấp 2 (sinh từ _src/gt/gtb_gen.py) ===== */\n" + "\n".join(out) + f"\nconst GB_LESSONS1={{\n{les}\n}};\nconst GB_GRAMMAR1={J(gram)};\n" + open('/home/claude/weiweizhongwen/_src/gt/gtb_px.js', encoding='utf-8').read()
+    js = "/* ===== 发展汉语·初级综合(II) Bài 1–10 – lớp Giao tiếp sơ cấp 2 (sinh từ _src/gt/gtb_gen.py) ===== */\n" + "\n".join(out) + f"\nconst GB_LESSONS1={{\n{les}\n}};\nconst GB_GRAMMAR1={J(gram)};\n" + open('/home/claude/weiweizhongwen/_src/gt/gtb_px.js', encoding='utf-8').read() + open('/home/claude/weiweizhongwen/_src/gt/gtb_talk.js', encoding='utf-8').read()
     open('/tmp/claude-0/-home-claude/c42ce2af-05ed-5ab0-9ae7-40fe1ca5a6a5/scratchpad/gt/gb.js', 'w', encoding='utf-8').write(js)
     print("bytes", len(js.encode()), file=sys.stderr)
 
