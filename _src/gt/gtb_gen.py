@@ -121,12 +121,18 @@ def build(n, D):
     for g in D["grammar"]:
         for f in g.get("forms", []):
             for e in f["ex"]: gsents.append(("".join(c.replace("[", "").replace("]", "") for c in e["c"]) + e.get("end", ""), e["vi"]))
+    from gtb_ex import EX
+    exm = {}
+    for ln in EX.get(n, "").strip().split("\n"):
+        if ln: h, z, v = ln.split("|"); exm[h] = [z, "", v]
     vocab = []
     for v in D["vocab"]:
+        if v["h"] in exm: v["ex"] = exm[v["h"]]
         if "ex" not in v:
             c = [s for s in sents + gsents if v["h"].split("（")[0].split("……")[0] in s[0]]
             c.sort(key=lambda s: (han(s[0]) > 28, han(s[0])))
             v["ex"] = [c[0][0], "", c[0][1]] if c else [v["h"], v["p"], v["vi"]]
+        if v["h"] not in exm: print("  thiếu câu ví dụ:", n, v["h"], file=sys.stderr)
         vocab.append(v)
     zhvi = [dict(zh=z, py="", vi=v) for z, v in sents if 4 <= han(z) <= 30][:14]
     speak = [dict(h=z, p="", vi=v) for z, v in sents + gsents if 4 <= han(z) <= 18][:14]
