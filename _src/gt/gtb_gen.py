@@ -132,7 +132,7 @@ def build(n, D):
             c = [s for s in sents + gsents if v["h"].split("（")[0].split("……")[0] in s[0]]
             c.sort(key=lambda s: (han(s[0]) > 28, han(s[0])))
             v["ex"] = [c[0][0], "", c[0][1]] if c else [v["h"], v["p"], v["vi"]]
-        if v["h"] not in exm: print("  thiếu câu ví dụ:", n, v["h"], file=sys.stderr)
+        if v["h"] not in exm and not v.get("ex"): print("  thiếu câu ví dụ:", n, v["h"], file=sys.stderr)
         vocab.append(v)
     zhvi = [dict(zh=z, py="", vi=v) for z, v in sents if 4 <= han(z) <= 30][:14]
     speak = [dict(h=z, p="", vi=v) for z, v in sents + gsents if 4 <= han(z) <= 18][:14]
@@ -150,7 +150,8 @@ def build(n, D):
     zk = set(x["zh"] for x in zhvi); allS = []; seen = set()
     from gtb_tr import TR
     extra = [tuple(x.split("|")) for x in TR.get(n, "").strip().split("\n") if x]
-    for z, v in extra + gsents + sents:
+    vex = [(v["ex"][0], v["ex"][2]) for v in vocab if D.get("vex") and v.get("ex")]
+    for z, v in extra + gsents + sents + vex:
         z = z.strip()
         if v.startswith("(") or z in seen or not (4 <= han(z) <= 24) or "……" in z: continue
         seen.add(z); allS.append((z, v))
@@ -201,22 +202,33 @@ def main():
     DICT.update("马上 小王 这个 那个 这些 那些 一点儿 回来 回去 出来 出去 起来 下去 上来 上去 进来 进去 过来 过去 这几天 有的 可以 不能 不会 不要 别的 一起 还是 只好 怎么办 对不起 没关系 谢谢 喜欢 外国 中文 汉字 生词 课文 电影 音乐 照片 手机 电话 邮件 上网 网上 晚饭 早饭 午饭 早晨 下午 上午 晚上 周末 假期 小时 分钟 星期 公园 商店 超市 银行 医院 飞机 火车 汽车 自行车 出租车 机场 车站 房子 院子 桌子 椅子 衣服 鞋 帽子 眼睛 头发 身体 生病 感冒 休息 睡觉 起床 洗澡 打扫 收拾 做饭 吃饭 喝水 说话 聊天儿 唱歌 跳舞 跑步 游泳 旅行 旅游 留学 学习 工作 上班 下班 上课 下课 考试 毕业 结婚 告诉 知道 明白 觉得 认为 希望 相信 介绍 帮助 帮忙 欢迎 参加 参观 准备 决定 已经 正在 刚才 以后 以前 后来 现在 从前 一直 经常 常常 有时候 突然 慢慢 越来越 特别是 一样 不如 比较 太阳 地球 世界 地图 国家 中国人 外国人 美国 德国 法国 日本 韩国 北京 上海 四川 南京 长城 故宫".split())
     DICT.update("外面 里面 上面 下面 前面 后面 左边 右边 中间 认识 时间 已经 一下 一遍 一次 一天 今年 去年 明年 春节 晚会 礼物 同学们 大家 别人 父母 家人 丈夫 女孩儿 男孩儿 小姑娘 第一 第二 第三 第四 高兴 难过 生气 快乐 舒服 漂亮 好看 好吃 容易 简单 重要 特别 非常 真的 当然 一定 可能 应该 需要 希望 打算 准备 开始 结束 回答 问题 意思 东西 时候 地方 办法 怎么样 为什么 我们 你们 他们".split())
     DICT.update("我们 你们 他们 她们 什么 怎么 为什么 已经 现在 以后 以前 时候 一个 一些 这么 那么 可是 但是 所以 因为 虽然 如果 要是 喜欢 知道 觉得 告诉 朋友 中国 学校 同学 老师 晚上 早上 每天 今天 明天 昨天 东西 地方 问题 事情 自己 大家 一起 一定 应该 可以 没有 不是 还是 或者 这样 那样 生活 习惯 工作 学习 汉语 电脑 衣服 房间 宿舍 妈妈 爸爸 儿子 女儿 孩子 一点儿 有点儿 起来 出来 回来 进来 过来 下去 上去 出去 回去".split())
+    C = CFG[sys.argv[1] if len(sys.argv) > 1 else "b"]
     B = {}
-    for mod in ("gtb1", "gtb2", "gtb3", "gtb4", "gtb5"):
+    for mod in C["mods"]:
         try: m = importlib.import_module(mod)
         except ModuleNotFoundError: continue
         B.update(m.B)
     for k in B:
         for v in B[k]["vocab"]: DICT.add(v["h"])
+        if C.get("vex"): B[k]["vex"] = True
     out = []; gram = {}
     for n in sorted(B):
         vocab, zhvi, vizh, speak, texts, test, trsort, trtype = build(n, B[n])
-        out.append(f"const GB{n}_VOCAB={J(vocab)};\nconst GB{n}_ZHVI={J(zhvi)};\nconst GB{n}_VIZH={J(vizh)};\nconst GB{n}_SPEAK={J(speak)};\nconst GB{n}_TEXT={J(texts)};\nconst GB{n}_TEST={J(test)};\nconst GB{n}_TR={J(dict(sort=trsort, type=trtype))};")
+        P = C["p"]
+        out.append(f"const {P}{n}_VOCAB={J(vocab)};\nconst {P}{n}_ZHVI={J(zhvi)};\nconst {P}{n}_VIZH={J(vizh)};\nconst {P}{n}_SPEAK={J(speak)};\nconst {P}{n}_TEXT={J(texts)};\nconst {P}{n}_TEST={J(test)};\nconst {P}{n}_TR={J(dict(sort=trsort, type=trtype))};")
         gram[n] = B[n]["grammar"]
         print(n, "sort", len(trsort), "type", len(trtype), file=sys.stderr)
-    les = ",\n".join(f'   {n}:{{title:"Bài {n}",theme:"",zh:{J(B[n]["zh"])},vi:{J(B[n]["vi"])},intro:{J(B[n].get("intro", ""))},vocab:GB{n}_VOCAB,zhvi:GB{n}_ZHVI,vizh:GB{n}_VIZH,sentences:GB{n}_SPEAK,texts:GB{n}_TEXT,test:GB{n}_TEST,tr:GB{n}_TR,px:true,needPy:true}}' for n in sorted(B))
-    js = "/* ===== 发展汉语·初级综合(II) Bài 1–10 – lớp Giao tiếp sơ cấp 2 (sinh từ _src/gt/gtb_gen.py) ===== */\n" + "\n".join(out) + f"\nconst GB_LESSONS1={{\n{les}\n}};\nconst GB_GRAMMAR1={J(gram)};\n" + open('/home/claude/weiweizhongwen/_src/gt/gtb_px.js', encoding='utf-8').read() + open('/home/claude/weiweizhongwen/_src/gt/gtb_talk.js', encoding='utf-8').read()
-    open('/tmp/claude-0/-home-claude/c42ce2af-05ed-5ab0-9ae7-40fe1ca5a6a5/scratchpad/gt/gb.js', 'w', encoding='utf-8').write(js)
+    P = C["p"]
+    les = ",\n".join(f'   {n}:{{title:"Bài {n}",theme:"",zh:{J(B[n]["zh"])},vi:{J(B[n]["vi"])},intro:{J(B[n].get("intro", ""))},vocab:{P}{n}_VOCAB,zhvi:{P}{n}_ZHVI,vizh:{P}{n}_VIZH,sentences:{P}{n}_SPEAK,texts:{P}{n}_TEXT,test:{P}{n}_TEST,tr:{P}{n}_TR,px:true,needPy:true}}' for n in sorted(B))
+    D0 = '/home/claude/weiweizhongwen/_src/gt/'
+    js = C["head"] + "\n" + "\n".join(out) + f"\nconst {C['les']}={{\n{les}\n}};\nconst {C['gram']}={J(gram)};\n" + "".join(open(D0 + f, encoding='utf-8').read() for f in C["js"])
+    open('/tmp/claude-0/-home-claude/c42ce2af-05ed-5ab0-9ae7-40fe1ca5a6a5/scratchpad/gt/' + C["out"], 'w', encoding='utf-8').write(js)
     print("bytes", len(js.encode()), file=sys.stderr)
 
+CFG = {
+ "b": dict(mods=("gtb1", "gtb2", "gtb3", "gtb4", "gtb5"), p="GB", les="GB_LESSONS1", gram="GB_GRAMMAR1", js=("gtb_px.js", "gtb_talk.js"), out="gb.js",
+           head="/* ===== 发展汉语·初级综合(II) Bài 1–10 – lớp Giao tiếp sơ cấp 2 (sinh từ _src/gt/gtb_gen.py) ===== */"),
+ "c": dict(mods=("gtc1", "gtc2", "gtc3", "gtc4", "gtc5"), p="GC", les="GC_LESSONS3", gram="GC_GRAMMAR3", js=("gtc_px.js", "gtc_talk.js"), out="gc.js", vex=True,
+           head="/* ===== 发展汉语·初级综合(I) Bài 21–30 – lớp Giao tiếp sơ cấp 1 (sinh từ _src/gt/gtb_gen.py c) ===== */"),
+}
 if __name__ == "__main__": main()
