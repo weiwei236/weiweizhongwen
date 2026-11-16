@@ -256,6 +256,8 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .choice input:checked+span,.chips input:checked+span{border-color:var(--accent);background:var(--leaf-soft)}
 .choice input:focus-visible+span,.chips input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
 .err{color:var(--bad);font-size:13px}
+.lv-bk{display:block;font-size:10px;font-weight:600;opacity:.75;line-height:1.1}
+#levels button:has(.lv-bk){white-space:nowrap;padding-left:4px;padding-right:4px;font-size:clamp(12px,3.4vw,15px)}
 .chips .lv-books{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;flex-basis:100%}
 .chips .lv-book span{display:grid;gap:2px;border-radius:12px;padding:10px 14px;height:100%}
 .chips .lv-book small{color:var(--muted);font-weight:400;font-size:13px}
@@ -3583,9 +3585,9 @@ const LEVELS = {
    15:{title:"Bài 15",theme:"",zh:"我想再去一次中国",vocab:H2L15_VOCAB,zhvi:H2L15_ZHVI,vizh:H2L15_VIZH,sentences:H2L15_SPEAK_SENT}}},
  hsk3:{name:"HSK 3", total:0, lessons:{}},
  hsk4:{name:"HSK 4", total:0, lessons:{}},
- gt1:{name:"Bài 1–10", full:"Giao tiếp · Bài 1–10", grp:"gt", head:"发展汉语", from:1, total:10, lessons:GT_LESSONS1},
- gt2:{name:"Bài 11–20", full:"Giao tiếp · Bài 11–20", grp:"gt", head:"发展汉语", from:11, total:10, lessons:GT_LESSONS2},
- gt3:{name:"Bài 21–30", full:"Giao tiếp · Bài 21–30", grp:"gt", head:"发展汉语", from:21, total:10, lessons:GC_LESSONS3},
+ gt1:{name:"Bài 1–10", full:"Giao tiếp sơ cấp 1 · Bài 1–10", grp:"gt", head:"发展汉语", from:1, total:10, lessons:GT_LESSONS1},
+ gt2:{name:"Bài 11–20", full:"Giao tiếp sơ cấp 1 · Bài 11–20", grp:"gt", head:"发展汉语", from:11, total:10, lessons:GT_LESSONS2},
+ gt3:{name:"Bài 21–30", full:"Giao tiếp sơ cấp 1 · Bài 21–30", grp:"gt", head:"发展汉语", from:21, total:10, lessons:GC_LESSONS3},
  gb1:{name:"Bài 1–10", full:"Giao tiếp sơ cấp 2 · Bài 1–10", grp:"gt", book:2, head:"发展汉语II", from:1, total:10, lessons:GB_LESSONS1}
 };
 
@@ -3739,11 +3741,15 @@ function renderLevels(){
   const pf=Profile.get(), grp=pf&&pf.cls==="gt"?"gt":"hsk";
   const bs=$("#brandSub"); if(bs) bs.textContent=grp==="gt"?"Luyện tiếng Trung theo giáo trình Phát triển Hán ngữ tổng hợp sơ cấp 1-2":"Luyện HSK theo giáo trình HSK 3.0";
   const bk=grp==="gt"?gtBook(pf&&pf.level):0;
-  if(!LEVELS[S.level]||(LEVELS[S.level].grp||"hsk")!==grp||(grp==="gt"&&(LEVELS[S.level].book||1)!==bk)){ S.level=grp==="gt"?gtLv(pf&&pf.level):(pf&&LEVELS[pf.level]&&!LEVELS[pf.level].grp?pf.level:"hsk1"); store.set("ww_level",S.level);
+  /* học viên lên sơ cấp 2 vẫn xem lại được sơ cấp 1; khi giáo trình trong hồ sơ đổi thì tự chuyển sang giáo trình mới (tiến độ cũ giữ nguyên) */
+  const pv=store.get("ww_pf_lv"), lvChanged=grp==="gt"&&pf&&pv!=null&&pv!==pf.level; if(grp==="gt"&&pf&&pv==null) store.set("ww_pf_lv",pf.level); if(lvChanged) store.set("ww_pf_lv",pf.level);
+  if(!LEVELS[S.level]||(LEVELS[S.level].grp||"hsk")!==grp||(grp==="gt"&&((LEVELS[S.level].book||1)>bk||lvChanged))){ S.level=grp==="gt"?gtLv(pf&&pf.level):(pf&&LEVELS[pf.level]&&!LEVELS[pf.level].grp?pf.level:"hsk1"); store.set("ww_level",S.level);
     const ids=Object.keys(LEVELS[S.level].lessons).map(Number); S.lesson=ids.length?(grp==="gt"?ids[0]:ids[ids.length-1]):null; }
-  $("#levels").innerHTML = Object.entries(LEVELS).filter(([k,v])=>(v.grp||"hsk")===grp&&(grp!=="gt"||(v.book||1)===bk)).map(([k,v])=>`<button role="tab" aria-selected="${k===S.level}" data-lv="${k}">${v.name}</button>`).join("");
+  { const Ls=LEVELS[S.level].lessons; if(!Ls[S.lesson]){ const last=+store.get("ww_les_"+S.level,0), ids=Object.keys(Ls).map(Number); S.lesson=Ls[last]?last:(ids.length?(grp==="gt"?ids[0]:ids[ids.length-1]):null); } }
+  const both=grp==="gt"&&bk>1, tabs=Object.entries(LEVELS).filter(([k,v])=>(v.grp||"hsk")===grp&&(grp!=="gt"||(v.book||1)<=bk)).sort((a,b)=>(b[1].book||1)-(a[1].book||1));
+  $("#levels").innerHTML = tabs.map(([k,v])=>`<button role="tab" aria-selected="${k===S.level}" data-lv="${k}">${both?`<small class="lv-bk">${(v.book||1)===bk?"Sơ cấp "+(v.book||1):"Xem lại SC"+(v.book||1)}</small>`:""}${v.name}</button>`).join("");
   $("#levels").onclick = e=>{const b=e.target.closest("button");if(!b)return;S.level=b.dataset.lv;store.set("ww_level",S.level);
-    const ids=Object.keys(LEVELS[S.level].lessons);S.lesson=ids.length?+ids[ids.length-1]:null;renderAll();};
+    const ids=Object.keys(LEVELS[S.level].lessons), last=+store.get("ww_les_"+S.level,0);S.lesson=LEVELS[S.level].lessons[last]?last:(ids.length?+ids[ids.length-1]:null);renderAll();};
 }
 function renderRail(){
   const L=LEVELS[S.level];
@@ -3755,7 +3761,7 @@ function renderRail(){
     h+=`<button role="tab" data-l="${i}" ${les?"":"disabled"} aria-selected="${S.lesson===i}">Bài ${i}<small>${les?(les.theme?esc(les.theme):(les.zh?`<span class="han">${esc(les.zh)}</span>`:"Bài mới")):"Sắp cập nhật"}</small></button>`;
   }
   $("#rail").innerHTML=h;
-  $("#rail").onclick=e=>{const b=e.target.closest("button");if(!b||b.disabled)return;S.lesson=+b.dataset.l;renderAll();};
+  $("#rail").onclick=e=>{const b=e.target.closest("button");if(!b||b.disabled)return;S.lesson=+b.dataset.l;store.set("ww_les_"+S.level,S.lesson);renderAll();};
   const rl=$("#rail"), sel=rl.querySelector('[aria-selected="true"]'); if(sel) rl.scrollLeft=sel.offsetLeft-rl.offsetLeft-rl.clientWidth/2+sel.clientWidth/2;
 }
 /* Giáo trình sơ cấp 2: phiên âm câu được điền tự động (pinyin-pro) khi mở bài lần đầu */
@@ -8804,7 +8810,7 @@ function renderHello(){
 function enterApp(){
   const p=Profile.get(); if(!p||!p.avatar) return openWelcome();
   if(p.cls==="hsk"&&LEVELS[p.level]){ S.level=p.level; const ids=Object.keys(LEVELS[S.level].lessons); S.lesson=ids.length?+ids[ids.length-1]:null; }
-  if(p.cls==="gt"&&((LEVELS[S.level]||{}).grp!=="gt"||(LEVELS[S.level].book||1)!==gtBook(p.level))){ S.level=gtLv(p.level); store.set("ww_level",S.level); const ids=Object.keys(LEVELS[S.level].lessons).map(Number); S.lesson=ids.length?ids[0]:LEVELS[S.level].from; }
+  if(p.cls==="gt"&&((LEVELS[S.level]||{}).grp!=="gt"||(LEVELS[S.level].book||1)>gtBook(p.level)||(store.get("ww_pf_lv")!=null&&store.get("ww_pf_lv")!==p.level))){ store.set("ww_pf_lv",p.level); S.level=gtLv(p.level); store.set("ww_level",S.level); const ids=Object.keys(LEVELS[S.level].lessons).map(Number); S.lesson=ids.length?ids[0]:LEVELS[S.level].from; }
   showScreen("app"); renderHello(); renderAll();
   if(!enterApp.logged){ enterApp.logged=true; Track.log("session",{},""); }
 }
