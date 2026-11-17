@@ -6,12 +6,14 @@ HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
 p = lambda *a: os.path.join(HERE, *a)
 import shutil
 imgs = {}; imgs2 = {}
-os.makedirs(os.path.join(ROOT, 'img', 'hsk2'), exist_ok=True); os.makedirs(os.path.join(ROOT, 'img', 'hsk1'), exist_ok=True)
+os.makedirs(os.path.join(ROOT, 'img', 'hsk2'), exist_ok=True); os.makedirs(os.path.join(ROOT, 'img', 'hsk1'), exist_ok=True); os.makedirs(os.path.join(ROOT, 'img', 'hsk3'), exist_ok=True)
 for d in sorted(x for x in os.listdir(HERE) if x.startswith('ex') and os.path.isdir(p(x))):
     for f in sorted(os.listdir(p(d))):
         if not f.endswith('.jpg'): continue
         uri = 'data:image/jpeg;base64,' + base64.b64encode(open(p(d, f), 'rb').read()).decode()
-        if d.startswith('ex2_') or d.startswith('exs1_'):   # ảnh sách bài tập: để thành file riêng img/hsk2, img/hsk1 cho trang nhẹ
+        if d.startswith('ex3_'):   # ảnh sách bài tập HSK 3 → img/hsk3
+            imgs2[f[:-4]] = uri; shutil.copyfile(p(d, f), os.path.join(ROOT, 'img', 'hsk3', f))
+        elif d.startswith('ex2_') or d.startswith('exs1_'):   # ảnh sách bài tập: để thành file riêng img/hsk2, img/hsk1 cho trang nhẹ
             imgs2[f[:-4]] = uri; shutil.copyfile(p(d, f), os.path.join(ROOT, 'img', 'hsk2' if d.startswith('ex2_') else 'hsk1', f))
         else: imgs[f[:-4]] = uri
 s = open(p('src.html'), encoding='utf-8').read()
