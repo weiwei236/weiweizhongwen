@@ -349,7 +349,7 @@ function guideSVG(expr = "smile", cls = ""){
 /* Bản đồ Trung Quốc chibi (viewBox 0 0 400 320) */
 function chinaMapSVG(){
   const P = "394,58 369,98 340,108 326,122 313,118 307,130 289,130 285,138 295,146 317,146 301,158 307,186 313,202 301,226 289,246 270,262 245,274 232,269 220,262 190,266 176,270 165,250 162,218 128,218 103,222 78,214 54,198 48,182 42,158 19,142 13,126 22,118 53,102 69,82 84,66 96,50 115,62 146,90 177,102 208,110 239,102 252,86 277,78 295,62 298,46 307,18 326,18 338,34 351,46 369,62";
-  let mts = ""; [[70, 170], [96, 186], [120, 176], [60, 140], [150, 200]].forEach(([x, y]) => mts += `<path d="M${x - 12} ${y + 8} L${x} ${y - 8} L${x + 12} ${y + 8}Z" fill="#B9D7A8" stroke="#8FB57E" stroke-width="1.6" stroke-linejoin="round"/><path d="M${x - 4} ${y - 2} L${x} ${y - 8} L${x + 4} ${y - 2}Z" fill="#fff"/>`);
+  let mts = ""; [[70, 170], [96, 186], [120, 176], [60, 140], [36, 110]].forEach(([x, y]) => mts += `<path d="M${x - 12} ${y + 8} L${x} ${y - 8} L${x + 12} ${y + 8}Z" fill="#B9D7A8" stroke="#8FB57E" stroke-width="1.6" stroke-linejoin="round"/><path d="M${x - 4} ${y - 2} L${x} ${y - 8} L${x + 4} ${y - 2}Z" fill="#fff"/>`);
   let waves = ""; [[352, 170], [366, 220], [340, 270], [372, 140]].forEach(([x, y]) => waves += `<path d="M${x} ${y} q6 -5 12 0 t12 0" fill="none" stroke="#A9D4EE" stroke-width="2.4" stroke-linecap="round"/>`);
   return `<svg class="tp-map-svg" viewBox="0 0 400 320" role="img" aria-label="Bản đồ Trung Quốc">
     <defs><linearGradient id="tpSea" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E6F5FF"/><stop offset="1" stop-color="#CFEAFB"/></linearGradient></defs>
@@ -360,9 +360,8 @@ function chinaMapSVG(){
     <ellipse cx="245" cy="290" rx="9" ry="6" fill="#E5F4D6" stroke="#9CC79A" stroke-width="4"/><ellipse cx="310" cy="252" rx="5" ry="11" fill="#E5F4D6" stroke="#9CC79A" stroke-width="4"/>
     ${mts}
     <path d="M60 230 Q70 222 82 230" stroke="#C9B48A" stroke-width="2" fill="none"/>
-    <g transform="translate(150 150)"><circle r="11" fill="#fff" stroke="#3B3B3B" stroke-width="1.6"/><circle cx="-8" cy="-8" r="4.5" fill="#3B3B3B"/><circle cx="8" cy="-8" r="4.5" fill="#3B3B3B"/><ellipse cx="-4" cy="0" rx="3" ry="3.6" fill="#3B3B3B"/><ellipse cx="4" cy="0" rx="3" ry="3.6" fill="#3B3B3B"/><circle cx="-3.4" cy="-.6" r="1" fill="#fff"/><circle cx="4.6" cy="-.6" r="1" fill="#fff"/><ellipse cx="0" cy="5" rx="1.8" ry="1.2" fill="#3B3B3B"/></g>
-    <path d="M279 123 Q330 140 311 192 Q300 200 303 200 Q250 190 218 205 Q200 222 194 242" fill="none" stroke="#E8453C" stroke-width="2.4" stroke-dasharray="2 6" stroke-linecap="round" opacity=".75"/>
-    <g transform="translate(240 160) rotate(-20)"><path d="M-12 0 L10 0 Q16 0 16 3 Q16 5 10 5 L-12 5Z" fill="#fff" stroke="#5A4034" stroke-width="1.4"/><path d="M-2 0 L4 -10 L8 -10 L6 0Z M-2 5 L4 13 L8 13 L6 5Z M-12 0 L-15 -6 L-11 -6 L-8 0Z" fill="#7FB8E6" stroke="#5A4034" stroke-width="1.2" stroke-linejoin="round"/></g>
+    <g transform="translate(160 132)"><circle r="11" fill="#fff" stroke="#3B3B3B" stroke-width="1.6"/><circle cx="-8" cy="-8" r="4.5" fill="#3B3B3B"/><circle cx="8" cy="-8" r="4.5" fill="#3B3B3B"/><ellipse cx="-4" cy="0" rx="3" ry="3.6" fill="#3B3B3B"/><ellipse cx="4" cy="0" rx="3" ry="3.6" fill="#3B3B3B"/><circle cx="-3.4" cy="-.6" r="1" fill="#fff"/><circle cx="4.6" cy="-.6" r="1" fill="#fff"/><ellipse cx="0" cy="5" rx="1.8" ry="1.2" fill="#3B3B3B"/></g>
+    <path id="tpTrail" d="" fill="none" stroke="#E8453C" stroke-width="2.6" stroke-dasharray="3 6" stroke-linecap="round" opacity=".8"/>
     <g id="tpPins"></g>
   </svg>`;
 }

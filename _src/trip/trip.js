@@ -1,6 +1,6 @@
 /* ===== Trò chơi "Khám phá Trung Quốc" – bản đồ, trạm, hướng dẫn viên, trả lời câu hỏi để mở khóa ===== */
 const Trip = {
-  st: null, view: "map", city: null, spot: null, qz: null, py: store.get("ww_trip_py", true),
+  st: null, view: "map", city: null, spot: null, qz: null, py: store.get("ww_trip_py", true), vi: store.get("ww_trip_vi", true), busy: false,
   key(){ const p = Profile.get(); if(!p) return null; if(!p.sid){ p.sid = Track.uid(); Profile.set(p); } return "ww_trip_" + p.sid; },
   load(){ const k = this.key(); if(!k) return null; this.st = store.get(k, null) || { done: {}, stamps: {} }; this.st.done = this.st.done || {}; this.st.stamps = this.st.stamps || {}; return this.st; },
   save(){ const k = this.key(); if(k && this.st) store.set(k, this.st); },
@@ -8,7 +8,7 @@ const Trip = {
   S(id){ for(const c of TRIP){ const s = c.spots.find(x => x.id === id); if(s) return s; } return null; },
   cnt(c){ return c.spots.filter(s => this.st.done[s.id]).length; },
   z(t){ return this.py ? rubyHTML(t) : esc(t); },
-  art(k, cls = ""){ return `<div class="tp-artbox ${cls}">${TA.wrap(k, ART[k](), "")}</div>`; },
+  art(k, cls = ""){ return `<div class="tp-artbox ${cls}">${tripArt(k)}</div>`; },
   say(zh){ return `<button type="button" class="tp-say" data-say="${esc(zh)}" aria-label="Nghe">${ICON.sound}</button>`; },
   line([zh, vi]){ return `<div class="tp-line">${this.say(zh)}<div><div class="tp-zh han">${this.z(zh)}</div><div class="tp-vi">${esc(vi)}</div></div></div>`; },
   guide(expr, html){ return `<div class="tp-guide"><div class="tp-gd">${guideSVG(expr)}</div><div class="tp-bub">${html}</div></div>`; },
@@ -17,35 +17,66 @@ const Trip = {
   render(){
     const p = Profile.get(), total = TRIP.reduce((a, c) => a + c.spots.length, 0), done = Object.keys(this.st.done).length;
     let h = `<div class="tp-top"><div><h2><span class="han">中国之旅</span> · Khám phá Trung Quốc</h2><p class="muted">Đã khám phá ${done}/${total} địa điểm · ${Object.keys(this.st.stamps).length}/${TRIP.length} con dấu</p></div>
-      <div class="tp-acts"><button class="btn ${this.py ? "on" : ""}" id="tpPy" aria-pressed="${this.py}">Phiên âm</button>
+      <div class="tp-acts"><button class="btn ${this.py ? "on" : ""}" id="tpPy" aria-pressed="${this.py}">Phiên âm</button><button class="btn ${this.vi ? "on" : ""}" id="tpVi" aria-pressed="${this.vi}">Tiếng Việt</button>
       ${this.view !== "map" ? `<button class="btn" id="tpMap">🗺 Bản đồ</button>` : ""}<button class="btn" id="tpBack">${ICON.left}Về trang học</button></div></div>`;
     if(this.view === "map") h += this.mapView();
     else if(this.view === "city") h += this.cityView();
     else if(this.view === "quiz") h += this.quizView();
     else if(this.view === "spot") h += this.spotView();
-    $("#tpBody").innerHTML = h; this.bind();
+    $("#tpBody").innerHTML = h; $("#tpBody").classList.toggle("tp-novi", !this.vi); this.bind();
   },
 
   /* ---------- Bản đồ ---------- */
   mapView(){
-    const pins = TRIP.map(c => { const n = this.cnt(c), full = n === c.spots.length;
+    const pins = TRIP.map(c => { const n = this.cnt(c), full = n === c.spots.length, lx = c.x + c.lx, ly = c.y + c.ly, far = Math.hypot(c.lx + 30, c.ly) > 34;
       return `<g class="tp-pin" data-c="${c.id}" tabindex="0" role="button" aria-label="${c.vi}">
-        <circle cx="${c.x}" cy="${c.y}" r="14" fill="${c.col}" opacity=".18"><animate attributeName="r" values="10;17;10" dur="2.4s" repeatCount="indefinite"/></circle>
-        <path d="M${c.x} ${c.y + 2} C${c.x - 9} ${c.y - 9} ${c.x - 9} ${c.y - 22} ${c.x} ${c.y - 22} C${c.x + 9} ${c.y - 22} ${c.x + 9} ${c.y - 9} ${c.x} ${c.y + 2}Z" fill="${c.col}" stroke="#5A4034" stroke-width="1.6" stroke-linejoin="round"/>
-        <circle cx="${c.x}" cy="${c.y - 14}" r="4" fill="#fff"/>
-        <g transform="translate(${c.x + c.lx} ${c.y + c.ly})"><rect x="0" y="-11" width="60" height="20" rx="10" fill="#fff" stroke="${c.col}" stroke-width="2"/><text x="20" y="4" text-anchor="middle" font-size="12" font-family="KaiTi,STKaiti,serif" fill="#3A2A22">${c.zh}</text>${full ? `<circle cx="48" cy="-1" r="6" fill="#2C9A58"/><path d="M45 -1 l2 2 l4 -4" stroke="#fff" stroke-width="1.6" fill="none"/>` : `<text x="47" y="2.5" font-size="7.5" text-anchor="middle" fill="#8A7466">${n}/5</text>`}</g></g>`; }).join("");
+        ${far ? `<path d="M${c.x} ${c.y - 8} L${lx + (c.lx < 0 ? 60 : 0)} ${ly - 1}" stroke="${c.col}" stroke-width="1.4" stroke-dasharray="2 2"/>` : ""}
+        <circle cx="${c.x}" cy="${c.y}" r="9" fill="${c.col}" opacity=".18"><animate attributeName="r" values="6;12;6" dur="2.4s" repeatCount="indefinite"/></circle>
+        <path d="M${c.x} ${c.y + 1} C${c.x - 7} ${c.y - 7} ${c.x - 7} ${c.y - 17} ${c.x} ${c.y - 17} C${c.x + 7} ${c.y - 17} ${c.x + 7} ${c.y - 7} ${c.x} ${c.y + 1}Z" fill="${c.col}" stroke="#5A4034" stroke-width="1.4" stroke-linejoin="round"/>
+        <circle cx="${c.x}" cy="${c.y - 11}" r="3.2" fill="#fff"/>
+        <g transform="translate(${lx} ${ly})"><rect x="0" y="-10" width="60" height="19" rx="9.5" fill="#fff" stroke="${c.col}" stroke-width="2"/><text x="20" y="4" text-anchor="middle" font-size="11.5" font-family="KaiTi,STKaiti,serif" fill="#3A2A22">${c.zh}</text>${full ? `<circle cx="48" cy="-.5" r="5.6" fill="#2C9A58"/><path d="M45.2 -.5 l2 2 l3.6 -3.6" stroke="#fff" stroke-width="1.5" fill="none"/>` : `<text x="47" y="2.6" font-size="7.5" text-anchor="middle" fill="#8A7466">${n}/${c.spots.length}</text>`}</g></g>`; }).join("");
     const stamps = TRIP.map(c => { const ok = this.st.stamps[c.id];
       return `<div class="tp-stamp ${ok ? "ok" : ""}" style="--sc:${c.col}" title="${c.vi}"><span class="han">${c.zh}</span><small>${ok ? "已到" : "未到"}</small></div>`; }).join("");
     return this.guide("smile", `<b class="han">${this.z("你好！我是导游小语。")}</b><p>Chào ${esc(Profile.get().name)}! Mình là hướng dẫn viên Tiểu Ngữ. Chọn một trạm trên bản đồ để bắt đầu chuyến đi nhé. Ở mỗi trạm, bạn trả lời đúng ít nhất <b>2/3 câu hỏi</b> để “mua vé” vào xem danh lam hoặc nếm món ngon. Khám phá đủ 5 địa điểm của một thành phố sẽ được đóng <b>con dấu hộ chiếu</b>!</p>`)
-      + `<div class="tp-maplay"><div class="tp-mapbox">${chinaMapSVG().replace('<g id="tpPins"></g>', pins)}</div>
+      + `<div class="tp-maplay"><div class="tp-mapbox"><div class="tp-mapin">${chinaMapSVG().replace('<g id="tpPins"></g>', pins)}${this.meHTML()}</div><p class="tp-maphint">✈ Bấm vào một trạm để bay đến đó</p></div>
         <aside class="tp-pass"><h3>护照 · Hộ chiếu du lịch</h3><div class="tp-stamps">${stamps}</div>
         <div class="tp-clist">${TRIP.map(c => `<button class="tp-cbtn" data-c="${c.id}" style="--sc:${c.col}">${this.art(c.cover, "mini")}<span><b class="han">${c.zh}</b> <small>${c.py}</small><em>${c.vi} · ${this.cnt(c)}/${c.spots.length}</em></span></button>`).join("")}</div></aside></div>`;
+  },
+
+  pos(c){ return `left:${c.x / 4}%;top:${c.y / 3.2}%`; },
+  head(){ const p = Profile.get(); try{ return avatarSVG({ ...(p.avatar || {}), expr: "laugh" }, { view: "head", label: p.name }); }catch(e){ return guideSVG("happy"); } },
+  meHTML(){ const c = this.st.at && this.C(this.st.at); return `<div class="tp-me ${c ? "" : "off"}" id="tpMe" style="${c ? this.pos(c) : "left:96%;top:92%"}"><div class="tp-me-h">${this.head()}</div><i></i></div>`; },
+  fly(id){
+    const to = this.C(id), from = this.st.at && this.C(this.st.at);
+    const done = () => { this.busy = false; this.st.at = id; this.save(); this.city = id; this.view = "city"; this.arrived = true; this.render(); window.scrollTo(0, 0); };
+    const box = $("#tpBody .tp-mapin");
+    if(!box || (from && from.id === id) || matchMedia("(prefers-reduced-motion: reduce)").matches) return done();
+    this.busy = true;
+    const A = from ? { x: from.x, y: from.y - 12 } : { x: 392, y: 300 }, B = { x: to.x, y: to.y - 12 };
+    const d = Math.hypot(B.x - A.x, B.y - A.y) || 1, sg = (B.x - A.x) >= 0 ? -1 : 1, C = { x: (A.x + B.x) / 2 + sg * (B.y - A.y) / d * d * .35 * -1, y: (A.y + B.y) / 2 - Math.abs(B.x - A.x) / d * d * .35 - 12 };
+    const pt = t => ({ x: (1 - t) * (1 - t) * A.x + 2 * (1 - t) * t * C.x + t * t * B.x, y: (1 - t) * (1 - t) * A.y + 2 * (1 - t) * t * C.y + t * t * B.y });
+    const me = $("#tpMe"); if(me) me.classList.add("off");
+    const plane = document.createElement("div"); plane.className = "tp-plane";
+    plane.innerHTML = `<div class="tp-pl-r">${this.head()}</div><svg class="tp-pl-s" viewBox="0 0 64 40" aria-hidden="true"><path d="M6 20 Q10 14 22 14 L50 14 Q60 14 62 20 Q60 26 50 26 L22 26 Q10 26 6 20Z" fill="#fff" stroke="#5A4034" stroke-width="2"/><path d="M28 14 L40 2 H46 L40 14Z M28 26 L40 38 H46 L40 26Z M8 18 L2 8 H8 L14 16Z" fill="#7FB8E6" stroke="#5A4034" stroke-width="1.6" stroke-linejoin="round"/><g fill="#9FD0F0" stroke="#5A4034" stroke-width="1"><circle cx="30" cy="20" r="2.4"/><circle cx="37" cy="20" r="2.4"/><circle cx="44" cy="20" r="2.4"/></g><path d="M54 16 Q60 18 60 20" stroke="#5A4034" stroke-width="1.4" fill="none"/><path d="M14 22 H26" stroke="#E8453C" stroke-width="2"/></svg>`;
+    box.appendChild(plane);
+    const trail = $("#tpBody #tpTrail"), dur = Math.min(2600, 1300 + d * 6), t0 = performance.now();
+    const step = now => {
+      const t = Math.min(1, (now - t0) / dur), e = t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      const p = pt(e), q = pt(Math.min(1, e + .01)), ang = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI;
+      plane.style.left = p.x / 4 + "%"; plane.style.top = p.y / 3.2 + "%";
+      plane.querySelector(".tp-pl-s").style.transform = `rotate(${ang}deg) scale(${1 + Math.sin(e * Math.PI) * .35})`;
+      if(trail){ let dd = `M${A.x} ${A.y}`; for(let k = 1; k <= 24; k++){ const r = pt(e * k / 24); dd += ` L${r.x.toFixed(1)} ${r.y.toFixed(1)}`; } trail.setAttribute("d", dd); }
+      if(t < 1) requestAnimationFrame(step);
+      else { plane.classList.add("land"); if(me){ me.style.cssText = this.pos(to); me.classList.remove("off"); me.classList.add("pop"); } setTimeout(done, 650); }
+    };
+    requestAnimationFrame(step);
   },
 
   /* ---------- Trạm thành phố ---------- */
   cityView(){
     const c = this.C(this.city);
-    return `<div class="tp-banner" style="--sc:${c.col}">${this.art(c.cover, "ban")}<div class="tp-bt"><span class="han">${c.zh}</span><small>${c.py}</small><b>${c.vi}</b><em>${this.cnt(c)}/${c.spots.length} địa điểm</em></div></div>`
+    const arr = this.arrived; this.arrived = false;
+    return `<div class="tp-banner ${arr ? "arrive" : ""}" style="--sc:${c.col}">${this.art(c.cover, "ban")}<div class="tp-bt"><span class="han">${c.zh}</span><small>${c.py}</small><b>${c.vi}</b><em>${this.cnt(c)}/${c.spots.length} địa điểm</em>${arr ? `<span class="tp-landed">✈ Đã hạ cánh!</span>` : ""}</div></div>`
       + this.guide("happy", c.intro.map(l => this.line(l)).join("") + `<button class="linkbtn tp-sayall" data-sayall="${esc(c.intro.map(l => l[0]).join(""))}">${ICON.sound} Nghe cả đoạn</button>`)
       + `<h3 class="tp-h">Bạn muốn khám phá gì?</h3><div class="tp-grid">${c.spots.map(s => { const ok = this.st.done[s.id];
         return `<button class="tp-card ${ok ? "ok" : "lock"}" data-s="${s.id}">${this.art(s.art)}<span class="tp-tag ${s.kind}">${s.kind === "jd" ? "景点 · Danh lam" : "美食 · Món ngon"}</span>
@@ -132,9 +163,10 @@ const Trip = {
     on("#tpBack", () => { stopSpeak(); showScreen("app"); renderHello(); });
     on("#tpMap, #tpMap2", () => { stopSpeak(); this.view = "map"; this.render(); });
     on("#tpCity", () => { stopSpeak(); this.view = "city"; this.render(); });
+    on("#tpVi", () => { this.vi = !this.vi; store.set("ww_trip_vi", this.vi); const b = $("#tpVi"); b.classList.toggle("on", this.vi); b.setAttribute("aria-pressed", this.vi); $("#tpBody").classList.toggle("tp-novi", !this.vi); });
     on("#tpPy", () => { this.py = !this.py; store.set("ww_trip_py", this.py); if(this.view === "fail"){ $("#tpBody").innerHTML = this.failView(); this.bind(); } else this.render(); });
-    const go = id => { this.city = id; this.view = "city"; this.render(); window.scrollTo(0, 0); };
-    on(".tp-pin, .tp-cbtn", el => go(el.dataset.c));
+    const go = (id, fromList) => { if(this.busy) return; const m = B.querySelector(".tp-mapin"); if(fromList && m && m.getBoundingClientRect().top < 0){ m.scrollIntoView({ behavior: "smooth", block: "center" }); setTimeout(() => this.fly(id), 450); } else this.fly(id); };
+    on(".tp-pin", el => go(el.dataset.c)); on(".tp-cbtn", el => go(el.dataset.c, true));
     B.querySelectorAll(".tp-pin").forEach(el => el.onkeydown = e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); go(el.dataset.c); } });
     on(".tp-say, .tp-word", el => speak(el.dataset.say));
     on(".tp-sayall", el => speak(el.dataset.sayall));

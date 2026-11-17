@@ -4,7 +4,7 @@
             ["s", "các từ theo đúng thứ tự cách nhau bằng dấu cách", nghĩa]  – sắp xếp thành câu
    Từ vựng & ngữ pháp lấy theo giáo trình HSK 1–3 (又…又…, 跟…一样, 先…再…, 比, 像…一样, V+极了, 是…的…) */
 const TRIP = [
- { id: "bj", zh: "北京", py: "Běijīng", vi: "Bắc Kinh", col: "#D9483B", x: 279, y: 123, lx: -66, ly: -18, cover: "gugong",
+ { id: "bj", zh: "北京", py: "Běijīng", vi: "Bắc Kinh", col: "#D9483B", x: 279, y: 123, lx: -66, ly: -20, cover: "gugong",
    intro: [["大家好！我是导游小语。欢迎来到北京！", "Chào mọi người! Mình là hướng dẫn viên Tiểu Ngữ. Chào mừng đến Bắc Kinh!"],
            ["北京是中国的首都，有三千多年的历史。", "Bắc Kinh là thủ đô của Trung Quốc, có hơn ba nghìn năm lịch sử."],
            ["这里有很多有名的景点，还有很多好吃的东西。你想先去哪儿？", "Ở đây có rất nhiều danh lam nổi tiếng và nhiều món ngon. Bạn muốn đi đâu trước?"]],
@@ -55,7 +55,7 @@ const TRIP = [
           ["s", "孩子们 都 很 喜欢 糖葫芦", "Bọn trẻ đều rất thích kẹo hồ lô."]] }
    ] },
 
- { id: "sh", zh: "上海", py: "Shànghǎi", vi: "Thượng Hải", col: "#E85A8A", x: 311, y: 186, lx: 14, ly: -8, cover: "mingzhu",
+ { id: "sh", zh: "上海", py: "Shànghǎi", vi: "Thượng Hải", col: "#E85A8A", x: 311, y: 186, lx: 14, ly: -12, cover: "mingzhu",
    intro: [["欢迎来到上海！上海是中国很大、很热闹的城市。", "Chào mừng đến Thượng Hải! Thượng Hải là thành phố rất lớn, rất nhộn nhịp của Trung Quốc."],
            ["这里有很高的楼，也有很老的街，白天和晚上都很漂亮。", "Ở đây có nhà cao tầng, cũng có phố cổ, ban ngày và ban đêm đều rất đẹp."],
            ["从北京坐高铁来上海，只要四个多小时。", "Từ Bắc Kinh đi tàu cao tốc đến Thượng Hải chỉ mất hơn bốn tiếng."]],
@@ -107,7 +107,7 @@ const TRIP = [
           ["s", "生煎包 下面 是 黄色 的", "Đáy bánh bao áp chảo màu vàng."]] }
    ] },
 
- { id: "cq", zh: "重庆", py: "Chóngqìng", vi: "Trùng Khánh", col: "#E8803C", x: 218, y: 205, lx: -72, ly: -6, cover: "hongyadong",
+ { id: "cq", zh: "重庆", py: "Chóngqìng", vi: "Trùng Khánh", col: "#E8803C", x: 218, y: 205, lx: 12, ly: 10, cover: "hongyadong",
    intro: [["欢迎来到重庆！重庆是一座山城，很多房子都建在山上。", "Chào mừng đến Trùng Khánh! Trùng Khánh là thành phố núi, nhiều nhà xây trên núi."],
            ["在重庆，路一会儿上，一会儿下，你会觉得很有意思。", "Ở Trùng Khánh, đường lúc lên lúc xuống, bạn sẽ thấy rất thú vị."],
            ["重庆人很热情，也特别爱吃辣。", "Người Trùng Khánh rất nhiệt tình, cũng cực kỳ thích ăn cay."]],
@@ -159,7 +159,7 @@ const TRIP = [
           ["s", "我 每天 早上 都 吃 小面", "Sáng nào tôi cũng ăn mì nhỏ."]] }
    ] },
 
- { id: "yn", zh: "云南", py: "Yúnnán", vi: "Vân Nam", col: "#3FA27A", x: 194, y: 242, lx: -64, ly: 18, cover: "lijiang",
+ { id: "yn", zh: "云南", py: "Yúnnán", vi: "Vân Nam", col: "#3FA27A", x: 194, y: 242, lx: -72, ly: 4, cover: "lijiang",
    intro: [["欢迎来到云南！云南在中国的西南边，四季都像春天一样。", "Chào mừng đến Vân Nam! Vân Nam ở phía tây nam Trung Quốc, bốn mùa đều như mùa xuân."],
            ["这里有雪山、有古城，还有很多漂亮的花。", "Ở đây có núi tuyết, có phố cổ, còn có rất nhiều hoa đẹp."],
            ["云南的花很多，有的菜里也有花呢！", "Hoa ở Vân Nam nhiều đến mức có món ăn cũng có hoa đấy!"]],
@@ -210,7 +210,7 @@ const TRIP = [
           ["s", "这 是 我 送 你 的 鲜花饼", "Đây là bánh hoa tươi mình tặng bạn."]] }
    ] },
 
- { id: "hz", zh: "杭州", py: "Hángzhōu", vi: "Hàng Châu", col: "#3A8FC4", x: 303, y: 202, lx: 14, ly: 16, cover: "xihu",
+ { id: "hz", zh: "杭州", py: "Hángzhōu", vi: "Hàng Châu", col: "#3A8FC4", x: 303, y: 202, lx: 16, ly: 12, cover: "xihu",
    intro: [["欢迎来到杭州！中国人常说：“上有天堂，下有苏杭。”", "Chào mừng đến Hàng Châu! Người Trung Quốc hay nói: “Trên có thiên đường, dưới có Tô Hàng.”"],
            ["杭州离上海很近，坐高铁不到一个小时。", "Hàng Châu rất gần Thượng Hải, đi tàu cao tốc chưa đến một tiếng."],
            ["杭州最有名的是西湖，还有龙井茶。我们出发吧！", "Nổi tiếng nhất Hàng Châu là Tây Hồ và trà Long Tỉnh. Chúng ta xuất phát thôi!"]],
