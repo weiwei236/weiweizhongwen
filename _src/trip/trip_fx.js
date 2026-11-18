@@ -31,7 +31,7 @@ const TRIP_FX = {
   gugong: { cloud: [8, 20], bird: 22 }, changcheng: { cloud: [9, 22], bird: 30, fall: "autumn" }, tiantan: { cloud: [9, 24], bird: 32 },
   kaoya: { steam: [[42, 30], [55, 27]] }, tanghulu: { fall: "snow", tw: [[10, 5, 90, 90, 6, "#fff"]] },
   mingzhu: { tw: [[5, 3, 95, 38, 8, "#FFF6C8"]], rip: [[25, 88, 12], [52, 93, 12], [76, 87, 10]] }, waitan: { cloud: [9], bird: 24, rip: [[18, 82, 10], [45, 90, 14], [72, 86, 10]], steam: [[88, 72]] },
-  yuyuan: { rip: [[28, 82, 10], [52, 90, 12], [78, 85, 10]], fish: [[18, 82, 86]], fall: "green" }, xiaolongbao: { steam: [[38, 28], [50, 24], [60, 28]] }, shengjian: { steam: [[40, 28], [55, 24]] },
+  yuyuan: { rip: [[28, 82, 10], [52, 90, 12], [78, 85, 10]], fall: "green" }, xiaolongbao: { steam: [[38, 28], [50, 24], [60, 28]] }, shengjian: { steam: [[40, 28], [55, 24]] },
   hongyadong: { tw: [[30, 12, 75, 70, 9, "#FFD27A"], [70, 2, 98, 35, 4, "#fff"]], rip: [[20, 92, 9], [42, 88, 12], [66, 93, 10]] },
   suodao: { cloud: [9], bird: 30, rip: [[45, 76, 10], [70, 72, 10], [30, 86, 9]] }, liziba: { cloud: [9], bird: 22, fall: "green" },
   huoguo: { steam: [[42, 33], [58, 33]] }, xiaomian: { steam: [[45, 24], [56, 20]] },
@@ -86,11 +86,12 @@ const TV_SVG = {
 };
 const Travel = {
   face(){ return `<span class="tv-face" style="background-image:url(${TRIP_GD.g_full})"></span>`; },
-  me(){ return `<span class="tv-me">${Trip.head()}</span>`; },
+  me(){ return TRIP_GD.walk ? `<span class="tv-face kid" style="background-image:url(${TRIP_GD.walk})"></span>` : `<span class="tv-me">${Trip.head()}</span>`; },
   walker(){ return `<div class="tv-walker"><div class="tv-gd">${guideSVG("smile", "walk")}</div><div class="tv-kid"><div class="tv-kh">${Trip.head()}</div><svg viewBox="0 0 40 46" class="tv-kb"><path d="M8 4 Q20 -2 32 4 L34 26 H6Z" fill="#F2B83A" stroke="#5A4034" stroke-width="2" stroke-linejoin="round"/><rect x="26" y="6" width="10" height="16" rx="4" fill="#E8453C" stroke="#5A4034" stroke-width="2"/><g class="tv-leg"><rect x="11" y="25" width="7" height="18" rx="3.5" fill="#3E5C52"/></g><g class="tv-leg b"><rect x="22" y="25" width="7" height="18" rx="3.5" fill="#3E5C52"/></g></svg></div></div>`; },
   actor(m){
     const W = TV_SVG.wheel;
-    if(m === "walk") return this.walker();
+    if(m === "walk") return TRIP_GD.walk ? `<div class="tv-pair walk"><img src="${TRIP_GD.walk}" alt=""></div>` : this.walker();
+    if(m === "bike" && TRIP_GD.bike) return `<div class="tv-pair bike"><img src="${TRIP_GD.bike}" alt=""></div>`;
     if(m === "bike") return `<div class="tv-veh tv-bike"><div class="tv-bk-h">${Trip.head()}</div><svg viewBox="0 0 120 70"><path d="M30 50 L52 26 L80 50 M52 26 L62 50 L30 50 M74 20 L80 50 M70 20 H82" stroke="#E8453C" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M44 22 L60 22" stroke="#5A4034" stroke-width="5" stroke-linecap="round"/><path d="M50 8 Q54 20 58 30" stroke="#3E5C52" stroke-width="8" stroke-linecap="round"/>${W(30, 50, 16)}${W(84, 50, 16)}</svg><div class="tv-gd small">${guideSVG("smile", "walk")}</div></div>`;
     if(m === "bus") return `<div class="tv-veh tv-bus"><svg viewBox="0 0 200 100"><rect x="10" y="14" width="180" height="66" rx="18" fill="#F6C343" stroke="#5A4034" stroke-width="3"/><rect x="10" y="58" width="180" height="10" fill="#E8453C"/><rect x="164" y="24" width="20" height="28" rx="6" fill="#BFE6FA" stroke="#5A4034" stroke-width="2.4"/><text x="100" y="78" font-size="10" fill="#fff" font-weight="700" text-anchor="middle">薇薇旅游 WEIWEI TOUR</text>${W(52, 84, 13)}${W(150, 84, 13)}</svg><div class="tv-win a">${this.face()}</div><div class="tv-win b">${this.me()}</div></div>`;
     if(m === "train") return `<div class="tv-veh tv-train"><svg viewBox="0 0 240 90"><path d="M10 20 Q10 10 22 10 H200 Q232 12 236 56 V72 H10Z" fill="#fff" stroke="#5A4034" stroke-width="3"/><rect x="10" y="54" width="226" height="8" fill="#21836A"/><path d="M206 18 Q226 24 228 50 H206Z" fill="#BFE6FA" stroke="#5A4034" stroke-width="2.4"/>${W(50, 76, 8)}${W(80, 76, 8)}${W(170, 76, 8)}${W(200, 76, 8)}</svg><div class="tv-win a">${this.face()}</div><div class="tv-win b">${this.me()}</div></div>`;
