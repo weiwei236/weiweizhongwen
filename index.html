@@ -5596,7 +5596,7 @@ const Speak = {
   render(){
     const W=$("#work"), it=this.items[this.cur];
     const micOK=!!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&window.MediaRecorder);
-    const oldList=W.querySelector(".sp-list"), keepTop=oldList?oldList.scrollTop:null, keepY=scrollY;
+    const oldList=W.querySelector(".sp-list"), keepTop=oldList?oldList.scrollTop:null, keepLeft=oldList?oldList.scrollLeft:0, keepY=scrollY;
     const li=t=>this.items.map((x,k)=>x.type!==t?"":`<button data-i="${k}" aria-selected="${k===this.cur}"><span class="han">${esc(x.h)}</span>${this.scores[x.h]!=null?`<span class="sc">${this.scores[x.h]}</span>`:""}</button>`).join("");
     W.innerHTML=`<div class="sp">
       <nav class="sp-list" aria-label="Mục luyện phát âm">${this.progressNote()}<h4>Từ vựng</h4>${li("w")}<h4>Câu</h4>${li("s")}</nav>
@@ -5614,8 +5614,11 @@ const Speak = {
           :!SR?`<div class="notice"><b>Trình duyệt này chỉ chấm được thanh điệu và độ lưu loát.</b>Để chấm thêm thanh mẫu và vận mẫu, hãy dùng Chrome hoặc Edge.</div>`:""}
         <div id="spReport"></div>
       </div></div>`;
-    { const nl=W.querySelector(".sp-list"); if(keepTop!=null){ nl.scrollTop=keepTop; if(Math.abs(scrollY-keepY)>2) scrollTo(0,keepY); }
-      const sel=nl.querySelector('[aria-selected="true"]'); if(sel){ const t=sel.offsetTop-nl.offsetTop; if(t<nl.scrollTop||t+sel.offsetHeight>nl.scrollTop+nl.clientHeight) nl.scrollTop=t-nl.clientHeight/2+sel.offsetHeight/2; } }
+    { const nl=W.querySelector(".sp-list"); const restore=()=>{ if(keepTop!=null){ nl.scrollTop=keepTop; nl.scrollLeft=keepLeft; if(Math.abs(scrollY-keepY)>2) scrollTo(0,keepY); }
+        const sel=nl.querySelector('[aria-selected="true"]'); if(!sel) return; const lr=nl.getBoundingClientRect(), sr=sel.getBoundingClientRect();
+        if(nl.scrollWidth>nl.clientWidth+4){ if(sr.left<lr.left||sr.right>lr.right) nl.scrollLeft+=sr.left-lr.left-lr.width/2+sr.width/2; }
+        else if(sr.top<lr.top||sr.bottom>lr.bottom) nl.scrollTop+=sr.top-lr.top-lr.height/2+sr.height/2; };
+      restore(); requestAnimationFrame(restore); }
     W.querySelector(".sp-list").onclick=e=>{const b=e.target.closest("button");if(!b)return;stopAnyRecording();this.cur=+b.dataset.i;this.last=null;this.render();};
     $("#spListen").onclick=()=>speak(it.h, it.type==="s"?.75:.7);
     $("#spRec").onclick=()=>REC?REC.stop():this.record(it);
