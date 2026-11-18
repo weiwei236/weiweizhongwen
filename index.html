@@ -13888,7 +13888,7 @@ const Trip = {
 /* Tiểu Ngữ: ảnh nhân vật (2 lớp: thân + tay vẫy) + miệng mấp máy / chớp mắt vẽ đè bằng SVG */
 function xiaoyuSVG(cls = ""){
   const G = typeof TRIP_GD !== "undefined" ? TRIP_GD : {};
-  return `<span class="xiaoyu xy ${cls}" aria-hidden="true"><img class="xy-b" src="${G.xy_base || ""}" alt=""><img class="xy-a" src="${G.xy_arm || ""}" alt=""><svg class="xy-o" viewBox="0 0 368 512"><g class="xy-m"><ellipse cx="167" cy="219" rx="21" ry="16" fill="#FEDBC7"/><path d="M156 216 Q167 225 179 216" fill="none" stroke="#8A3B2E" stroke-width="3" stroke-linecap="round"/></g><g class="xy-e" fill="#FEDBC7"><ellipse cx="128" cy="183" rx="23" ry="23"/><ellipse cx="212" cy="192" rx="24" ry="23"/><path d="M106 188 Q128 198 150 187 M189 197 Q212 207 236 195" fill="none" stroke="#3A2620" stroke-width="3.5" stroke-linecap="round"/></g></svg></span>`;
+  return `<span class="xiaoyu xy ${cls}" aria-hidden="true"><img class="xy-b" src="${G.xy_base ? G.xy_base + (G.xy_base.startsWith("data:") ? "" : "?v=3") : ""}" alt=""><img class="xy-a" src="${G.xy_arm ? G.xy_arm + (G.xy_arm.startsWith("data:") ? "" : "?v=3") : ""}" alt=""><svg class="xy-o" viewBox="0 0 368 512"><g class="xy-m"><ellipse cx="167" cy="219" rx="21" ry="16" fill="#FEDBC7"/><path d="M156 216 Q167 225 179 216" fill="none" stroke="#8A3B2E" stroke-width="3" stroke-linecap="round"/></g><g class="xy-e" fill="#FEDBC7"><ellipse cx="128" cy="183" rx="23" ry="23"/><ellipse cx="212" cy="192" rx="24" ry="23"/><path d="M106 188 Q128 198 150 187 M189 197 Q212 207 236 195" fill="none" stroke="#3A2620" stroke-width="3.5" stroke-linecap="round"/></g></svg></span>`;
 }
 /* khi phát âm thì Tiểu Ngữ đang hiện trên màn hình cũng "nói" theo */
 function xyTalk(text){
