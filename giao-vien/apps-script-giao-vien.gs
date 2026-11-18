@@ -24,6 +24,13 @@
  *   Readings – các bài đọc giáo viên soạn trên trang web (chỉ giáo viên có mật khẩu mới thêm/sửa/xoá được).
  * Mật khẩu KHÔNG được lưu dạng chữ thường, chỉ lưu bản mã hoá (SHA-256 + muối).
  *
+ * MÃ LỚP HỌC (bắt buộc khi đăng ký tài khoản mới):
+ *   Cài đặt dự án → Thuộc tính tập lệnh → thêm:
+ *     CLASS_CODE = mã lớp bạn đưa cho học viên, VD: WEIWEI2026
+ *                  (nhiều lớp thì cách nhau bằng dấu phẩy, VD: HSK2026,GIAOTIEP26; không phân biệt hoa/thường)
+ *   Học viên đã có tài khoản vẫn đăng nhập bình thường, không cần mã.
+ *   Muốn đổi mã: sửa giá trị CLASS_CODE rồi Lưu (không cần triển khai lại).
+ *
  * LUYỆN HỘI THOẠI VỚI AI (tuỳ chọn – lớp Giao tiếp, tab "Hội thoại" → "Trò chuyện với AI"):
  *   Cài đặt dự án → Thuộc tính tập lệnh → thêm:
  *     AI_API_KEY      = API key của Anthropic (Claude), dạng sk-ant-...   ← KHÔNG dán key vào mã
@@ -58,6 +65,10 @@ function hash_(salt, pw) {
   return raw.map(b => ('0' + (b & 255).toString(16)).slice(-2)).join('');
 }
 function teacherOk_(key) { const k = PropertiesService.getScriptProperties().getProperty('TEACHER_KEY'); return !!k && key === k; }
+function classOk_(code) {
+  const list = String(PropertiesService.getScriptProperties().getProperty('CLASS_CODE') || '').split(',').map(x => x.trim().toLowerCase()).filter(Boolean);
+  return list.length > 0 && list.indexOf(String(code || '').trim().toLowerCase()) >= 0;
+}
 function normPhone_(p) { p = String(p || '').replace(/[^\d+]/g, ''); if (p.indexOf('+84') === 0) p = '0' + p.slice(3); return p; }
 /* tìm dòng theo tên đăng nhập hoặc số điện thoại; trả về số dòng (bắt đầu từ 2) hoặc 0 */
 function findRow_(sh, id) {
@@ -110,6 +121,8 @@ function doPost(e) {
       if (!/^[a-z0-9_.]{3,20}$/.test(u)) return json_({ ok: false, error: 'bad_username' });
       if (!/^0\d{9}$/.test(ph)) return json_({ ok: false, error: 'bad_phone' });
       if (pw.length < 6) return json_({ ok: false, error: 'bad_password' });
+      if (!PropertiesService.getScriptProperties().getProperty('CLASS_CODE')) return json_({ ok: false, error: 'no_class_code' });
+      if (!classOk_(b.classCode)) return json_({ ok: false, error: 'bad_class_code' });
       if (findRow_(ac, u)) return json_({ ok: false, error: 'user_taken' });
       if (findRow_(ac, ph)) return json_({ ok: false, error: 'phone_taken' });
       const data = JSON.stringify(b.data || {});

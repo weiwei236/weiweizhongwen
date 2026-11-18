@@ -1521,6 +1521,8 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 
     <form id="auReg" novalidate class="auth-form" hidden>
       <div><h2>Đăng ký tài khoản</h2><p class="muted">Chỉ cần đăng ký một lần. Tiến độ học, nhân vật và trang trại sẽ được lưu theo tài khoản.</p></div>
+      <div class="field rg-code"><label for="rgCode">Mã lớp học</label><input id="rgCode" class="inp" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="30" placeholder="Giáo viên sẽ gửi mã này cho bạn">
+        <small class="muted">Chỉ học viên của lớp 薇薇中文 mới đăng ký được. Chưa có mã? Hãy nhắn giáo viên.</small></div>
       <div class="field"><label for="rgName">Họ tên</label><input id="rgName" class="inp" autocomplete="name" maxlength="40" placeholder="VD: Nguyễn Thu Hà"></div>
       <div class="grid2">
         <div class="field"><label for="rgUser">Tên đăng nhập</label><input id="rgUser" class="inp" autocomplete="username" autocapitalize="off" spellcheck="false" maxlength="20" placeholder="VD: thuha">
@@ -9249,7 +9251,7 @@ function openWelcome(){
   const a=Auth.get(), api=Auth.on(), B=$("#welBtns");
   if(api&&a&&p) B.innerHTML=`<button class="btn primary big" id="welGo">Vào học</button><p class="wel-acc">Đang đăng nhập: <b>${esc(p.username||a.u)}</b> · <button class="linkbtn" id="welOut">Đăng xuất</button></p>`;
   else if(api) B.innerHTML=`<div class="wel-row"><button class="btn primary big" id="welLogin">Đăng nhập</button><button class="btn big" id="welReg">Đăng ký</button></div>
-    ${p?`<button class="linkbtn" id="welGo">Tiếp tục học thử với tên ${esc(p.name)}</button><p class="wel-acc">Học thử chỉ lưu trên máy này. Đăng ký để giữ tiến độ trên mọi thiết bị.</p>`:`<button class="linkbtn" id="welGuest">Học thử không cần tài khoản</button>`}`;
+    ${p?`<button class="linkbtn" id="welGo">Tiếp tục học thử với tên ${esc(p.name)}</button><p class="wel-acc">Học thử chỉ lưu trên máy này. Đăng ký để giữ tiến độ trên mọi thiết bị.</p>`:`<p class="wel-acc">Trang dành cho học viên lớp 薇薇中文. Học viên mới cần <b>mã lớp học</b> (giáo viên cung cấp) để đăng ký.</p>`}`;
   else B.innerHTML=`<button class="btn primary big" id="welGo">${p?(p.avatar?"Vào học":"Tiếp tục"):"Bắt đầu"}</button>${p?`<button class="linkbtn" id="welGuest">Đăng nhập bằng tên khác</button>`:""}`;
   const on=(id,f)=>{ const b=$("#"+id); if(b) b.onclick=f; };
   on("welGo",()=>{ const q=Profile.get(); if(q&&q.avatar) enterApp(); else if(q) openAvatar(); else openLogin(null); });
@@ -10136,7 +10138,9 @@ const AUTH_ERR = {
   bad_password: "Mật khẩu cần ít nhất 6 ký tự.",
   user_taken: "Tên đăng nhập này đã có người dùng. Hãy chọn tên khác.",
   phone_taken: "Số điện thoại này đã được đăng ký. Nếu là của bạn, hãy chọn Đăng nhập.",
-  too_large: "Dữ liệu quá lớn để lưu. Hãy báo giáo viên."
+  too_large: "Dữ liệu quá lớn để lưu. Hãy báo giáo viên.",
+  bad_class_code: "Mã lớp học chưa đúng. Hãy kiểm tra lại hoặc nhắn giáo viên để lấy mã.",
+  no_class_code: "Lớp học chưa mở đăng ký (giáo viên chưa đặt mã lớp). Hãy nhắn giáo viên."
 };
 function guestHasData(){ const p = Profile.get(); return !!(p && !Auth.get()); }
 function openAuth(mode = "login"){
@@ -10183,7 +10187,8 @@ $("#auReg").onsubmit = async e => {
   e.preventDefault();
   const name = $("#rgName").value.trim().replace(/\s+/g, " "), u = $("#rgUser").value.trim().toLowerCase(), phone = $("#rgPhone").value.replace(/[^\d+]/g, "").replace(/^\+84/, "0");
   const pw = $("#rgPw").value, pw2 = $("#rgPw2").value;
-  const cls = document.querySelector('input[name="rgcls"]:checked').value, level = document.querySelector('input[name="rglvl"]:checked').value;
+  const cls = document.querySelector('input[name="rgcls"]:checked').value, level = document.querySelector('input[name="rglvl"]:checked').value, classCode = $("#rgCode").value.trim();
+  if(!classCode) return authErr("#auRegErr", "Hãy nhập mã lớp học do giáo viên cung cấp.");
   if(!name) return authErr("#auRegErr", "Hãy nhập họ tên của bạn.");
   if(!/^[a-z0-9_.]{3,20}$/.test(u)) return authErr("#auRegErr", "bad_username");
   if(!/^0\d{9}$/.test(phone)) return authErr("#auRegErr", "bad_phone");
@@ -10198,7 +10203,7 @@ $("#auReg").onsubmit = async e => {
     data.ww_profile = { ...old, name, cls, level, sid: u, username: u, phone };
   } else data = { ww_profile: { name, cls, level, avatar: null, sid: u, username: u, phone }, ww_level: level };
   const btn = $("#auRegBtn"); busyBtn(btn, true, "Đang tạo tài khoản…"); $("#auRegErr").hidden = true;
-  const res = await Auth.call("register", { username: u, phone, password: pw, name, cls, level, data });
+  const res = await Auth.call("register", { username: u, phone, password: pw, name, cls, level, data, classCode });
   busyBtn(btn, false);
   if(!res.ok) return authErr("#auRegErr", res.error);
   Auth.set({ u, token: res.token });

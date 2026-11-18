@@ -21,7 +21,23 @@ src = (s.replace('__LOGO__', open(p('logo.b64')).read().strip())
         .replace('__TEACHER_API__', open(p('teacher_api.txt')).read().strip())
         )
 art = src.replace('__EX_IMG__', 'const EX_IMG=' + json.dumps({**imgs, **imgs2}) + ';\n')
-src = src.replace('__EX_IMG__', 'const EX_IMG=' + json.dumps(imgs) + ';\n')
+# index.html (GitHub Pages): ảnh để thành file riêng cho trang nhẹ; bản xem trước (--artifact) vẫn nhúng ảnh
+os.makedirs(os.path.join(ROOT, 'img', 'ex'), exist_ok=True)
+exmap = {}
+for d in sorted(x for x in os.listdir(HERE) if x.startswith('ex') and os.path.isdir(p(x)) and not (x.startswith('ex2_') or x.startswith('ex3_') or x.startswith('exs1_'))):
+    for f in sorted(os.listdir(p(d))):
+        if f.endswith('.jpg'): shutil.copyfile(p(d, f), os.path.join(ROOT, 'img', 'ex', f)); exmap[f[:-4]] = 'img/ex/' + f
+src = src.replace('__EX_IMG__', 'const EX_IMG=' + json.dumps(exmap) + ';\n')
+import re
+def files_js(var, sub):
+    global src
+    d = os.path.join(HERE, 'trip', sub); out = os.path.join(ROOT, 'trip', sub); os.makedirs(out, exist_ok=True); m = {}
+    if os.path.isdir(d):
+        for f in sorted(os.listdir(d)):
+            if f.endswith('.webp'): shutil.copyfile(os.path.join(d, f), os.path.join(out, f)); m[f[:-5]] = 'trip/' + sub + '/' + f
+    i = src.find('const ' + var + '=')
+    if i >= 0: j = src.index(';\n', i); src = src[:i] + 'const ' + var + '=' + json.dumps(m) + src[j:]
+files_js('TRIP_IMG_DATA', 'img'); files_js('TRIP_GD_DATA', 'gd')
 head = '<!doctype html>\n<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">'
 k = src.index('<section id="scrWelcome"')
 open(os.path.join(ROOT, 'index.html'), 'w', encoding='utf-8').write(head + src[:k] + '</head>\n<body style="margin:0">\n' + src[k:] + '\n</body></html>')
