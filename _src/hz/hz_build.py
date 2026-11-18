@@ -24,3 +24,10 @@ for lv, v in levels.items():
     body = json.dumps({c: x for c, x in m.items() if x}, ensure_ascii=False, separators=(',', ':'))
     open(os.path.join(OUT, f'd_{lv}.js'), 'w', encoding='utf-8').write('HZ.add(' + body + ');\n')
     print(lv, len(chars), 'chữ', os.path.getsize(os.path.join(OUT, f'd_{lv}.js')) // 1024, 'KB', ('thiếu: ' + ''.join(miss)) if miss else '')
+# Bộ thủ: mọi chữ xuất hiện trong _src/learn/bushou.js → hz/d_bushou.js
+import re as _re
+_s = open(os.path.join(D, '..', 'learn', 'bushou.js'), encoding='utf-8').read()
+_cs = sorted(set(_re.findall(r'[⺀-⿟㐀-鿿]', _s)))
+_m = {c: comp(c) for c in _cs}
+open(os.path.join(OUT, 'd_bushou.js'), 'w', encoding='utf-8').write('HZ.add(' + json.dumps({c: x for c, x in _m.items() if x}, ensure_ascii=False, separators=(',', ':')) + ');\n')
+print('bushou', len(_cs), 'chữ', 'thiếu: ' + ''.join(c for c, x in _m.items() if not x))
