@@ -287,10 +287,18 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .swatches button{border:0;background:none;display:grid;justify-items:center;gap:4px;font-size:12.5px;font-weight:600;padding:0}
 .swatches i{display:block;width:44px;height:44px;border-radius:50%;border:3px solid var(--surface);box-shadow:0 0 0 2px var(--line)}
 .swatches button[aria-pressed="true"] i{box-shadow:0 0 0 3px var(--accent)}
-.hello{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:18px;background:linear-gradient(90deg,var(--leaf-soft),var(--surface) 60%);border:1px solid var(--line);border-radius:16px;padding:8px 16px 8px 8px}
-.hello .me{width:76px;flex:0 0 auto} .hello .me svg{width:100%;height:auto;display:block}
+.hello{display:flex;align-items:stretch;gap:16px;margin-bottom:18px;background:linear-gradient(90deg,var(--leaf-soft),var(--surface) 55%);border:1px solid var(--line);border-radius:18px;padding:10px 16px 10px 10px}
+.hello .me{width:92px;flex:0 0 auto;display:flex;align-items:flex-end;background:radial-gradient(circle at 50% 70%,#fff 0,#fff0 70%);border-radius:14px} .hello .me svg{width:100%;height:auto;display:block}
+.hello .hi-main{flex:1;min-width:0;display:grid;gap:8px;align-content:center}
+.hello .hi-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.hello .hi-acc{display:flex;gap:6px;flex-wrap:wrap}.hello .hi-acc .btn{padding:5px 10px;font-size:13px}
+.hello .hi-row{display:flex;align-items:center;gap:10px;padding-top:8px;border-top:1px dashed var(--line)}
+.hello .hi-lb{flex:0 0 72px;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.hello .hi-btns{display:flex;gap:6px;flex-wrap:wrap}
+.sections .sec-sep{width:1px;align-self:stretch;background:var(--line);margin:4px 2px}
+@media (min-width:900px){.sections button{padding:8px 12px}}
+@media (max-width:640px){.hello{display:grid;grid-template-columns:76px minmax(0,1fr);gap:8px 12px;padding:10px}.hello .me{width:76px;grid-row:1}.hello .hi-main{display:contents}.hello .hi-top{grid-column:2;align-self:center}.hello .hi-row{grid-column:1/-1;flex-direction:column;align-items:flex-start;gap:6px}.hello .hi-lb{flex:none}.sections .sec-sep{display:none}}
 .hello h2{margin:0;font-size:20px} .hello p{margin:2px 0 0;color:var(--muted);font-size:14px}
-.hello .acts{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
 .hello .note{color:var(--warn);font-size:13px}
 @media (prefers-reduced-motion:reduce){.wel-stage svg{animation:none}}
 /* luyện đề HSK – trình bày giống trang sách */
@@ -4550,14 +4558,16 @@ function renderLesson(){
     <p>${les.vocab.length} từ mới · ${les.zhvi.length+les.vizh.length} câu luyện dịch · ${new Set(les.vocab.map(w=>w.h)).size+les.sentences.length} mục luyện phát âm</p></div>
     <div class="sections" role="tablist" aria-label="Phần luyện tập">
       ${les.texts?`<button role="tab" data-s="text" aria-selected="${S.section==="text"}">${ICON.read}Bài khóa</button>`:""}
-      ${les.talk||les.px?`<button role="tab" data-s="talk" aria-selected="${S.section==="talk"}">${ICON.mic}Hội thoại</button>`:""}
       <button role="tab" data-s="flash" aria-selected="${S.section==="flash"}">${ICON.cards}Flashcard</button>
       <button role="tab" data-s="write" aria-selected="${S.section==="write"}">${ICON.pen}Tập viết</button>
-      <button role="tab" data-s="game" aria-selected="${S.section==="game"}">${ICON.game}Trò chơi</button>
-      <button role="tab" data-s="trans" aria-selected="${S.section==="trans"}">${ICON.trans}Luyện dịch</button>
-      <button role="tab" data-s="speak" aria-selected="${S.section==="speak"}">${ICON.mic}Phát âm</button>
       ${Grammar.has(S.level,S.lesson)?`<button role="tab" data-s="gram" aria-selected="${S.section==="gram"}">${ICON.book}Ngữ pháp</button>`:""}
+      <i class="sec-sep" aria-hidden="true"></i>
+      <button role="tab" data-s="speak" aria-selected="${S.section==="speak"}">${ICON.mic}Phát âm</button>
+      ${les.talk||les.px?`<button role="tab" data-s="talk" aria-selected="${S.section==="talk"}">${ICON.mic}Hội thoại</button>`:""}
+      <button role="tab" data-s="trans" aria-selected="${S.section==="trans"}">${ICON.trans}Luyện dịch</button>
       <button role="tab" data-s="read" aria-selected="${S.section==="read"}">${ICON.read}Bài đọc</button>
+      <i class="sec-sep" aria-hidden="true"></i>
+      <button role="tab" data-s="game" aria-selected="${S.section==="game"}">${ICON.game}Trò chơi</button>
       ${les.test?`<button role="tab" data-s="exam" aria-selected="${S.section==="exam"}">${ICON.quiz}${les.test.gt?"Bài tập":"Bài tập HSK"}</button>`:""}
     </div>
   </div>
@@ -9564,10 +9574,21 @@ $("#avSave").onclick=()=>{ const p=Profile.get(); if(!p)return openLogin(null); 
 
 function renderHello(){
   const p=Profile.get(); if(!p) return; Farm.load();
+  const gt=(p.cls||"hsk")==="gt", srsN=SRS.count();
   $("#hello").innerHTML=`<div class="me">${avatarSVG(p.avatar,{label:"Nhân vật của "+p.name})}</div>
-    <div><h2><span class="han">你好，</span>${esc(p.name)}！</h2><p>${esc(levelLabel(p))}${Auth.get()?` · <span class="acc-ok">Tài khoản ${esc(p.username||"")}</span>`:(Auth.on()?` · <button class="linkbtn" id="hiReg">Học thử – đăng ký để lưu tiến độ</button>`:"")}</p>
-</div>
-    <div class="acts"><button class="btn srs-btn" id="hiSrs">🔁 Ôn tập hôm nay${(n => n ? `<span class="n">${n}</span>` : " ✓")(SRS.count())}</button><button class="btn bs-btn" id="hiBs"><span class="han">部</span> Bộ thủ</button>${((Profile.get() || {}).cls || "hsk") === "gt" ? "" : `<button class="btn ch-btn" id="hiCh">👥 Nhân vật</button>`}<button class="btn farm-btn" id="hiFarm">${ICON_SPROUT}Trang trại · ${coinSVG()}<b class="coin-count">${Farm.coins()}</b></button><button class="btn trip-btn" id="hiTrip"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>Khám phá TQ</button><button class="btn gr-btn" id="hiGr">${ICON.book}Ngữ pháp</button><button class="btn kt-btn" id="hiKt">${ICON.quiz}Kiểm tra</button><button class="btn" id="hiAv">Đổi nhân vật</button><button class="btn" id="hiInfo">Sửa thông tin</button><button class="btn" id="hiOut">Đăng xuất</button></div>`;
+    <div class="hi-main">
+      <div class="hi-top"><div><h2><span class="han">你好，</span>${esc(p.name)}！</h2><p>${esc(levelLabel(p))}${Auth.get()?` · <span class="acc-ok">Tài khoản ${esc(p.username||"")}</span>`:(Auth.on()?` · <button class="linkbtn" id="hiReg">Học thử – đăng ký để lưu tiến độ</button>`:"")}</p></div>
+        <div class="hi-acc"><button class="btn sm" id="hiAv">Đổi nhân vật</button><button class="btn sm" id="hiInfo">Sửa thông tin</button><button class="btn sm" id="hiOut">Đăng xuất</button></div></div>
+      <div class="hi-row"><span class="hi-lb">Học tập</span><div class="hi-btns">
+        <button class="btn srs-btn" id="hiSrs">🔁 Ôn tập hôm nay${srsN ? `<span class="n">${srsN}</span>` : " ✓"}</button>
+        <button class="btn gr-btn" id="hiGr">${ICON.book}Ngữ pháp</button>
+        <button class="btn kt-btn" id="hiKt">${ICON.quiz}Kiểm tra</button>
+        <button class="btn bs-btn" id="hiBs"><span class="han">部</span> Bộ thủ</button></div></div>
+      <div class="hi-row"><span class="hi-lb">Khám phá</span><div class="hi-btns">
+        <button class="btn trip-btn" id="hiTrip"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>Khám phá TQ</button>
+        <button class="btn farm-btn" id="hiFarm">${ICON_SPROUT}Trang trại · ${coinSVG()}<b class="coin-count">${Farm.coins()}</b></button>
+        ${gt ? "" : `<button class="btn ch-btn" id="hiCh">👥 Nhân vật</button>`}</div></div>
+    </div>`;
   $("#hiSrs").onclick=()=>SRS.open(); $("#hiBs").onclick=()=>Bushou.open(); if($("#hiCh")) $("#hiCh").onclick=()=>Chars.open();
   $("#hiFarm").onclick=()=>Farm.open();
   $("#hiTrip").onclick=()=>Trip.open();
