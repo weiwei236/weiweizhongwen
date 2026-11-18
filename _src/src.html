@@ -14218,8 +14218,8 @@ const Grammar = {
     const fill = b.type === "fill";
     const line = t => String(t).split(/(\{[^}]*\})/).filter(Boolean).map(x => /^\{.*\}$/.test(x)
       ? `<button type="button" class="gr-blank" style="--w:${[...x.slice(1, -1)].length + 1.5}em" data-ans="${esc(x.slice(1, -1))}" aria-label="Hiện đáp án"><span>${esc(x.slice(1, -1))}</span></button>` : esc(x)).join("");
-    return `<div class="gr-pblock"><div class="gr-ptitle">${fill ? "Hoàn thành hội thoại" : "Đọc hội thoại"}</div>
-      ${fill ? `<div class="gr-phint">Nhấp vào ô trống để hiện đáp án.</div>` : ""}
+    return `<div class="gr-pblock"><div class="gr-ptitle">${b.title ? esc(b.title) : fill ? "Hoàn thành hội thoại" : "Đọc hội thoại"}</div>
+      ${fill ? `<div class="gr-phint">${b.ref ? "Tự viết câu trả lời của bạn, rồi nhấp vào ô trống để xem đáp án gợi ý." : "Nhấp vào ô trống để hiện đáp án."}</div>` : ""}
       <div class="gr-dlg">${b.items.map((it, i) => it.map(([who, t], j) => `<span class="gr-dno">${j ? "" : `(${i + 1})`}</span><span class="gr-who">${esc(who)}：</span><span class="gr-say">${line(t)}${!fill ? ` <button class="say-sm" data-say="${esc(t)}" aria-label="Nghe">${ICON.sound}</button>` : ""}</span>`).join("") + `<i class="gr-gap"></i>`).join("")}</div></div>`;
   },
   legend(){ return `<div class="gr-legend">${Object.entries(GR_ROLE).map(([k, r]) => `<span class="gr-chip sm r-${k}" style="--rc:${r.c}">${r.vi}</span>`).join("")}</div>`; },
