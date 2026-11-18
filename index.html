@@ -525,7 +525,19 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .gr-page{padding:18px 0 40px}
 .gr-top{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .gr-hero{display:flex;align-items:center;gap:14px;background:linear-gradient(120deg,#FFF1EC,#FDF8EE 60%,var(--leaf-soft));border:1.5px solid #F3C9BE;border-radius:20px;padding:12px 18px}
-.gr-hero .xiaoyu{width:108px;flex:none}.gr-hero.sm .xiaoyu{width:76px}
+.xy{position:relative;display:inline-block;aspect-ratio:368/512;flex:none;vertical-align:bottom}
+.xy img,.xy .xy-o{position:absolute;inset:0;width:100%;height:100%;display:block}
+.xy-a{transform-origin:39.4% 51.8%;animation:xyWave 2.4s ease-in-out infinite}
+@keyframes xyWave{0%,100%{transform:rotate(0)}15%{transform:rotate(-7deg)}35%{transform:rotate(8deg)}55%{transform:rotate(-5deg)}75%{transform:rotate(6deg)}}
+.xy-m{opacity:0;animation:xyMouth .26s steps(1) 6}
+.xy.talk .xy-m{animation:xyMouth .26s steps(1) infinite}
+@keyframes xyMouth{0%{opacity:1}50%{opacity:0}}
+.xy-e{opacity:0;animation:xyBlink 4.2s infinite}
+@keyframes xyBlink{0%,93%,100%{opacity:0}95%,98%{opacity:1}}
+.tk-av{position:relative}.tk-av .xy{position:absolute;width:76px;left:50%;top:-21px;margin-left:-38px}
+.od-tws .xy{width:auto;height:100%}
+@media (prefers-reduced-motion:reduce){.xy-a,.xy-e,.xy-m{animation:none}}
+.gr-hero .xiaoyu{width:120px;flex:none}.gr-hero.sm .xiaoyu{width:92px}
 .gr-bubble{position:relative;background:#fff;border-radius:16px;padding:12px 16px;box-shadow:var(--shadow);font-size:14.5px;display:grid;gap:4px}
 .gr-bubble::before{content:"";position:absolute;left:-9px;top:24px;border:9px solid transparent;border-right-color:#fff;border-left:0}
 .gr-bubble b.han{color:#D2432F;font-size:19px}.gr-sub{color:#D2432F}.gr-bubble span{color:var(--ink)}
@@ -578,7 +590,7 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 @media (max-width:560px){.gr-dlg{font-size:20px;column-gap:4px}}
 .gr-foot{text-align:center}
 .gr-btn svg{width:18px;height:18px}
-@media (max-width:560px){.gr-hero{padding:10px}.gr-hero .xiaoyu{width:70px}.gr-pt{padding:14px 12px}.gr-tbl td{font-size:20px}}
+@media (max-width:560px){.gr-hero{padding:10px}.gr-hero .xiaoyu{width:80px}.gr-pt{padding:14px 12px}.gr-tbl td{font-size:20px}}
 /* bài kiểm tra */
 .kt-page{display:grid;gap:16px;padding:18px 0 40px;grid-template-columns:minmax(0,1fr)}.kt-page>*{min-width:0}
 .kt-hero{display:flex;gap:14px;align-items:center;background:linear-gradient(120deg,#FFF1EC,#FDF8EE);border:1.5px solid #F3C9BE;border-radius:18px;padding:14px 18px}
@@ -4330,6 +4342,7 @@ function speakOnline(text,v,done){
 }
 /* Đọc từng cụm theo dấu câu để ngắt nghỉ rõ ràng; từ đơn đọc chậm hơn một chút */
 function speak(text,done,fromQ){
+  try{ xyTalk(text); }catch(e){}
   if(!fromQ){ SPQ=[]; SPQ_TOK++; SPQ_ON=false; }
   stopSpeak();
   const ov=onlineVoice(); if(ov&&TTS_AUDIO){ speakOnline(text,ov,done); return; }
@@ -11744,6 +11757,17 @@ const p_ = (d, f, o = "") => `<path d="${d}" fill="${f}" ${o}/>`;
 const bsFace = (x, y, r, hair = HAIR) => c_(x, y, r, SK) + p_(`M${x - r} ${y} A${r} ${r} 0 0 1 ${x + r} ${y} Q${x} ${y - r * .35} ${x - r} ${y}Z`, hair) + c_(x - r * .38, y + r * .2, r * .11, "#2B2B33") + c_(x + r * .38, y + r * .2, r * .11, "#2B2B33") + e_(x - r * .55, y + r * .5, r * .16, r * .1, "#F4A0A0") + e_(x + r * .55, y + r * .5, r * .16, r * .1, "#F4A0A0");
 const BS_OL = "#5A4034";
 /* Mỗi mục: bản cũ trả về [hình, [x, y, cỡ], màu chữ, viền chữ]; bản mới trả về { u, o, c, sc, g, bg } */
+/* vỏ sò quạt: mép trên lượn sóng mềm, gân cong toả từ bản lề */
+const bsScallop = () => {
+  const cx = 100, cy = 182, rx = 92, ry = 152, n = 8, a0 = -168, a1 = -12, P = (a, k = 1) => { const r = a * Math.PI / 180; return [cx + Math.cos(r) * rx * k, cy + Math.sin(r) * ry * k]; };
+  const as = [...Array(n + 1)].map((_, i) => a0 + (a1 - a0) * i / n);
+  let d = `M${cx - 8} ${cy - 2} Q${P(a0, .55).join(" ")} ${P(a0).join(" ")}`;
+  for (let i = 0; i < n; i++) { const m = (as[i] + as[i + 1]) / 2; d += ` Q${P(m, 1.12).join(" ")} ${P(as[i + 1]).join(" ")}`; }
+  d += ` Q${P(a1, .55).join(" ")} ${cx + 8} ${cy - 2}Z`;
+  const ribs = as.slice(1, -1).map(a => { const [x, y] = P(a, .97), [mx, my] = P(a + (a < -90 ? 6 : -6), .55); return `<path d="M${cx} ${cy - 6} Q${mx} ${my} ${x} ${y}"/>`; }).join("");
+  const sh = as.slice(0, -1).map((a, i) => { const m = (a + as[i + 1]) / 2, [x, y] = P(m, 1.02); return `<path d="M${cx} ${cy - 10} L${x} ${y}"/>`; }).join("");
+  return `<clipPath id="bsShell"><path d="${d}"/></clipPath>` + p_(d, "#F7B7A3") + `<g clip-path="url(#bsShell)" fill="none" stroke-linecap="round"><g stroke="#F9C9B8" stroke-width="12" opacity=".7">${sh}</g><g stroke="#E8957F" stroke-width="3" opacity=".55">${ribs}</g></g>` + p_(d, "none", 'stroke="#E58B76" stroke-width="3" stroke-linejoin="round"') + p_(`M${cx - 30} ${cy - 2} Q${cx - 34} ${cy - 18} ${cx - 16} ${cy - 16} L${cx + 16} ${cy - 16} Q${cx + 34} ${cy - 18} ${cx + 30} ${cy - 2} Q${cx} ${cy + 6} ${cx - 30} ${cy - 2}Z`, "#E89A85");
+};
 const BS_ART = {
   ren: () => [`<circle cx="100" cy="40" r="13" fill="#E8695A" stroke="${BS_OL}" stroke-width="3"/><ellipse cx="62" cy="174" rx="12" ry="6" fill="#E57AA1"/><ellipse cx="146" cy="174" rx="12" ry="6" fill="#E57AA1"/>`, [38, 46, 124]],
   kou: () => ({ u: r_(44, 56, 124, 104, "#F06C8E", 44) + r_(60, 70, 92, 78, "#7A1F2B", 16) + r_(64, 73, 84, 13, "#fff", 5) + e_(106, 134, 32, 12, "#F48FA0"), c: "#2B2B33", g: [10, 20, 180] }),
@@ -11768,12 +11792,12 @@ const BS_ART = {
   zhu: () => ({ u: r_(64, 30, 16, 166, "#7CC264", 7) + r_(116, 24, 16, 172, "#7CC264", 7) + [70, 112, 154].map(y => r_(62, y, 20, 4, "#5A9E47", 2) + r_(114, y - 6, 20, 4, "#5A9E47", 2)).join("") + e_(150, 46, 22, 7, "#93D27A", 'transform="rotate(-25 150 46)"') + e_(44, 60, 22, 7, "#93D27A", 'transform="rotate(25 44 60)"') + e_(150, 70, 18, 6, "#93D27A", 'transform="rotate(15 150 70)"'), c: "#1F3A1F", sc: { 2: "#2E6B2F", 5: "#2E6B2F" }, bg: "#E6F2D8" }),
   cao: () => ({ u: r_(0, 122, 200, 78, "#B98A5A") + Array.from({ length: 22 }, (_, i) => { const x = 18 + i * 8, h = 50 + (i * 37 % 40); return p_(`M${x - 5} 124 Q${x} ${124 - h * .6} ${x + (i % 2 ? 6 : -6)} ${124 - h} Q${x + 2} ${124 - h * .5} ${x + 5} 124Z`, i % 3 ? "#6DBE5A" : "#86CF72"); }).join(""), c: "#1F3A1F", g: [16, 40, 168], bg: "#E8F4DC" }),
   mian: () => ({ u: r_(54, 132, 92, 56, "#FFF3E0") + r_(88, 150, 24, 38, "#C9925A", 3) + r_(62, 144, 18, 16, "#BFE6FA", 3) + r_(120, 144, 18, 16, "#BFE6FA", 3) + p_("M48 136 L56 118 H160 L162 136Z", "#E8695A") + r_(132, 92, 12, 26, "#B5523F") + r_(0, 186, 200, 14, "#B9D59C"), c: "#5A1E14", g: [10, 50, 180], bg: "#DCEFF8" }),
-  ma: () => ({ u: e_(110, 128, 54, 28, "#D9A066") + p_("M58 124 L80 100 L72 62 L54 44 L36 54 L44 72 L52 110Z", "#D9A066") + p_("M56 46 Q76 50 82 70 L80 98 Q72 70 60 58Z", "#6B4226") + [70, 90, 128, 148].map(x => r_(x - 5, 140, 10, 46, "#B97A45", 5)).join("") + p_("M160 118 Q190 130 182 176 Q172 150 158 140Z", "#6B4226"), c: "#3B2414" }),
+  ma: () => ({ u: `<g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M162 108 Q188 118 182 150 Q180 170 186 184" stroke="#6B4226" stroke-width="13"/><path d="M166 118 Q178 134 172 164" stroke="#8A5A34" stroke-width="6"/><path d="M140 136 Q136 162 128 184" stroke="#C98443" stroke-width="13"/><path d="M92 120 Q70 124 62 130 Q56 140 62 150" stroke="#C98443" stroke-width="11"/><path d="M156 130 Q170 156 158 168 Q156 178 160 186" stroke="#E2A35E" stroke-width="13"/><path d="M84 108 Q62 100 50 106 Q42 116 48 132" stroke="#E2A35E" stroke-width="12"/></g>` + e_(122, 118, 50, 30, "#E2A35E", 'transform="rotate(-24 122 118)"') + p_("M58 50 L80 40 Q98 66 112 94 L78 112 Q70 80 58 50Z", "#E2A35E") + p_("M70 28 Q80 42 74 56 L46 70 Q28 76 22 64 Q18 52 32 46 L52 30 Q60 22 70 28Z", "#E2A35E") + e_(27, 61, 8, 7, "#D18B52") + p_("M60 28 L68 10 L74 32Z", "#E2A35E") + c_(52, 44, 3.4, "#2B1A10") + c_(24, 59, 1.8, "#7A4A2A") + p_("M70 22 Q84 30 88 46 Q98 66 114 92 Q100 84 92 70 Q82 54 72 46 Q64 36 70 22Z", "#6B4226") + [[48, 134], [62, 152], [128, 187], [160, 187]].map(([x, y]) => e_(x, y, 8, 4.5, "#4A2E1C")).join(""), c: "#3B2414" }),
   yu2: () => [`<path d="M30 100 Q80 40 140 80 L182 54 L172 100 L182 146 L140 120 Q80 160 30 100Z" fill="#F7A55E" opacity=".6" stroke="#E07A1F" stroke-width="3"/><circle cx="56" cy="94" r="5" fill="${BS_OL}"/>`, [44, 40, 112]],
   niao: () => [`<path d="M40 90 Q50 40 100 44 Q150 46 156 96 Q170 120 186 128 Q150 138 120 150 Q60 156 40 90Z" fill="#8CCBEA" opacity=".6" stroke="#5B9BD5" stroke-width="3"/><path d="M40 72 L18 80 L40 86Z" fill="#F6B444"/><circle cx="58" cy="70" r="5" fill="${BS_OL}"/>`, [44, 40, 112]],
   quan: () => [`<path d="M150 150 Q190 130 182 96" stroke="#D9A066" stroke-width="12" stroke-linecap="round" fill="none"/><ellipse cx="104" cy="156" rx="56" ry="34" fill="#E8B77D" stroke="$${BS_OL}" stroke-width="3"/><circle cx="100" cy="86" r="52" fill="#F2C994" stroke="$${BS_OL}" stroke-width="3"/><path d="M52 60 Q34 74 40 120 Q56 112 62 84Z M148 60 Q166 74 160 120 Q144 112 138 84Z" fill="#B97A4A" stroke="$${BS_OL}" stroke-width="3"/><ellipse cx="100" cy="106" rx="22" ry="16" fill="#FFF1DC"/><ellipse cx="100" cy="98" rx="8" ry="6" fill="$${BS_OL}"/><circle cx="80" cy="80" r="5" fill="$${BS_OL}"/><circle cx="120" cy="80" r="5" fill="$${BS_OL}"/><path d="M96 116 Q100 132 108 118" fill="#F27C8A"/>`, [46, 42, 108], "#2B2B33", "rgba(255,255,255,.88)"],
   che: () => ({ u: [[48, 54], [140, 54], [28, 118], [158, 118]].map(([x, y]) => r_(x, y, 16, 34, "#3B3B46", 6)).join("") + r_(76, 44, 50, 128, "#E8695A", 16) + r_(82, 52, 38, 22, "#BFE6FA", 6) + r_(82, 142, 38, 18, "#BFE6FA", 6), c: "#2B2B33", bg: "#E4E7EF" }),
-  bei: () => ({ u: e_(100, 108, 60, 74, "#F3D9B1") + [[72, 70], [128, 62], [62, 120], [138, 112], [80, 160], [124, 156], [100, 50]].map(([x, y]) => c_(x, y, 6, "#D9A66B")).join("") + p_("M100 44 Q90 76 104 108 Q90 140 100 172", "none", 'stroke="#C9935C" stroke-width="6" stroke-linecap="round"') + [60, 80, 100, 120, 140, 160].map(y => p_(`M88 ${y} H112`, "none", 'stroke="#FFF6E6" stroke-width="3" stroke-linecap="round"')).join(""), c: "#4A2A12", bg: "#D5ECF5" }),
+  bei: () => ({ u: bsScallop(), c: "#7A2E24", bg: "#FBEDE6" }),
   wang: () => ({ u: p_("M64 66 H136 L154 168 H46Z", "#B39DDB") + p_("M46 66 L52 22 L76 46 L100 14 L124 46 L148 22 L154 66Z", "#F6C343") + c_(100, 40, 6, "#E8453C") + c_(70, 52, 4.5, "#5BA4D9") + c_(130, 52, 4.5, "#5BA4D9"), c: "#5A3A0A", bg: "#FFF3C8" }),
   shi2: () => ({ u: p_("M0 0 H200 V56 Q170 66 140 60 L64 66 Q30 70 0 84Z", "#8C8D99") + e_(108, 128, 46, 38, "#C9CAD2") + e_(96, 116, 14, 6, "#fff", 'opacity=".6"') + e_(30, 176, 14, 8, "#B5B6C0") + e_(176, 180, 10, 6, "#B5B6C0") + e_(150, 170, 8, 5, "#B5B6C0"), c: "#2B2B33", bg: "#ECEDF1" }),
   mi: () => [`<g fill="#fff" stroke="#E2D2A6" stroke-width="2">${[[40, 40], [160, 46], [36, 160], [164, 156], [100, 26], [100, 178], [24, 100], [176, 100]].map(([x, y]) => `<ellipse cx="${x}" cy="${y}" rx="9" ry="6" transform="rotate(${(x + y) % 90} ${x} ${y})"/>`).join("")}</g>`, [40, 40, 120]],
@@ -12041,7 +12065,7 @@ let hzRz; window.addEventListener("resize", () => { clearTimeout(hzRz); hzRz = s
 /* HZ_JS_END */
 /* TRIP_JS_BEGIN */
 const TRIP_IMG_DATA={"bianlian": "trip/img/bianlian.webp", "bingfen": "trip/img/bingfen.webp", "bingmayong": "trip/img/bingmayong.webp", "changcheng": "trip/img/changcheng.webp", "changfen": "trip/img/changfen.webp", "chengqiang": "trip/img/chengqiang.webp", "chenjiaci": "trip/img/chenjiaci.webp", "dameisha": "trip/img/dameisha.webp", "dandanmian": "trip/img/dandanmian.webp", "danxia": "trip/img/danxia.webp", "dayanta": "trip/img/dayanta.webp", "diaolou": "trip/img/diaolou.webp", "dongpo": "trip/img/dongpo.webp", "duanqiao": "trip/img/duanqiao.webp", "emeishan": "trip/img/emeishan.webp", "gangzhuao": "trip/img/gangzhuao.webp", "guangzhouta": "trip/img/guangzhouta.webp", "gugong": "trip/img/gugong.webp", "guilinmifen": "trip/img/guilinmifen.webp", "hongyadong": "trip/img/hongyadong.webp", "huiguorou": "trip/img/huiguorou.webp", "huoguo": "trip/img/huoguo.webp", "huqiu": "trip/img/huqiu.webp", "jiuzhaigou": "trip/img/jiuzhaigou.webp", "kaoya": "trip/img/kaoya.webp", "kuanzhai": "trip/img/kuanzhai.webp", "leifeng": "trip/img/leifeng.webp", "leshandafo": "trip/img/leshandafo.webp", "lijiang": "trip/img/lijiang.webp", "lijiangriver": "trip/img/lijiangriver.webp", "liziba": "trip/img/liziba.webp", "longjing": "trip/img/longjing.webp", "mapodoufu": "trip/img/mapodoufu.webp", "mingzhu": "trip/img/mingzhu.webp", "mixian": "trip/img/mixian.webp", "niurouwan": "trip/img/niurouwan.webp", "pandajidi": "trip/img/pandajidi.webp", "paomo": "trip/img/paomo.webp", "pijiuyu": "trip/img/pijiuyu.webp", "pingjianglu": "trip/img/pingjianglu.webp", "roujiamo": "trip/img/roujiamo.webp", "shamian": "trip/img/shamian.webp", "shaoe": "trip/img/shaoe.webp", "shengha": "trip/img/shengha.webp", "shengjian": "trip/img/shengjian.webp", "shenzhenwan": "trip/img/shenzhenwan.webp", "shijiezhichuang": "trip/img/shijiezhichuang.webp", "shilin": "trip/img/shilin.webp", "songshuguiyu": "trip/img/songshuguiyu.webp", "suodao": "trip/img/suodao.webp", "tanghulu": "trip/img/tanghulu.webp", "tiantan": "trip/img/tiantan.webp", "waitan": "trip/img/waitan.webp", "xiajiao": "trip/img/xiajiao.webp", "xiangbishan": "trip/img/xiangbishan.webp", "xianhuabing": "trip/img/xianhuabing.webp", "xianrouyuebing": "trip/img/xianrouyuebing.webp", "xiaolongbao": "trip/img/xiaolongbao.webp", "xiaomian": "trip/img/xiaomian.webp", "xihu": "trip/img/xihu.webp", "yangshuo": "trip/img/yangshuo.webp", "yeziji": "trip/img/yeziji.webp", "yulong": "trip/img/yulong.webp", "yuyuan": "trip/img/yuyuan.webp", "zhuozhengyuan": "trip/img/zhuozhengyuan.webp"};
-const TRIP_GD_DATA={"bike": "trip/gd/bike.webp", "boat": "trip/gd/boat.webp", "bus": "trip/gd/bus.webp", "cable": "trip/gd/cable.webp", "g_arm": "trip/gd/g_arm.webp", "g_base": "trip/gd/g_base.webp", "g_full": "trip/gd/g_full.webp", "map": "trip/gd/map.webp", "train": "trip/gd/train.webp", "walk": "trip/gd/walk.webp"};
+const TRIP_GD_DATA={"bike": "trip/gd/bike.webp", "boat": "trip/gd/boat.webp", "bus": "trip/gd/bus.webp", "cable": "trip/gd/cable.webp", "g_arm": "trip/gd/g_arm.webp", "g_base": "trip/gd/g_base.webp", "g_full": "trip/gd/g_full.webp", "map": "trip/gd/map.webp", "train": "trip/gd/train.webp", "walk": "trip/gd/walk.webp", "xy_arm": "trip/gd/xy_arm.webp", "xy_base": "trip/gd/xy_base.webp"};
 /* ===== Tranh chibi cho trò chơi "Khám phá Trung Quốc" (viewBox 0 0 200 150) ===== */
 const TA = {
   OL: "#5A4034",
@@ -13861,24 +13885,17 @@ const Trip = {
   }
 };
 /* TRIP_JS_END */
+/* Tiểu Ngữ: ảnh nhân vật (2 lớp: thân + tay vẫy) + miệng mấp máy / chớp mắt vẽ đè bằng SVG */
 function xiaoyuSVG(cls = ""){
-  return `<svg class="xiaoyu ${cls}" viewBox="0 0 120 150" aria-hidden="true">
-    <ellipse cx="60" cy="144" rx="34" ry="5" fill="#000" opacity=".08"/>
-    <path d="M28 70 Q22 40 44 26 Q60 16 76 26 Q98 40 92 70 Q94 92 84 104 L36 104 Q26 92 28 70Z" fill="#2E2321"/>
-    <circle cx="86" cy="24" r="11" fill="#2E2321"/><path d="M78 19 Q86 14 93 20" stroke="#F2B8C6" stroke-width="3" fill="none" stroke-linecap="round"/>
-    <path d="M38 112 Q38 98 60 96 Q82 98 82 112 L84 132 L36 132Z" fill="#7CC264"/>
-    <path d="M52 98 L60 108 L68 98" fill="#fff"/><circle cx="60" cy="118" r="5.5" fill="#fff"/><text x="60" y="121" text-anchor="middle" font-size="7" font-weight="700" fill="#21836A">语</text>
-    <rect x="44" y="130" width="12" height="9" rx="3" fill="#3E5C52"/><rect x="64" y="130" width="12" height="9" rx="3" fill="#3E5C52"/>
-    <ellipse cx="60" cy="66" rx="27" ry="27" fill="#FCE3D2"/>
-    <path d="M33 62 Q36 36 60 36 Q86 36 88 62 Q80 50 70 48 Q62 56 46 54 Q38 56 33 62Z" fill="#2E2321"/>
-    <ellipse cx="49" cy="68" rx="4.2" ry="5" fill="#2E2321"/><ellipse cx="71" cy="68" rx="4.2" ry="5" fill="#2E2321"/>
-    <circle cx="50.5" cy="66.4" r="1.5" fill="#fff"/><circle cx="72.5" cy="66.4" r="1.5" fill="#fff"/>
-    <ellipse cx="42" cy="76" rx="4.5" ry="2.6" fill="#F6A9A9" opacity=".7"/><ellipse cx="78" cy="76" rx="4.5" ry="2.6" fill="#F6A9A9" opacity=".7"/>
-    <path d="M55 79 Q60 83 65 79" stroke="#B4544A" stroke-width="2" fill="none" stroke-linecap="round"/>
-    <path d="M82 112 Q96 104 100 90" stroke="#7CC264" stroke-width="8" stroke-linecap="round" fill="none"/>
-    <circle cx="101" cy="88" r="5" fill="#FCE3D2"/><path d="M102 84 L114 62" stroke="#B98552" stroke-width="3" stroke-linecap="round"/><circle cx="114.5" cy="61" r="3" fill="#D2432F"/>
-    <path d="M38 112 Q28 120 34 130" stroke="#7CC264" stroke-width="8" stroke-linecap="round" fill="none"/>
-  </svg>`;
+  const G = typeof TRIP_GD !== "undefined" ? TRIP_GD : {};
+  return `<span class="xiaoyu xy ${cls}" aria-hidden="true"><img class="xy-b" src="${G.xy_base || ""}" alt=""><img class="xy-a" src="${G.xy_arm || ""}" alt=""><svg class="xy-o" viewBox="0 0 368 512"><g class="xy-m"><ellipse cx="167" cy="216" rx="21" ry="13" fill="#FCDCCB"/><path d="M156 214 Q167 222 178 214" fill="none" stroke="#8A3B2E" stroke-width="3" stroke-linecap="round"/></g><g class="xy-e" fill="#FCDEC6"><ellipse cx="130" cy="186" rx="22" ry="17"/><ellipse cx="211" cy="193" rx="24" ry="19"/><path d="M110 190 Q130 198 151 189 M188 197 Q211 206 235 196" fill="none" stroke="#3A2620" stroke-width="3.5" stroke-linecap="round"/></g></svg></span>`;
+}
+/* khi phát âm thì Tiểu Ngữ đang hiện trên màn hình cũng "nói" theo */
+function xyTalk(text){
+  const els = [...document.querySelectorAll(".xy")].filter(e => e.offsetParent);
+  if (!els.length) return;
+  const ms = Math.max(1200, [...String(text || "")].length * 260 / Math.max(.5, typeof RATE === "number" ? RATE : 1));
+  els.forEach(e => { e.classList.add("talk"); clearTimeout(e._xyT); e._xyT = setTimeout(() => e.classList.remove("talk"), ms); });
 }
 
 GRAMMAR.gt1 = GT_GRAMMAR1; GRAMMAR.gt2 = GT_GRAMMAR2; GRAMMAR.gb1 = GB_GRAMMAR1; GRAMMAR.gt3 = GC_GRAMMAR3; GRAMMAR.hsk3 = H3_GRAMMAR;
