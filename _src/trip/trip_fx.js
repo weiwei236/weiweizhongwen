@@ -16,9 +16,10 @@ function guideSVG(expr = "smile", cls = ""){
 /* ---------- Bản đồ mới (ảnh Canva 600×450, không có đường lưỡi bò) ---------- */
 /* [x, y, lệch nhãn x, lệch nhãn y] theo hệ toạ độ 600×450 của ảnh bản đồ */
 const TRIP_MAP = { bj: [400, 185, -96, -30], sh: [447, 263, 16, -26], hz: [437, 279, 18, 10], xa: [332, 247, -80, -46], cq: [309, 298, 14, -34],
-  cd: [286, 286, -100, 30], sc: [272, 258, -112, -34], yn: [262, 335, -104, 26], gl: [344, 346, -86, 18], gz: [368, 372, 16, 14], gd: [382, 350, 18, -22] };
+  cd: [286, 286, -104, -2], sc: [272, 258, -112, -34], yn: [262, 335, -104, 26], gl: [344, 346, -86, 18], gz: [368, 372, -100, 32], gd: [382, 350, 18, -22],
+  su: [434, 256, 14, -54], sz: [386, 381, 22, 22] };
 const TRIP_HOME = { x: 300, y: 446 };   /* xuất phát: Hà Nội (phía nam, ngoài khung) */
-const TRIP_CODE = { bj: "PEK", sh: "PVG", cq: "CKG", yn: "KMG", hz: "HGH", xa: "XIY", gl: "KWL", sc: "JZH", cd: "CTU", gz: "CAN", gd: "SZX" };
+const TRIP_CODE = { bj: "PEK", sh: "PVG", cq: "CKG", yn: "KMG", hz: "HGH", xa: "XIY", gl: "KWL", sc: "JZH", cd: "CTU", gz: "CAN", gd: "SWA", su: "SZV", sz: "SZX" };
 function tripMapHTML(pinsSVG){
   return `<img class="tp-mapimg" src="${TRIP_GD.map}" alt="Bản đồ Trung Quốc"><svg class="tp-map-svg" viewBox="0 0 600 450" role="img" aria-label="Các trạm trên bản đồ">
     <path id="tpTrail" d="" fill="none" stroke="#E8453C" stroke-width="3.6" stroke-dasharray="4 8" stroke-linecap="round" opacity=".85"/>${pinsSVG}</svg>`;
@@ -53,7 +54,11 @@ const TRIP_FX = {
   guangzhouta: { tw: [[0, 0, 100, 55, 10, "#fff"], [52, 10, 66, 70, 5, "#B9F3FF"]], rip: [[28, 86, 10], [58, 80, 12], [80, 90, 9]] },
   shamian: { fall: "green", bird: 14 }, chenjiaci: { cloud: [6], bird: 16 }, xiajiao: { steam: [[40, 30], [55, 28]] }, changfen: { steam: [[35, 32], [55, 27]] },
   danxia: { cloud: [7], bird: 15, rip: [[30, 74, 8], [55, 70, 8], [70, 56, 6]] }, diaolou: { cloud: [6], bird: 14 },
-  gangzhuao: { cloud: [9], bird: 26, rip: [[20, 75, 10], [50, 88, 12], [76, 70, 10], [40, 62, 8]] }, shaoe: { steam: [[42, 24], [54, 21]] }, niurouwan: { steam: [[44, 38], [55, 35]] }
+  gangzhuao: { cloud: [9], bird: 26, rip: [[20, 75, 10], [50, 88, 12], [76, 70, 10], [40, 62, 8]] }, shaoe: { steam: [[42, 24], [54, 21]] }, niurouwan: { steam: [[44, 38], [55, 35]] },
+  zhuozhengyuan: { cloud: [6], bird: 12, rip: [[40, 62, 10], [60, 70, 12], [35, 74, 8]], fall: "green" }, pingjianglu: { rip: [[46, 78, 6], [50, 88, 8], [48, 96, 9]], fall: "green" },
+  huqiu: { cloud: [10, 24], bird: 18 }, songshuguiyu: { steam: [[30, 30], [42, 26]] }, xianrouyuebing: { steam: [[44, 26], [56, 23]] },
+  shenzhenwan: { tw: [[10, 25, 90, 55, 8, "#FFF6C8"]], rip: [[20, 62, 12], [50, 66, 14], [78, 62, 10]], bird: 14 }, shijiezhichuang: { cloud: [8], bird: 16 },
+  dameisha: { rip: [[30, 50, 12], [55, 56, 14], [80, 52, 10], [45, 62, 12]], bird: 18, cloud: [6] }, yeziji: { steam: [[40, 30], [52, 27]] }, shengha: { steam: [[40, 30], [55, 28]] }
 };
 function tripRng(seed){ let h = 2166136261; for(const ch of seed) h = Math.imul(h ^ ch.charCodeAt(0), 16777619); return () => { h += 0x6D2B79F5; let t = h; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 const FX_FISH = c => `<svg viewBox="0 0 30 16"><path d="M2 8 Q10 0 20 5 L28 1 L26 8 L28 15 L20 11 Q10 16 2 8Z" fill="${c}" stroke="#A8502E" stroke-width="1.2"/><circle cx="8" cy="7" r="1.3" fill="#3A2A22"/></svg>`;
@@ -74,7 +79,8 @@ function tripFX(k){
 /* ---------- Cảnh di chuyển giữa các điểm tham quan ---------- */
 const TRIP_MV = { suodao: "cable", emeishan: "cable", liziba: "train", mingzhu: "train", guangzhouta: "train", gangzhuao: "bus",
   xihu: "boat", lijiangriver: "boat", xiangbishan: "boat", waitan: "boat", hongyadong: "boat", leshandafo: "boat", danxia: "boat", leifeng: "boat", yuyuan: "walk",
-  chengqiang: "bike", yangshuo: "bike", duanqiao: "walk", lijiang: "walk", kuanzhai: "walk", shamian: "bike" };
+  chengqiang: "bike", yangshuo: "bike", duanqiao: "walk", lijiang: "walk", kuanzhai: "walk", shamian: "bike",
+  pingjianglu: "boat", zhuozhengyuan: "walk", shenzhenwan: "bike", dameisha: "bus", shijiezhichuang: "train" };
 const TRIP_MVTXT = { walk: ["走路去", "Đi bộ cùng Tiểu Ngữ đến"], bike: ["骑自行车去", "Đạp xe đến"], bus: ["坐大巴去", "Đi xe buýt du lịch đến"], train: ["坐地铁去", "Đi tàu điện đến"], boat: ["坐船去", "Đi thuyền đến"], cable: ["坐缆车去", "Đi cáp treo đến"] };
 function tripMode(s){ return TRIP_MV[s.art] || (s.kind === "jd" ? "bus" : "walk"); }
 const TV_SVG = {
