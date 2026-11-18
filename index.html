@@ -527,7 +527,7 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .gr-hero{display:flex;align-items:center;gap:14px;background:linear-gradient(120deg,#FFF1EC,#FDF8EE 60%,var(--leaf-soft));border:1.5px solid #F3C9BE;border-radius:20px;padding:12px 18px}
 .xy{position:relative;display:inline-block;aspect-ratio:368/512;flex:none;vertical-align:bottom}
 .xy img,.xy .xy-o{position:absolute;inset:0;width:100%;height:100%;display:block}
-.xy-a{transform-origin:39.4% 51.8%;animation:xyWave 2.4s ease-in-out infinite}
+.xy-a{transform-origin:38.9% 51.2%;animation:xyWave 2.4s ease-in-out infinite}
 @keyframes xyWave{0%,100%{transform:rotate(0)}15%{transform:rotate(-7deg)}35%{transform:rotate(8deg)}55%{transform:rotate(-5deg)}75%{transform:rotate(6deg)}}
 .xy-m{opacity:0;animation:xyMouth .26s steps(1) 6}
 .xy.talk .xy-m{animation:xyMouth .26s steps(1) infinite}
@@ -13888,7 +13888,7 @@ const Trip = {
 /* Tiểu Ngữ: ảnh nhân vật (2 lớp: thân + tay vẫy) + miệng mấp máy / chớp mắt vẽ đè bằng SVG */
 function xiaoyuSVG(cls = ""){
   const G = typeof TRIP_GD !== "undefined" ? TRIP_GD : {};
-  return `<span class="xiaoyu xy ${cls}" aria-hidden="true"><img class="xy-b" src="${G.xy_base || ""}" alt=""><img class="xy-a" src="${G.xy_arm || ""}" alt=""><svg class="xy-o" viewBox="0 0 368 512"><g class="xy-m"><ellipse cx="167" cy="216" rx="21" ry="13" fill="#FCDCCB"/><path d="M156 214 Q167 222 178 214" fill="none" stroke="#8A3B2E" stroke-width="3" stroke-linecap="round"/></g><g class="xy-e" fill="#FCDEC6"><ellipse cx="130" cy="186" rx="22" ry="17"/><ellipse cx="211" cy="193" rx="24" ry="19"/><path d="M110 190 Q130 198 151 189 M188 197 Q211 206 235 196" fill="none" stroke="#3A2620" stroke-width="3.5" stroke-linecap="round"/></g></svg></span>`;
+  return `<span class="xiaoyu xy ${cls}" aria-hidden="true"><img class="xy-b" src="${G.xy_base || ""}" alt=""><img class="xy-a" src="${G.xy_arm || ""}" alt=""><svg class="xy-o" viewBox="0 0 368 512"><g class="xy-m"><ellipse cx="167" cy="219" rx="21" ry="16" fill="#FEDBC7"/><path d="M156 216 Q167 225 179 216" fill="none" stroke="#8A3B2E" stroke-width="3" stroke-linecap="round"/></g><g class="xy-e" fill="#FEDBC7"><ellipse cx="128" cy="183" rx="23" ry="23"/><ellipse cx="212" cy="192" rx="24" ry="23"/><path d="M106 188 Q128 198 150 187 M189 197 Q212 207 236 195" fill="none" stroke="#3A2620" stroke-width="3.5" stroke-linecap="round"/></g></svg></span>`;
 }
 /* khi phát âm thì Tiểu Ngữ đang hiện trên màn hình cũng "nói" theo */
 function xyTalk(text){
