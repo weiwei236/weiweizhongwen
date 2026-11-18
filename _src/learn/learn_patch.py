@@ -12,7 +12,7 @@ def once(s, old, new, mark):
     if mark in s: return s
     assert s.count(old) == 1, ('không tìm thấy duy nhất', old[:70]); return s.replace(old, new, 1)
 s = put(s, '/* LEARN_CSS_BEGIN */', '/* LEARN_CSS_END */', rd('learn.css'), '/* HZ_CSS_BEGIN */')
-s = put(s, '/* LEARN_JS_BEGIN */', '/* LEARN_JS_END */', rd('srs.js') + '\n' + rd('bushou.js'), '/* HZ_JS_BEGIN */')
+s = put(s, '/* LEARN_JS_BEGIN */', '/* LEARN_JS_END */', rd('srs.js') + '\n' + rd('bushou.js') + '\n' + rd('chars.js'), '/* HZ_JS_BEGIN */')
 a = '<section id="scrTrip" class="screen trip-screen" hidden><div class="tp-wrap" id="tpBody"></div></section>'
 s = once(s, a, a + '\n<section id="scrReview" class="screen" hidden><div class="rv-wrap" id="rvBody"></div></section>\n<section id="scrBushou" class="screen" hidden><div class="bs-wrap" id="bsBody"></div></section>', 'id="scrReview"')
 s = once(s, '"scrFarm","scrTrip",', '"scrFarm","scrTrip","scrReview","scrBushou",', '"scrReview","scrBushou"')
@@ -22,4 +22,8 @@ s = once(s, '  $("#hiFarm").onclick=()=>Farm.open();', '  $("#hiSrs").onclick=()
 s = once(s, 'const L=LEVELS[S.level], les=L.lessons[S.lesson]; gbFillPy(les);', 'const L=LEVELS[S.level], les=L.lessons[S.lesson]; gbFillPy(les); if(les) SRS.see(S.level,S.lesson);', 'SRS.see(S.level')
 s = once(s, 'game: "Trò chơi", write: "Tập viết" };', 'game: "Trò chơi", write: "Tập viết", srs: "Ôn tập hằng ngày", bushou: "Bộ thủ" };', 'srs: "Ôn tập')
 s = once(s, '      case "write": return `${d.done}/${d.total} chữ đã viết đúng`;', '      case "write": return `${d.done}/${d.total} chữ đã viết đúng`;\n      case "srs": return `Ôn ${d.n} từ, nhớ ${d.right}`;\n      case "bushou": return `${d.mode === "combo" ? "Ghép chữ" : "Tìm bộ thủ"}: ${d.right}/${d.total}`;', 'case "srs"')
+s = once(s, '<section id="scrBushou" class="screen" hidden><div class="bs-wrap" id="bsBody"></div></section>', '<section id="scrBushou" class="screen" hidden><div class="bs-wrap" id="bsBody"></div></section>\n<section id="scrChars" class="screen" hidden><div class="ch-body" id="chBody"></div></section>', 'id="scrChars"')
+s = once(s, '"scrReview","scrBushou",', '"scrReview","scrBushou","scrChars",', '"scrBushou","scrChars"')
+s = once(s, '<span class="han">部</span> Bộ thủ</button>', '<span class="han">部</span> Bộ thủ</button>${((Profile.get() || {}).cls || "hsk") === "gt" ? "" : `<button class="btn ch-btn" id="hiCh">👥 Nhân vật</button>`}', 'id="hiCh"')
+s = once(s, '$("#hiBs").onclick=()=>Bushou.open();', '$("#hiBs").onclick=()=>Bushou.open(); if($("#hiCh")) $("#hiCh").onclick=()=>Chars.open();', 'Chars.open()')
 open(P, 'w', encoding='utf-8').write(s); print('ok')
