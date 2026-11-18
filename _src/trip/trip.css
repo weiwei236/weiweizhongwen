@@ -338,7 +338,7 @@
 .tv-face.kid{background-size:330% auto;background-position:7% 33%}
 .tvm-walk .tv-act,.tvm-bike .tv-act{bottom:22px}
 @media (max-width:480px){.tv-pair.walk,.tv-pair.bike{height:120px}}
-.tv-pair.bus,.tv-pair.train{height:150px;animation:tvBump .5s ease-in-out infinite}
+.tv-pair.bus{height:150px;animation:tvBump .5s ease-in-out infinite}.tv-pair.train{height:auto;width:min(480px,86vw);animation:tvBump .4s ease-in-out infinite}.tv-pair.train img{width:100%;height:auto}
 .tv-pair.boat{height:160px;margin-bottom:-26px;animation:tvBoat 1.6s ease-in-out infinite}
 .tv-pair.cable{height:170px;transform-origin:50% 0;animation:tvSwing 2s ease-in-out infinite}
-@media (max-width:480px){.tv-pair.bus,.tv-pair.train,.tv-pair.boat,.tv-pair.cable{height:120px}}
+@media (max-width:480px){.tv-pair.bus,.tv-pair.boat,.tv-pair.cable{height:120px}}
