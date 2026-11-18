@@ -77,6 +77,7 @@ def main():
     B = {}
     for f in sorted(os.listdir(HERE)):
         if re.match(r'h3_\d\d\.py$', f): B.update(importlib.import_module(f[:-3]).B)
+    import h3_prac; h3_prac.attach(B)
     for k in B:
         for v in B[k]["vocab"]: G0.DICT.add(v["h"])
     out = []; gram = {}
