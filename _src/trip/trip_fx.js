@@ -119,10 +119,10 @@ const Travel = {
 
 /* ---------- Vé máy bay ---------- */
 const Ticket = {
-  info(id){ const st = Trip.st, t = st.tix && st.tix[id]; if(t) return t;
-    const R = tripRng(id + (Trip.key() || "")), d = new Date();
+  info(id, again){ const st = Trip.st, t = st.tix && st.tix[id]; if(t && !again) return t;
+    const R = tripRng(id + (Trip.key() || "") + (again ? Date.now() : "")), d = new Date();
     return { no: "WW" + (100 + Math.floor(R() * 899)), seat: (1 + Math.floor(R() * 30)) + "ABCDEF"[Math.floor(R() * 6)], gate: "ABCD"[Math.floor(R() * 4)] + (1 + Math.floor(R() * 20)),
-      time: String(7 + Math.floor(R() * 12)).padStart(2, "0") + ":" + ["00", "15", "30", "45"][Math.floor(R() * 4)], date: d.toLocaleDateString("vi-VN"), from: st.at || "han", price: this.price(id) }; },
+      time: String(7 + Math.floor(R() * 12)).padStart(2, "0") + ":" + ["00", "15", "30", "45"][Math.floor(R() * 4)], date: d.toLocaleDateString("vi-VN"), from: st.at || "han", price: again ? 0 : this.price(id) }; },
   /* Giá vé (xu nông trại) theo quãng đường bay: 10–25 xu. Bài tập đạt 100% được 10 xu. */
   price(id){ const a = Trip.st.at && TRIP_MAP[Trip.st.at] ? TRIP_MAP[Trip.st.at] : [TRIP_HOME.x, TRIP_HOME.y], b = TRIP_MAP[id];
     return Math.max(10, Math.min(25, 8 + Math.round(Math.hypot(b[0] - a[0], b[1] - a[1]) / 18))); },
@@ -139,11 +139,11 @@ const Ticket = {
       <div class="tk-stamp"><span class="han">已出票</span><small>ĐÃ XUẤT VÉ</small></div></div>`;
   },
   open(id, onFly){
-    const c = Trip.C(id), t = this.info(id), ov = document.createElement("div"); ov.className = "tk-ov";
+    const owned = !!(Trip.st.tix && Trip.st.tix[id]), c = Trip.C(id), t = this.info(id, owned), ov = document.createElement("div"); ov.className = "tk-ov";
     const paint = paid => { ov.innerHTML = `<div class="tk-box" role="dialog" aria-label="Mua vé máy bay đi ${esc(c.vi)}"><button class="tk-x" aria-label="Đóng">${ICON.x}</button>
-      ${Trip.guide(paid ? "happy" : "smile", paid ? `<b class="han">${Trip.z("票买好了！我们出发吧！")}</b><p>Vé đã in xong! Mình cùng lên máy bay đi <b>${esc(c.vi)}</b> nhé.</p>` : `<b class="han">${Trip.z("我们坐飞机去" + c.zh + "吧！")}</b><p>Mình cùng bay đến <b>${esc(c.vi)}</b> nhé! Dùng <b>xu nông trại</b> để mua vé máy bay. Vé đã mua dùng được mãi cho thành phố này.</p>`)}
+      ${Trip.guide(paid ? "happy" : "smile", paid ? `<b class="han">${Trip.z("票买好了！我们出发吧！")}</b><p>Vé đã in xong! Mình cùng lên máy bay đi <b>${esc(c.vi)}</b> nhé.</p>` : owned ? `<b class="han">${Trip.z("我们再去" + c.zh + "吧！")}</b><p>Mình cùng quay lại <b>${esc(c.vi)}</b> nhé! Bạn đã mua vé đến đây rồi nên lần này <b>miễn phí</b>. Bấm <b>Lấy vé</b> để in vé mới.</p>` : `<b class="han">${Trip.z("我们坐飞机去" + c.zh + "吧！")}</b><p>Mình cùng bay đến <b>${esc(c.vi)}</b> nhé! Dùng <b>xu nông trại</b> để mua vé máy bay. Vé đã mua dùng được mãi cho thành phố này.</p>`)}
       <div class="tk-print">${this.card(id, t, paid)}</div>
-      <div class="tp-row">${paid ? `<button class="btn primary big" id="tkFly">✈ Lên máy bay</button>` : (() => { const have = this.coins(), need = t.price - have;
+      <div class="tp-row">${paid ? `<button class="btn primary big" id="tkFly">✈ Lên máy bay</button>` : owned ? `<div class="tk-pay"><span class="tk-coin">${coinSVG()}</span><div><b>Giá vé: 0 xu · Miễn phí</b><small>Bạn đã có vé đến ${esc(c.vi)} từ lần trước</small></div></div><button class="btn primary big" id="tkBuy">🎫 Lấy vé · Miễn phí</button>` : (() => { const have = this.coins(), need = t.price - have;
         return need > 0 ? `<div class="tk-pay lack"><span class="tk-coin">${coinSVG()}</span><div><b>Giá vé: ${t.price} xu</b><small>Bạn đang có ${have} xu · còn thiếu <b>${need} xu</b>. Làm bài tập ở trang học để kiếm thêm xu nhé!</small></div></div><button class="btn primary big" id="tkEarn">📚 Đi học kiếm xu</button>`
           : `<div class="tk-pay"><span class="tk-coin">${coinSVG()}</span><div><b>Giá vé: ${t.price} xu</b><small>Bạn đang có ${have} xu · sau khi mua còn ${have - t.price} xu</small></div></div><button class="btn primary big" id="tkBuy">🎫 Mua vé · ${t.price} xu</button>`; })()}</div></div>`;
       ov.querySelector(".tk-x").onclick = () => { stopSpeak(); ov.remove(); };
@@ -151,13 +151,13 @@ const Ticket = {
       if(paid){ ov.querySelector("#tkFly").onclick = () => { ov.classList.add("out"); setTimeout(() => { ov.remove(); onFly(); }, 250); }; }
       else if(ov.querySelector("#tkEarn")) ov.querySelector("#tkEarn").onclick = () => { stopSpeak(); ov.remove(); showScreen("app"); renderHello(); };
       else ov.querySelector("#tkBuy").onclick = () => {
-        if(!Farm.spend(t.price)) return paint(false);
-        Farm.save(); refreshCoinBadge(); Track.log("coins", { amount: -t.price, pct: 0, reason: "Vé máy bay đi " + c.vi, balance: Farm.st.coins });
+        if(!owned){ if(!Farm.spend(t.price)) return paint(false);
+          Farm.save(); refreshCoinBadge(); Track.log("coins", { amount: -t.price, pct: 0, reason: "Vé máy bay đi " + c.vi, balance: Farm.st.coins }); }
         Trip.st.tix = Trip.st.tix || {}; Trip.st.tix[id] = t; if(!Trip.st.visa) Trip.st.visa = Date.now(); Trip.save();
         paint(true); ov.querySelector(".tk-print").classList.add("printing"); Trip.talkSay("票买好了！我们出发吧！", ov); };
       Trip.talk(ov, 1600);
     };
-    paint(!!(Trip.st.tix && Trip.st.tix[id]));
+    paint(false);
     document.body.appendChild(ov);
   }
 };

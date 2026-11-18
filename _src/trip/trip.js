@@ -169,7 +169,7 @@ const Trip = {
     on("#tpVi", () => { this.vi = !this.vi; store.set("ww_trip_vi", this.vi); const b = $("#tpVi"); b.classList.toggle("on", this.vi); b.setAttribute("aria-pressed", this.vi); $("#tpBody").classList.toggle("tp-novi", !this.vi); });
     on("#tpPy", () => { this.py = !this.py; store.set("ww_trip_py", this.py); if(this.view === "fail"){ $("#tpBody").innerHTML = this.failView(); this.bind(); } else this.render(); });
     const fly = (id, fromList) => { const m = B.querySelector(".tp-mapin"); if(fromList && m && m.getBoundingClientRect().top < 0){ m.scrollIntoView({ behavior: "smooth", block: "center" }); setTimeout(() => this.fly(id), 450); } else this.fly(id); };
-    const go = (id, fromList) => { if(this.busy) return; const same = this.st.at === id; if(same || (this.st.tix || {})[id]) return fly(id, fromList); Ticket.open(id, () => fly(id, fromList)); };
+    const go = (id, fromList) => { if(this.busy) return; const same = this.st.at === id; if(same) return fly(id, fromList); Ticket.open(id, () => fly(id, fromList)); };
     on(".tp-pin", el => go(el.dataset.c)); on(".tp-cbtn", el => go(el.dataset.c, true));
     B.querySelectorAll(".tp-pin").forEach(el => el.onkeydown = e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); go(el.dataset.c); } });
     on(".tp-say, .tp-word", el => this.talkSay(el.dataset.say));
