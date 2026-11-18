@@ -35,17 +35,17 @@ const TRIP_FX = {
   hongyadong: { tw: [[30, 12, 75, 70, 9, "#FFD27A"], [70, 2, 98, 35, 4, "#fff"]], rip: [[20, 92, 9], [42, 88, 12], [66, 93, 10]] },
   suodao: { cloud: [9], bird: 30, rip: [[45, 76, 10], [70, 72, 10], [30, 86, 9]] }, liziba: { cloud: [9], bird: 22, fall: "green" },
   huoguo: { steam: [[42, 33], [58, 33]] }, xiaomian: { steam: [[45, 24], [56, 20]] },
-  shilin: { cloud: [7], bird: 18, rip: [[14, 84, 8], [30, 90, 9]], fish: [[6, 38, 88]] }, lijiang: { cloud: [7], rip: [[46, 64, 8], [55, 76, 10], [42, 90, 12]], fall: "petal" },
+  shilin: { cloud: [7], bird: 18, rip: [[14, 84, 8], [30, 90, 9]] }, lijiang: { cloud: [7], rip: [[46, 64, 8], [55, 76, 10], [42, 90, 12]], fall: "petal" },
   yulong: { cloud: [10, 32], bird: 22 }, mixian: { steam: [[46, 12], [56, 9]] }, xianhuabing: { fall: "petal" },
-  xihu: { cloud: [12], rip: [[30, 60, 12], [55, 70, 14], [75, 84, 10], [42, 82, 10]], fish: [[20, 70, 90]], fall: "green" },
+  xihu: { cloud: [12], rip: [[30, 60, 12], [55, 70, 14], [75, 84, 10], [42, 82, 10]], fall: "green" },
   leifeng: { cloud: [8], bird: 30, rip: [[60, 80, 12], [76, 72, 10], [42, 92, 10]] }, duanqiao: { fall: "snow", rip: [[50, 92, 12], [24, 78, 8], [78, 82, 9]] },
   longjing: { steam: [[40, 34], [50, 30]], fall: "green" }, dongpo: { steam: [[38, 26], [50, 23]] },
   bingmayong: { fall: "dust" }, dayanta: { cloud: [8], fount: [[34, 80], [50, 82], [71, 80]] }, chengqiang: { cloud: [12], bird: 22 },
   roujiamo: { steam: [[45, 30], [56, 27]] }, paomo: { steam: [[45, 32], [56, 29]] },
-  lijiangriver: { cloud: [14], bird: 24, rip: [[20, 72, 10], [50, 78, 12], [30, 92, 12], [80, 76, 10]], fish: [[8, 40, 90]] },
+  lijiangriver: { cloud: [14], bird: 24, rip: [[20, 72, 10], [50, 78, 12], [30, 92, 12], [80, 76, 10]] },
   xiangbishan: { cloud: [8], bird: 16, rip: [[20, 86, 10], [46, 93, 12], [80, 90, 10]] }, yangshuo: { cloud: [10], bird: 18, fall: "green" },
   guilinmifen: { steam: [[40, 30], [52, 28]] }, pijiuyu: { steam: [[40, 28], [52, 25]] },
-  jiuzhaigou: { rip: [[46, 60, 12], [60, 48, 10], [40, 86, 14], [70, 80, 10]], fish: [[25, 75, 78]], fall: "autumn" },
+  jiuzhaigou: { rip: [[46, 60, 12], [60, 48, 10], [40, 86, 14], [70, 80, 10]], fall: "autumn" },
   leshandafo: { bird: 14, rip: [[12, 80, 8], [30, 92, 10], [60, 96, 10]] }, emeishan: { cloud: [44, 60, 72], bird: 14, tw: [[58, 18, 72, 40, 4, "#FFF3B0"]] },
   mapodoufu: { steam: [[48, 30], [58, 27]] }, huiguorou: { steam: [[45, 35], [57, 32]] },
   pandajidi: { fall: "green" }, kuanzhai: { steam: [[38, 70], [86, 78]], fall: "green" }, bianlian: { tw: [[20, 10, 70, 80, 9, "#FFE27A"]] },
@@ -116,7 +116,11 @@ const Ticket = {
   info(id){ const st = Trip.st, t = st.tix && st.tix[id]; if(t) return t;
     const R = tripRng(id + (Trip.key() || "")), d = new Date();
     return { no: "WW" + (100 + Math.floor(R() * 899)), seat: (1 + Math.floor(R() * 30)) + "ABCDEF"[Math.floor(R() * 6)], gate: "ABCD"[Math.floor(R() * 4)] + (1 + Math.floor(R() * 20)),
-      time: String(7 + Math.floor(R() * 12)).padStart(2, "0") + ":" + ["00", "15", "30", "45"][Math.floor(R() * 4)], date: d.toLocaleDateString("vi-VN"), from: st.at || "han" }; },
+      time: String(7 + Math.floor(R() * 12)).padStart(2, "0") + ":" + ["00", "15", "30", "45"][Math.floor(R() * 4)], date: d.toLocaleDateString("vi-VN"), from: st.at || "han", price: this.price(id) }; },
+  /* Giá vé (xu nông trại) theo quãng đường bay: 10–25 xu. Bài tập đạt 100% được 10 xu. */
+  price(id){ const a = Trip.st.at && TRIP_MAP[Trip.st.at] ? TRIP_MAP[Trip.st.at] : [TRIP_HOME.x, TRIP_HOME.y], b = TRIP_MAP[id];
+    return Math.max(10, Math.min(25, 8 + Math.round(Math.hypot(b[0] - a[0], b[1] - a[1]) / 18))); },
+  coins(){ return typeof Farm !== "undefined" && Farm.load() ? Farm.st.coins : 0; },
   card(id, t, stamped){
     const c = Trip.C(id), f = t.from === "han" ? { zh: "河内", vi: "Hà Nội", code: "HAN" } : { ...Trip.C(t.from), code: TRIP_CODE[t.from] }, p = Profile.get();
     let bars = ""; const R = tripRng(t.no + id); for(let x = 0; x < 120; x += 2 + Math.floor(R() * 3)) bars += `<rect x="${x}" y="0" width="${1 + Math.floor(R() * 2)}" height="30"/>`;
@@ -124,20 +128,25 @@ const Ticket = {
       <div class="tk-l"><div class="tk-hd"><b>✈ 薇薇航空 <small>WEIWEI AIR</small></b><span>登机牌 · BOARDING PASS</span></div>
         <div class="tk-route"><div><b>${f.code}</b><span class="han">${f.zh}</span><small>${esc(f.vi)}</small></div><i>✈</i><div><b>${TRIP_CODE[id]}</b><span class="han">${c.zh}</span><small>${esc(c.vi)}</small></div></div>
         <div class="tk-grid"><div><small>乘客 · Hành khách</small><b>${esc(p.name || "")}</b></div><div><small>航班 · Chuyến bay</small><b>${t.no}</b></div><div><small>日期 · Ngày bay</small><b>${t.date}</b></div>
-          <div><small>登机口 · Cửa</small><b>${t.gate}</b></div><div><small>座位 · Ghế</small><b>${t.seat}</b></div><div><small>登机 · Giờ lên</small><b>${t.time}</b></div></div></div>
+          <div><small>登机口 · Cửa</small><b>${t.gate}</b></div><div><small>座位 · Ghế</small><b>${t.seat}</b></div><div><small>登机 · Giờ lên</small><b>${t.time}</b></div>${t.price != null ? `<div><small>票价 · Giá vé</small><b>${t.price} xu</b></div>` : ""}</div></div>
       <div class="tk-r"><div class="tk-pic">${tripArt(c.cover)}</div><b>${TRIP_CODE[id]}</b><small>${t.seat} · ${t.no}</small><svg class="tk-bar" viewBox="0 0 120 30" preserveAspectRatio="none">${bars}</svg></div>
       <div class="tk-stamp"><span class="han">已出票</span><small>ĐÃ XUẤT VÉ</small></div></div>`;
   },
   open(id, onFly){
     const c = Trip.C(id), t = this.info(id), ov = document.createElement("div"); ov.className = "tk-ov";
     const paint = paid => { ov.innerHTML = `<div class="tk-box" role="dialog" aria-label="Mua vé máy bay đi ${esc(c.vi)}"><button class="tk-x" aria-label="Đóng">${ICON.x}</button>
-      ${Trip.guide(paid ? "happy" : "smile", paid ? `<b class="han">${Trip.z("票买好了！我们出发吧！")}</b><p>Vé đã in xong! Mình cùng lên máy bay đi <b>${esc(c.vi)}</b> nhé.</p>` : `<b class="han">${Trip.z("我们坐飞机去" + c.zh + "吧！")}</b><p>Mình cùng bay đến <b>${esc(c.vi)}</b> nhé! Bấm <b>Mua vé</b> để in vé máy bay.</p>`)}
+      ${Trip.guide(paid ? "happy" : "smile", paid ? `<b class="han">${Trip.z("票买好了！我们出发吧！")}</b><p>Vé đã in xong! Mình cùng lên máy bay đi <b>${esc(c.vi)}</b> nhé.</p>` : `<b class="han">${Trip.z("我们坐飞机去" + c.zh + "吧！")}</b><p>Mình cùng bay đến <b>${esc(c.vi)}</b> nhé! Dùng <b>xu nông trại</b> để mua vé máy bay. Vé đã mua dùng được mãi cho thành phố này.</p>`)}
       <div class="tk-print">${this.card(id, t, paid)}</div>
-      <div class="tp-row">${paid ? `<button class="btn primary big" id="tkFly">✈ Lên máy bay</button>` : `<span class="tk-price">Giá vé: <b>0 xu</b> · Tiểu Ngữ mời bạn!</span><button class="btn primary big" id="tkBuy">🎫 Mua vé</button>`}</div></div>`;
+      <div class="tp-row">${paid ? `<button class="btn primary big" id="tkFly">✈ Lên máy bay</button>` : (() => { const have = this.coins(), need = t.price - have;
+        return need > 0 ? `<div class="tk-pay lack"><span class="tk-coin">${coinSVG()}</span><div><b>Giá vé: ${t.price} xu</b><small>Bạn đang có ${have} xu · còn thiếu <b>${need} xu</b>. Làm bài tập ở trang học để kiếm thêm xu nhé!</small></div></div><button class="btn primary big" id="tkEarn">📚 Đi học kiếm xu</button>`
+          : `<div class="tk-pay"><span class="tk-coin">${coinSVG()}</span><div><b>Giá vé: ${t.price} xu</b><small>Bạn đang có ${have} xu · sau khi mua còn ${have - t.price} xu</small></div></div><button class="btn primary big" id="tkBuy">🎫 Mua vé · ${t.price} xu</button>`; })()}</div></div>`;
       ov.querySelector(".tk-x").onclick = () => { stopSpeak(); ov.remove(); };
       const say = ov.querySelector(".tp-say"); ov.querySelectorAll(".tp-say").forEach(b => b.onclick = () => Trip.talkSay(b.dataset.say, ov));
       if(paid){ ov.querySelector("#tkFly").onclick = () => { ov.classList.add("out"); setTimeout(() => { ov.remove(); onFly(); }, 250); }; }
+      else if(ov.querySelector("#tkEarn")) ov.querySelector("#tkEarn").onclick = () => { stopSpeak(); ov.remove(); showScreen("app"); renderHello(); };
       else ov.querySelector("#tkBuy").onclick = () => {
+        if(!Farm.spend(t.price)) return paint(false);
+        Farm.save(); refreshCoinBadge(); Track.log("coins", { amount: -t.price, pct: 0, reason: "Vé máy bay đi " + c.vi, balance: Farm.st.coins });
         Trip.st.tix = Trip.st.tix || {}; Trip.st.tix[id] = t; if(!Trip.st.visa) Trip.st.visa = Date.now(); Trip.save();
         paint(true); ov.querySelector(".tk-print").classList.add("printing"); Trip.talkSay("票买好了！我们出发吧！", ov); };
       Trip.talk(ov, 1600);
