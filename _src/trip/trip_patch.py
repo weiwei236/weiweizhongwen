@@ -8,7 +8,11 @@ def img_js():
     if os.path.isdir(d):
         for f in sorted(os.listdir(d)):
             if f.endswith('.webp'): m[f[:-5]] = 'data:image/webp;base64,' + base64.b64encode(open(os.path.join(d, f), 'rb').read()).decode()
-    return 'const TRIP_IMG_DATA=' + json.dumps(m) + ';\n'
+    g = {}; gd = os.path.join(D, 'gd')
+    if os.path.isdir(gd):
+        for f in sorted(os.listdir(gd)):
+            if f.endswith('.webp'): g[f[:-5]] = 'data:image/webp;base64,' + base64.b64encode(open(os.path.join(gd, f), 'rb').read()).decode()
+    return 'const TRIP_IMG_DATA=' + json.dumps(m) + ';\nconst TRIP_GD_DATA=' + json.dumps(g) + ';\n'
 rd = lambda f: open(os.path.join(D, f), encoding='utf-8').read()
 def put(s, b, e, body, anchor, before=True):
     if b not in s:
@@ -17,7 +21,7 @@ def put(s, b, e, body, anchor, before=True):
     i = s.index(b) + len(b); j = s.index(e)
     return s[:i] + '\n' + body + s[j:]
 s = put(s, '/* TRIP_CSS_BEGIN */', '/* TRIP_CSS_END */', rd('trip.css'), '</style>')
-s = put(s, '/* TRIP_JS_BEGIN */', '/* TRIP_JS_END */', img_js() + rd('trip_art.js') + '\n' + rd('trip_art2.js') + '\n' + rd('trip_data.js') + '\n' + rd('trip_data2.js') + '\n' + rd('trip.js'), 'function xiaoyuSVG(')
+s = put(s, '/* TRIP_JS_BEGIN */', '/* TRIP_JS_END */', img_js() + rd('trip_art.js') + '\n' + rd('trip_art2.js') + '\n' + rd('trip_data.js') + '\n' + rd('trip_data2.js') + '\n' + rd('trip_fx.js') + '\n' + rd('trip.js'), 'function xiaoyuSVG(')
 if 'id="scrTrip"' not in s:
     a = '<section id="scrFarm" class="screen farm-screen" hidden><div class="fm-wrap" id="fmBody"></div></section>'
     s = s.replace(a, a + '\n<section id="scrTrip" class="screen trip-screen" hidden><div class="tp-wrap" id="tpBody"></div></section>', 1)
