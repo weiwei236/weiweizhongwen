@@ -35,8 +35,10 @@ def files_js(var, sub):
     if os.path.isdir(d):
         for f in sorted(os.listdir(d)):
             if f.endswith('.webp'): shutil.copyfile(os.path.join(d, f), os.path.join(out, f)); m[f[:-5]] = 'trip/' + sub + '/' + f
-    i = src.find('const ' + var + '=')
-    if i >= 0: j = src.index(';\n', i); src = src[:i] + 'const ' + var + '=' + json.dumps(m) + src[j:]
+    global art
+    for nm in ('src', 'art'):
+        t = globals()[nm]; i = t.find('const ' + var + '=')
+        if i >= 0: j = t.index(';\n', i); globals()[nm] = t[:i] + 'const ' + var + '=' + json.dumps(m) + t[j:]
 files_js('TRIP_IMG_DATA', 'img'); files_js('TRIP_GD_DATA', 'gd')
 head = '<!doctype html>\n<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">'
 k = src.index('<section id="scrWelcome"')
