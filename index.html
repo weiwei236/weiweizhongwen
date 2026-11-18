@@ -4609,7 +4609,7 @@ function renderLesson(){
   <section class="panel" id="work"></section>
   <div class="next-step" id="nextStep"></div>`;
   box.querySelector(".sections").onclick=e=>{const b=e.target.closest("button");if(!b)return;S.section=b.dataset.s;store.set("ww_section",S.section);renderLesson();scrollToLesson();};
-  bindLesNav(box);
+  bindLesNav(box); updateGo();
   if(S.section==="exam"&&!les.test) S.section="flash";
   if(S.section==="text"&&!les.texts) S.section="flash";
   if(S.section==="talk"&&!les.talk&&!les.px) S.section="flash";
@@ -4629,13 +4629,14 @@ function bindLesNav(root){
   const pk=root.querySelector("#lesPick"); if(pk) pk.onclick=()=>{ const P=$("#railPop"); P.hidden=!P.hidden; pk.setAttribute("aria-expanded",!P.hidden); if(!P.hidden){ $("#lesson").before(P); const sel=P.querySelector('[aria-selected="true"]'); if(sel) sel.scrollIntoView({block:"nearest"}); } };
 }
 const SEC_NAME={text:"Bài khóa",flash:"Flashcard",write:"Tập viết",gram:"Ngữ pháp",speak:"Phát âm",talk:"Hội thoại",trans:"Luyện dịch",read:"Bài đọc",game:"Trò chơi",exam:"Bài tập"};
-function renderNextStep(){ const box=$("#nextStep"); if(!box) return;
+function renderNextStep(){ updateGo(); const box=$("#nextStep"); if(!box) return;
   const tabs=[...document.querySelectorAll("#lesson .sections [data-s]")].map(b=>b.dataset.s), i=tabs.indexOf(S.section), ids=lesIds(), li=ids.indexOf(S.lesson);
   if(i>=0&&i<tabs.length-1){ const n=tabs[i+1]; box.innerHTML=`<span class="muted">Xong phần ${SEC_NAME[S.section]||""}?</span><button class="btn primary" data-ns="${n}">Tiếp theo: ${SEC_NAME[n]||n} →</button>`; }
   else if(li>=0&&li<ids.length-1&&LEVELS[S.level].lessons[ids[li+1]]){ box.innerHTML=`<span class="muted">Bạn đã đi hết các phần của bài ${S.lesson} 🎉</span><button class="btn primary" data-nl="${ids[li+1]}">Sang Bài ${ids[li+1]} →</button>`; }
   else { box.innerHTML=""; return; }
   const b=box.querySelector("button"); b.onclick=()=>{ if(b.dataset.ns){ S.section=b.dataset.ns; store.set("ww_section",S.section); renderLesson(); } else { S.lesson=+b.dataset.nl; store.set("ww_les_"+S.level,S.lesson); S.section=document.querySelector("#lesson .sections [data-s]").dataset.s; renderAll(); } scrollToLesson(); };
 }
+function updateGo(){ const g=$("#hiGo"); if(g) g.textContent=`▶ Học tiếp: Bài ${S.lesson??""} · ${SEC_NAME[S.section]||"Flashcard"}`; }
 function scrollToLesson(){ const el=$("#lesson .lesson-head"); if(!el) return; const y=el.getBoundingClientRect().top+scrollY-(($("#miniBar")&&!$("#miniBar").hidden)?$("#miniBar").offsetHeight:0)-8; if(Math.abs(scrollY-y)>40) scrollTo({top:y,behavior:"smooth"}); }
 
 /* ======================= BÀI KHÓA (课文) – lớp Giao tiếp ======================= */
@@ -5594,6 +5595,7 @@ const Speak = {
   render(){
     const W=$("#work"), it=this.items[this.cur];
     const micOK=!!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&window.MediaRecorder);
+    const oldList=W.querySelector(".sp-list"), keepTop=oldList?oldList.scrollTop:null, keepY=scrollY;
     const li=t=>this.items.map((x,k)=>x.type!==t?"":`<button data-i="${k}" aria-selected="${k===this.cur}"><span class="han">${esc(x.h)}</span>${this.scores[x.h]!=null?`<span class="sc">${this.scores[x.h]}</span>`:""}</button>`).join("");
     W.innerHTML=`<div class="sp">
       <nav class="sp-list" aria-label="Mục luyện phát âm">${this.progressNote()}<h4>Từ vựng</h4>${li("w")}<h4>Câu</h4>${li("s")}</nav>
@@ -5611,6 +5613,8 @@ const Speak = {
           :!SR?`<div class="notice"><b>Trình duyệt này chỉ chấm được thanh điệu và độ lưu loát.</b>Để chấm thêm thanh mẫu và vận mẫu, hãy dùng Chrome hoặc Edge.</div>`:""}
         <div id="spReport"></div>
       </div></div>`;
+    { const nl=W.querySelector(".sp-list"); if(keepTop!=null){ nl.scrollTop=keepTop; if(Math.abs(scrollY-keepY)>2) scrollTo(0,keepY); }
+      const sel=nl.querySelector('[aria-selected="true"]'); if(sel){ const t=sel.offsetTop-nl.offsetTop; if(t<nl.scrollTop||t+sel.offsetHeight>nl.scrollTop+nl.clientHeight) nl.scrollTop=t-nl.clientHeight/2+sel.offsetHeight/2; } }
     W.querySelector(".sp-list").onclick=e=>{const b=e.target.closest("button");if(!b)return;stopAnyRecording();this.cur=+b.dataset.i;this.last=null;this.render();};
     $("#spListen").onclick=()=>speak(it.h, it.type==="s"?.75:.7);
     $("#spRec").onclick=()=>REC?REC.stop():this.record(it);
@@ -9679,7 +9683,7 @@ function initSettings(){
 }
 function enterApp(){
   const p=Profile.get(); if(!p||!p.avatar) return openWelcome();
-  if(p.cls==="hsk"&&LEVELS[p.level]){ S.level=p.level; const ids=Object.keys(LEVELS[S.level].lessons); S.lesson=ids.length?+ids[ids.length-1]:null; }
+  if(p.cls==="hsk"&&LEVELS[p.level]){ S.level=p.level; const ids=Object.keys(LEVELS[S.level].lessons), last=+store.get("ww_les_"+S.level,0); S.lesson=LEVELS[S.level].lessons[last]?last:(ids.length?+ids[ids.length-1]:null); }
   if(p.cls==="gt"&&((LEVELS[S.level]||{}).grp!=="gt"||(LEVELS[S.level].book||1)>gtBook(p.level)||(store.get("ww_pf_lv")!=null&&store.get("ww_pf_lv")!==p.level))){ store.set("ww_pf_lv",p.level); S.level=gtLv(p.level); store.set("ww_level",S.level); const ids=Object.keys(LEVELS[S.level].lessons).map(Number); S.lesson=ids.length?ids[0]:LEVELS[S.level].from; }
   showScreen("app"); renderAll(); renderHello(); initSettings();
   if(!enterApp.logged){ enterApp.logged=true; Track.log("session",{},""); }
