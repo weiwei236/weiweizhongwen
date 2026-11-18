@@ -296,6 +296,35 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
 .hello .hi-lb{flex:0 0 72px;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
 .hello .hi-btns{display:flex;gap:6px;flex-wrap:wrap}
 .sections .sec-sep{width:1px;align-self:stretch;background:var(--line);margin:4px 2px}
+/* ---- điều hướng gọn ---- */
+.top .wrap{padding-block:8px}.brand img{height:44px}
+.top-right{position:relative}
+.set-btn{padding:6px 12px}
+.set-pop{position:fixed;z-index:80;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,.15);padding:12px;display:grid;gap:10px;min-width:240px}
+.set-pop .voice{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.set-acc{display:grid;gap:6px;border-top:1px solid var(--line);padding-top:10px}.set-acc:empty{display:none}
+.mini-bar{position:fixed;top:0;left:0;right:0;z-index:70;background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);box-shadow:0 4px 14px rgba(0,0,0,.06)}
+.mb-in{display:flex;align-items:center;gap:8px;padding-block:6px}
+.mb-me{width:40px;height:40px;border-radius:50%;overflow:hidden;border:2px solid var(--accent);background:#fff;padding:0;flex:none;position:relative}
+.mb-me svg{position:absolute;width:170%;height:auto;left:-35%;top:-38%}
+.mb-name{font-size:14px;white-space:nowrap;max-width:110px;overflow:hidden;text-overflow:ellipsis}
+.mb-btns{display:flex;gap:5px;flex:1;min-width:0;overflow-x:auto;scrollbar-width:none;align-items:center}.mb-btns::-webkit-scrollbar{display:none}
+.mb-btns .btn{padding:5px 10px;font-size:13px;flex:none;white-space:nowrap}.mb-btns .btn svg{width:15px;height:15px}
+.mb-sep{width:1px;height:22px;background:var(--line);flex:none}
+body.has-mini{--stick:56px}
+.lesson-head{align-items:center;justify-content:flex-start;margin:14px 0 10px;gap:14px}
+.lh-nav{display:flex;gap:4px;align-items:center;flex:none}
+.lh-arr{padding:6px 12px;font-size:18px;line-height:1}.lh-arr[disabled]{opacity:.35}
+.lh-pick{font-weight:700}.lh-pick small{color:var(--muted);font-weight:500}
+.lh-t{min-width:0}.lh-t p{margin:2px 0 0}
+#lesson>.sections{position:sticky;top:var(--stick,0px);z-index:40;background:var(--bg);padding:8px 0;margin-bottom:8px}
+.rail-pop{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px;margin:10px 0;box-shadow:var(--shadow)}
+.rail-pop .rail{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));overflow:visible;max-height:50vh;overflow-y:auto}
+.rail-pop .rail button{align-items:flex-start;text-align:left}
+.next-step{display:flex;justify-content:flex-end;align-items:center;gap:12px;flex-wrap:wrap;margin:14px 0 4px}.next-step:empty{display:none}
+.hi-go{padding:6px 14px;font-size:13.5px}
+@media (max-width:640px){.hello .hi-acc .btn:not(.hi-go){display:none}.mb-btns .btn{padding:5px 8px}#lesson>.sections{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}#lesson>.sections::-webkit-scrollbar{display:none}#lesson>.sections button{flex:none}.mb-name{display:none}.mb-btns .btn span:not(.n):not(.han){display:none}.set-btn span{display:none}.lesson-head h1{font-size:21px}.brand small{display:none}.brand img{height:36px}.top .voice{display:flex}}
+
 @media (min-width:900px){.sections button{padding:8px 12px}}
 @media (max-width:640px){.hello{display:grid;grid-template-columns:76px minmax(0,1fr);gap:8px 12px;padding:10px}.hello .me{width:76px;grid-row:1}.hello .hi-main{display:contents}.hello .hi-top{grid-column:2;align-self:center}.hello .hi-row{grid-column:1/-1;flex-direction:column;align-items:flex-start;gap:6px}.hello .hi-lb{flex:none}.sections .sec-sep{display:none}}
 .hello h2{margin:0;font-size:20px} .hello p{margin:2px 0 0;color:var(--muted);font-size:14px}
@@ -1738,19 +1767,24 @@ fieldset{border:0;padding:0;margin:0;min-width:0} legend{font-weight:600;margin-
       <div><b class="han">薇薇中文</b><small id="brandSub">Luyện HSK theo giáo trình HSK 3.0</small></div>
     </div>
     <div class="top-right">
+      <button class="btn set-btn" id="setBtn" aria-haspopup="true" aria-expanded="false" title="Cài đặt">⚙<span> Cài đặt</span></button>
+      <div class="set-pop" id="setPop" hidden>
       <label class="voice" for="voiceSel">Giọng đọc
         <select id="voiceSel"><option>Đang tải giọng…</option></select></label>
       <label class="voice" for="rateSel">Tốc độ
         <select id="rateSel"><option value="0.7">Chậm</option><option value="0.85">Vừa</option><option value="1">Bình thường</option><option value="1.25">Nhanh</option></select></label>
+      <div class="set-acc" id="setAcc"></div>
+      </div>
       <div class="levels" role="tablist" aria-label="Cấp độ" id="levels"></div>
     </div>
   </div>
 </header>
 
+<div class="mini-bar" id="miniBar" hidden></div>
 <main class="wrap">
   <div class="hello" id="hello"></div>
-  <p class="rail-label" id="railLabel">Bài học</p>
-  <div class="rail" id="rail" role="tablist" aria-label="Bài học"></div>
+  <div class="rail-pop" id="railPop" hidden><p class="rail-label" id="railLabel">Bài học</p>
+  <div class="rail" id="rail" role="tablist" aria-label="Bài học"></div></div>
   <div id="lesson"></div>
   <p class="foot">Tiến độ học được lưu trên trình duyệt của bạn. Phím tắt flashcard: <kbd>Space</kbd> lật thẻ, <kbd>←</kbd> <kbd>→</kbd> chuyển thẻ.</p>
 </main>
@@ -4535,7 +4569,7 @@ function renderRail(){
     h+=`<button role="tab" data-l="${i}" ${les?"":"disabled"} aria-selected="${S.lesson===i}">Bài ${i}<small>${les?(les.theme?esc(les.theme):(les.zh?`<span class="han">${esc(les.zh)}</span>`:"Bài mới")):"Sắp cập nhật"}</small></button>`;
   }
   $("#rail").innerHTML=h;
-  $("#rail").onclick=e=>{const b=e.target.closest("button");if(!b||b.disabled)return;S.lesson=+b.dataset.l;store.set("ww_les_"+S.level,S.lesson);renderAll();};
+  $("#rail").onclick=e=>{const b=e.target.closest("button");if(!b||b.disabled)return;S.lesson=+b.dataset.l;store.set("ww_les_"+S.level,S.lesson);$("#railPop").hidden=true;renderAll();};
   const rl=$("#rail"), sel=rl.querySelector('[aria-selected="true"]'); if(sel) rl.scrollLeft=sel.offsetLeft-rl.offsetLeft-rl.clientWidth/2+sel.clientWidth/2;
 }
 /* Giáo trình sơ cấp 2: phiên âm câu được điền tự động (pinyin-pro) khi mở bài lần đầu */
@@ -4554,8 +4588,10 @@ function renderLesson(){
   }
   box.innerHTML=`
   <div class="lesson-head">
-    <div><h1><span class="han">${L.head?L.head+" · ":L.name.replace(/\s+/g,"")+"级 - "}第${S.lesson}课${les.zh?": ":""}</span><span class="han hl">${esc(les.zh)}</span></h1>
+    <div class="lh-nav">${lesNav()}</div>
+    <div class="lh-t"><h1><span class="han">${L.head?L.head+" · ":L.name.replace(/\s+/g,"")+"级 - "}第${S.lesson}课${les.zh?": ":""}</span><span class="han hl">${esc(les.zh)}</span></h1>
     <p>${les.vocab.length} từ mới · ${les.zhvi.length+les.vizh.length} câu luyện dịch · ${new Set(les.vocab.map(w=>w.h)).size+les.sentences.length} mục luyện phát âm</p></div>
+  </div>
     <div class="sections" role="tablist" aria-label="Phần luyện tập">
       ${les.texts?`<button role="tab" data-s="text" aria-selected="${S.section==="text"}">${ICON.read}Bài khóa</button>`:""}
       <button role="tab" data-s="flash" aria-selected="${S.section==="flash"}">${ICON.cards}Flashcard</button>
@@ -4570,9 +4606,10 @@ function renderLesson(){
       <button role="tab" data-s="game" aria-selected="${S.section==="game"}">${ICON.game}Trò chơi</button>
       ${les.test?`<button role="tab" data-s="exam" aria-selected="${S.section==="exam"}">${ICON.quiz}${les.test.gt?"Bài tập":"Bài tập HSK"}</button>`:""}
     </div>
-  </div>
-  <section class="panel" id="work"></section>`;
-  box.querySelector(".sections").onclick=e=>{const b=e.target.closest("button");if(!b)return;S.section=b.dataset.s;store.set("ww_section",S.section);renderLesson();};
+  <section class="panel" id="work"></section>
+  <div class="next-step" id="nextStep"></div>`;
+  box.querySelector(".sections").onclick=e=>{const b=e.target.closest("button");if(!b)return;S.section=b.dataset.s;store.set("ww_section",S.section);renderLesson();scrollToLesson();};
+  bindLesNav(box);
   if(S.section==="exam"&&!les.test) S.section="flash";
   if(S.section==="text"&&!les.texts) S.section="flash";
   if(S.section==="talk"&&!les.talk&&!les.px) S.section="flash";
@@ -4580,8 +4617,26 @@ function renderLesson(){
   if(S.section==="gram"&&!Grammar.has(S.level,S.lesson)) S.section="flash";
   if(typeof Games!=="undefined") Games.stop();
   if(S.section==="text") TextView.mount(les); else if(S.section==="talk") Talk.mount(les); else if(S.section==="flash") Flash.mount(les); else if(S.section==="game") Games.mount(les); else if(S.section==="trans") Trans.mount(les); else if(S.section==="exam") Exam.mount(les); else if(S.section==="read") Reading.mount(les); else if(S.section==="gram") Grammar.mount(les); else if(S.section==="write") Write.mount(les); else Speak.mount(les);
+  renderNextStep();
 }
 function renderAll(){ stopAnyRecording(); renderLevels(); renderRail(); renderLesson(); }
+/* chọn bài gọn: ‹ Bài N ▾ › (bảng chọn bài mở khi bấm) */
+function lesIds(){ const L=LEVELS[S.level]; return Object.keys(L.lessons||{}).map(Number).sort((a,b)=>a-b); }
+function lesNav(){ const ids=lesIds(), i=ids.indexOf(S.lesson);
+  return `<button class="btn lh-arr" data-go="-1" ${i>0?"":"disabled"} aria-label="Bài trước">‹</button><button class="btn lh-pick" id="lesPick" aria-expanded="false">Bài ${S.lesson} <small>/ ${LEVELS[S.level].total||ids.length}</small> ▾</button><button class="btn lh-arr" data-go="1" ${i>=0&&i<ids.length-1?"":"disabled"} aria-label="Bài sau">›</button>`; }
+function bindLesNav(root){
+  root.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{ const ids=lesIds(), i=ids.indexOf(S.lesson)+ +b.dataset.go; if(ids[i]==null) return; S.lesson=ids[i]; store.set("ww_les_"+S.level,S.lesson); renderAll(); });
+  const pk=root.querySelector("#lesPick"); if(pk) pk.onclick=()=>{ const P=$("#railPop"); P.hidden=!P.hidden; pk.setAttribute("aria-expanded",!P.hidden); if(!P.hidden){ $("#lesson").before(P); const sel=P.querySelector('[aria-selected="true"]'); if(sel) sel.scrollIntoView({block:"nearest"}); } };
+}
+const SEC_NAME={text:"Bài khóa",flash:"Flashcard",write:"Tập viết",gram:"Ngữ pháp",speak:"Phát âm",talk:"Hội thoại",trans:"Luyện dịch",read:"Bài đọc",game:"Trò chơi",exam:"Bài tập"};
+function renderNextStep(){ const box=$("#nextStep"); if(!box) return;
+  const tabs=[...document.querySelectorAll("#lesson .sections [data-s]")].map(b=>b.dataset.s), i=tabs.indexOf(S.section), ids=lesIds(), li=ids.indexOf(S.lesson);
+  if(i>=0&&i<tabs.length-1){ const n=tabs[i+1]; box.innerHTML=`<span class="muted">Xong phần ${SEC_NAME[S.section]||""}?</span><button class="btn primary" data-ns="${n}">Tiếp theo: ${SEC_NAME[n]||n} →</button>`; }
+  else if(li>=0&&li<ids.length-1&&LEVELS[S.level].lessons[ids[li+1]]){ box.innerHTML=`<span class="muted">Bạn đã đi hết các phần của bài ${S.lesson} 🎉</span><button class="btn primary" data-nl="${ids[li+1]}">Sang Bài ${ids[li+1]} →</button>`; }
+  else { box.innerHTML=""; return; }
+  const b=box.querySelector("button"); b.onclick=()=>{ if(b.dataset.ns){ S.section=b.dataset.ns; store.set("ww_section",S.section); renderLesson(); } else { S.lesson=+b.dataset.nl; store.set("ww_les_"+S.level,S.lesson); S.section=document.querySelector("#lesson .sections [data-s]").dataset.s; renderAll(); } scrollToLesson(); };
+}
+function scrollToLesson(){ const el=$("#lesson .lesson-head"); if(!el) return; const y=el.getBoundingClientRect().top+scrollY-(($("#miniBar")&&!$("#miniBar").hidden)?$("#miniBar").offsetHeight:0)-8; if(Math.abs(scrollY-y)>40) scrollTo({top:y,behavior:"smooth"}); }
 
 /* ======================= BÀI KHÓA (课文) – lớp Giao tiếp ======================= */
 const GT_TXIMG = { gt1: ["1_0", "1_2", "2_2", "3_0", "3_2", "5_0", "7_0", "7_1", "7_2", "8_2"], gt2: ["14_0", "17_0", "20_1"] }; /* hình minh họa bài khóa cắt từ sách */
@@ -9578,7 +9633,7 @@ function renderHello(){
   $("#hello").innerHTML=`<div class="me">${avatarSVG(p.avatar,{label:"Nhân vật của "+p.name})}</div>
     <div class="hi-main">
       <div class="hi-top"><div><h2><span class="han">你好，</span>${esc(p.name)}！</h2><p>${esc(levelLabel(p))}${Auth.get()?` · <span class="acc-ok">Tài khoản ${esc(p.username||"")}</span>`:(Auth.on()?` · <button class="linkbtn" id="hiReg">Học thử – đăng ký để lưu tiến độ</button>`:"")}</p></div>
-        <div class="hi-acc"><button class="btn sm" id="hiAv">Đổi nhân vật</button><button class="btn sm" id="hiInfo">Sửa thông tin</button><button class="btn sm" id="hiOut">Đăng xuất</button></div></div>
+        <div class="hi-acc"><button class="btn primary hi-go" id="hiGo">▶ Học tiếp: Bài ${S.lesson??""} · ${SEC_NAME[S.section]||"Flashcard"}</button><button class="btn sm" id="hiAv">Đổi nhân vật</button><button class="btn sm" id="hiInfo">Sửa thông tin</button><button class="btn sm" id="hiOut">Đăng xuất</button></div></div>
       <div class="hi-row"><span class="hi-lb">Học tập</span><div class="hi-btns">
         <button class="btn srs-btn" id="hiSrs">🔁 Ôn tập hôm nay${srsN ? `<span class="n">${srsN}</span>` : " ✓"}</button>
         <button class="btn gr-btn" id="hiGr">${ICON.book}Ngữ pháp</button>
@@ -9598,12 +9653,35 @@ function renderHello(){
   $("#hiAv").onclick=openAvatar;
   $("#hiInfo").onclick=()=>openLogin(Profile.get());
   $("#hiOut").onclick=e=>{ const b=e.currentTarget; if(b.dataset.armed){ logoutAll(); } else { b.dataset.armed=1; b.textContent="Bấm lần nữa để đăng xuất"; b.classList.add("bad"); } };
+  $("#hiGo").onclick=()=>scrollToLesson();
+  renderMini(p, gt, srsN);
+}
+/* thanh gọn ghim trên cùng khi học viên cuộn xuống phần học – vẫn đủ 7 nút */
+function renderMini(p, gt, srsN){
+  const M=$("#miniBar"); if(!M) return;
+  M.innerHTML=`<div class="wrap mb-in"><button class="mb-me" id="mbTop" title="Lên đầu trang">${avatarSVG(p.avatar,{label:"Nhân vật"})}</button><b class="mb-name">${esc(p.name)}</b>
+    <div class="mb-btns"><button class="btn srs-btn" data-mb="hiSrs">🔁<span> Ôn tập</span>${srsN?`<span class="n">${srsN}</span>`:""}</button><button class="btn gr-btn" data-mb="hiGr">${ICON.book}<span> Ngữ pháp</span></button><button class="btn kt-btn" data-mb="hiKt">${ICON.quiz}<span> Kiểm tra</span></button><button class="btn bs-btn" data-mb="hiBs"><span class="han">部</span><span> Bộ thủ</span></button>
+    <i class="mb-sep"></i><button class="btn trip-btn" data-mb="hiTrip">✈️<span> Khám phá</span></button><button class="btn farm-btn" data-mb="hiFarm">🌾<span> Trại</span> ${coinSVG()}<b class="coin-count">${Farm.coins()}</b></button>${gt?"":`<button class="btn ch-btn" data-mb="hiCh">👥<span> Nhân vật</span></button>`}</div>
+    <button class="btn set-btn" data-mb="setBtn" title="Cài đặt">⚙</button></div>`;
+  M.querySelectorAll("[data-mb]").forEach(b=>b.onclick=e=>{ e.stopPropagation(); const t=$("#"+b.dataset.mb); if(t) t.click(); });
+  $("#mbTop").onclick=()=>scrollTo({top:0,behavior:"smooth"});
+  if(!renderMini.obs && "IntersectionObserver" in window){ renderMini.obs=new IntersectionObserver(es=>{ const vis=es[0].isIntersecting; const m=$("#miniBar"); m.hidden=vis||$("#app").hidden; document.body.classList.toggle("has-mini",!m.hidden); },{rootMargin:"-40px 0px 0px 0px"}); renderMini.obs.observe($("#hello")); }
+}
+/* nút ⚙ Cài đặt: giọng đọc, tốc độ, tài khoản */
+function initSettings(){
+  const B=$("#setBtn"), P=$("#setPop"); if(!B||initSettings.done) return; initSettings.done=true;
+  const place=()=>{ const anchor=(!$("#miniBar").hidden&&scrollY>60)?$("#miniBar").querySelector(".set-btn"):B; const r=anchor.getBoundingClientRect(); P.style.top=(r.bottom+6)+"px"; P.style.right=Math.max(8,innerWidth-r.right)+"px"; };
+  B.onclick=e=>{ e.stopPropagation(); P.hidden=!P.hidden; B.setAttribute("aria-expanded",!P.hidden);
+    if(!P.hidden){ $("#setAcc").innerHTML=Profile.get()?`<button class="btn" data-sa="hiAv">Đổi nhân vật</button><button class="btn" data-sa="hiInfo">Sửa thông tin</button><button class="btn" data-sa="hiOut">Đăng xuất</button>`:"";
+      $("#setAcc").querySelectorAll("[data-sa]").forEach(b=>b.onclick=()=>{ const t=$("#"+b.dataset.sa); if(t) t.click(); if(b.dataset.sa!=="hiOut") P.hidden=true; else b.textContent=t.textContent; }); place(); } };
+  document.addEventListener("click",e=>{ if(!P.hidden&&!P.contains(e.target)&&e.target!==B){ P.hidden=true; } });
+  addEventListener("scroll",()=>{ if(!P.hidden) place(); },{passive:true});
 }
 function enterApp(){
   const p=Profile.get(); if(!p||!p.avatar) return openWelcome();
   if(p.cls==="hsk"&&LEVELS[p.level]){ S.level=p.level; const ids=Object.keys(LEVELS[S.level].lessons); S.lesson=ids.length?+ids[ids.length-1]:null; }
   if(p.cls==="gt"&&((LEVELS[S.level]||{}).grp!=="gt"||(LEVELS[S.level].book||1)>gtBook(p.level)||(store.get("ww_pf_lv")!=null&&store.get("ww_pf_lv")!==p.level))){ store.set("ww_pf_lv",p.level); S.level=gtLv(p.level); store.set("ww_level",S.level); const ids=Object.keys(LEVELS[S.level].lessons).map(Number); S.lesson=ids.length?ids[0]:LEVELS[S.level].from; }
-  showScreen("app"); renderHello(); renderAll();
+  showScreen("app"); renderAll(); renderHello(); initSettings();
   if(!enterApp.logged){ enterApp.logged=true; Track.log("session",{},""); }
 }
 
