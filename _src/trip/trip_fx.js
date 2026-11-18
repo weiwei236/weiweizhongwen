@@ -130,23 +130,23 @@ const Ticket = {
   card(id, t, stamped){
     const c = Trip.C(id), f = t.from === "han" ? { zh: "河内", vi: "Hà Nội", code: "HAN" } : { ...Trip.C(t.from), code: TRIP_CODE[t.from] }, p = Profile.get();
     let bars = ""; const R = tripRng(t.no + id); for(let x = 0; x < 120; x += 2 + Math.floor(R() * 3)) bars += `<rect x="${x}" y="0" width="${1 + Math.floor(R() * 2)}" height="30"/>`;
-    return `<div class="tk ${stamped ? "paid" : ""}" style="--sc:${c.col}">
-      <div class="tk-l"><div class="tk-hd"><b>✈ 薇薇航空 <small>WEIWEI AIR</small></b><span>登机牌 · BOARDING PASS</span></div>
-        <div class="tk-route"><div><b>${f.code}</b><span class="han">${f.zh}</span><small>${esc(f.vi)}</small></div><i>✈</i><div><b>${TRIP_CODE[id]}</b><span class="han">${c.zh}</span><small>${esc(c.vi)}</small></div></div>
-        <div class="tk-grid"><div><small>乘客 · Hành khách</small><b>${esc(p.name || "")}</b></div><div><small>航班 · Chuyến bay</small><b>${t.no}</b></div><div><small>日期 · Ngày bay</small><b>${t.date}</b></div>
+    return `<div class="tkt ${stamped ? "paid" : ""}" style="--sc:${c.col}">
+      <div class="tkt-l"><div class="tkt-hd"><b>✈ 薇薇航空 <small>WEIWEI AIR</small></b><span>登机牌 · BOARDING PASS</span></div>
+        <div class="tkt-route"><div><b>${f.code}</b><span class="han">${f.zh}</span><small>${esc(f.vi)}</small></div><i>✈</i><div><b>${TRIP_CODE[id]}</b><span class="han">${c.zh}</span><small>${esc(c.vi)}</small></div></div>
+        <div class="tkt-grid"><div><small>乘客 · Hành khách</small><b>${esc(p.name || "")}</b></div><div><small>航班 · Chuyến bay</small><b>${t.no}</b></div><div><small>日期 · Ngày bay</small><b>${t.date}</b></div>
           <div><small>登机口 · Cửa</small><b>${t.gate}</b></div><div><small>座位 · Ghế</small><b>${t.seat}</b></div><div><small>登机 · Giờ lên</small><b>${t.time}</b></div>${t.price != null ? `<div><small>票价 · Giá vé</small><b>${t.price} xu</b></div>` : ""}</div></div>
-      <div class="tk-r"><div class="tk-pic">${tripArt(c.cover)}</div><b>${TRIP_CODE[id]}</b><small>${t.seat} · ${t.no}</small><svg class="tk-bar" viewBox="0 0 120 30" preserveAspectRatio="none">${bars}</svg></div>
-      <div class="tk-stamp"><span class="han">已出票</span><small>ĐÃ XUẤT VÉ</small></div></div>`;
+      <div class="tkt-r"><div class="tkt-pic">${tripArt(c.cover)}</div><b>${TRIP_CODE[id]}</b><small>${t.seat} · ${t.no}</small><svg class="tkt-bar" viewBox="0 0 120 30" preserveAspectRatio="none">${bars}</svg></div>
+      <div class="tkt-stamp"><span class="han">已出票</span><small>ĐÃ XUẤT VÉ</small></div></div>`;
   },
   open(id, onFly){
-    const owned = !!(Trip.st.tix && Trip.st.tix[id]), c = Trip.C(id), t = this.info(id, owned), ov = document.createElement("div"); ov.className = "tk-ov";
-    const paint = paid => { ov.innerHTML = `<div class="tk-box" role="dialog" aria-label="Mua vé máy bay đi ${esc(c.vi)}"><button class="tk-x" aria-label="Đóng">${ICON.x}</button>
+    const owned = !!(Trip.st.tix && Trip.st.tix[id]), c = Trip.C(id), t = this.info(id, owned), ov = document.createElement("div"); ov.className = "tkt-ov";
+    const paint = paid => { ov.innerHTML = `<div class="tkt-box" role="dialog" aria-label="Mua vé máy bay đi ${esc(c.vi)}"><button class="tkt-x" aria-label="Đóng">${ICON.x}</button>
       ${Trip.guide(paid ? "happy" : "smile", paid ? `<b class="han">${Trip.z("票买好了！我们出发吧！")}</b><p>Vé đã in xong! Mình cùng lên máy bay đi <b>${esc(c.vi)}</b> nhé.</p>` : owned ? `<b class="han">${Trip.z("我们再去" + c.zh + "吧！")}</b><p>Mình cùng quay lại <b>${esc(c.vi)}</b> nhé! Bạn đã mua vé đến đây rồi nên lần này <b>miễn phí</b>. Bấm <b>Lấy vé</b> để in vé mới.</p>` : `<b class="han">${Trip.z("我们坐飞机去" + c.zh + "吧！")}</b><p>Mình cùng bay đến <b>${esc(c.vi)}</b> nhé! Dùng <b>xu nông trại</b> để mua vé máy bay. Vé đã mua dùng được mãi cho thành phố này.</p>`)}
-      <div class="tk-print">${this.card(id, t, paid)}</div>
-      <div class="tp-row">${paid ? `<button class="btn primary big" id="tkFly">✈ Lên máy bay</button>` : owned ? `<div class="tk-pay"><span class="tk-coin">${coinSVG()}</span><div><b>Giá vé: 0 xu · Miễn phí</b><small>Bạn đã có vé đến ${esc(c.vi)} từ lần trước</small></div></div><button class="btn primary big" id="tkBuy">🎫 Lấy vé · Miễn phí</button>` : (() => { const have = this.coins(), need = t.price - have;
-        return need > 0 ? `<div class="tk-pay lack"><span class="tk-coin">${coinSVG()}</span><div><b>Giá vé: ${t.price} xu</b><small>Bạn đang có ${have} xu · còn thiếu <b>${need} xu</b>. Làm bài tập ở trang học để kiếm thêm xu nhé!</small></div></div><button class="btn primary big" id="tkEarn">📚 Đi học kiếm xu</button>`
-          : `<div class="tk-pay"><span class="tk-coin">${coinSVG()}</span><div><b>Giá vé: ${t.price} xu</b><small>Bạn đang có ${have} xu · sau khi mua còn ${have - t.price} xu</small></div></div><button class="btn primary big" id="tkBuy">🎫 Mua vé · ${t.price} xu</button>`; })()}</div></div>`;
-      ov.querySelector(".tk-x").onclick = () => { stopSpeak(); ov.remove(); };
+      <div class="tkt-print">${this.card(id, t, paid)}</div>
+      <div class="tp-row">${paid ? `<button class="btn primary big" id="tkFly">✈ Lên máy bay</button>` : owned ? `<div class="tkt-pay"><span class="tkt-coin">${coinSVG()}</span><div><b>Giá vé: 0 xu · Miễn phí</b><small>Bạn đã có vé đến ${esc(c.vi)} từ lần trước</small></div></div><button class="btn primary big" id="tkBuy">🎫 Lấy vé · Miễn phí</button>` : (() => { const have = this.coins(), need = t.price - have;
+        return need > 0 ? `<div class="tkt-pay lack"><span class="tkt-coin">${coinSVG()}</span><div><b>Giá vé: ${t.price} xu</b><small>Bạn đang có ${have} xu · còn thiếu <b>${need} xu</b>. Làm bài tập ở trang học để kiếm thêm xu nhé!</small></div></div><button class="btn primary big" id="tkEarn">📚 Đi học kiếm xu</button>`
+          : `<div class="tkt-pay"><span class="tkt-coin">${coinSVG()}</span><div><b>Giá vé: ${t.price} xu</b><small>Bạn đang có ${have} xu · sau khi mua còn ${have - t.price} xu</small></div></div><button class="btn primary big" id="tkBuy">🎫 Mua vé · ${t.price} xu</button>`; })()}</div></div>`;
+      ov.querySelector(".tkt-x").onclick = () => { stopSpeak(); ov.remove(); };
       const say = ov.querySelector(".tp-say"); ov.querySelectorAll(".tp-say").forEach(b => b.onclick = () => Trip.talkSay(b.dataset.say, ov));
       if(paid){ ov.querySelector("#tkFly").onclick = () => { ov.classList.add("out"); setTimeout(() => { ov.remove(); onFly(); }, 250); }; }
       else if(ov.querySelector("#tkEarn")) ov.querySelector("#tkEarn").onclick = () => { stopSpeak(); ov.remove(); showScreen("app"); renderHello(); };
@@ -154,7 +154,7 @@ const Ticket = {
         if(!owned){ if(!Farm.spend(t.price)) return paint(false);
           Farm.save(); refreshCoinBadge(); Track.log("coins", { amount: -t.price, pct: 0, reason: "Vé máy bay đi " + c.vi, balance: Farm.st.coins }); }
         Trip.st.tix = Trip.st.tix || {}; Trip.st.tix[id] = t; if(!Trip.st.visa) Trip.st.visa = Date.now(); Trip.save();
-        paint(true); ov.querySelector(".tk-print").classList.add("printing"); Trip.talkSay("票买好了！我们出发吧！", ov); };
+        paint(true); ov.querySelector(".tkt-print").classList.add("printing"); Trip.talkSay("票买好了！我们出发吧！", ov); };
       Trip.talk(ov, 1600);
     };
     paint(false);
@@ -198,10 +198,10 @@ const Passport = {
     this.pg = typeof at === "number" ? at : at ? Math.max(0, P.indexOf(at)) : 0;
     let ov = document.querySelector(".pp-ov"); if(!ov){ ov = document.createElement("div"); ov.className = "pp-ov"; document.body.appendChild(ov); }
     const paint = () => { const P = this.pages(), k = P[this.pg];
-      ov.innerHTML = `<div class="pp-box" role="dialog" aria-label="Hộ chiếu du lịch"><button class="tk-x" aria-label="Đóng">${ICON.x}</button>
+      ov.innerHTML = `<div class="pp-box" role="dialog" aria-label="Hộ chiếu du lịch"><button class="tkt-x" aria-label="Đóng">${ICON.x}</button>
         <div class="pp-book ${k === "cover" ? "is-cover" : ""}"><div class="pp-page" key="${k}">${this.page(k)}</div>${this.fresh && k.startsWith("st") ? `<div class="pp-tool" aria-hidden="true"><svg viewBox="0 0 60 90"><rect x="22" y="0" width="16" height="44" rx="8" fill="#8E5A33" stroke="#5A4034" stroke-width="2.4"/><rect x="6" y="44" width="48" height="16" rx="5" fill="#C9A27A" stroke="#5A4034" stroke-width="2.4"/><rect x="4" y="60" width="52" height="10" rx="3" fill="var(--sc,#D9483B)"/></svg></div>` : ""}</div>
         <div class="pp-nav"><button class="btn" id="ppPrev" ${this.pg ? "" : "disabled"} aria-label="Trang trước">${ICON.left}</button><span>${P.map((_, j) => `<i class="${j === this.pg ? "on" : ""}"></i>`).join("")}</span><button class="btn" id="ppNext" ${this.pg < P.length - 1 ? "" : "disabled"} aria-label="Trang sau">${ICON.right}</button></div></div>`;
-      ov.querySelector(".tk-x").onclick = () => { ov.remove(); this.fresh = null; };
+      ov.querySelector(".tkt-x").onclick = () => { ov.remove(); this.fresh = null; };
       ov.onclick = e => { if(e.target === ov){ ov.remove(); this.fresh = null; } };
       ov.querySelector("#ppPrev").onclick = () => { this.pg--; this.fresh = null; paint(); };
       ov.querySelector("#ppNext").onclick = () => { this.pg++; this.fresh = null; paint(); };
