@@ -6,12 +6,14 @@ HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
 p = lambda *a: os.path.join(HERE, *a)
 import shutil
 imgs = {}; imgs2 = {}
-os.makedirs(os.path.join(ROOT, 'img', 'hsk2'), exist_ok=True); os.makedirs(os.path.join(ROOT, 'img', 'hsk1'), exist_ok=True); os.makedirs(os.path.join(ROOT, 'img', 'hsk3'), exist_ok=True)
+os.makedirs(os.path.join(ROOT, 'img', 'hsk2'), exist_ok=True); os.makedirs(os.path.join(ROOT, 'img', 'hsk1'), exist_ok=True); os.makedirs(os.path.join(ROOT, 'img', 'hsk3'), exist_ok=True); os.makedirs(os.path.join(ROOT, 'img', 'hsk4'), exist_ok=True)
 for d in sorted(x for x in os.listdir(HERE) if x.startswith('ex') and os.path.isdir(p(x))):
     for f in sorted(os.listdir(p(d))):
         if not f.endswith('.jpg'): continue
         uri = 'data:image/jpeg;base64,' + base64.b64encode(open(p(d, f), 'rb').read()).decode()
-        if d.startswith('ex3_'):   # ảnh sách bài tập HSK 3 → img/hsk3
+        if d.startswith('ex4_'):   # ảnh 看图造句 HSK 4 → img/hsk4
+            imgs2[f[:-4]] = uri; shutil.copyfile(p(d, f), os.path.join(ROOT, 'img', 'hsk4', f))
+        elif d.startswith('ex3_'):   # ảnh sách bài tập HSK 3 → img/hsk3
             imgs2[f[:-4]] = uri; shutil.copyfile(p(d, f), os.path.join(ROOT, 'img', 'hsk3', f))
         elif d.startswith('ex2_') or d.startswith('exs1_'):   # ảnh sách bài tập: để thành file riêng img/hsk2, img/hsk1 cho trang nhẹ
             imgs2[f[:-4]] = uri; shutil.copyfile(p(d, f), os.path.join(ROOT, 'img', 'hsk2' if d.startswith('ex2_') else 'hsk1', f))
@@ -24,7 +26,7 @@ art = src.replace('__EX_IMG__', 'const EX_IMG=' + json.dumps({**imgs, **imgs2}) 
 # index.html (GitHub Pages): ảnh để thành file riêng cho trang nhẹ; bản xem trước (--artifact) vẫn nhúng ảnh
 os.makedirs(os.path.join(ROOT, 'img', 'ex'), exist_ok=True)
 exmap = {}
-for d in sorted(x for x in os.listdir(HERE) if x.startswith('ex') and os.path.isdir(p(x)) and not (x.startswith('ex2_') or x.startswith('ex3_') or x.startswith('exs1_'))):
+for d in sorted(x for x in os.listdir(HERE) if x.startswith('ex') and os.path.isdir(p(x)) and not (x.startswith('ex2_') or x.startswith('ex3_') or x.startswith('ex4_') or x.startswith('exs1_'))):
     for f in sorted(os.listdir(p(d))):
         if f.endswith('.jpg'): shutil.copyfile(p(d, f), os.path.join(ROOT, 'img', 'ex', f)); exmap[f[:-4]] = 'img/ex/' + f
 src = src.replace('__EX_IMG__', 'const EX_IMG=' + json.dumps(exmap) + ';\n')

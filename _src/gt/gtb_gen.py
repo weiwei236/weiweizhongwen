@@ -57,8 +57,8 @@ def posq(zh, vi, items):  # items [("他A从来B都C吃D早饭。", "不", "C")]
     return dict(k="pos", zh=zh, vi=vi, items=items)
 def tf(zh, vi, items, passage=None):  # items [("câu", True/False)]
     return dict(k="tf", zh=zh, vi=vi, items=items, passage=passage)
-def opn(zh, vi, items, passage=None):  # items [("đề", "đáp án gợi ý")]
-    return dict(k="open", zh=zh, vi=vi, items=items, passage=passage)
+def opn(zh, vi, items, passage=None, pics=None):  # items [("đề", "đáp án gợi ý")]; pics="h4_l1" → hình h4_l1_w1.. (看图，用词语造句)
+    return dict(k="open", zh=zh, vi=vi, items=items, passage=passage, pics=pics)
 
 BL = re.compile(r'【([^】]*)】')
 def build_test(parts):
@@ -104,8 +104,11 @@ def build_test(parts):
                 n += 1; qs.append(dict(n=n, text=t)); ans.append("A" if ok else "B"); explain[str(n)] = ("Đúng (对)." if ok else "Sai (错).") + (" " + P.get("why", {}).get(t, "") if P.get("why") else "")
         elif k == "open":
             p.update(type="open")
-            for t, ref in P["items"]:
-                n += 1; qs.append(dict(n=n, text=t, ref=ref)); ans.append("*")
+            for j, (t, ref) in enumerate(P["items"]):
+                n += 1
+                if P.get("pics"): qs.append(dict(n=n, img=f'{P["pics"]}_w{j + 1}', lines=[["Dùng từ", t]], ref=ref))
+                else: qs.append(dict(n=n, text=t, ref=ref))
+                ans.append("*")
         p["qs"] = qs
         p["vi"] = (f"Câu {start}–{n}: " if n > start else f"Câu {start}: ") + P["vi"]
         secs.append(p)
