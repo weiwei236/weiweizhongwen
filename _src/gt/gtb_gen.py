@@ -232,6 +232,8 @@ def main():
 CFG = {
  "b": dict(mods=("gtb1", "gtb2", "gtb3", "gtb4", "gtb5"), p="GB", les="GB_LESSONS1", gram="GB_GRAMMAR1", js=("gtb_px.js", "gtb_talk.js"), out="gb.js",
            head="/* ===== 发展汉语·初级综合(II) Bài 1–10 – lớp Giao tiếp sơ cấp 2 (sinh từ _src/gt/gtb_gen.py) ===== */"),
+ "b2": dict(mods=("gtb6", "gtb7", "gtb8", "gtb9", "gtb10"), p="GB", les="GB_LESSONS2", gram="GB_GRAMMAR2", js=("gtb2_px.js", "gtb2_talk.js"), out="gb2.js",
+           head="/* ===== 发展汉语·初级综合(II) Bài 11–20 – lớp Giao tiếp sơ cấp 2 (sinh từ _src/gt/gtb_gen.py b2) ===== */"),
  "c": dict(mods=("gtc1", "gtc2", "gtc3", "gtc4", "gtc5"), p="GC", les="GC_LESSONS3", gram="GC_GRAMMAR3", js=("gtc_px.js", "gtc_talk.js"), out="gc.js", vex=True,
            head="/* ===== 发展汉语·初级综合(I) Bài 21–30 – lớp Giao tiếp sơ cấp 1 (sinh từ _src/gt/gtb_gen.py c) ===== */"),
 }

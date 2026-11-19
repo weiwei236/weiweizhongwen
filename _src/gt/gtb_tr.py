@@ -149,3 +149,5 @@ TR = {
 大家别挤，一个一个地上车吧。|Mọi người đừng chen, lên xe từng người một nhé.
 """,
 }
+from gtb_tr2 import TR2
+TR.update(TR2)

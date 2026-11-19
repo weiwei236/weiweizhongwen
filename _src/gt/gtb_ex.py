@@ -296,3 +296,5 @@ EX = {
 童年|我的童年是在农村过的。|Tuổi thơ của tôi trôi qua ở nông thôn.
 """,
 }
+from gtb_ex2 import EX2
+EX.update(EX2)
