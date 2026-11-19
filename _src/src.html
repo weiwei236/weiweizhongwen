@@ -4618,7 +4618,7 @@ function speakOnline(text,v,done){
 }
 /* Đọc từng cụm theo dấu câu để ngắt nghỉ rõ ràng; từ đơn đọc chậm hơn một chút */
 function speak(text,done,fromQ){
-  try{ BGM.dip(); }catch(e){}
+  try{ BGM.dip(text); }catch(e){}
   try{ xyTalk(text); }catch(e){}
   if(!fromQ){ SPQ=[]; SPQ_TOK++; SPQ_ON=false; }
   stopSpeak();
@@ -6735,7 +6735,7 @@ const BGM = {
       document.addEventListener("visibilitychange", () => { if(!this.ctx) return; if(document.hidden) this.ctx.suspend && this.ctx.suspend(); else if(this.theme) this.ctx.resume && this.ctx.resume(); });
     } catch(e){ this.ctx = null; }
     return this.ctx; },
-  level(){ return this.muted || this.held || !this.theme ? 0 : (this.dipT > Date.now() ? this.VOL * .35 : this.VOL); },
+  level(){ return this.muted || this.held || !this.theme ? 0 : (this.dipT > Date.now() ? this.VOL * .4 : this.VOL); },
   apply(tc){ if(this.ctx) this.out.gain.setTargetAtTime(this.level(), this.ctx.currentTime, tc || .6); },
   voice(f, t, d, o){ const c = this.ctx, g = c.createGain(), lp = c.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = o.lp || 2200;
     g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(o.v, t + (o.a || .005)); g.gain.setTargetAtTime(0, t + (o.a || .005) + (o.h || 0), o.r || d / 4);
@@ -6780,7 +6780,10 @@ const BGM = {
   tick(){ const c = this.ctx; if(!c || !this.theme) return; const e = 60 / this.THEMES[this.theme].bpm / 2;
     if(this.t < c.currentTime) this.t = c.currentTime + .05;
     while(this.t < c.currentTime + .5){ this.step(this.beat, this.t, e); this.t += e; this.beat++; }
-    if(this.dipT && this.dipT < Date.now()){ this.dipT = 0; this.apply(.5); } },
+    if(this.dipT){ if(this.talking() && Date.now() - this.dip0 < 30000) this.dipT = Math.max(this.dipT, Date.now() + 600); else if(this.dipT < Date.now()){ this.dipT = 0; this.apply(.5); } } },
+  /* đang có giọng đọc (HDV / nhân vật nói)? – giọng online (Audio) hoặc giọng máy (speechSynthesis) */
+  talking(){ try { if(typeof TTS_AUDIO !== "undefined" && TTS_AUDIO && TTS_AUDIO.src && !TTS_AUDIO.paused && !TTS_AUDIO.ended && !TTS_AUDIO.error && TTS_AUDIO.readyState >= 2) return true; } catch(e){}
+    try { return "speechSynthesis" in window && (speechSynthesis.speaking || speechSynthesis.pending); } catch(e){ return false; } },
   play(theme){ const c = this.ac(); if(!c) return; c.resume && c.resume(); this.btn(true);
     if(this.theme === theme) return;
     const was = this.theme; this.theme = theme;
@@ -6791,7 +6794,7 @@ const BGM = {
   stop(){ this.btn(false); if(!this.theme) return; this.theme = null; this.apply(.25); const tm = this.timer; setTimeout(() => { if(!this.theme) clearInterval(tm); }, 1200); },
   screen(id){ const th = id === "scrFarm" ? "farm" : id === "scrTrip" ? "trip" : null; if(th) this.play(th); else this.stop(); },
   hold(on){ this.held = !!on; this.apply(.3); },
-  dip(){ if(!this.theme) return; this.dipT = Date.now() + 2600; this.apply(.15); },
+  dip(t){ if(!this.theme) return; this.dip0 = Date.now(); this.dipT = Date.now() + 1200 + Math.min(12000, [...String(t || "")].length * 260); this.apply(.12); },
   toggle(){ this.muted = !this.muted; try { localStorage.setItem("ww_bgm_mute", this.muted ? "1" : "0"); } catch(e){} const c = this.ac(); if(c && c.resume) c.resume(); this.apply(.3); this.btn(!!this.theme); },
   btn(show){ let b = document.getElementById("bgmBtn");
     if(!b){ if(!show) return; b = document.createElement("button"); b.id = "bgmBtn"; b.type = "button"; b.className = "bgm-btn"; b.onclick = () => this.toggle(); document.body.appendChild(b); }
