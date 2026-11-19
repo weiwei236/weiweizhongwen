@@ -71,6 +71,7 @@ def build_test(parts):
             p.update(type="pooltext", pool=P["pool"]);
             if P["inline"] and max(len(w) for w in P["pool"]) <= 6: p["inline"] = True
             else: p["long"] = True
+            if not P["inline"] and len(P["items"]) == 1 and len(BL.findall(P["items"][0])) >= 2: p["dnd"] = True   # đoạn văn nhiều ô → kéo thả
             for it in P["items"]:
                 ws = BL.findall(it); nums = list(range(n + 1, n + 1 + len(ws)))
                 txt = it; full = BL.sub(lambda m: m.group(1), it)
