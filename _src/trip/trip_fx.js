@@ -18,9 +18,9 @@ function guideSVG(expr = "smile", cls = ""){
 const TRIP_MAP = { bj: [400, 185, -96, -30], sh: [447, 263, 16, -26], hz: [437, 279, 18, 10], xa: [332, 247, -80, -46], cq: [309, 298, 14, -34],
   cd: [286, 286, -104, -2], sc: [272, 258, -112, -34], yn: [262, 335, -104, 26], gl: [344, 346, -86, 18], gz: [368, 372, -100, 32], gd: [382, 350, 18, -22],
   su: [434, 256, 14, -54], sz: [386, 381, 22, 22],
-  sl: [243, 308, -150, 22], xz: [168, 268, -112, 0] };
+  xz: [168, 268, -112, 0] };
 const TRIP_HOME = { x: 300, y: 446 };   /* xuất phát: Hà Nội (phía nam, ngoài khung) */
-const TRIP_CODE = { bj: "PEK", sh: "PVG", cq: "CKG", yn: "KMG", hz: "HGH", xa: "XIY", gl: "KWL", sc: "JZH", cd: "CTU", gz: "CAN", gd: "SWA", su: "SZV", sz: "SZX", sl: "DIG", xz: "LXA" };
+const TRIP_CODE = { bj: "PEK", sh: "PVG", cq: "CKG", yn: "KMG", hz: "HGH", xa: "XIY", gl: "KWL", sc: "JZH", cd: "CTU", gz: "CAN", gd: "SWA", su: "SZV", sz: "SZX", xz: "LXA" };
 function tripMapHTML(pinsSVG){
   return `<img class="tp-mapimg" src="${TRIP_GD.map}" alt="Bản đồ Trung Quốc"><svg class="tp-map-svg" viewBox="0 0 600 450" role="img" aria-label="Các trạm trên bản đồ">
     <path id="tpTrail" d="" fill="none" stroke="#E8453C" stroke-width="3.6" stroke-dasharray="4 8" stroke-linecap="round" opacity=".85"/>${pinsSVG}</svg>`;
@@ -30,8 +30,7 @@ function tripMapHTML(pinsSVG){
    cloud:[y%] mây trôi · bird:y% chim bay · rip:[[x,y,rộng]] gợn nước · fish:[[x1,x2,y]] cá bơi
    fall:"autumn|green|petal|snow|dust" vật rơi/bay · steam:[[x,y]] hơi nóng · tw:[[x1,y1,x2,y2,số,màu]] lấp lánh · fount:[[x,y]] đài phun nước */
 const TRIP_FX = {
-  songzanlin: { cloud: [8, 20], bird: 26, rip: [[30, 86, 10], [60, 90, 12]] }, pudacuo: { cloud: [8], bird: 24, rip: [[35, 70, 12], [60, 76, 10]], fall: "petal" },
-  dukezong: { tw: [[10, 5, 90, 50, 8, "#FFE7A0"]] }, maoniuhuoguo: { steam: [[45, 30], [56, 26]] }, suyoucha: { steam: [[50, 26], [58, 22]] },
+  songzanlin: { cloud: [6, 18], bird: 26, rip: [[35, 84, 12], [55, 88, 12]] }, lungta: { cloud: [8] }, suyoucha: { steam: [[50, 50], [56, 46]] }, zanba: { steam: [[72, 40]] },
   budalagong: { cloud: [8, 22], bird: 28 }, bakuojie: { cloud: [8], bird: 22 }, namucuo: { cloud: [9, 24], bird: 20, rip: [[25, 70, 12], [55, 76, 14], [78, 72, 10]] },
   gugong: { cloud: [8, 20], bird: 22 }, changcheng: { cloud: [9, 22], bird: 30, fall: "autumn" }, tiantan: { cloud: [9, 24], bird: 32 },
   kaoya: { steam: [[42, 30], [55, 27]] }, tanghulu: { fall: "snow", tw: [[10, 5, 90, 90, 6, "#fff"]] },
