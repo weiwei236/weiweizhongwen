@@ -6718,8 +6718,8 @@ const BGM = {
   THEMES: {
     // Nông trại: đàn tranh gảy nhẹ, Sol ngũ cung, chậm rãi
     farm: { bpm: 64, root: 55, lead: "pluck", dens: .5, pads: [[0, 7, 16], [-3, 4, 12], [2, 9, 14], [-5, 2, 9]] },
-    // Khám phá: tiếng sáo trúc mềm, Rê ngũ cung, trôi chảy
-    trip: { bpm: 72, root: 50, lead: "flute", dens: .4, pads: [[0, 7, 16], [-3, 4, 9], [5, 9, 12], [-5, 2, 7]] }
+    // Khám phá: vui tươi, nhún nhảy – Rê trưởng ngũ cung, có nhịp trống nhẹ, giai điệu lặp lại dễ nhớ
+    trip: { bpm: 112, root: 50, lead: "bright", dens: .62, bouncy: 1, pads: [[0, 7, 16], [-5, 2, 11], [-3, 4, 12], [-7, 2, 11]] }
   },
   SC: [0, 2, 4, 7, 9],
   hz(m){ return 440 * Math.pow(2, (m - 69) / 12); },
@@ -6747,9 +6747,25 @@ const BGM = {
     else if(kind === "flute") this.voice(f, t, d, { v: .045, a: .12, h: d * .5, r: .35, lp: 1800, types: ["sine", "triangle"], mul: [1, 1], mix: [1, .25], vib: 1 });
     else if(kind === "pad") this.voice(f, t, d, { v: .022, a: 1.6, h: d * .55, r: 1.2, lp: 900, types: ["sine", "triangle"], det: .003, mix: [1, .5] });
     else if(kind === "bass") this.voice(f, t, d, { v: .06, a: .02, r: 1.1, lp: 500, types: ["sine"] });
+    else if(kind === "bright") this.voice(f, t, d, { v: .06, a: .004, r: .28, lp: 3800, types: ["triangle", "square"], mul: [1, 1], mix: [1, .06], bend: 1 });
+    else if(kind === "pop") this.voice(f, t, d, { v: .05, a: .002, r: .04, lp: 2400, types: ["sine"] });
     else if(kind === "bell") this.voice(f, t, d, { v: .018, a: .002, r: .9, lp: 5000, types: ["sine", "sine"], mul: [1, 2.76], mix: [1, .3] }); },
+  shaker(t, v){ const c = this.ctx; if(!this.nb){ const n = c.sampleRate * .08; this.nb = c.createBuffer(1, n, c.sampleRate); const d = this.nb.getChannelData(0); for(let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 4); }
+    const s = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain(); s.buffer = this.nb; f.type = "highpass"; f.frequency.value = 6000; g.gain.value = v; s.connect(f); f.connect(g); g.connect(this.bus); s.start(t); },
+  bouncy(i, t, e, T, ch){ const R = T.root, k = i % 16, b = R - 12 + ch[0];
+    if(k % 4 === 0) this.note("bass", b + (k % 8 === 4 ? 7 : 0), t, e * 2.5);
+    if(k % 4 === 2) this.note("pop", R + 24 + ch[1] % 12, t, .2);
+    this.shaker(t, k % 2 ? .05 : .025);
+    if(k === 0){ const ph = Math.floor(i / 32); if(ph !== this.phI){ this.phI = ph; this.phrase = [];
+        let m = 4 + Math.floor(Math.random() * 3); const RH = [[1,0,1,1,1,0,1,0],[1,1,1,0,1,0,1,1],[1,0,1,0,1,1,1,0],[1,0,0,1,1,0,1,0]];
+        for(let h = 0; h < 2; h++){ const rh = RH[Math.floor(Math.random() * RH.length)]; for(let j = 0; j < 16; j++){ const on = rh[j % 8] && !(h === 1 && j >= 12);
+          if(on){ m = Math.max(2, Math.min(11, m + [-1, -1, 1, 1, 2, -2, 0][Math.floor(Math.random() * 7)])); } this.phrase.push(on ? m : -1); } } } }
+    const m = this.phrase && this.phrase[i % 32];
+    if(m >= 0) this.note(T.lead, R + 12 + Math.floor(m / 5) * 12 + this.SC[m % 5], t, e * 2.2);
+    if(Math.random() < .03) this.note("bell", R + 36 + this.SC[Math.floor(Math.random() * 5)], t + e * .5, 1.5); },
   step(i, t, e){ const T = this.THEMES[this.theme], R = T.root, ch = T.pads[Math.floor(i / 16) % T.pads.length], inBar = i % 16;
-    if(inBar === 0){ ch.forEach(o => this.note("pad", R + o, t, e * 16)); this.note("bass", R - 12 + ch[0], t, e * 8); }
+    if(inBar === 0){ ch.forEach(o => this.note("pad", R + o, t, e * 16)); if(!T.bouncy) this.note("bass", R - 12 + ch[0], t, e * 8); }
+    if(T.bouncy) return this.bouncy(i, t, e, T, ch);
     if(inBar === 8) this.note("bass", R - 12 + ch[0] + (Math.random() < .5 ? 7 : 0), t, e * 6);
     const strong = i % 2 === 0, p = strong ? T.dens : T.dens * .35;
     if(Math.random() < p){
@@ -6768,6 +6784,7 @@ const BGM = {
     const was = this.theme; this.theme = theme;
     if(!was){ this.t = c.currentTime + .1; this.beat = 0; this.mel = 2; }
     else this.beat = Math.ceil(this.beat / 16) * 16;
+    this.phI = -1;
     clearInterval(this.timer); this.timer = setInterval(() => this.tick(), 120); this.tick(); this.apply(1.2); },
   stop(){ this.btn(false); if(!this.theme) return; this.theme = null; this.apply(.25); const tm = this.timer; setTimeout(() => { if(!this.theme) clearInterval(tm); }, 1200); },
   screen(id){ const th = id === "scrFarm" ? "farm" : id === "scrTrip" ? "trip" : null; if(th) this.play(th); else this.stop(); },
@@ -9889,7 +9906,7 @@ function renderMini(p, gt, srsN){
 /* nút ⚙ Cài đặt: giọng đọc, tốc độ, tài khoản */
 function initSettings(){
   const B=$("#setBtn"), P=$("#setPop"); if(!B||initSettings.done) return; initSettings.done=true;
-  const place=()=>{ const anchor=(!$("#miniBar").hidden&&scrollY>60)?$("#miniBar").querySelector(".set-btn"):B; const r=anchor.getBoundingClientRect(); P.style.top=(r.bottom+6)+"px"; P.style.right=Math.max(8,innerWidth-r.right)+"px"; };
+  const place=()=>{ const anchor=(!$("#miniBar").hidden&&scrollY>60)?$("#miniBar").querySelector(".set-btn"):B; const r=anchor.getBoundingClientRect(); P.style.top=(r.bottom+6)+"px"; P.style.right="auto"; P.style.maxWidth=(innerWidth-16)+"px"; const w=P.offsetWidth||260; P.style.left=Math.max(8,Math.min(innerWidth-w-8, r.right-w > 8 && r.left > innerWidth/2 ? r.right-w : r.left))+"px"; };
   B.onclick=e=>{ e.stopPropagation(); P.hidden=!P.hidden; B.setAttribute("aria-expanded",!P.hidden);
     if(!P.hidden){ $("#setAcc").innerHTML=Profile.get()?`<button class="btn" data-sa="hiAv">Đổi nhân vật</button><button class="btn" data-sa="hiInfo">Sửa thông tin</button><button class="btn" data-sa="hiOut">Đăng xuất</button>`:"";
       $("#setAcc").querySelectorAll("[data-sa]").forEach(b=>b.onclick=()=>{ const t=$("#"+b.dataset.sa); if(t) t.click(); if(b.dataset.sa!=="hiOut") P.hidden=true; else b.textContent=t.textContent; }); place(); } };
