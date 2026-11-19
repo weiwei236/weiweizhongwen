@@ -12,7 +12,7 @@ for d in sorted(x for x in os.listdir(HERE) if x.startswith('ex') and os.path.is
         if not f.endswith('.jpg'): continue
         uri = 'data:image/jpeg;base64,' + base64.b64encode(open(p(d, f), 'rb').read()).decode()
         if d.startswith('ex4_'):   # ảnh 看图造句 HSK 4 → img/hsk4
-            imgs2[f[:-4]] = uri; shutil.copyfile(p(d, f), os.path.join(ROOT, 'img', 'hsk4', f))
+            imgs2[f[:-4]] = 'img/hsk4/' + f; shutil.copyfile(p(d, f), os.path.join(ROOT, 'img', 'hsk4', f))   # bản artifact: đăng kèm thành file riêng
         elif d.startswith('ex3_'):   # ảnh sách bài tập HSK 3 → img/hsk3
             imgs2[f[:-4]] = uri; shutil.copyfile(p(d, f), os.path.join(ROOT, 'img', 'hsk3', f))
         elif d.startswith('ex2_') or d.startswith('exs1_'):   # ảnh sách bài tập: để thành file riêng img/hsk2, img/hsk1 cho trang nhẹ
