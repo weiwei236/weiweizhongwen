@@ -1675,6 +1675,8 @@ body.has-mini{--stick:56px}
 .tkt-pay{display:flex;gap:10px;align-items:center;background:#fff;border:2px solid #F2C9A8;border-radius:14px;padding:8px 14px;text-align:left}
 .tkt-pay div{display:grid}.tkt-pay small{color:var(--muted);font-size:12.5px}.tkt-pay.lack{border-color:color-mix(in srgb,var(--bad) 45%,#fff)}.tkt-pay.lack small b{color:var(--bad)}
 .tkt-coin{width:30px;height:30px;flex:none}.tkt-coin svg{width:100%;height:100%;display:block}
+
+.tp-ph{width:100%;height:100%;min-height:120px;aspect-ratio:4/3;display:grid;place-items:center;background:linear-gradient(160deg,#DFF1FB 0%,#F4F9E9 60%,#FFF4DC 100%)}.tp-ph span{font-size:clamp(42px,9vw,88px);filter:drop-shadow(0 4px 6px rgba(0,0,0,.12))}
 /* TRIP_CSS_END */
 </style>
 
@@ -13425,6 +13427,8 @@ Object.assign(ART, {
 const TRIP_IMG = typeof TRIP_IMG_DATA !== "undefined" ? TRIP_IMG_DATA : {};
 function tripArt(k){
   if(TRIP_IMG[k]) return `<img class="tp-art tp-img" src="${TRIP_IMG[k]}" alt="" loading="lazy">`;
+  if(!ART[k]){ const E = { songzanlin: "🛕", pudacuo: "🏞️", dukezong: "🏮", maoniuhuoguo: "🍲", suannai: "🥣", budalagong: "🏯", bakuojie: "🛍️", namucuo: "🏔️", suyoucha: "🍵", zanba: "🍙" };
+    return `<div class="tp-art tp-ph"><span>${E[k] || "🗺️"}</span></div>`; }
   return TA.wrap(k, ART[k]() + (ART_X[k] ? ART_X[k]() : "") + TA.light(k), "");
 }
 
@@ -14104,6 +14108,113 @@ TRIP.push(
 );
 (() => { const ord = ["bj", "xa", "sh", "su", "hz", "sc", "cd", "cq", "yn", "gl", "gz", "sz", "gd"]; TRIP.sort((a, b) => ord.indexOf(a.id) - ord.indexOf(b.id)); })();
 
+/* ===== 2 trạm mới: Shangri-La (香格里拉), Tây Tạng (西藏) ===== */
+TRIP.push(
+ { id: "sl", zh: "香格里拉", py: "Xiānggélǐlā", vi: "Shangri-La", col: "#C9862E", x: 0, y: 0, lx: 0, ly: 0, cover: "songzanlin",
+   intro: [["欢迎来到香格里拉！“香格里拉”的意思是“心中的日月”。", "Chào mừng đến Shangri-La! “Shangri-La” có nghĩa là “mặt trời và mặt trăng trong lòng”."],
+           ["香格里拉在云南的西北边，离丽江不太远。", "Shangri-La ở phía tây bắc Vân Nam, cách Lệ Giang không xa lắm."],
+           ["这里很高，天很蓝，草地很大，还能看到很多牦牛。", "Nơi đây rất cao, trời rất xanh, đồng cỏ rất rộng, còn thấy được nhiều bò Tây Tạng."]],
+   spots: [
+    { id: "sl1", art: "songzanlin", zh: "松赞林寺", py: "Sōngzànlín Sì", vi: "Tu viện Tùng Tán Lâm", kind: "jd",
+      lines: [["松赞林寺是云南最大的藏传佛教寺庙。", "Tu viện Tùng Tán Lâm là ngôi chùa Phật giáo Tây Tạng lớn nhất Vân Nam."],
+              ["它建在山上，很多人叫它“小布达拉宫”。", "Nó được xây trên núi, nhiều người gọi nó là “Tiểu Potala”."],
+              ["寺庙的屋顶是金色的，在太阳下特别漂亮。", "Mái chùa màu vàng kim, dưới ánh mặt trời đặc biệt đẹp."],
+              ["进寺庙的时候，要安静一点儿，不能大声说话。", "Khi vào chùa phải yên lặng một chút, không được nói to."]],
+      words: [["寺庙", "sìmiào", "chùa, đền"], ["山", "shān", "núi"], ["金色", "jīnsè", "màu vàng kim"], ["安静", "ānjìng", "yên tĩnh"]],
+      q: [["c", "很多人叫松赞林寺什么？", "小布达拉宫|小故宫|小长城", 0, "很多人叫它“小布达拉宫” (Tiểu Potala)."],
+          ["f", "进寺庙的时候，要（　）一点儿。", "安静|热闹|快|大声", 0, "Vào chùa cần 安静 (yên lặng)."],
+          ["s", "寺庙 的 屋顶 是 金色 的", "Mái chùa màu vàng kim."]] },
+    { id: "sl2", art: "pudacuo", zh: "普达措", py: "Pǔdácuò", vi: "Công viên quốc gia Phổ Đạt Thố", kind: "jd",
+      lines: [["普达措是一个国家公园，里面有湖、有草地、有森林。", "Phổ Đạt Thố là một công viên quốc gia, trong đó có hồ, có đồng cỏ, có rừng."],
+              ["湖水又蓝又清，像一面大镜子。", "Nước hồ vừa xanh vừa trong, giống như một tấm gương lớn."],
+              ["我们可以在木头路上慢慢走，一边走一边拍照。", "Chúng ta có thể đi chầm chậm trên con đường gỗ, vừa đi vừa chụp ảnh."],
+              ["这里有点儿冷，记得多穿一件衣服。", "Ở đây hơi lạnh, nhớ mặc thêm một chiếc áo."]],
+      words: [["湖", "hú", "hồ"], ["草地", "cǎodì", "đồng cỏ"], ["森林", "sēnlín", "rừng"], ["镜子", "jìngzi", "gương"]],
+      q: [["c", "普达措的湖水怎么样？", "又蓝又清|又黑又脏|又热又咸", 0, "湖水又蓝又清 – vừa xanh vừa trong."],
+          ["f", "我们一边走一边（　）。", "拍照|睡觉|做饭|上课", 0, "一边……一边…… = vừa… vừa…: vừa đi vừa chụp ảnh."],
+          ["s", "这里 有点儿 冷 记得 多 穿 一件 衣服", "Ở đây hơi lạnh, nhớ mặc thêm một chiếc áo."]] },
+    { id: "sl3", art: "dukezong", zh: "独克宗古城", py: "Dúkèzōng Gǔchéng", vi: "Cổ trấn Độc Khắc Tông", kind: "jd",
+      lines: [["独克宗古城已经有一千三百多年了。", "Cổ trấn Độc Khắc Tông đã có hơn một nghìn ba trăm năm rồi."],
+              ["山上有一个很大很大的转经筒，是世界上最大的。", "Trên núi có một chiếc kinh luân rất rất lớn, là lớn nhất thế giới."],
+              ["要好几个人一起推，它才能转起来。", "Phải mấy người cùng đẩy thì nó mới quay được."],
+              ["晚上，古城里很多人一起跳舞，非常热闹。", "Buổi tối, trong cổ trấn nhiều người cùng nhảy múa, vô cùng náo nhiệt."]],
+      words: [["古城", "gǔchéng", "thành cổ"], ["世界", "shìjiè", "thế giới"], ["推", "tuī", "đẩy"], ["跳舞", "tiào wǔ", "nhảy múa"]],
+      q: [["c", "山上的转经筒有多大？", "世界上最大的|跟杯子一样小|和书一样大", 0, "Đó là kinh luân lớn nhất thế giới."],
+          ["f", "要好几个人一起推，它（　）能转起来。", "才|就|也|还", 0, "要……才…… = phải… mới…"],
+          ["s", "晚上 很多 人 一起 跳舞", "Buổi tối nhiều người cùng nhảy múa."]] },
+    { id: "sl4", art: "maoniuhuoguo", zh: "牦牛肉火锅", py: "máoniúròu huǒguō", vi: "Lẩu thịt bò Tây Tạng", kind: "ms",
+      lines: [["牦牛是生活在高原上的牛，毛又长又厚。", "Bò Tây Tạng (yak) là loài bò sống trên cao nguyên, lông vừa dài vừa dày."],
+              ["牦牛肉很香，很多人喜欢做成火锅。", "Thịt bò Tây Tạng rất thơm, nhiều người thích nấu thành lẩu."],
+              ["天气冷的时候，吃一锅热热的火锅，太舒服了！", "Khi trời lạnh, ăn một nồi lẩu nóng hổi, dễ chịu quá!"],
+              ["锅里还可以放蘑菇和蔬菜。", "Trong nồi còn có thể cho nấm và rau."]],
+      words: [["牦牛", "máoniú", "bò Tây Tạng (yak)"], ["高原", "gāoyuán", "cao nguyên"], ["蘑菇", "mógu", "nấm"], ["舒服", "shūfu", "dễ chịu"]],
+      q: [["c", "牦牛生活在哪儿？", "高原上|大海里|城市里", 0, "牦牛 sống trên 高原 (cao nguyên)."],
+          ["f", "牦牛的毛又长（　）厚。", "又|也|和|就", 0, "又……又…… = vừa… vừa…"],
+          ["s", "天气 冷 的 时候 吃 火锅 太 舒服 了", "Khi trời lạnh ăn lẩu dễ chịu quá."]] },
+    { id: "sl5", art: "suannai", zh: "牦牛酸奶", py: "máoniú suānnǎi", vi: "Sữa chua bò Tây Tạng", kind: "ms",
+      lines: [["香格里拉的酸奶是用牦牛奶做的。", "Sữa chua ở Shangri-La được làm từ sữa bò Tây Tạng."],
+              ["它很浓，用勺子吃，不用吸管喝。", "Nó rất đặc, ăn bằng thìa, không uống bằng ống hút."],
+              ["酸奶有一点儿酸，放一点儿糖或者蜂蜜就更好吃了。", "Sữa chua hơi chua, cho thêm chút đường hoặc mật ong thì càng ngon."],
+              ["走累了，坐下来吃一碗酸奶吧！", "Đi mệt rồi thì ngồi xuống ăn một bát sữa chua nhé!"]],
+      words: [["酸奶", "suānnǎi", "sữa chua"], ["勺子", "sháozi", "cái thìa"], ["酸", "suān", "chua"], ["蜂蜜", "fēngmì", "mật ong"]],
+      q: [["c", "这里的酸奶是用什么做的？", "牦牛奶|椰子水|咖啡", 0, "用牦牛奶做的 – làm từ sữa bò Tây Tạng."],
+          ["f", "放一点儿糖（　）蜂蜜就更好吃了。", "或者|还是|但是|所以", 0, "或者 = hoặc (câu trần thuật); 还是 dùng trong câu hỏi."],
+          ["s", "走 累 了 坐 下来 吃 一碗 酸奶 吧", "Đi mệt rồi, ngồi xuống ăn một bát sữa chua nhé."]] }
+   ] },
+ { id: "xz", zh: "西藏", py: "Xīzàng", vi: "Tây Tạng", col: "#8A4FB3", x: 0, y: 0, lx: 0, ly: 0, cover: "budalagong",
+   intro: [["扎西德勒！这是藏语，意思是“吉祥如意”。欢迎来到西藏！", "Tashi delek! Đây là tiếng Tạng, nghĩa là “cát tường như ý”. Chào mừng đến Tây Tạng!"],
+           ["西藏在中国的西南边，人们叫它“世界屋脊”。", "Tây Tạng ở phía tây nam Trung Quốc, người ta gọi nó là “nóc nhà thế giới”."],
+           ["这里很高，刚到的时候要慢慢走，多喝水，多休息。", "Nơi đây rất cao, lúc mới đến phải đi chậm, uống nhiều nước, nghỉ ngơi nhiều."]],
+   spots: [
+    { id: "xz1", art: "budalagong", zh: "布达拉宫", py: "Bùdálā Gōng", vi: "Cung điện Potala", kind: "jd",
+      lines: [["布达拉宫在拉萨，是西藏最有名的地方。", "Cung điện Potala ở Lhasa, là nơi nổi tiếng nhất Tây Tạng."],
+              ["它建在红山上，有一千三百多年的历史。", "Nó được xây trên núi Hồng Sơn, có lịch sử hơn một nghìn ba trăm năm."],
+              ["宫殿有白色的墙，也有红色的墙，非常好看。", "Cung điện có tường màu trắng, cũng có tường màu đỏ, rất đẹp."],
+              ["五十元人民币的后面就是布达拉宫，你看过吗？", "Mặt sau tờ 50 tệ chính là cung điện Potala, bạn đã thấy chưa?"]],
+      words: [["宫殿", "gōngdiàn", "cung điện"], ["历史", "lìshǐ", "lịch sử"], ["墙", "qiáng", "tường"], ["人民币", "rénmínbì", "Nhân dân tệ"]],
+      q: [["c", "布达拉宫在哪个城市？", "拉萨|北京|丽江", 0, "布达拉宫 ở 拉萨 (Lhasa)."],
+          ["f", "宫殿有白色的墙，（　）有红色的墙。", "也|就|才|再", 0, "……也…… = cũng…"],
+          ["s", "布达拉宫 有 一千三百多年 的 历史", "Cung điện Potala có lịch sử hơn 1300 năm."]] },
+    { id: "xz2", art: "bakuojie", zh: "八廓街", py: "Bākuò Jiē", vi: "Phố Bát Quách", kind: "jd",
+      lines: [["八廓街在大昭寺的旁边，是拉萨最老的街。", "Phố Bát Quách nằm cạnh chùa Đại Chiêu, là con phố cổ nhất Lhasa."],
+              ["很多人在这里一边走一边转经。", "Nhiều người ở đây vừa đi vừa quay kinh luân cầu nguyện."],
+              ["街上有很多小商店，卖手工做的东西。", "Trên phố có rất nhiều cửa hàng nhỏ, bán đồ làm thủ công."],
+              ["走在八廓街上，要按顺时针的方向走。", "Đi trên phố Bát Quách phải đi theo chiều kim đồng hồ."]],
+      words: [["街", "jiē", "phố"], ["商店", "shāngdiàn", "cửa hàng"], ["手工", "shǒugōng", "thủ công"], ["方向", "fāngxiàng", "hướng"]],
+      q: [["c", "八廓街在哪儿？", "大昭寺的旁边|大海的旁边|机场的旁边", 0, "八廓街 ở cạnh chùa 大昭寺."],
+          ["f", "街上有很多小商店，（　）手工做的东西。", "卖|买|吃|看", 0, "Cửa hàng 卖 (bán) đồ thủ công."],
+          ["s", "很多 人 一边 走 一边 转经", "Nhiều người vừa đi vừa quay kinh luân."]] },
+    { id: "xz3", art: "namucuo", zh: "纳木错", py: "Nàmùcuò", vi: "Hồ thiêng Namtso", kind: "jd",
+      lines: [["纳木错是一个很大的湖，“错”在藏语里就是“湖”的意思。", "Namtso là một hồ rất lớn, “错” trong tiếng Tạng có nghĩa là “hồ”."],
+              ["它在很高的地方，离天空好像特别近。", "Nó nằm ở nơi rất cao, dường như rất gần với bầu trời."],
+              ["湖水蓝得像宝石，远处还有雪山。", "Nước hồ xanh như đá quý, phía xa còn có núi tuyết."],
+              ["湖边挂着很多彩色的经幡，风一吹，就飘起来了。", "Ven hồ treo rất nhiều cờ cầu nguyện nhiều màu, gió thổi một cái là bay phấp phới."]],
+      words: [["天空", "tiānkōng", "bầu trời"], ["雪山", "xuěshān", "núi tuyết"], ["彩色", "cǎisè", "nhiều màu"], ["风", "fēng", "gió"]],
+      q: [["c", "藏语里的“错”是什么意思？", "湖|山|河", 0, "“错” trong tiếng Tạng nghĩa là 湖 (hồ)."],
+          ["f", "风一吹，经幡（　）飘起来了。", "就|才|还|又", 0, "一……就…… = hễ… là…"],
+          ["s", "湖水 蓝 得 像 宝石", "Nước hồ xanh như đá quý."]] },
+    { id: "xz4", art: "suyoucha", zh: "酥油茶", py: "sūyóu chá", vi: "Trà bơ Tây Tạng", kind: "ms",
+      lines: [["酥油茶是西藏人每天都喝的茶。", "Trà bơ là loại trà người Tây Tạng ngày nào cũng uống."],
+              ["它是用茶、酥油和一点儿盐做的，不是甜的。", "Nó được làm từ trà, bơ và một chút muối, không phải vị ngọt."],
+              ["西藏天气冷，喝酥油茶身体会很暖和。", "Tây Tạng trời lạnh, uống trà bơ cơ thể sẽ ấm áp."],
+              ["主人会给你倒很多次茶，这是对客人的热情。", "Chủ nhà sẽ rót trà cho bạn nhiều lần, đó là sự nhiệt tình với khách."]],
+      words: [["茶", "chá", "trà"], ["盐", "yán", "muối"], ["暖和", "nuǎnhuo", "ấm áp"], ["客人", "kèrén", "khách"]],
+      q: [["c", "酥油茶是什么味道的？", "有一点儿咸|很甜|很辣", 0, "Có cho một chút 盐 (muối) nên hơi mặn, không ngọt."],
+          ["f", "西藏天气冷，喝酥油茶身体会很（　）。", "暖和|凉快|累|饿", 0, "暖和 = ấm áp."],
+          ["s", "主人 会 给 你 倒 很多次 茶", "Chủ nhà sẽ rót trà cho bạn nhiều lần."]] },
+    { id: "xz5", art: "zanba", zh: "糌粑", py: "zānba", vi: "Bánh Tsampa (bột lúa mạch)", kind: "ms",
+      lines: [["糌粑是西藏人最常吃的东西。", "Tsampa là món người Tây Tạng ăn thường xuyên nhất."],
+              ["它是用青稞面做的，青稞是高原上的一种麦子。", "Nó được làm từ bột lúa mạch cao nguyên, 青稞 là một loại lúa mạch trên cao nguyên."],
+              ["把青稞面放在碗里，加一点儿酥油茶，用手捏成小团。", "Cho bột lúa mạch vào bát, thêm chút trà bơ, dùng tay nặn thành viên nhỏ."],
+              ["糌粑很方便，出门的时候带一点儿就不会饿了。", "Tsampa rất tiện, khi ra ngoài mang theo một ít là không bị đói."]],
+      words: [["碗", "wǎn", "bát"], ["手", "shǒu", "tay"], ["方便", "fāngbiàn", "tiện lợi"], ["饿", "è", "đói"]],
+      q: [["c", "糌粑是用什么做的？", "青稞面|大米|鸡蛋", 0, "糌粑 làm từ 青稞面 (bột lúa mạch cao nguyên)."],
+          ["f", "（　）青稞面放在碗里。", "把|被|给|在", 0, "Câu chữ 把: 把 + tân ngữ + 放在……"],
+          ["s", "出门 的 时候 带 一点儿 糌粑", "Khi ra ngoài mang theo một ít tsampa."]] }
+   ] }
+);
+(() => { const ord = ["bj", "xa", "sh", "su", "hz", "sc", "cd", "cq", "yn", "sl", "xz", "gl", "gz", "sz", "gd"]; TRIP.sort((a, b) => ord.indexOf(a.id) - ord.indexOf(b.id)); })();
+
 /* ===== Khám phá TQ – phần mở rộng: HDV hoạt hình (Canva), bản đồ mới, hiệu ứng tranh,
    cảnh di chuyển giữa các điểm, vé máy bay, hộ chiếu & visa đóng dấu ===== */
 const TRIP_GD = typeof TRIP_GD_DATA !== "undefined" ? TRIP_GD_DATA : {};
@@ -14123,9 +14234,10 @@ function guideSVG(expr = "smile", cls = ""){
 /* [x, y, lệch nhãn x, lệch nhãn y] theo hệ toạ độ 600×450 của ảnh bản đồ */
 const TRIP_MAP = { bj: [400, 185, -96, -30], sh: [447, 263, 16, -26], hz: [437, 279, 18, 10], xa: [332, 247, -80, -46], cq: [309, 298, 14, -34],
   cd: [286, 286, -104, -2], sc: [272, 258, -112, -34], yn: [262, 335, -104, 26], gl: [344, 346, -86, 18], gz: [368, 372, -100, 32], gd: [382, 350, 18, -22],
-  su: [434, 256, 14, -54], sz: [386, 381, 22, 22] };
+  su: [434, 256, 14, -54], sz: [386, 381, 22, 22],
+  sl: [243, 308, -150, 22], xz: [168, 268, -112, 0] };
 const TRIP_HOME = { x: 300, y: 446 };   /* xuất phát: Hà Nội (phía nam, ngoài khung) */
-const TRIP_CODE = { bj: "PEK", sh: "PVG", cq: "CKG", yn: "KMG", hz: "HGH", xa: "XIY", gl: "KWL", sc: "JZH", cd: "CTU", gz: "CAN", gd: "SWA", su: "SZV", sz: "SZX" };
+const TRIP_CODE = { bj: "PEK", sh: "PVG", cq: "CKG", yn: "KMG", hz: "HGH", xa: "XIY", gl: "KWL", sc: "JZH", cd: "CTU", gz: "CAN", gd: "SWA", su: "SZV", sz: "SZX", sl: "DIG", xz: "LXA" };
 function tripMapHTML(pinsSVG){
   return `<img class="tp-mapimg" src="${TRIP_GD.map}" alt="Bản đồ Trung Quốc"><svg class="tp-map-svg" viewBox="0 0 600 450" role="img" aria-label="Các trạm trên bản đồ">
     <path id="tpTrail" d="" fill="none" stroke="#E8453C" stroke-width="3.6" stroke-dasharray="4 8" stroke-linecap="round" opacity=".85"/>${pinsSVG}</svg>`;
@@ -14135,6 +14247,9 @@ function tripMapHTML(pinsSVG){
    cloud:[y%] mây trôi · bird:y% chim bay · rip:[[x,y,rộng]] gợn nước · fish:[[x1,x2,y]] cá bơi
    fall:"autumn|green|petal|snow|dust" vật rơi/bay · steam:[[x,y]] hơi nóng · tw:[[x1,y1,x2,y2,số,màu]] lấp lánh · fount:[[x,y]] đài phun nước */
 const TRIP_FX = {
+  songzanlin: { cloud: [8, 20], bird: 26, rip: [[30, 86, 10], [60, 90, 12]] }, pudacuo: { cloud: [8], bird: 24, rip: [[35, 70, 12], [60, 76, 10]], fall: "petal" },
+  dukezong: { tw: [[10, 5, 90, 50, 8, "#FFE7A0"]] }, maoniuhuoguo: { steam: [[45, 30], [56, 26]] }, suyoucha: { steam: [[50, 26], [58, 22]] },
+  budalagong: { cloud: [8, 22], bird: 28 }, bakuojie: { cloud: [8], bird: 22 }, namucuo: { cloud: [9, 24], bird: 20, rip: [[25, 70, 12], [55, 76, 14], [78, 72, 10]] },
   gugong: { cloud: [8, 20], bird: 22 }, changcheng: { cloud: [9, 22], bird: 30, fall: "autumn" }, tiantan: { cloud: [9, 24], bird: 32 },
   kaoya: { steam: [[42, 30], [55, 27]] }, tanghulu: { fall: "snow", tw: [[10, 5, 90, 90, 6, "#fff"]] },
   mingzhu: { tw: [[5, 3, 95, 38, 8, "#FFF6C8"]], rip: [[25, 88, 12], [52, 93, 12], [76, 87, 10]] }, waitan: { cloud: [9], bird: 24, rip: [[18, 82, 10], [45, 90, 14], [72, 86, 10]], steam: [[88, 72]] },
@@ -14351,12 +14466,12 @@ const Trip = {
 
   /* ---------- Bản đồ ---------- */
   mapView(){
-    const pins = TRIP.map(c => { const n = this.cnt(c), full = n === c.spots.length, [x, y, lx, ly] = TRIP_MAP[c.id], X = x + lx, Y = y + ly, cx = Math.max(X, Math.min(X + 90, x)), cy = Math.max(Y - 14, Math.min(Y + 14, y - 14));
+    const pins = TRIP.map(c => { const n = this.cnt(c), full = n === c.spots.length, [x, y, lx, ly] = TRIP_MAP[c.id], X = x + lx, Y = y + ly, L = [...c.zh].length, W = Math.max(90, 58 + 17 * L), cx = Math.max(X, Math.min(X + W, x)), cy = Math.max(Y - 14, Math.min(Y + 14, y - 14));
       return `<g class="tp-pin" data-c="${c.id}" tabindex="0" role="button" aria-label="${c.vi}">
         ${Math.hypot(cx - x, cy - y + 14) > 18 ? `<path d="M${x} ${y - 14} L${cx} ${cy}" stroke="${c.col}" stroke-width="2" stroke-dasharray="3 3"/>` : ""}
         <circle cx="${x}" cy="${y}" r="12" fill="${c.col}" opacity=".2"><animate attributeName="r" values="8;17;8" dur="2.4s" repeatCount="indefinite"/></circle>
         <g transform="translate(${x} ${y}) scale(1.45)"><path d="M0 1 C-7 -7 -7 -17 0 -17 C7 -17 7 -7 0 1Z" fill="${c.col}" stroke="#5A4034" stroke-width="1.4" stroke-linejoin="round"/><circle cx="0" cy="-11" r="3.2" fill="#fff"/></g>
-        <g transform="translate(${X} ${Y})"><rect x="0" y="-14" width="90" height="28" rx="14" fill="#fff" stroke="${c.col}" stroke-width="2.6"/><text x="31" y="6" text-anchor="middle" font-size="17" font-family="KaiTi,STKaiti,serif" fill="#3A2A22">${c.zh}</text>${full ? `<circle cx="72" cy="0" r="8.4" fill="#2C9A58"/><path d="M68 0 l3 3 l5.4 -5.4" stroke="#fff" stroke-width="2.2" fill="none"/>` : `<text x="72" y="4" font-size="11" text-anchor="middle" fill="#8A7466">${n}/${c.spots.length}</text>`}</g></g>`; }).join("");
+        <g transform="translate(${X} ${Y})"><rect x="0" y="-14" width="${W}" height="28" rx="14" fill="#fff" stroke="${c.col}" stroke-width="2.6"/><text x="${L > 2 ? 12 + 8.5 * L : 31}" y="6" text-anchor="middle" font-size="17" font-family="KaiTi,STKaiti,serif" fill="#3A2A22">${c.zh}</text>${full ? `<circle cx="${W - 18}" cy="0" r="8.4" fill="#2C9A58"/><path d="M${W - 22} 0 l3 3 l5.4 -5.4" stroke="#fff" stroke-width="2.2" fill="none"/>` : `<text x="${W - 18}" y="4" font-size="11" text-anchor="middle" fill="#8A7466">${n}/${c.spots.length}</text>`}</g></g>`; }).join("");
     const stamps = TRIP.map(c => { const ok = this.st.stamps[c.id];
       return `<div class="tp-stamp ${ok ? "ok" : ""}" style="--sc:${c.col}" title="${c.vi}" data-pp="${c.id}" role="button" tabindex="0"><span class="han">${c.zh}</span><small>${ok ? "已到" : "未到"}</small></div>`; }).join("");
     return this.guide("smile", `<b class="han">${this.z("你好！我是导游小语。")}</b><p>Chào ${esc(Profile.get().name)}! Mình là hướng dẫn viên Tiểu Ngữ. Chọn một trạm trên bản đồ để bắt đầu chuyến đi nhé. Ở mỗi trạm, bạn trả lời đúng ít nhất <b>2/3 câu hỏi</b> để “mua vé” vào xem danh lam hoặc nếm món ngon. Trước mỗi chuyến bay nhớ <b>mua vé máy bay</b> nhé. Khám phá đủ 5 địa điểm của một thành phố sẽ được <b>đóng dấu vào hộ chiếu</b>!</p>`)

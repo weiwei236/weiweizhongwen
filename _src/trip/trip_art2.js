@@ -363,5 +363,7 @@ Object.assign(ART, {
 const TRIP_IMG = typeof TRIP_IMG_DATA !== "undefined" ? TRIP_IMG_DATA : {};
 function tripArt(k){
   if(TRIP_IMG[k]) return `<img class="tp-art tp-img" src="${TRIP_IMG[k]}" alt="" loading="lazy">`;
+  if(!ART[k]){ const E = { songzanlin: "🛕", pudacuo: "🏞️", dukezong: "🏮", maoniuhuoguo: "🍲", suannai: "🥣", budalagong: "🏯", bakuojie: "🛍️", namucuo: "🏔️", suyoucha: "🍵", zanba: "🍙" };
+    return `<div class="tp-art tp-ph"><span>${E[k] || "🗺️"}</span></div>`; }
   return TA.wrap(k, ART[k]() + (ART_X[k] ? ART_X[k]() : "") + TA.light(k), "");
 }

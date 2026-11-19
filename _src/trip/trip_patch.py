@@ -21,7 +21,7 @@ def put(s, b, e, body, anchor, before=True):
     i = s.index(b) + len(b); j = s.index(e)
     return s[:i] + '\n' + body + s[j:]
 s = put(s, '/* TRIP_CSS_BEGIN */', '/* TRIP_CSS_END */', rd('trip.css'), '</style>')
-s = put(s, '/* TRIP_JS_BEGIN */', '/* TRIP_JS_END */', img_js() + rd('trip_art.js') + '\n' + rd('trip_art2.js') + '\n' + rd('trip_data.js') + '\n' + rd('trip_data2.js') + '\n' + rd('trip_data3.js') + '\n' + rd('trip_fx.js') + '\n' + rd('trip.js'), 'function xiaoyuSVG(')
+s = put(s, '/* TRIP_JS_BEGIN */', '/* TRIP_JS_END */', img_js() + rd('trip_art.js') + '\n' + rd('trip_art2.js') + '\n' + rd('trip_data.js') + '\n' + rd('trip_data2.js') + '\n' + rd('trip_data3.js') + '\n' + rd('trip_data4.js') + '\n' + rd('trip_fx.js') + '\n' + rd('trip.js'), 'function xiaoyuSVG(')
 if 'id="scrTrip"' not in s:
     a = '<section id="scrFarm" class="screen farm-screen" hidden><div class="fm-wrap" id="fmBody"></div></section>'
     s = s.replace(a, a + '\n<section id="scrTrip" class="screen trip-screen" hidden><div class="tp-wrap" id="tpBody"></div></section>', 1)
