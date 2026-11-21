@@ -1,0 +1,263 @@
+#L 1|Xin chào AI Tiểu Ngữ!
+#T 课文1|开学第一天，在办公室里，王一飞和AI助教小语打招呼。|Ngày đầu tiên đi học, Vương Nhất Phi chào hỏi trợ giảng AI Tiểu Ngữ ở trong văn phòng.
+王一飞>AI小语，你好！|Xin chào AI Tiểu Ngữ!
+小语>王老师，你好！|Chào cô Vương!
+#T 课文2|开学第一天，课堂上，学生们学习打招呼用语。|Ngày đầu tiên đi học, các bạn học sinh học cách diễn đạt chào hỏi tại lớp.
+王一飞>大家好！|Chào cả lớp!
+学生们>老师，您好！|Chào cô ạ!
+小语>你们好！|Chào các bạn!
+学生们>你好，小语！|Chào Tiểu Ngữ!
+#T 课文3|开学第一天，课堂上，学生们学习致谢语、告别语。|Ngày đầu tiên đi học, các bạn học sinh học các mẫu câu cảm ơn và tạm biệt ở trong lớp học.
+学生们>谢谢！|Cảm ơn bạn!
+小语>不客气！|Đừng khách sáo!
+王一飞>同学们，再见！|Tạm biệt các em!
+学生们>老师，再见！|Tạm biệt cô ạ!
+#L 2|Mình tên là Lý Văn
+#T 课文1|在教室里，王一飞在认识学生。|Vương Nhất Phi đang làm quen với học sinh ở trong lớp học.
+王一飞>请问，你叫什么名字？|Xin hỏi, em tên là gì?
+陈天中>我叫陈天中。|Em tên là Trần Thiên Trung ạ.
+#T 课文2|在校园里，陈天中和白家月打招呼时认错了人。|Trần Thiên Trung đã nhầm Bạch Gia Nguyệt với người khác khi chào hỏi cô ấy ở trong khuôn viên trường.
+陈天中>你好，安妮！|Chào Annie!
+白家月>你好，陈天中！我不是安妮，我是白家月。|Chào Trần Thiên Trung! Mình không phải là Annie, mình là Bạch Gia Nguyệt.
+陈天中>对不起！|Xin lỗi bạn!
+白家月>没关系！|Không sao đâu!
+#T 课文3|在校园里，李文和白家月第一次相遇。|Lý Văn và Bạch Gia Nguyệt lần đầu gặp nhau trong khuôn viên trường.
+李文>你好！我叫李文。|Chào bạn! Mình tên là Lý Văn.
+白家月>你好！我叫白家月。|Xin chào! Mình tên là Bạch Gia Nguyệt.
+李文>很高兴认识你。|Rất vui được làm quen với bạn.
+白家月>认识你我也很高兴。|Mình cũng rất vui được làm quen với bạn.
+#L 3|Mình là người Trung Quốc
+#T 课文1|在校园里，李文和白家月第一次相遇，两人继续聊天儿。|Lý Văn và Bạch Gia Nguyệt gặp nhau lần đầu, hai người tiếp tục trò chuyện trong khuôn viên trường.
+李文>我是中国人。|Mình là người Trung Quốc.
+白家月>我是法国人。我的中文老师也是中国人。|Mình là người Pháp. Giáo viên tiếng Trung Quốc của mình cũng là người Trung Quốc.
+#T 课文2|在教室里，下课后，安妮在看陈天中手机里的照片。|Sau giờ học, Annie đang xem ảnh trên điện thoại di động của Trần Thiên Trung ở trong lớp học.
+安妮>这是谁？|Đây là ai vậy?
+陈天中>这是我女朋友。|Đây là bạn gái mình.
+安妮>你女朋友是哪国人？|Bạn gái của bạn là người nước nào?
+陈天中>她也是泰国人。|Cô ấy cũng là người Thái Lan.
+#T 课文3|在家里，王一雪给王一飞打视频电话。|Vương Nhất Tuyết đang gọi video cho Vương Nhất Phi ở trong nhà.
+王一雪>喂，一飞！|A lô, Nhất Phi à!
+王一飞>姐姐！|Vâng, chị!
+王一雪>你工作还忙吗？|Công việc của em vẫn bận lắm à?
+王一飞>对，还很忙。你也很忙吗？|Vâng, vẫn rất bận. Chị cũng bận lắm phải không?
+王一雪>我不太忙。我们很想你。|Chị không bận lắm. Mọi người đều rất nhớ em.
+王一飞>我也想你们。|Em cũng nhớ mọi người.
+#L 4|Chị có hai con
+#T 课文1|在家里，刘明和王一雪在聊天儿。|Lưu Minh và Vương Nhất Tuyết đang trò chuyện ở trong nhà.
+刘明>一飞忙吗？|Nhất Phi có bận không?
+王一雪>她很忙。|Dì ấy rất bận.
+刘明>她有多少个学生？|Dì ấy có bao nhiêu học sinh?
+王一雪>她有二十个学生。|Dì ấy có hai mươi học sinh.
+#T 课文2|在公司里，王一雪和杨同乐休息时聊天儿。|Vương Nhất Tuyết và Dương Đồng Lạc trò chuyện với nhau trong giờ nghỉ ở công ty.
+王一雪>我有两个哥哥，你呢？|Chị có hai anh trai. Em thì sao?
+杨同乐>我没有哥哥。|Em không có anh trai.
+王一雪>你家有几口人？|Nhà em có mấy người?
+杨同乐>我家有四口人，爸爸、妈妈、妹妹和我。|Nhà em có bốn người: bố, mẹ, em gái và em.
+#T 课文3|在街上，王一雪带着儿子偶遇杨同乐。|Khi Vương Nhất Tuyết đang đi cùng con trai trên phố thì tình cờ gặp Dương Đồng Lạc.
+杨同乐>这是您儿子吗？|Đây là con trai chị phải không?
+王一雪>是的。我有两个孩子，一个儿子，一个女儿。|Đúng vậy. Chị có hai con, một con trai và một con gái.
+杨同乐>您儿子几岁？|Con trai chị mấy tuổi rồi?
+王一雪>他今年五岁。|Cháu năm nay năm tuổi.
+杨同乐>您女儿多大？|Con gái chị bao nhiêu tuổi?
+王一雪>她今年十二。|Cháu năm nay mười hai tuổi.
+#L 5|Hôm nay anh được nghỉ
+#T 课文1|在家里，刘明和王一雪在聊天儿。|Lưu Minh và Vương Nhất Tuyết đang trò chuyện ở trong nhà.
+王一雪>今天几号？|Hôm nay ngày mấy anh nhỉ?
+刘明>今天9月8号。|Hôm nay là ngày 8 tháng 9.
+王一雪>星期几？|Thứ mấy vậy?
+刘明>星期日。今天我休息。|Chủ nhật. Hôm nay anh được nghỉ.
+#T 课文2|在公司里，王一雪和杨同乐休息时聊天儿。|Vương Nhất Tuyết và Dương Đồng Lạc đang trò chuyện trong giờ nghỉ tại công ty.
+王一雪>你会做饭吗？|Em có biết nấu ăn không?
+杨同乐>我会做。|Em biết.
+王一雪>你会做什么？|Em biết nấu món gì?
+杨同乐>我会做面条儿、饺子，也会做一些菜。星期天我也做饭。|Em biết nấu mì, sủi cảo và biết chế biến một số món ăn khác. Chủ nhật em cũng nấu ăn.
+#T 课文3|在公司里，王一雪和杨同乐下班时聊天儿。|Vương Nhất Tuyết và Dương Đồng Lạc đang trò chuyện sau giờ làm ở công ty.
+王一雪>同乐，下班吗？|Đồng Lạc, em tan làm chưa?
+杨同乐>下班。|Em tan làm rồi.
+王一雪>这是你的新电脑吗？|Đây là máy tính mới của em à?
+杨同乐>是的，是我的新电脑。|Đúng vậy, đây là máy tính mới của em.
+王一雪>真好看！|Đẹp thật đấy!
+杨同乐>我也很喜欢它。|Em cũng rất thích nó.
+#L 6|Số điện thoại di động của bạn là bao nhiêu?
+#T 课文1|在校园里，李文向白家月要手机号。|Lý Văn đang hỏi xin số điện thoại di động của Bạch Gia Nguyệt trong khuôn viên trường.
+李文>家月，你的手机号是多少？|Gia Nguyệt, số điện thoại di động của bạn là bao nhiêu?
+白家月>我的手机号是+33 601493190。|Số điện thoại di động của mình là +33 601493190.
+李文>我的手机号是+86 13552721160。|Số của mình là +86 13552721160.
+白家月>好的。|Ừ.
+#T 课文2|在教室里，下课后，白家月和陈天中在聊天儿。|Bạch Gia Nguyệt và Trần Thiên Trung đang trò chuyện trong lớp sau khi tan học.
+陈天中>家月，明天你去哪儿？|Gia Nguyệt, ngày mai bạn đi đâu?
+白家月>我想去超市买东西。|Mình muốn đi siêu thị mua đồ.
+陈天中>你去超市买什么？|Bạn đi siêu thị mua gì vậy?
+白家月>我想买些牛奶。|Mình muốn mua ít sữa.
+#T 课文3|在家里，王一雪全家在讨论周末晚餐安排。|Gia đình Vương Nhất Tuyết đang bàn về kế hoạch cho bữa tối cuối tuần ở trong nhà.
+王一雪>星期天我们去哪儿吃晚饭？|Chủ nhật này nhà mình đi đâu ăn tối nhỉ?
+刘明>我还想去西安饭店。|Bố vẫn muốn đến nhà hàng Tây An.
+刘小雪>那边的包子非常好吃，我想吃包子。|Bánh bao ở đó rất ngon, con muốn ăn bánh bao.
+刘小明>妈妈，我想吃米饭，不想吃包子。|Mẹ ơi, con muốn ăn cơm, không muốn ăn bánh bao đâu.
+王一雪>好的。我们怎么去？|Được thôi. Chúng ta đi thế nào nhỉ?
+刘明>坐出租车去。|Đi taxi nhé.
+#L 7|
+#T 课文1|白家月和安妮在打电话。|Bạch Gia Nguyệt và Annie đang nói chuyện điện thoại.
+白家月>现在几点？|Bây giờ là mấy giờ rồi?
+安妮>早上八点四十。|8 giờ 40 sáng.
+白家月>我上午十点十分有课。|Mình có tiết học lúc 10 giờ 10 phút sáng.
+安妮>好的，我们下午两点见吧。|Ừ, vậy chúng ta gặp nhau lúc 2 giờ chiều nhé.
+#T 课文2|在校园里，李文遇到白家月。|Lý Văn gặp Bạch Gia Nguyệt trong khuôn viên trường.
+李文>下午我想去电影院看电影，你去吗？|Chiều nay mình muốn đi xem phim ở rạp chiếu phim. Bạn có đi không?
+白家月>我不想去，下午还有事。|Mình không muốn đi. Chiều nay mình còn có việc.
+李文>好的。明天呢？|Ừ. Vậy ngày mai thì sao?
+白家月>我明天下午两点还上课呢，四点半下课。|2 giờ chiều mai mình phải lên lớp, 4 giờ rưỡi tan học.
+#T 课文3|王一雪在办公室给刘明打电话。|Vương Nhất Tuyết đang gọi điện cho Lưu Minh ở phòng làm việc.
+王一雪>喂，你在哪儿呢？|A lô, anh đang ở đâu thế?
+刘明>我在家里呢。|Anh đang ở nhà.
+王一雪>我晚上六点半下班。|Em tan làm lúc 6 rưỡi tối.
+刘明>我八点去医院上班。|8 giờ anh đến bệnh viện làm việc.
+王一雪>好的，你去店里买些菜吧。|Vâng, anh ra cửa hàng mua ít thức ăn nhé.
+刘明>好，我十分钟后去。|Ừ, 10 phút nữa anh đi.
+#L 8|
+#T 课文1|在王一飞家，白家月和陈天中来做客。|Bạch Gia Nguyệt và Trần Thiên Trung đến thăm nhà Vương Nhất Phi.
+白家月>房间外有一只小猫。|Bên ngoài phòng có một con mèo nhỏ.
+陈天中>我没看见，它在哪儿呢？|Mình không nhìn thấy, nó ở đâu thế?
+白家月>它在桌子下呢。|Nó ở dưới cái bàn kìa.
+陈天中>这只小猫真漂亮！|Con mèo nhỏ này xinh thật!
+#T 课文2|在教室里，下课后，白家月给李文打电话。|Bạch Gia Nguyệt gọi điện thoại cho Lý Văn ở trong lớp sau khi tan học.
+白家月>我们在哪儿见呢？|Chúng mình gặp nhau ở đâu nhỉ?
+李文>在学校书店前见吧。|Ở trước cửa hiệu sách của trường nhé.
+白家月>好的。下午两点你能到吗？|Ừ. 2 giờ chiều bạn đến được không?
+李文>我能到。我在学校吃午饭。|Mình đến được. Mình ăn trưa ở trường.
+#T 课文3|在医院里，刘明和同事胡医生在聊天儿。|Lưu Minh đang trò chuyện với đồng nghiệp của anh là bác sĩ Hồ ở trong bệnh viện.
+刘明>小胡，还没吃饭呢？|Tiểu Hồ, em vẫn chưa ăn cơm à?
+胡医生>没吃呢。|Em chưa ăn ạ.
+刘明>大医院病人多，医生非常忙。|Ở bệnh viện lớn, bệnh nhân rất đông, bác sĩ cực kỳ bận.
+胡医生>是的。我爸爸也在医院工作，他也非常忙。|Vâng. Bố em cũng làm việc ở bệnh viện, ông ấy cũng bận lắm.
+刘明>你家有两个医生？|Nhà em có hai bác sĩ cơ à?
+胡医生>对。|Vâng.
+#L 9|
+#T 课文1|在校园里，李文和白家月在聊天儿。|Lý Văn và Bạch Gia Nguyệt đang trò chuyện ở trong khuôn viên trường.
+李文>学校前边有一家电影院。|Phía trước trường học có một rạp chiếu phim.
+白家月>对。我们晚上去那个电影院看电影吧。|Đúng vậy. Tối chúng mình đến đó xem phim nhé.
+李文>好！我们七点在电影院外边见，好吗？|Được, chúng mình gặp nhau lúc 7 giờ ở bên ngoài rạp chiếu phim, được không?
+白家月>好的，晚上七点见！|Ừ, tối 7 giờ gặp nhau nhé.
+#T 课文2|在教室里，下课后，白家月和陈天中在对话。|Bạch Gia Nguyệt đang trò chuyện với Trần Thiên Trung ở trong lớp sau khi tan học.
+白家月>椅子上有一本中文书，那是谁的书？|Có một quyển sách tiếng Trung Quốc ở trên ghế. Đó là sách của ai vậy?
+陈天中>是我的书，谢谢。这是我的第二本中文书。|Là sách của mình, cảm ơn bạn. Đây là quyển sách tiếng Trung Quốc thứ hai của mình.
+白家月>不客气。你明天上午在哪儿？|Đừng khách sáo nhé. Sáng mai bạn ở đâu?
+陈天中>我明天上午在学校学习。|Sáng mai mình học ở trường.
+#T 课文3|在办公室里，休息时，王一雪和杨同乐谈论周末生活。|Vương Nhất Tuyết và Dương Đồng Lạc đang trò chuyện về cuộc sống cuối tuần của họ trong lúc nghỉ ngơi ở văn phòng.
+王一雪>明天星期六，你做什么？|Mai là thứ Bảy rồi, em định làm gì?
+杨同乐>我白天在家里读书，晚上和朋友们去外边唱歌。|Ban ngày em sẽ ở nhà đọc sách, buổi tối em sẽ ra ngoài hát cùng bạn bè.
+王一雪>你唱歌很好听。|Em hát rất hay.
+杨同乐>谢谢！您星期六做什么？|Cảm ơn chị! Thứ Bảy chị làm gì?
+王一雪>我在家里做饭、看电视，和孩子们、小狗玩。|Chị ở nhà nấu ăn, xem ti vi, chơi với các con và con chó nhỏ của chị.
+杨同乐>我也有一只小狗。|Em cũng có một con chó nhỏ đấy.
+#L 10|
+#T 课文1|在一家小店，王一雪在买杯子。|Vương Nhất Tuyết mua cốc ở một cửa hàng nhỏ.
+王一雪>请问，有杯子吗？|Xin hỏi, ở đây có bán cốc không?
+售货员>有，杯子在这边。|Có ạ, cốc ở phía bên này.
+王一雪>多少钱一个？|Bao nhiêu tiền một chiếc vậy?
+售货员>这些五块钱一个，那些十块钱一个。|Những chiếc này 5 đồng một chiếc, còn những chiếc kia 10 đồng một chiếc.
+王一雪>我买这个吧。|Tôi lấy chiếc này.
+#T 课文2|在菜市场，王一雪在买水果。|Vương Nhất Tuyết đang mua hoa quả ở chợ.
+王一雪>这儿的水果真不少！|Hoa quả ở đây nhiều nhỉ!
+售货员>您想买什么？|Chị muốn mua gì?
+王一雪>我想买两斤苹果。|Tôi muốn mua hai cân táo.
+售货员>苹果三块五一斤。这些七块二，七块钱吧。|Táo 3 đồng rưỡi một cân. Chỗ này 7,2 đồng, lấy chị 7 đồng nhé.
+王一雪>好的，这儿的苹果真便宜！|Vâng, táo ở đây rẻ thật!
+#T 课文3|在商场里，刘明和王一雪在给孩子买衣服。|Lưu Minh và Vương Nhất Tuyết đang mua quần áo cho các con trong trung tâm thương mại.
+王一雪>这家商店衣服真多！这件一百元，怎么样？|Cửa hàng này nhiều quần áo thật đấy! Chiếc này 100 đồng, anh thấy thế nào?
+刘明>好看，也不贵。|Đẹp đấy, mà cũng không đắt.
+王一雪>小雪能穿，买一件吧。|Tiểu Tuyết mặc được đấy, mua một chiếc nhé.
+刘明>好的。小明能穿吗？|Ừ. Tiểu Minh có mặc được không?
+王一雪>不能。这些是女孩子穿的衣服，男孩子的衣服在那儿。|Không được đâu. Những cái này là quần áo dành cho bé gái. Quần áo dành cho bé trai ở đằng kia cơ.
+刘明>好的。|Ừ nhỉ.
+#L 11|
+#T 课文1|在路上，李文在找饭店，王一飞给他打电话。|Lý Văn đang tìm nhà hàng trên đường đi, Vương Nhất Phi gọi điện cho anh ấy.
+王一飞>喂，李文，你什么时候能到饭店？|A lô, Lý Văn à, khi nào em có thể đến nhà hàng?
+李文>还不知道，正在找呢。它是不是在超市后边？|Cũng không biết ạ, em đang tìm đây. Nó có phải ở phía sau siêu thị không?
+王一飞>是的。你开车没开车？|Đúng rồi. Em có lái xe không?
+李文>我没开车，坐车呢。|Em không lái xe, đang đi taxi đây.
+#T 课文2|在饭店里，王一飞和李文见面后聊天儿。|Vương Nhất Phi và Lý Văn trò chuyện sau khi gặp nhau tại nhà hàng.
+王一飞>你还在读大学吗？|Em vẫn đang học đại học à?
+李文>对，我读大学呢，还是大学生。|Đúng vậy, em đang học đại học, vẫn đang là sinh viên.
+王一飞>你们学习忙不忙？|Các em học có bận không?
+李文>非常忙，我学医，我们的课很多。|Bận lắm ạ, em học ngành y, chúng em có rất nhiều môn học.
+#T 课文3|星期六早上，刘明要去医院加班，出门前和女儿对话。|Sáng thứ Bảy, Lưu Minh phải đến bệnh viện làm thêm giờ, anh trò chuyện với con gái trước khi ra khỏi nhà.
+刘明>弟弟起床没起床呢？|Em trai con dậy chưa?
+刘小雪>没起床呢，还在睡觉。|Chưa dậy ạ, em vẫn đang ngủ.
+刘明>还睡呢？他今天去不去那里？|Vẫn ngủ à? Hôm nay em có đến chỗ đó không?
+刘小雪>去哪里？|Đi đâu ạ?
+刘明>去超市。|Đi siêu thị.
+刘小雪>我昨天问他，他对我说，他不去，他今天要和小朋友玩。|Hôm qua con hỏi em rồi, em nói với con là em không đi, hôm nay em muốn chơi với các bạn nhỏ.
+#L 12|
+#T 课文1|王一雪给王一飞打电话，询问王一飞那边的情况。|Vương Nhất Tuyết gọi điện cho Vương Nhất Phi để hỏi thăm tình hình chỗ cô ấy.
+王一雪>今天天气怎么样？|Hôm nay thời tiết thế nào?
+王一飞>这里的天不太好，下雨了。|Thời tiết ở đây không ổn lắm, mưa rồi ạ.
+王一雪>雨大吗？|Mưa to không?
+王一飞>有点儿大，我觉得很冷。|Hơi to ạ, em cảm thấy rất lạnh.
+#T 课文2|在公司电梯里，王一雪和杨同乐在聊天儿。|Vương Nhất Tuyết và Dương Đồng Lạc đang trò chuyện trong thang máy công ty.
+王一雪>昨天下雪了。|Hôm qua tuyết rơi rồi.
+杨同乐>是的，太冷了。|Đúng vậy, trời lạnh quá.
+王一雪>你昨天没来公司，生病了？|Hôm qua em không đến công ty, bị ốm à?
+杨同乐>对，我昨天去医院看病了。|Vâng, hôm qua em đi bệnh viện khám bệnh.
+#T 课文3|昨天在医院，医生给杨同乐看病。|Hôm qua, bác sĩ khám bệnh cho Dương Đồng Lạc tại bệnh viện.
+杨同乐>医生，我病了。|Thưa bác sĩ, tôi bị ốm rồi.
+胡医生>我看看。你觉得怎么样？|Để tôi khám xem. Anh cảm thấy thế nào?
+杨同乐>我很冷。|Tôi rất lạnh.
+胡医生>好的，吃一点儿药，今天休息半天吧。|Được rồi, uống một ít thuốc nhé, hôm nay nghỉ ngơi nửa ngày nhé.
+杨同乐>好的。|Vâng.
+胡医生>回家后再喝些热水。|Sau khi về nhà nhớ uống thêm ít nước ấm nhé.
+#L 13|
+#T 课文1|在教室里，下课后，白家月问王老师问题。|Bạch Gia Nguyệt hỏi bài cô Vương ở trong lớp sau khi tan học.
+白家月>王老师，我可以再问您一个问题吗？|Thưa cô Vương, em có thể hỏi thêm cô một câu nữa không ạ?
+王一飞>可以。你有什么问题？|Được chứ. Em có vấn đề gì nào?
+白家月>那个小店卖不卖手机？|Cửa hàng nhỏ kia có bán điện thoại di động không ạ?
+王一飞>我不知道。你可以打电话问一下。|Cô không biết. Em có thể gọi điện thoại hỏi xem.
+#T 课文2|在咖啡馆里，王一雪想吃早餐。|Vương Nhất Tuyết muốn ăn sáng ở trong quán cà phê.
+服务员>女士，请坐！您喝什么？|Mời cô ngồi! Cô uống gì ạ?
+王一雪>我看一下。请给我一杯牛奶。|Để tôi xem một chút. Cho tôi một cốc sữa.
+服务员>好的。您还要什么？|Vâng. Cô còn dùng thêm gì nữa không?
+王一雪>我还没吃早饭，再要这个面包和鸡蛋吧。|Tôi vẫn chưa ăn sáng, cho tôi cái bánh mì này và trứng nhé.
+#T 课文3|在餐馆里，刘明在点餐。|Lưu Minh đang gọi món ăn ở nhà hàng.
+服务员>先生，请坐！您要什么？|Mời anh ngồi! Anh cần gì ạ?
+刘明>我要一斤饺子。|Cho tôi một cân sủi cảo.
+服务员>好的。一斤饺子40个。|Vâng ạ. Một cân sủi cảo có 40 cái.
+刘明>40个太多了，我要一半吧。|40 cái thì nhiều quá, tôi lấy nửa cân thôi nhé.
+服务员>半斤20个。您想喝什么？|Nửa cân là 20 cái. Anh muốn uống gì không ạ?
+刘明>请给我一杯茶吧。|Cho tôi một cốc trà nhé.
+#L 14|
+#T 课文1|在教室里，下课后，白家月和陈天中在谈论上一次课外旅行。|Bạch Gia Nguyệt và Trần Thiên Trung đang thảo luận về chuyến du lịch ngoại khoá lần trước ở trong lớp sau giờ tan học.
+白家月>你们上火车后看见王老师了吗？|Sau khi lên tàu các bạn có nhìn thấy cô Vương không?
+陈天中>没看见。中午车开后，有些人在看书，有些人睡觉了。|Không nhìn thấy đâu. Buổi trưa, sau khi tàu chạy, có một số người đọc sách, một số người ngủ.
+白家月>你呢？|Còn bạn thì sao?
+陈天中>我看了一个电影。|Mình đã xem một bộ phim.
+#T 课文2|在课堂上，王一飞询问同学们的学习情况。|Cô Vương Nhất Phi hỏi thăm tình hình học tập của học sinh ở trong lớp học.
+王一飞>你们会说汉语了，也会写汉字了吗？|Các em đã biết nói tiếng Trung Quốc rồi, cũng đã biết viết chữ Hán rồi phải không?
+白家月>我们都会写了。|Chúng em đều biết viết rồi ạ.
+陈天中>老师，我听不见。|Thưa cô, em không nghe thấy ạ.
+王一飞>请大家不要说话！请听老师的问题：你们都会写哪些汉字了？|Mọi người đừng nói chuyện! Hãy lắng nghe câu hỏi của cô: Các em đã biết viết những chữ Hán nào rồi?
+陈天中>我会写这些字了，您看！|Cô xem này, em đã biết viết những chữ này rồi!
+#T 课文3|在家里，刘明和王一雪在谈论孩子的升学情况。|Lưu Minh và Vương Nhất Tuyết đang trò chuyện về tình hình học tập của các con ở trong nhà.
+刘明>明年女儿上中学。|Sang năm con gái lên trung học.
+王一雪>对。儿子也上小学了。|Đúng vậy. Con trai cũng lên tiểu học.
+刘明>我们家有了一个中学生。|Nhà mình có một học sinh trung học rồi.
+王一雪>还有了一个小学生。|Còn có thêm một học sinh tiểu học nữa.
+刘明>上学后，他们都忙了。|Sau khi vào học, các con đều bận rộn cả.
+王一雪>是的。太晚了，睡觉吧。|Đúng vậy. Muộn quá rồi, đi ngủ thôi.
+#L 15|
+#T 课文1|在李文家，李文邀请陈天中、白家月等朋友品尝中餐。|Lý Văn mời các bạn Trần Thiên Trung, Bạch Gia Nguyệt thưởng thức món ăn Trung Quốc tại nhà mình.
+李文>你们爱吃哪个菜？|Các bạn thích ăn món nào?
+白家月>我喜欢这个，也喜欢那个。|Mình thích món này, cũng thích món kia.
+陈天中>这些菜都好吃，还很好看。|Những món này đều ngon, còn rất đẹp mắt nữa.
+李文>我爱吃中国菜，也喜欢做。大家多吃点儿。|Mình thích ăn món Trung Quốc, cũng thích nấu. Mọi người ăn nhiều vào nhé.
+#T 课文2|在李文家，大家边吃饭边谈论假期计划。|Mọi người vừa ăn vừa thảo luận về kế hoạch kỳ nghỉ tại nhà Lý Văn.
+李文>你们都想去哪儿？|Các bạn đều muốn đi đâu vậy?
+安妮>去年我和男朋友去了西安，今年我想去北京。|Năm ngoái mình và bạn trai đã đi Tây An, năm nay mình muốn đi Bắc Kinh.
+白家月>前几年我去了西安，非常好玩儿。今年我也想去北京。|Mấy năm trước mình đã đi Tây An, rất vui. Năm nay mình cũng muốn đi Bắc Kinh.
+李文>我和王老师都是北京人，北京非常漂亮。|Mình và cô Vương đều là người Bắc Kinh, Bắc Kinh rất đẹp.
+#T 课文3|在教室外，白家月、安妮和王老师在谈论去北京旅游的事。|Bạch Gia Nguyệt, Annie và cô Vương đang nói chuyện về việc đi du lịch Bắc Kinh ở bên ngoài lớp học.
+王一飞>你们的飞机到北京要几个小时？|Chuyến bay của các em đến Bắc Kinh mất mấy tiếng?
+白家月>九个小时。|9 tiếng ạ.
+王一飞>我家人都在北京，星期天我姐姐也有时间，她可以去机场接你们，你们也可以住我家。|Người nhà cô đều ở Bắc Kinh, Chủ nhật chị gái cô cũng có thời gian, chị ấy có thể đi sân bay đón các em, các em cũng có thể ở nhà cô.
+安妮>我们星期日早上八点到大兴机场，早不早？|8 giờ sáng Chủ nhật chúng em đã đến sân bay Đại Hưng, có sớm không cô?
+王一飞>不早。|Không sớm đâu.
+白家月>谢谢老师！那我们和您姐姐在大兴机场见！|Cảm ơn cô ạ! Vậy chúng em hẹn gặp chị cô ở sân bay Đại Hưng nhé!
