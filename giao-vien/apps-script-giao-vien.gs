@@ -260,6 +260,9 @@ function doPost(e) {
       } catch (err) { return json_({ ok: false, error: 'not_found' }); }
     }
 
+    /* ---- Luyện ngữ âm: audio mẫu của giáo viên + bài ghi âm của học viên ---- */
+    if (act.indexOf('pron') === 0) { const out = pronAction_(act, b, ac); if (out) return json_(out); }
+
     /* ---- Bài kiểm tra ---- */
     if (act.indexOf('test') === 0) { const out = testAction_(act, b, ac); if (out) return json_(out); }
 
@@ -447,4 +450,92 @@ function chat_(b) {
   const text = (JSON.parse(res.getContentText()).content || []).map(c => c.text || '').join('');
   const m = text.match(/\{[\s\S]*\}/);
   try { return { ok: true, data: JSON.parse(m ? m[0] : text) }; } catch (err) { return { ok: true, data: b.mode === 'review' ? { items: [], summary: text } : { say: text, py: '', vi: '' } }; }
+}
+
+
+/* ======================= LUYỆN NGỮ ÂM =======================
+   - Audio mẫu: giáo viên ghi âm từng từ / câu, lưu ở thư mục "Weiwei - File nghe bài đọc" (ai có link cũng nghe được).
+   - Bài ghi âm của học viên: lưu ở thư mục riêng "Weiwei - Ghi âm học viên" (KHÔNG chia sẻ); chỉ chính học viên đó
+     và giáo viên (TEACHER_KEY) nghe được qua Apps Script. Mỗi học viên giữ 1 bản mới nhất cho mỗi từ / câu. */
+const PREF = 'PronRef', PSUB = 'PronSubs';
+const PR_HEAD = ['Khoá mục', 'Cấp', 'Bài', 'Mục', 'Drive id', 'Cập nhật'];
+const PS_HEAD = ['Khoá', 'Tên đăng nhập', 'Họ tên', 'Cấp', 'Bài', 'Mục', 'Nội dung', 'Drive id', 'Nộp lúc', 'Nhận xét', 'Nhận xét lúc', 'Học viên đã xem'];
+const REC_FOLDER = 'Weiwei - Ghi âm học viên';
+const MAX_REC = 2500000; // ~1,8 MB âm thanh (base64)
+function recFolder_() { const it = DriveApp.getFoldersByName(REC_FOLDER); return it.hasNext() ? it.next() : DriveApp.createFolder(REC_FOLDER); }
+function trash_(id) { try { if (id) DriveApp.getFileById(String(id)).setTrashed(true); } catch (e) {} }
+function findKey_(sh, n, key) { const rows = rowsOf_(sh, n); for (let i = 0; i < rows.length; i++) if (String(rows[i][0]) === key) return { r: i + 2, row: rows[i] }; return { r: 0, row: null }; }
+function ms_(v) { return v ? new Date(v).getTime() : 0; }
+function pronAction_(act, b, ac) {
+  const lv = str_(b.level, 10), les = Number(b.lesson) || 0, item = str_(b.item, 120);
+  if (act === 'pronRef') {   // ai cũng xem được audio mẫu
+    const refs = {};
+    rowsOf_(sheet_(PREF, PR_HEAD), PR_HEAD.length).forEach(r => { if (String(r[1]) === lv && Number(r[2]) === les) refs[String(r[3])] = String(r[4]); });
+    return { ok: true, refs: refs };
+  }
+  if (act === 'pronSubmit' || act === 'pronMine' || act === 'pronMyAudio' || act === 'pronSeen') {
+    const r = authRow_(ac, b.u, b.token); if (!r) return { ok: false, error: 'auth' };
+    const u = String(ac.getRange(r, C.user).getValue()).toLowerCase(), name = String(ac.getRange(r, C.name).getValue());
+    const sh = sheet_(PSUB, PS_HEAD);
+    if (act === 'pronMine') {
+      const out = {};
+      rowsOf_(sh, PS_HEAD.length).forEach(x => { if (String(x[1]).toLowerCase() === u && String(x[3]) === lv && Number(x[4]) === les)
+        out[String(x[5])] = { id: String(x[7]), at: ms_(x[8]), comment: String(x[9] || ''), cAt: ms_(x[10]), seen: ms_(x[11]) }; });
+      return { ok: true, mine: out };
+    }
+    if (act === 'pronSeen') {
+      const rows = rowsOf_(sh, PS_HEAD.length), now = new Date();
+      rows.forEach((x, i) => { if (String(x[1]).toLowerCase() === u && String(x[3]) === lv && Number(x[4]) === les && x[9] && !x[11]) sh.getRange(i + 2, 12).setValue(now); });
+      return { ok: true };
+    }
+    if (act === 'pronMyAudio') {
+      const f = findKey_(sh, PS_HEAD.length, [u, lv, les, item].join('|'));
+      if (!f.r) return { ok: false, error: 'not_found' };
+      try { const bl = DriveApp.getFileById(String(f.row[7])).getBlob(); return { ok: true, mime: bl.getContentType(), data: Utilities.base64Encode(bl.getBytes()) }; }
+      catch (e) { return { ok: false, error: 'not_found' }; }
+    }
+    /* pronSubmit */
+    if (!lv || !les || !item || !b.data) return { ok: false, error: 'missing' };
+    if (String(b.data).length > MAX_REC) return { ok: false, error: 'too_large' };
+    const mime = str_(b.mime, 60) || 'audio/webm', ext = mime.indexOf('mp4') >= 0 ? 'm4a' : mime.indexOf('ogg') >= 0 ? 'ogg' : 'webm';
+    const file = recFolder_().createFile(Utilities.newBlob(Utilities.base64Decode(b.data), mime, [u, lv, 'bai' + les, item.replace(/[^\w一-鿿]+/g, '_')].join('-') + '.' + ext));
+    const key = [u, lv, les, item].join('|'), f = findKey_(sh, PS_HEAD.length, key), now = new Date();
+    const row = [key, u, name, lv, les, item, str_(b.text, 200), file.getId(), now, '', '', ''];
+    if (f.r) { trash_(f.row[7]); sh.getRange(f.r, 1, 1, PS_HEAD.length).setValues([row]); } else sh.appendRow(row);
+    return { ok: true, id: file.getId(), at: now.getTime() };
+  }
+  /* ---- phần giáo viên ---- */
+  if (!teacherOk_(b.key)) return { ok: false, error: 'unauthorized' };
+  if (act === 'pronRefSet') {
+    if (!lv || !les || !item || !b.data) return { ok: false, error: 'missing' };
+    const f0 = audioFolder_().createFile(Utilities.newBlob(Utilities.base64Decode(b.data), str_(b.mime, 60) || 'audio/mpeg', ['mau', lv, 'bai' + les, item.replace(/[^\w一-鿿]+/g, '_')].join('-') + (str_(b.ext, 6) ? '.' + str_(b.ext, 6) : '')));
+    try { f0.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW); } catch (err) {}
+    const sh = sheet_(PREF, PR_HEAD), key = [lv, les, item].join('|'), f = findKey_(sh, PR_HEAD.length, key);
+    const row = [key, lv, les, item, f0.getId(), new Date()];
+    if (f.r) { trash_(f.row[4]); sh.getRange(f.r, 1, 1, PR_HEAD.length).setValues([row]); } else sh.appendRow(row);
+    return { ok: true, id: f0.getId() };
+  }
+  if (act === 'pronRefDel') {
+    const sh = sheet_(PREF, PR_HEAD), f = findKey_(sh, PR_HEAD.length, [lv, les, item].join('|'));
+    if (f.r) { trash_(f.row[4]); sh.deleteRow(f.r); }
+    return { ok: true };
+  }
+  if (act === 'pronSubs') {
+    return { ok: true, subs: rowsOf_(sheet_(PSUB, PS_HEAD), PS_HEAD.length).map(x => ({ k: String(x[0]), u: String(x[1]), name: String(x[2]), level: String(x[3]), lesson: Number(x[4]),
+      item: String(x[5]), text: String(x[6]), id: String(x[7]), at: ms_(x[8]), comment: String(x[9] || ''), cAt: ms_(x[10]), seen: ms_(x[11]) })) };
+  }
+  if (act === 'pronAudio') {
+    const f = findKey_(sheet_(PSUB, PS_HEAD), PS_HEAD.length, str_(b.k, 200));
+    if (!f.r) return { ok: false, error: 'not_found' };
+    try { const bl = DriveApp.getFileById(String(f.row[7])).getBlob(); return { ok: true, mime: bl.getContentType(), data: Utilities.base64Encode(bl.getBytes()) }; }
+    catch (e) { return { ok: false, error: 'not_found' }; }
+  }
+  if (act === 'pronComment') {
+    const sh = sheet_(PSUB, PS_HEAD), f = findKey_(sh, PS_HEAD.length, str_(b.k, 200));
+    if (!f.r) return { ok: false, error: 'not_found' };
+    const c = str_(b.comment, 1000), now = new Date();
+    sh.getRange(f.r, 10, 1, 3).setValues([[c, c ? now : '', '']]);
+    return { ok: true, cAt: c ? now.getTime() : 0 };
+  }
+  return null;
 }
