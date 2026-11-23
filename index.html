@@ -1748,6 +1748,7 @@ body.has-mini{--stick:56px}
 .pa-tip{margin:0 0 6px}
 @media(max-width:640px){.pr-zh{font-size:26px}.pr-row{padding:10px}.pa-filter .inp{flex:1 1 40%}}
 .pr-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.pr-mic{font-size:13px;color:var(--muted);display:inline-flex;gap:6px;align-items:center}.pr-mic select{font:inherit;font-size:13px;max-width:240px;padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:inherit}
+.btn.loading{opacity:.7;cursor:progress}.btn.loading::after{content:'…';margin-left:2px}audio.pp-inline{height:36px;max-width:100%;margin-top:2px}
 /* PRON_CSS_END */
 </style>
 
@@ -11463,21 +11464,33 @@ function pronBlob(r){ const bin = atob(r.data), u8 = new Uint8Array(bin.length);
 function pronTime(ms){ return ms ? new Date(ms).toLocaleString("vi-VN", { hour: "2-digit", minute: "2-digit", day: "2-digit", month: "2-digit" }) : ""; }
 /* phát 1 file: url trực tiếp từ Drive, lỗi thì xin Apps Script gửi dữ liệu về */
 const PronPlayer = {
-  el: null, btn: null,
+  el: null, btn: null, loading: null, cache: {},
   stop(){ if(this.el){ this.el.pause(); this.el = null; } if(this.btn){ this.btn.classList.remove("on"); this.btn = null; } },
-  async play(src, btn, fetchB64){
+  /* src: link trực tiếp; fetchB64: hàm xin Apps Script gửi dữ liệu (dùng khi không có link / link lỗi); ck: khoá lưu tạm */
+  async play(src, btn, fetchB64, ck){
+    if(btn && this.loading === btn) return;               // đang tải: bấm thêm không huỷ
     const same = this.btn && this.btn === btn; this.stop(); if(same) return;
     if(typeof BGM !== "undefined" && BGM.dip) try{ BGM.dip(""); }catch(e){}
+    if(!src && ck && this.cache[ck]) src = this.cache[ck];
     const el = new Audio(); this.el = el; this.btn = btn; if(btn) btn.classList.add("on");
     const end = () => { if(this.el === el) this.stop(); };
+    const inline = url => { /* trình duyệt chặn tự phát → hiện trình phát để bấm */
+      const row = btn && btn.closest(".pa-sub,.pr-row,.pa-ref"); if(!row) return end();
+      let au = row.querySelector("audio.pp-inline"); if(!au){ au = document.createElement("audio"); au.className = "pp-inline"; au.controls = true; row.appendChild(au); }
+      au.src = url; end(); };
     el.onended = end;
     let tried = false;
     el.onerror = async () => {
       if(tried || !fetchB64 || this.el !== el){ end(); return; } tried = true;
-      const r = await fetchB64(); if(!r || !r.ok || !r.data || this.el !== el){ end(); return; }
-      el.src = URL.createObjectURL(pronBlob(r)); el.play().catch(end);
+      this.loading = btn; if(btn){ btn.classList.add("loading"); btn.disabled = true; }
+      let r; try{ r = await fetchB64(); }catch(e){ r = { ok: false, error: "network" }; }
+      this.loading = null; if(btn){ btn.classList.remove("loading"); btn.disabled = false; }
+      if(!r || !r.ok || !r.data){ end(); alert("Chưa tải được file ghi âm (" + ((r && r.error) || "lỗi mạng") + "). Thử bấm lại sau vài giây."); return; }
+      const url = URL.createObjectURL(pronBlob(r)); if(ck) this.cache[ck] = url;
+      if(this.el !== el) return;
+      el.src = url; el.play().catch(() => inline(url));
     };
-    if(src){ el.src = src; el.play().catch(() => { if(el.onerror) el.onerror(); }); }
+    if(src){ el.src = src; el.play().catch(err => { if(err && err.name === "NotAllowedError") inline(src); else if(el.onerror) el.onerror(); }); }
     else el.onerror();
   }
 };
@@ -11533,7 +11546,7 @@ const Pron = {
     W.innerHTML = `<div class="pr">
       <div class="pr-head"><div><h2 class="han">语音练习 <small>Luyện ngữ âm – phát âm</small></h2>
         <p class="muted">Bấm <b>Giọng nam / Giọng nữ</b> để nghe mẫu → <b>Ghi âm</b> (bấm lần nữa để dừng) → <b>Nghe giọng em</b> để tự so sánh → <b>Nộp cho cô</b>. Cô sẽ nghe và nhận xét từng từ, từng câu.</p></div>
-        <div class="pr-tools">${micPicker("prMic")}${unsent && a ? `<button class="btn primary" id="prAll">Nộp tất cả (${unsent})</button>` : ""}</div></div>
+        <div class="pr-tools">${micPicker("prMic")}${this.sending ? `<button class="btn primary" id="prAll" disabled>Đang nộp ${this.sending.i}/${this.sending.n}… (đừng tắt trang)</button>` : unsent && a ? `<button class="btn primary" id="prAll">Nộp tất cả (${unsent})</button>` : ""}</div></div>
       ${!Track.on() ? `<div class="fm-note">Trang chưa nối với Google Sheet của giáo viên nên chưa nộp bài được. Em vẫn có thể tự ghi âm và nghe lại.</div>`
         : !a ? `<div class="fm-note">Em đang dùng bản học thử. <b>Đăng ký / đăng nhập</b> tài khoản để nộp bài ghi âm cho cô và xem cô nhận xét.</div>` : ""}
       ${newC ? `<div class="fm-note pr-note">💬 Cô vừa nhận xét ${newC} mục – xem các khung màu vàng bên dưới.</div>` : ""}
@@ -11542,7 +11555,7 @@ const Pron = {
       <h3 class="pr-h">Câu chính <small>${sents.length} câu</small></h3><div class="pr-list">${sents.map(row).join("")}</div>
     </div>`;
     W.querySelectorAll(".pr-row [data-a]").forEach(b => b.onclick = () => this.act(b.closest(".pr-row").dataset.k, b.dataset.a, b));
-    const all = $("#prAll"); if(all) all.onclick = () => this.sendAll(all);
+    const all = $("#prAll"); if(all && !this.sending) all.onclick = () => this.sendAll(all);
     micBind("prMic");
   },
   item(k){ return this.items(this.lv, this.n).find(x => x.k === k); },
@@ -11567,7 +11580,7 @@ const Pron = {
       const l = (this.local[K] || {})[k];
       if(l) return PronPlayer.play(l.url, btn);
       const u = this.user(); if(!u) return;
-      return PronPlayer.play("", btn, () => Auth.call("pronMyAudio", { u: u.u, token: u.token, level: this.lv, lesson: this.n, item: k }, 60000));
+      return PronPlayer.play("", btn, () => Auth.call("pronMyAudio", { u: u.u, token: u.token, level: this.lv, lesson: this.n, item: k }, 90000), "me|" + this.lv + this.n + k + "|" + ((this.mine[K] || {})[k] || {}).at);
     }
     if(a === "rec"){
       if(PronRec.cur && btn.classList.contains("rec")){ PronRec.stop(); return; }
@@ -11596,7 +11609,9 @@ const Pron = {
     if(!Track.on()){ alert("Trang chưa nối với Google Sheet của giáo viên."); return false; }
     this.busy[k] = true; if(!quiet) this.render();
     const data = await pronB64(l.blob);
-    const r = await Auth.call("pronSubmit", { u: u.u, token: u.token, level: lv, lesson: n, item: k, text: x ? x.zh : "", mime: l.blob.type || "audio/mpeg", data }, 120000);
+    const body = { u: u.u, token: u.token, level: lv, lesson: n, item: k, text: x ? x.zh : "", mime: l.blob.type || "audio/mpeg", data };
+    let r = await Auth.call("pronSubmit", body, 120000);
+    if(!r.ok && !quiet && r.error !== "auth" && r.error !== "too_large"){ await new Promise(z => setTimeout(z, 2000)); r = await Auth.call("pronSubmit", body, 120000); }
     delete this.busy[k];
     if(r.ok){
       URL.revokeObjectURL(l.url); delete loc[k];
@@ -11608,10 +11623,12 @@ const Pron = {
   },
   async sendAll(btn){
     const ks = Object.keys(this.local[this.key()] || {}); if(!ks.length) return;
-    btn.disabled = true; let ok = 0;
-    for(let i = 0; i < ks.length; i++){ btn.textContent = `Đang nộp ${i + 1}/${ks.length}…`; if(await this.send(ks[i], true)) ok++; }
-    if(ok < ks.length) alert(`Đã nộp ${ok}/${ks.length}. Các mục còn lại chưa nộp được, em thử lại nhé.`);
-    this.render();
+    let ok = 0; this.sending = { i: 0, n: ks.length };
+    for(let i = 0; i < ks.length; i++){ this.sending.i = i + 1; const b = $("#prAll"); if(b){ b.disabled = true; b.textContent = `Đang nộp ${i + 1}/${ks.length}… (đừng tắt trang)`; }
+      let done = false; for(let t = 0; t < 3 && !done; t++){ if(t) await new Promise(r => setTimeout(r, 2000 * t)); done = await this.send(ks[i], true); }
+      if(done) ok++; }
+    this.sending = null; this.render();
+    alert(ok === ks.length ? `✓ Đã nộp xong ${ok}/${ks.length} bản ghi cho cô.` : `Đã nộp ${ok}/${ks.length}. Các mục còn “Chưa nộp bản mới” em bấm “Nộp tất cả” lần nữa nhé.`);
   },
   stop(){ PronRec.cancel(); PronPlayer.stop(); }
 };
@@ -11683,7 +11700,7 @@ const PronAdmin = {
     B.querySelectorAll(".pa-pre [data-ps]").forEach(b => b.onclick = () => { navigator.clipboard && navigator.clipboard.writeText(b.dataset.ps).catch(() => {}); b.classList.add("on"); setTimeout(() => b.classList.remove("on"), 600); });
     B.querySelectorAll(".pa-sub").forEach(el => {
       const k = el.dataset.k, s = all.find(x => x.k === k), ta = el.querySelector(".pa-ta"), ok = el.querySelector(".pa-ok");
-      el.querySelector("[data-play]").onclick = e => PronPlayer.play("", e.currentTarget, () => Auth.call("pronAudio", { key: Teacher.key, k }, 60000));
+      el.querySelector("[data-play]").onclick = e => PronPlayer.play("", e.currentTarget, () => Auth.call("pronAudio", { key: Teacher.key, k }, 90000), "t|" + k + "|" + s.at);
       const rb = el.querySelector("[data-ref]"); if(rb) rb.onclick = e => { const id = rb.dataset.ref; PronPlayer.play(audioSrc({ id }), e.currentTarget, () => Auth.call("audio", { id }, 60000)); };
       const sbt = el.querySelector("[data-st]"); if(sbt) sbt.onclick = e => PronPlayer.play(sbt.dataset.st, e.currentTarget);
       el.querySelectorAll("[data-ins]").forEach(b => b.onclick = () => { const t = b.dataset.ins, v = ta.value.trim(); ta.value = v ? (v.includes(t) ? v : v + " " + t) : t; ta.focus(); });

@@ -42,3 +42,4 @@
 .pa-tip{margin:0 0 6px}
 @media(max-width:640px){.pr-zh{font-size:26px}.pr-row{padding:10px}.pa-filter .inp{flex:1 1 40%}}
 .pr-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.pr-mic{font-size:13px;color:var(--muted);display:inline-flex;gap:6px;align-items:center}.pr-mic select{font:inherit;font-size:13px;max-width:240px;padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:inherit}
+.btn.loading{opacity:.7;cursor:progress}.btn.loading::after{content:'…';margin-left:2px}audio.pp-inline{height:36px;max-width:100%;margin-top:2px}
