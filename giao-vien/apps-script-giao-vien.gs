@@ -100,7 +100,10 @@ function profileOf_(row) {
 function dataOf_(row) { try { return JSON.parse(row[C.data - 1] || '{}'); } catch (e) { return {}; } }
 
 function doPost(e) {
-  try { const b0 = JSON.parse(e.postData.contents || '{}'); if (b0.action === 'chat') return json_(chat_(b0)); } catch (err) { return json_({ ok: false, error: 'bad_request' }); }
+  try { const b0 = JSON.parse(e.postData.contents || '{}'); if (b0.action === 'chat') return json_(chat_(b0));
+    /* Luyện ngữ âm: chạy song song, chỉ khoá lúc ghi vào Sheet (tải file lên/xuống Drive không phải chờ nhau) */
+    if (String(b0.action || '').indexOf('pron') === 0) { try { return json_(pronAction_(b0.action, b0, sheet_(ACCOUNTS, AC_HEAD)) || { ok: false, error: 'unknown_action' }); } catch (err) { return json_({ ok: false, error: String(err) }); } }
+  } catch (err) { return json_({ ok: false, error: 'bad_request' }); }
   const lock = LockService.getScriptLock();
   lock.waitLock(20000);
   try {
@@ -259,9 +262,6 @@ function doPost(e) {
         return json_({ ok: true, mime: bl.getContentType(), data: Utilities.base64Encode(bl.getBytes()) });
       } catch (err) { return json_({ ok: false, error: 'not_found' }); }
     }
-
-    /* ---- Luyện ngữ âm: audio mẫu của giáo viên + bài ghi âm của học viên ---- */
-    if (act.indexOf('pron') === 0) { const out = pronAction_(act, b, ac); if (out) return json_(out); }
 
     /* ---- Bài kiểm tra ---- */
     if (act.indexOf('test') === 0) { const out = testAction_(act, b, ac); if (out) return json_(out); }
@@ -466,6 +466,7 @@ function recFolder_() { const it = DriveApp.getFoldersByName(REC_FOLDER); return
 function trash_(id) { try { if (id) DriveApp.getFileById(String(id)).setTrashed(true); } catch (e) {} }
 function findKey_(sh, n, key) { const rows = rowsOf_(sh, n); for (let i = 0; i < rows.length; i++) if (String(rows[i][0]) === key) return { r: i + 2, row: rows[i] }; return { r: 0, row: null }; }
 function ms_(v) { return v ? new Date(v).getTime() : 0; }
+function locked_(fn) { const l = LockService.getScriptLock(); l.waitLock(25000); try { return fn(); } finally { l.releaseLock(); } }
 function pronAction_(act, b, ac) {
   const lv = str_(b.level, 10), les = Number(b.lesson) || 0, item = str_(b.item, 120);
   if (act === 'pronRef') {   // ai cũng xem được audio mẫu
@@ -483,11 +484,11 @@ function pronAction_(act, b, ac) {
         out[String(x[5])] = { id: String(x[7]), at: ms_(x[8]), comment: String(x[9] || ''), cAt: ms_(x[10]), seen: ms_(x[11]) }; });
       return { ok: true, mine: out };
     }
-    if (act === 'pronSeen') {
+    if (act === 'pronSeen') return locked_(() => {
       const rows = rowsOf_(sh, PS_HEAD.length), now = new Date();
       rows.forEach((x, i) => { if (String(x[1]).toLowerCase() === u && String(x[3]) === lv && Number(x[4]) === les && x[9] && !x[11]) sh.getRange(i + 2, 12).setValue(now); });
       return { ok: true };
-    }
+    });
     if (act === 'pronMyAudio') {
       const f = findKey_(sh, PS_HEAD.length, [u, lv, les, item].join('|'));
       if (!f.r) return { ok: false, error: 'not_found' };
@@ -499,9 +500,10 @@ function pronAction_(act, b, ac) {
     if (String(b.data).length > MAX_REC) return { ok: false, error: 'too_large' };
     const mime = str_(b.mime, 60) || 'audio/webm', ext = mime.indexOf('mp4') >= 0 ? 'm4a' : mime.indexOf('ogg') >= 0 ? 'ogg' : 'webm';
     const file = recFolder_().createFile(Utilities.newBlob(Utilities.base64Decode(b.data), mime, [u, lv, 'bai' + les, item.replace(/[^\w一-鿿]+/g, '_')].join('-') + '.' + ext));
-    const key = [u, lv, les, item].join('|'), f = findKey_(sh, PS_HEAD.length, key), now = new Date();
+    const key = [u, lv, les, item].join('|'), now = new Date();
     const row = [key, u, name, lv, les, item, str_(b.text, 200), file.getId(), now, '', '', ''];
-    if (f.r) { trash_(f.row[7]); sh.getRange(f.r, 1, 1, PS_HEAD.length).setValues([row]); } else sh.appendRow(row);
+    const old = locked_(() => { const f = findKey_(sh, PS_HEAD.length, key); if (f.r) sh.getRange(f.r, 1, 1, PS_HEAD.length).setValues([row]); else sh.appendRow(row); return f.r ? f.row[7] : ''; });
+    trash_(old);
     return { ok: true, id: file.getId(), at: now.getTime() };
   }
   /* ---- phần giáo viên ---- */
@@ -510,14 +512,15 @@ function pronAction_(act, b, ac) {
     if (!lv || !les || !item || !b.data) return { ok: false, error: 'missing' };
     const f0 = audioFolder_().createFile(Utilities.newBlob(Utilities.base64Decode(b.data), str_(b.mime, 60) || 'audio/mpeg', ['mau', lv, 'bai' + les, item.replace(/[^\w一-鿿]+/g, '_')].join('-') + (str_(b.ext, 6) ? '.' + str_(b.ext, 6) : '')));
     try { f0.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW); } catch (err) {}
-    const sh = sheet_(PREF, PR_HEAD), key = [lv, les, item].join('|'), f = findKey_(sh, PR_HEAD.length, key);
-    const row = [key, lv, les, item, f0.getId(), new Date()];
-    if (f.r) { trash_(f.row[4]); sh.getRange(f.r, 1, 1, PR_HEAD.length).setValues([row]); } else sh.appendRow(row);
+    const sh = sheet_(PREF, PR_HEAD), key = [lv, les, item].join('|'), row = [key, lv, les, item, f0.getId(), new Date()];
+    const old = locked_(() => { const f = findKey_(sh, PR_HEAD.length, key); if (f.r) sh.getRange(f.r, 1, 1, PR_HEAD.length).setValues([row]); else sh.appendRow(row); return f.r ? f.row[4] : ''; });
+    trash_(old);
     return { ok: true, id: f0.getId() };
   }
   if (act === 'pronRefDel') {
-    const sh = sheet_(PREF, PR_HEAD), f = findKey_(sh, PR_HEAD.length, [lv, les, item].join('|'));
-    if (f.r) { trash_(f.row[4]); sh.deleteRow(f.r); }
+    const sh = sheet_(PREF, PR_HEAD);
+    const old = locked_(() => { const f = findKey_(sh, PR_HEAD.length, [lv, les, item].join('|')); if (f.r) sh.deleteRow(f.r); return f.r ? f.row[4] : ''; });
+    trash_(old);
     return { ok: true };
   }
   if (act === 'pronSubs') {
@@ -531,11 +534,11 @@ function pronAction_(act, b, ac) {
     catch (e) { return { ok: false, error: 'not_found' }; }
   }
   if (act === 'pronComment') {
-    const sh = sheet_(PSUB, PS_HEAD), f = findKey_(sh, PS_HEAD.length, str_(b.k, 200));
-    if (!f.r) return { ok: false, error: 'not_found' };
-    const c = str_(b.comment, 1000), now = new Date();
-    sh.getRange(f.r, 10, 1, 3).setValues([[c, c ? now : '', '']]);
-    return { ok: true, cAt: c ? now.getTime() : 0 };
+    const sh = sheet_(PSUB, PS_HEAD), c = str_(b.comment, 1000), now = new Date();
+    return locked_(() => { const f = findKey_(sh, PS_HEAD.length, str_(b.k, 200));
+      if (!f.r) return { ok: false, error: 'not_found' };
+      sh.getRange(f.r, 10, 1, 3).setValues([[c, c ? now : '', '']]);
+      return { ok: true, cAt: c ? now.getTime() : 0 }; });
   }
   return null;
 }

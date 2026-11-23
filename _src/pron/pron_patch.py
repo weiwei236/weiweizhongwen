@@ -28,4 +28,6 @@ rep('''if(this.view === "read"){ RdAdmin.draft = null; RdAdmin.render(); } else 
 rep('''this.view = b.dataset.tv; this.view === "read" ? RdAdmin.render() :''', '''this.view = b.dataset.tv; PronAdmin.stopRec(); PronPlayer.stop(); this.view === "read" ? RdAdmin.render() : this.view === "na" ? PronAdmin.render() :''')
 rep('''    if(this.view === "read") return RdAdmin.render();\n    if(this.view === "kt") return KTA.render();''', '''    if(this.view === "read") return RdAdmin.render();\n    if(this.view === "na") return PronAdmin.render();\n    if(this.view === "kt") return KTA.render();''')
 rep("    const stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}});", "    const stream=await pickMic({echoCancellation:true,noiseSuppression:true});")
+rep("  async mp3(f32, rate){", "  async mp3(f32, rate, kbps){")
+rep("new lamejs.Mp3Encoder(1, rate, 96)", "new lamejs.Mp3Encoder(1, rate, kbps || 96)")
 open(SRC, "w", encoding="utf-8").write(s); print("ok")
