@@ -11359,6 +11359,8 @@ const PRON_PRESETS = [
   "Tốc độ hơi nhanh, em đọc chậm lại cho rõ từng âm.",
   "File ghi âm bị nhỏ/rè, cô nghe chưa rõ. Em ghi âm lại giúp cô nhé."
 ];
+/* audio có sẵn trên web (cô gửi, đã cắt từng từ) – audio cô ghi trong khu giáo viên sẽ được ưu tiên hơn */
+const PRON_STATIC = {"hsk1":{"1":{"w:你好":"audio/pron/h1_1_01.mp3","w:大家":"audio/pron/h1_1_02.mp3","w:好":"audio/pron/h1_1_03.mp3","w:学生":"audio/pron/h1_1_04.mp3","w:老师":"audio/pron/h1_1_05.mp3","w:们":"audio/pron/h1_1_06.mp3","w:您":"audio/pron/h1_1_07.mp3","w:你们":"audio/pron/h1_1_08.mp3","w:谢谢":"audio/pron/h1_1_09.mp3","w:不客气":"audio/pron/h1_1_10.mp3","w:同学":"audio/pron/h1_1_11.mp3","w:再见":"audio/pron/h1_1_12.mp3","w:王老师":"audio/pron/h1_1_13.mp3"},"2":{"w:请问":"audio/pron/h1_2_01.mp3","w:你":"audio/pron/h1_2_02.mp3","w:叫":"audio/pron/h1_2_03.mp3","w:什么":"audio/pron/h1_2_04.mp3","w:名字":"audio/pron/h1_2_05.mp3","w:我":"audio/pron/h1_2_06.mp3","w:不":"audio/pron/h1_2_07.mp3","w:是":"audio/pron/h1_2_08.mp3","w:对不起":"audio/pron/h1_2_09.mp3","w:没关系":"audio/pron/h1_2_10.mp3","w:没事":"audio/pron/h1_2_11.mp3","w:很":"audio/pron/h1_2_12.mp3","w:高兴":"audio/pron/h1_2_13.mp3","w:认识":"audio/pron/h1_2_14.mp3","w:也":"audio/pron/h1_2_15.mp3"},"3":{"w:人":"audio/pron/h1_3_01.mp3","w:的":"audio/pron/h1_3_02.mp3","w:中文":"audio/pron/h1_3_03.mp3","w:中国":"audio/pron/h1_3_04.mp3","w:法国":"audio/pron/h1_3_05.mp3","w:这":"audio/pron/h1_3_06.mp3","w:谁":"audio/pron/h1_3_07.mp3","w:女朋友":"audio/pron/h1_3_08.mp3","w:哪":"audio/pron/h1_3_09.mp3","w:国":"audio/pron/h1_3_10.mp3","w:她":"audio/pron/h1_3_11.mp3","w:泰国":"audio/pron/h1_3_12.mp3","w:喂":"audio/pron/h1_3_13.mp3","w:姐姐":"audio/pron/h1_3_14.mp3","w:工作":"audio/pron/h1_3_15.mp3","w:还":"audio/pron/h1_3_16.mp3","w:忙":"audio/pron/h1_3_17.mp3","w:吗":"audio/pron/h1_3_18.mp3","w:对":"audio/pron/h1_3_19.mp3","w:太":"audio/pron/h1_3_20.mp3","w:我们":"audio/pron/h1_3_21.mp3","w:想":"audio/pron/h1_3_22.mp3"},"4":{"w:有":"audio/pron/h1_4_01.mp3","w:多少":"audio/pron/h1_4_02.mp3","w:个":"audio/pron/h1_4_03.mp3","w:哥哥":"audio/pron/h1_4_04.mp3","w:呢":"audio/pron/h1_4_05.mp3","w:没有":"audio/pron/h1_4_06.mp3","w:家":"audio/pron/h1_4_07.mp3","w:几":"audio/pron/h1_4_08.mp3","w:口":"audio/pron/h1_4_09.mp3","w:爸爸":"audio/pron/h1_4_10.mp3","w:妈妈":"audio/pron/h1_4_11.mp3","w:妹妹":"audio/pron/h1_4_12.mp3","w:和":"audio/pron/h1_4_13.mp3","w:儿子":"audio/pron/h1_4_14.mp3","w:孩子":"audio/pron/h1_4_15.mp3","w:女儿":"audio/pron/h1_4_16.mp3","w:岁":"audio/pron/h1_4_17.mp3","w:他":"audio/pron/h1_4_18.mp3","w:今年":"audio/pron/h1_4_19.mp3","w:多":"audio/pron/h1_4_20.mp3","w:大":"audio/pron/h1_4_21.mp3"},"5":{"w:今天":"audio/pron/h1_5_01.mp3","w:号":"audio/pron/h1_5_02.mp3","w:月":"audio/pron/h1_5_03.mp3","w:日":"audio/pron/h1_5_04.mp3","w:星期":"audio/pron/h1_5_05.mp3","w:星期日":"audio/pron/h1_5_06.mp3","w:星期天":"audio/pron/h1_5_07.mp3","w:休息":"audio/pron/h1_5_08.mp3","w:会":"audio/pron/h1_5_09.mp3","w:做饭":"audio/pron/h1_5_10.mp3","w:做":"audio/pron/h1_5_11.mp3","w:面条儿":"audio/pron/h1_5_12.mp3","w:饺子":"audio/pron/h1_5_13.mp3","w:一些":"audio/pron/h1_5_14.mp3","w:菜":"audio/pron/h1_5_15.mp3","w:下班":"audio/pron/h1_5_16.mp3","w:新":"audio/pron/h1_5_17.mp3","w:电脑":"audio/pron/h1_5_18.mp3","w:真":"audio/pron/h1_5_19.mp3","w:好看":"audio/pron/h1_5_20.mp3","w:喜欢":"audio/pron/h1_5_21.mp3","w:它":"audio/pron/h1_5_22.mp3"}}};
 /* ======================= LUYỆN NGỮ ÂM =======================
    Học viên: nghe audio mẫu của cô → ghi âm → nộp. Cô nghe & nhận xét trong khu giáo viên (tab “Ngữ âm”).
    Dữ liệu lưu ở Google Sheet/Drive của giáo viên qua Apps Script (pronRef, pronSubmit, pronMine, pronSubs, pronComment…). */
@@ -11450,6 +11452,7 @@ const Pron = {
   },
   user(){ const a = Auth.get(); return a && a.u && a.token ? a : null; },
   key(){ return this.lv + ":" + this.n; },
+  stat(lv, n, k){ const t = PRON_STATIC[lv] && PRON_STATIC[lv][n]; return t && t[k] || ""; },
   async load(force){
     const k = this.key(), lv = this.lv, n = this.n;
     if(!Track.on()) return;
@@ -11468,7 +11471,7 @@ const Pron = {
   },
   render(){
     const W = $("#work"); if(!W) return;
-    const k = this.key(), refs = this.refs[k] || {}, mine = this.mine[k] || {}, loc = this.local[k] || {}, a = this.user();
+    const k = this.key(), refs = Object.assign({}, (PRON_STATIC[this.lv] || {})[this.n] || {}, this.refs[k] || {}), mine = this.mine[k] || {}, loc = this.local[k] || {}, a = this.user();
     const items = this.items(this.lv, this.n), words = items.filter(x => !x.sent), sents = items.filter(x => x.sent);
     const unsent = Object.keys(loc).length, newC = Object.values(mine).filter(x => x.comment && x.cAt > (x.seen || 0)).length;
     const row = x => {
@@ -11505,6 +11508,7 @@ const Pron = {
     if(a === "ref"){
       const id = (this.refs[K] || {})[k];
       if(id) return PronPlayer.play(audioSrc({ id }), btn, () => Auth.call("audio", { id }, 60000));
+      const st = this.stat(this.lv, this.n, k); if(st) return PronPlayer.play(st, btn);
       PronPlayer.stop(); return speak(x.zh);
     }
     if(a === "me"){
@@ -11629,6 +11633,7 @@ const PronAdmin = {
       const k = el.dataset.k, s = all.find(x => x.k === k), ta = el.querySelector(".pa-ta"), ok = el.querySelector(".pa-ok");
       el.querySelector("[data-play]").onclick = e => PronPlayer.play("", e.currentTarget, () => Auth.call("pronAudio", { key: Teacher.key, k }, 60000));
       const rb = el.querySelector("[data-ref]"); if(rb) rb.onclick = e => { const id = rb.dataset.ref; PronPlayer.play(audioSrc({ id }), e.currentTarget, () => Auth.call("audio", { id }, 60000)); };
+      const sbt = el.querySelector("[data-st]"); if(sbt) sbt.onclick = e => PronPlayer.play(sbt.dataset.st, e.currentTarget);
       el.querySelectorAll("[data-ins]").forEach(b => b.onclick = () => { const t = b.dataset.ins, v = ta.value.trim(); ta.value = v ? (v.includes(t) ? v : v + " " + t) : t; ta.focus(); });
       el.querySelector("[data-keep]").onclick = () => { const v = ta.value.trim(); if(!v) return; const c = this.presets().custom; if(!c.includes(v)){ c.push(v); this.savePresets(c); } ok.textContent = "Đã lưu làm câu mẫu"; };
       el.querySelector("[data-save]").onclick = async e => {
@@ -11641,22 +11646,22 @@ const PronAdmin = {
     });
     this.loadRefsFor(list);
   },
-  refBtn(s){ const id = (this.refs[s.level + ":" + s.lesson] || {})[s.item]; return id ? `<button class="btn sm ghost" data-ref="${esc(id)}" title="Nghe audio mẫu của cô">${ICON.sound}Mẫu</button>` : ""; },
+  refBtn(s){ const id = (this.refs[s.level + ":" + s.lesson] || {})[s.item], st = Pron.stat(s.level, s.lesson, s.item); if(!id && st) return `<button class="btn sm ghost" data-st="${esc(st)}" title="Nghe audio mẫu">${ICON.sound}Mẫu</button>`; return id ? `<button class="btn sm ghost" data-ref="${esc(id)}" title="Nghe audio mẫu của cô">${ICON.sound}Mẫu</button>` : ""; },
   async loadRefsFor(list){
     const need = [...new Set(list.map(s => s.level + ":" + s.lesson))].filter(k => !this.refs[k]); if(!need.length) return;
     await Promise.all(need.map(k => { const [lv, n] = k.split(":"); return Auth.call("pronRef", { level: lv, lesson: +n }, 30000).then(r => { this.refs[k] = r.ok ? r.refs || {} : {}; }); }));
-    if(Teacher.view === "na" && this.tab === "subs") document.querySelectorAll(".pa-sub").forEach(el => { const s = (this.subs || []).find(x => x.k === el.dataset.k); if(!s || el.querySelector("[data-ref]")) return;
-      const h = this.refBtn(s); if(h){ el.querySelector(".pa-s1").insertAdjacentHTML("beforeend", h); const rb = el.querySelector("[data-ref]"); rb.onclick = e => { const id = rb.dataset.ref; PronPlayer.play(audioSrc({ id }), e.currentTarget, () => Auth.call("audio", { id }, 60000)); }; } });
+    if(Teacher.view === "na" && this.tab === "subs") document.querySelectorAll(".pa-sub").forEach(el => { const s = (this.subs || []).find(x => x.k === el.dataset.k); if(!s || el.querySelector("[data-ref]") || !(this.refs[s.level + ":" + s.lesson] || {})[s.item]) return; const old = el.querySelector("[data-st]"); if(old) old.remove();
+      const h = this.refBtn(s); if(h){ el.querySelector(".pa-s1").insertAdjacentHTML("beforeend", h); const rb = el.querySelector("[data-ref]"); if(rb) rb.onclick = e => { const id = rb.dataset.ref; PronPlayer.play(audioSrc({ id }), e.currentTarget, () => Auth.call("audio", { id }, 60000)); }; } });
   },
   /* ----- audio mẫu ----- */
   async renderRef(force){
     const B = $("#tBody"), K = this.lv + ":" + this.n;
     if(force || !this.refs[K]){ const r = await Auth.call("pronRef", { level: this.lv, lesson: this.n }, 30000); this.refs[K] = r.ok ? r.refs || {} : {}; if(!r.ok) this.msg = "Chưa tải được audio mẫu (" + (r.error || "lỗi mạng") + ")."; }
-    const refs = this.refs[K], items = Pron.items(this.lv, this.n), have = items.filter(x => refs[x.k]).length;
+    const refs = this.refs[K], items = Pron.items(this.lv, this.n), have = items.filter(x => refs[x.k] || Pron.stat(this.lv, this.n, x.k)).length;
     const opt = (v, l, cur) => `<option value="${v}" ${String(cur) === String(v) ? "selected" : ""}>${esc(l)}</option>`;
     const row = x => `<div class="pa-ref${refs[x.k] ? " has" : ""}" data-k="${esc(x.k)}">
         <div class="pa-txt"><span class="han">${esc(x.zh)}</span><small>${esc(x.py)}${x.pos ? " · " + esc(x.pos) : ""} · ${esc(x.vi)}</small></div>
-        <div class="pa-racts">${refs[x.k] ? `<span class="pr-tag ok">✓ Đã có</span><button class="btn sm" data-a="play">${ICON.play}Nghe</button>` : `<span class="pr-tag">Chưa có</span>`}
+        <div class="pa-racts">${refs[x.k] ? `<span class="pr-tag ok">✓ Cô đã ghi</span><button class="btn sm" data-a="play">${ICON.play}Nghe</button>` : Pron.stat(this.lv, this.n, x.k) ? `<span class="pr-tag ok">✓ File có sẵn</span><button class="btn sm" data-a="stat">${ICON.play}Nghe</button>` : `<span class="pr-tag">Chưa có</span>`}
           <button class="btn sm pa-rec" data-a="rec">${ICON.mic}<span>${refs[x.k] ? "Ghi lại" : "Ghi âm"}</span></button>
           <label class="btn sm pa-up">📁 Tải file<input type="file" accept="audio/*" hidden></label>
           ${refs[x.k] ? `<button class="btn sm ghost" data-a="del" title="Xoá audio mẫu">🗑</button>` : ""}</div>
@@ -11677,6 +11682,7 @@ const PronAdmin = {
     B.querySelectorAll(".pa-ref").forEach(el => {
       const k = el.dataset.k, prev = el.querySelector(".pa-prev");
       const pb = el.querySelector('[data-a="play"]'); if(pb) pb.onclick = e => { const id = refs[k]; PronPlayer.play(audioSrc({ id }), e.currentTarget, () => Auth.call("audio", { id }, 60000)); };
+      const sb = el.querySelector('[data-a="stat"]'); if(sb) sb.onclick = e => PronPlayer.play(Pron.stat(this.lv, this.n, k), e.currentTarget);
       const db = el.querySelector('[data-a="del"]'); if(db) db.onclick = async () => { if(!confirm("Xoá audio mẫu của mục này?")) return; db.disabled = true; const r = await Auth.call("pronRefDel", { key: Teacher.key, level: this.lv, lesson: this.n, item: k }, 30000); if(r.ok) delete refs[k]; else alert("Chưa xoá được: " + (r.error || "lỗi mạng")); this.renderRef(); };
       const show = (blob, ext) => { const url = URL.createObjectURL(blob);
         prev.innerHTML = `<audio controls src="${url}"></audio><button class="btn sm primary" data-save>Lưu làm audio mẫu</button><button class="btn sm" data-cancel>Huỷ</button><span class="pa-ok"></span>`;

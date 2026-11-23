@@ -89,6 +89,7 @@ const Pron = {
   },
   user(){ const a = Auth.get(); return a && a.u && a.token ? a : null; },
   key(){ return this.lv + ":" + this.n; },
+  stat(lv, n, k){ const t = PRON_STATIC[lv] && PRON_STATIC[lv][n]; return t && t[k] || ""; },
   async load(force){
     const k = this.key(), lv = this.lv, n = this.n;
     if(!Track.on()) return;
@@ -107,7 +108,7 @@ const Pron = {
   },
   render(){
     const W = $("#work"); if(!W) return;
-    const k = this.key(), refs = this.refs[k] || {}, mine = this.mine[k] || {}, loc = this.local[k] || {}, a = this.user();
+    const k = this.key(), refs = Object.assign({}, (PRON_STATIC[this.lv] || {})[this.n] || {}, this.refs[k] || {}), mine = this.mine[k] || {}, loc = this.local[k] || {}, a = this.user();
     const items = this.items(this.lv, this.n), words = items.filter(x => !x.sent), sents = items.filter(x => x.sent);
     const unsent = Object.keys(loc).length, newC = Object.values(mine).filter(x => x.comment && x.cAt > (x.seen || 0)).length;
     const row = x => {
@@ -144,6 +145,7 @@ const Pron = {
     if(a === "ref"){
       const id = (this.refs[K] || {})[k];
       if(id) return PronPlayer.play(audioSrc({ id }), btn, () => Auth.call("audio", { id }, 60000));
+      const st = this.stat(this.lv, this.n, k); if(st) return PronPlayer.play(st, btn);
       PronPlayer.stop(); return speak(x.zh);
     }
     if(a === "me"){
@@ -268,6 +270,7 @@ const PronAdmin = {
       const k = el.dataset.k, s = all.find(x => x.k === k), ta = el.querySelector(".pa-ta"), ok = el.querySelector(".pa-ok");
       el.querySelector("[data-play]").onclick = e => PronPlayer.play("", e.currentTarget, () => Auth.call("pronAudio", { key: Teacher.key, k }, 60000));
       const rb = el.querySelector("[data-ref]"); if(rb) rb.onclick = e => { const id = rb.dataset.ref; PronPlayer.play(audioSrc({ id }), e.currentTarget, () => Auth.call("audio", { id }, 60000)); };
+      const sbt = el.querySelector("[data-st]"); if(sbt) sbt.onclick = e => PronPlayer.play(sbt.dataset.st, e.currentTarget);
       el.querySelectorAll("[data-ins]").forEach(b => b.onclick = () => { const t = b.dataset.ins, v = ta.value.trim(); ta.value = v ? (v.includes(t) ? v : v + " " + t) : t; ta.focus(); });
       el.querySelector("[data-keep]").onclick = () => { const v = ta.value.trim(); if(!v) return; const c = this.presets().custom; if(!c.includes(v)){ c.push(v); this.savePresets(c); } ok.textContent = "Đã lưu làm câu mẫu"; };
       el.querySelector("[data-save]").onclick = async e => {
@@ -280,22 +283,22 @@ const PronAdmin = {
     });
     this.loadRefsFor(list);
   },
-  refBtn(s){ const id = (this.refs[s.level + ":" + s.lesson] || {})[s.item]; return id ? `<button class="btn sm ghost" data-ref="${esc(id)}" title="Nghe audio mẫu của cô">${ICON.sound}Mẫu</button>` : ""; },
+  refBtn(s){ const id = (this.refs[s.level + ":" + s.lesson] || {})[s.item], st = Pron.stat(s.level, s.lesson, s.item); if(!id && st) return `<button class="btn sm ghost" data-st="${esc(st)}" title="Nghe audio mẫu">${ICON.sound}Mẫu</button>`; return id ? `<button class="btn sm ghost" data-ref="${esc(id)}" title="Nghe audio mẫu của cô">${ICON.sound}Mẫu</button>` : ""; },
   async loadRefsFor(list){
     const need = [...new Set(list.map(s => s.level + ":" + s.lesson))].filter(k => !this.refs[k]); if(!need.length) return;
     await Promise.all(need.map(k => { const [lv, n] = k.split(":"); return Auth.call("pronRef", { level: lv, lesson: +n }, 30000).then(r => { this.refs[k] = r.ok ? r.refs || {} : {}; }); }));
-    if(Teacher.view === "na" && this.tab === "subs") document.querySelectorAll(".pa-sub").forEach(el => { const s = (this.subs || []).find(x => x.k === el.dataset.k); if(!s || el.querySelector("[data-ref]")) return;
-      const h = this.refBtn(s); if(h){ el.querySelector(".pa-s1").insertAdjacentHTML("beforeend", h); const rb = el.querySelector("[data-ref]"); rb.onclick = e => { const id = rb.dataset.ref; PronPlayer.play(audioSrc({ id }), e.currentTarget, () => Auth.call("audio", { id }, 60000)); }; } });
+    if(Teacher.view === "na" && this.tab === "subs") document.querySelectorAll(".pa-sub").forEach(el => { const s = (this.subs || []).find(x => x.k === el.dataset.k); if(!s || el.querySelector("[data-ref]") || !(this.refs[s.level + ":" + s.lesson] || {})[s.item]) return; const old = el.querySelector("[data-st]"); if(old) old.remove();
+      const h = this.refBtn(s); if(h){ el.querySelector(".pa-s1").insertAdjacentHTML("beforeend", h); const rb = el.querySelector("[data-ref]"); if(rb) rb.onclick = e => { const id = rb.dataset.ref; PronPlayer.play(audioSrc({ id }), e.currentTarget, () => Auth.call("audio", { id }, 60000)); }; } });
   },
   /* ----- audio mẫu ----- */
   async renderRef(force){
     const B = $("#tBody"), K = this.lv + ":" + this.n;
     if(force || !this.refs[K]){ const r = await Auth.call("pronRef", { level: this.lv, lesson: this.n }, 30000); this.refs[K] = r.ok ? r.refs || {} : {}; if(!r.ok) this.msg = "Chưa tải được audio mẫu (" + (r.error || "lỗi mạng") + ")."; }
-    const refs = this.refs[K], items = Pron.items(this.lv, this.n), have = items.filter(x => refs[x.k]).length;
+    const refs = this.refs[K], items = Pron.items(this.lv, this.n), have = items.filter(x => refs[x.k] || Pron.stat(this.lv, this.n, x.k)).length;
     const opt = (v, l, cur) => `<option value="${v}" ${String(cur) === String(v) ? "selected" : ""}>${esc(l)}</option>`;
     const row = x => `<div class="pa-ref${refs[x.k] ? " has" : ""}" data-k="${esc(x.k)}">
         <div class="pa-txt"><span class="han">${esc(x.zh)}</span><small>${esc(x.py)}${x.pos ? " · " + esc(x.pos) : ""} · ${esc(x.vi)}</small></div>
-        <div class="pa-racts">${refs[x.k] ? `<span class="pr-tag ok">✓ Đã có</span><button class="btn sm" data-a="play">${ICON.play}Nghe</button>` : `<span class="pr-tag">Chưa có</span>`}
+        <div class="pa-racts">${refs[x.k] ? `<span class="pr-tag ok">✓ Cô đã ghi</span><button class="btn sm" data-a="play">${ICON.play}Nghe</button>` : Pron.stat(this.lv, this.n, x.k) ? `<span class="pr-tag ok">✓ File có sẵn</span><button class="btn sm" data-a="stat">${ICON.play}Nghe</button>` : `<span class="pr-tag">Chưa có</span>`}
           <button class="btn sm pa-rec" data-a="rec">${ICON.mic}<span>${refs[x.k] ? "Ghi lại" : "Ghi âm"}</span></button>
           <label class="btn sm pa-up">📁 Tải file<input type="file" accept="audio/*" hidden></label>
           ${refs[x.k] ? `<button class="btn sm ghost" data-a="del" title="Xoá audio mẫu">🗑</button>` : ""}</div>
@@ -316,6 +319,7 @@ const PronAdmin = {
     B.querySelectorAll(".pa-ref").forEach(el => {
       const k = el.dataset.k, prev = el.querySelector(".pa-prev");
       const pb = el.querySelector('[data-a="play"]'); if(pb) pb.onclick = e => { const id = refs[k]; PronPlayer.play(audioSrc({ id }), e.currentTarget, () => Auth.call("audio", { id }, 60000)); };
+      const sb = el.querySelector('[data-a="stat"]'); if(sb) sb.onclick = e => PronPlayer.play(Pron.stat(this.lv, this.n, k), e.currentTarget);
       const db = el.querySelector('[data-a="del"]'); if(db) db.onclick = async () => { if(!confirm("Xoá audio mẫu của mục này?")) return; db.disabled = true; const r = await Auth.call("pronRefDel", { key: Teacher.key, level: this.lv, lesson: this.n, item: k }, 30000); if(r.ok) delete refs[k]; else alert("Chưa xoá được: " + (r.error || "lỗi mạng")); this.renderRef(); };
       const show = (blob, ext) => { const url = URL.createObjectURL(blob);
         prev.innerHTML = `<audio controls src="${url}"></audio><button class="btn sm primary" data-save>Lưu làm audio mẫu</button><button class="btn sm" data-cancel>Huỷ</button><span class="pa-ok"></span>`;
