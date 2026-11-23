@@ -472,7 +472,11 @@ function pronAction_(act, b, ac) {
   if (act === 'pronRef') {   // ai cũng xem được audio mẫu
     const refs = {};
     rowsOf_(sheet_(PREF, PR_HEAD), PR_HEAD.length).forEach(r => { if (String(r[1]) === lv && Number(r[2]) === les) refs[String(r[3])] = String(r[4]); });
-    return { ok: true, refs: refs };
+    if (!b.data) return { ok: true, refs: refs };
+    /* gửi kèm luôn dữ liệu các file audio mẫu của bài (vài chục file nhỏ) để học viên bấm là nghe ngay */
+    const audio = {}; let tot = 0;
+    Object.keys(refs).forEach(it => { if (tot > 6000000) return; try { const bl = DriveApp.getFileById(refs[it]).getBlob(), d = Utilities.base64Encode(bl.getBytes()); tot += d.length; audio[it] = { mime: bl.getContentType(), data: d }; } catch (e) {} });
+    return { ok: true, refs: refs, audio: audio };
   }
   if (act === 'pronSubmit' || act === 'pronMine' || act === 'pronMyAudio' || act === 'pronSeen') {
     const r = authRow_(ac, b.u, b.token); if (!r) return { ok: false, error: 'auth' };
