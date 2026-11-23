@@ -10482,7 +10482,7 @@ const Teacher = {
   },
   topbar(title, sub){
     return `<div class="t-top"><div><h2>${esc(title)}</h2><p class="muted">${sub}</p></div>
-      <div class="t-acts"><div class="seg t-view" role="group" aria-label="Khu giáo viên">${[["hv", "Học viên"], ["read", "Bài đọc"], ["kt", "Kiểm tra"], ["na", "Ngữ âm"]].map(([v, l]) => `<button type="button" data-tv="${v}" aria-pressed="${this.view === v}">${l}</button>`).join("")}</div>
+      <div class="t-acts"><div class="seg t-view" role="group" aria-label="Khu giáo viên">${[["hv", "Học viên"], ["read", "Bài đọc"], ["kt", "Kiểm tra"]].concat(PRON_ON ? [["na", "Ngữ âm"]] : []).map(([v, l]) => `<button type="button" data-tv="${v}" aria-pressed="${this.view === v}">${l}</button>`).join("")}</div>
         <button class="btn" id="tReload">${ICON.redo}Tải lại</button><button class="btn" id="tOut">Đăng xuất</button><button class="btn" id="tHome">${ICON.left}Về trang học</button></div></div>`;
   },
   bindTop(){
@@ -10493,6 +10493,7 @@ const Teacher = {
   },
   render(){
     if(this.view === "read") return RdAdmin.render();
+    if(this.view === "na" && !PRON_ON) this.view = "hv";
     if(this.view === "na") return PronAdmin.render();
     if(this.view === "kt") return KTA.render();
     const f = this.filter, q = f.q.trim().toLowerCase();
@@ -11336,6 +11337,8 @@ const Reading = {
 
 /* ---------- Soạn bài đọc (chỉ giáo viên) ---------- */
 /* PRON_JS_BEGIN */
+/* Bật/tắt chức năng Luyện ngữ âm (học viên + khu giáo viên). Đặt true để mở lại. */
+const PRON_ON = false;
 /* Luyện ngữ âm – 5 câu chính mỗi bài (từ mới lấy thẳng từ les.vocab) */
 const PRON_SENT = {
   hsk1: {
@@ -11506,7 +11509,7 @@ async function pronRefWarm(refs){ /* máy chủ cũ không gửi kèm dữ liệ
 
 const Pron = {
   refs: {}, mine: {}, local: {}, busy: {}, les: null, lv: "", n: 0,
-  has(lv, n){ return !!(PRON_SENT[lv] && PRON_SENT[lv][n]); },
+  has(lv, n){ return PRON_ON && !!(PRON_SENT[lv] && PRON_SENT[lv][n]); },
   items(lv, n){
     const L = LEVELS[lv], les = L && L.lessons[n]; if(!les) return [];
     const seen = new Set(), out = [];

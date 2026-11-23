@@ -1,3 +1,5 @@
+/* Bật/tắt chức năng Luyện ngữ âm (học viên + khu giáo viên). Đặt true để mở lại. */
+const PRON_ON = false;
 /* Luyện ngữ âm – 5 câu chính mỗi bài (từ mới lấy thẳng từ les.vocab) */
 const PRON_SENT = {
   hsk1: {

@@ -136,7 +136,7 @@ async function pronRefWarm(refs){ /* máy chủ cũ không gửi kèm dữ liệ
 
 const Pron = {
   refs: {}, mine: {}, local: {}, busy: {}, les: null, lv: "", n: 0,
-  has(lv, n){ return !!(PRON_SENT[lv] && PRON_SENT[lv][n]); },
+  has(lv, n){ return PRON_ON && !!(PRON_SENT[lv] && PRON_SENT[lv][n]); },
   items(lv, n){
     const L = LEVELS[lv], les = L && L.lessons[n]; if(!les) return [];
     const seen = new Set(), out = [];
