@@ -119,7 +119,7 @@ const Pron = {
   },
   render(){
     const W = $("#work"); if(!W) return;
-    const k = this.key(), refs = Object.assign({}, (PRON_STATIC[this.lv] || {})[this.n] || {}, this.refs[k] || {}), mine = this.mine[k] || {}, loc = this.local[k] || {}, a = this.user();
+    const k = this.key(), refs = this.refs[k] || {}, mine = this.mine[k] || {}, loc = this.local[k] || {}, a = this.user();
     const items = this.items(this.lv, this.n), words = items.filter(x => !x.sent), sents = items.filter(x => x.sent);
     const unsent = Object.keys(loc).length, newC = Object.values(mine).filter(x => x.comment && x.cAt > (x.seen || 0)).length;
     const row = x => {
@@ -127,7 +127,7 @@ const Pron = {
       return `<div class="pr-row${x.sent ? " sent" : ""}" data-k="${esc(x.k)}">
         <div class="pr-main"><span class="pr-zh han">${esc(x.zh)}</span>${x.pos ? `<span class="pr-pos">${esc(x.pos)}</span>` : ""}<span class="pr-py">${esc(x.py)}</span><span class="pr-vi">${esc(x.vi)}</span></div>
         <div class="pr-acts">
-          <button class="btn sm pr-ref" data-a="ref" title="${refs[x.k] ? "Nghe audio cô ghi âm" : "Cô chưa ghi âm câu này – tạm nghe giọng máy"}">${ICON.sound}${refs[x.k] ? "Nghe cô đọc" : "Nghe (giọng máy)"}</button>
+          ${this.refBtns(x.k, refs)}
           <button class="btn sm pr-rec" data-a="rec" ${PronRec.ok() ? "" : "disabled"}>${ICON.mic}<span>${l || m ? "Ghi lại" : "Ghi âm"}</span></button>
           ${l || m ? `<button class="btn sm" data-a="me">${ICON.play}Nghe giọng em</button>` : ""}
           ${l ? `<button class="btn sm primary" data-a="send" ${busy ? "disabled" : ""}>${busy ? "Đang nộp…" : "Nộp cho cô"}</button>` : ""}
@@ -138,7 +138,7 @@ const Pron = {
     };
     W.innerHTML = `<div class="pr">
       <div class="pr-head"><div><h2 class="han">语音练习 <small>Luyện ngữ âm – phát âm</small></h2>
-        <p class="muted">Bấm <b>Nghe cô đọc</b> → <b>Ghi âm</b> (bấm lần nữa để dừng) → <b>Nghe giọng em</b> để tự so sánh → <b>Nộp cho cô</b>. Cô sẽ nghe và nhận xét từng từ, từng câu.</p></div>
+        <p class="muted">Bấm <b>Giọng nam / Giọng nữ</b> để nghe mẫu → <b>Ghi âm</b> (bấm lần nữa để dừng) → <b>Nghe giọng em</b> để tự so sánh → <b>Nộp cho cô</b>. Cô sẽ nghe và nhận xét từng từ, từng câu.</p></div>
         ${unsent && a ? `<button class="btn primary" id="prAll">Nộp tất cả (${unsent})</button>` : ""}</div>
       ${!Track.on() ? `<div class="fm-note">Trang chưa nối với Google Sheet của giáo viên nên chưa nộp bài được. Em vẫn có thể tự ghi âm và nghe lại.</div>`
         : !a ? `<div class="fm-note">Em đang dùng bản học thử. <b>Đăng ký / đăng nhập</b> tài khoản để nộp bài ghi âm cho cô và xem cô nhận xét.</div>` : ""}
@@ -151,12 +151,21 @@ const Pron = {
     const all = $("#prAll"); if(all) all.onclick = () => this.sendAll(all);
   },
   item(k){ return this.items(this.lv, this.n).find(x => x.k === k); },
+  /* nút nghe mẫu: giọng nam / giọng nữ (file có sẵn), giọng cô (cô ghi trong khu giáo viên), hoặc giọng máy */
+  refBtns(k, refs){
+    const st = this.stat(this.lv, this.n, k), b = (v, l, t) => `<button class="btn sm pr-ref" data-a="ref" data-v="${v}" title="${t}">${ICON.sound}${l}</button>`;
+    let h = "";
+    if(st && st.m) h += b("m", "Giọng nam", "Nghe giọng nam đọc mẫu");
+    if(st && st.f) h += b("f", "Giọng nữ", "Nghe giọng nữ đọc mẫu");
+    if(refs[k]) h += b("c", "Giọng cô", "Nghe audio cô ghi âm");
+    return h || b("tts", "Nghe (giọng máy)", "Chưa có audio mẫu – tạm nghe giọng máy");
+  },
   async act(k, a, btn){
     const K = this.key(), x = this.item(k); if(!x) return;
     if(a === "ref"){
-      const id = (this.refs[K] || {})[k];
-      if(id) return PronPlayer.play(audioSrc({ id }), btn, () => Auth.call("audio", { id }, 60000));
-      const st = this.stat(this.lv, this.n, k); if(st) return PronPlayer.play(st, btn);
+      const v = btn.dataset.v, id = (this.refs[K] || {})[k], st = this.stat(this.lv, this.n, k);
+      if(v === "c" && id) return PronPlayer.play(audioSrc({ id }), btn, () => Auth.call("audio", { id }, 60000));
+      if(st && st[v]) return PronPlayer.play(st[v], btn);
       PronPlayer.stop(); return speak(x.zh);
     }
     if(a === "me"){
@@ -294,7 +303,7 @@ const PronAdmin = {
     });
     this.loadRefsFor(list);
   },
-  refBtn(s){ const id = (this.refs[s.level + ":" + s.lesson] || {})[s.item], st = Pron.stat(s.level, s.lesson, s.item); if(!id && st) return `<button class="btn sm ghost" data-st="${esc(st)}" title="Nghe audio mẫu">${ICON.sound}Mẫu</button>`; return id ? `<button class="btn sm ghost" data-ref="${esc(id)}" title="Nghe audio mẫu của cô">${ICON.sound}Mẫu</button>` : ""; },
+  refBtn(s){ const id = (this.refs[s.level + ":" + s.lesson] || {})[s.item], st = Pron.stat(s.level, s.lesson, s.item); if(!id && st && (st.f || st.m)) return `<button class="btn sm ghost" data-st="${esc(st.f || st.m)}" title="Nghe audio mẫu">${ICON.sound}Mẫu</button>`; return id ? `<button class="btn sm ghost" data-ref="${esc(id)}" title="Nghe audio mẫu của cô">${ICON.sound}Mẫu</button>` : ""; },
   async loadRefsFor(list){
     const need = [...new Set(list.map(s => s.level + ":" + s.lesson))].filter(k => !this.refs[k]); if(!need.length) return;
     await Promise.all(need.map(k => { const [lv, n] = k.split(":"); return Auth.call("pronRef", { level: lv, lesson: +n }, 30000).then(r => { this.refs[k] = r.ok ? r.refs || {} : {}; }); }));
@@ -309,12 +318,12 @@ const PronAdmin = {
     const opt = (v, l, cur) => `<option value="${v}" ${String(cur) === String(v) ? "selected" : ""}>${esc(l)}</option>`;
     const row = x => `<div class="pa-ref${refs[x.k] ? " has" : ""}" data-k="${esc(x.k)}">
         <div class="pa-txt"><span class="han">${esc(x.zh)}</span><small>${esc(x.py)}${x.pos ? " · " + esc(x.pos) : ""} · ${esc(x.vi)}</small></div>
-        <div class="pa-racts">${refs[x.k] ? `<span class="pr-tag ok">✓ Cô đã ghi</span><button class="btn sm" data-a="play">${ICON.play}Nghe</button>` : Pron.stat(this.lv, this.n, x.k) ? `<span class="pr-tag ok">✓ File có sẵn</span><button class="btn sm" data-a="stat">${ICON.play}Nghe</button>` : `<span class="pr-tag">Chưa có</span>`}
+        <div class="pa-racts">${refs[x.k] ? `<span class="pr-tag ok">✓ Cô đã ghi</span><button class="btn sm" data-a="play">${ICON.play}Giọng cô</button>` : Pron.stat(this.lv, this.n, x.k) ? `<span class="pr-tag ok">✓ File có sẵn</span>` : `<span class="pr-tag">Chưa có</span>`}${["m", "f"].filter(v => (Pron.stat(this.lv, this.n, x.k) || {})[v]).map(v => `<button class="btn sm" data-a="stat" data-v="${v}">${ICON.play}${v === "m" ? "Giọng nam" : "Giọng nữ"}</button>`).join("")}
           <button class="btn sm pa-rec" data-a="rec">${ICON.mic}<span>${refs[x.k] ? "Ghi lại" : "Ghi âm"}</span></button>
           <label class="btn sm pa-up">📁 Tải file<input type="file" accept="audio/*" hidden></label>
           ${refs[x.k] ? `<button class="btn sm ghost" data-a="del" title="Xoá audio mẫu">🗑</button>` : ""}</div>
         <div class="pa-prev"></div></div>`;
-    B.innerHTML = this.head(`Audio mẫu: học viên bấm “Nghe cô đọc” sẽ nghe đúng file này`) + `
+    B.innerHTML = this.head(`Audio mẫu: học viên nghe các file này khi bấm Giọng nam / Giọng nữ / Giọng cô`) + `
       <div class="panel pa">
         <div class="pa-bar"><div class="seg pa-seg" role="group"><button data-pt="subs" aria-pressed="false">Bài nộp của học viên</button><button data-pt="ref" aria-pressed="true">Audio mẫu của cô</button></div></div>
         <div class="pa-filter"><select class="inp" id="paRLv">${this.levels().map(lv => opt(lv, this.lvName(lv), this.lv)).join("")}</select>
@@ -330,7 +339,7 @@ const PronAdmin = {
     B.querySelectorAll(".pa-ref").forEach(el => {
       const k = el.dataset.k, prev = el.querySelector(".pa-prev");
       const pb = el.querySelector('[data-a="play"]'); if(pb) pb.onclick = e => { const id = refs[k]; PronPlayer.play(audioSrc({ id }), e.currentTarget, () => Auth.call("audio", { id }, 60000)); };
-      const sb = el.querySelector('[data-a="stat"]'); if(sb) sb.onclick = e => PronPlayer.play(Pron.stat(this.lv, this.n, k), e.currentTarget);
+      el.querySelectorAll('[data-a="stat"]').forEach(sb => sb.onclick = e => PronPlayer.play(Pron.stat(this.lv, this.n, k)[sb.dataset.v], e.currentTarget));
       const db = el.querySelector('[data-a="del"]'); if(db) db.onclick = async () => { if(!confirm("Xoá audio mẫu của mục này?")) return; db.disabled = true; const r = await Auth.call("pronRefDel", { key: Teacher.key, level: this.lv, lesson: this.n, item: k }, 30000); if(r.ok) delete refs[k]; else alert("Chưa xoá được: " + (r.error || "lỗi mạng")); this.renderRef(); };
       const show = (blob, ext) => { const url = URL.createObjectURL(blob);
         prev.innerHTML = `<audio controls src="${url}"></audio><button class="btn sm primary" data-save>Lưu làm audio mẫu</button><button class="btn sm" data-cancel>Huỷ</button><span class="pa-ok"></span>`;
