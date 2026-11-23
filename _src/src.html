@@ -1716,7 +1716,7 @@ body.has-mini{--stick:56px}
 .pr-py{font-size:17px;color:#2C6E52}.pr-vi{font-size:15px;color:var(--muted)}
 .pr-acts{display:flex;gap:6px;flex-wrap:wrap}
 .pr-acts .btn.on,.pa .btn.on{background:#E6F2EC;border-color:#2C6E52}
-.pr-rec.rec,.pa-rec.rec{background:#FDE8E8;border-color:#D64545;color:#B42318;animation:prPulse 1.1s infinite}
+.pr-rec.rec,.pa-rec.rec{background:linear-gradient(90deg,#F6B4B4 calc(var(--lv,0)*100%),#FDE8E8 0);border-color:#D64545;color:#B42318;animation:prPulse 1.1s infinite}
 @keyframes prPulse{50%{box-shadow:0 0 0 5px rgba(214,69,69,.15)}}
 .pr-st{display:flex;gap:6px;flex-wrap:wrap}.pr-st:empty{display:none}
 .pr-tag{font-size:12.5px;padding:2px 9px;border-radius:99px;background:var(--surface-2);color:var(--muted);border:1px solid var(--line)}
@@ -11370,14 +11370,26 @@ const PronRec = {
   async start(maxSec = 20, onTick){
     this.cancel();
     if(typeof stopAnyRecording === "function") stopAnyRecording();
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
+    /* đo âm lượng trực tiếp từ micro (tạo AudioContext ngay trong lúc bấm để iPhone không chặn) */
+    let ac = null; try{ ac = new (window.AudioContext || window.webkitAudioContext)(); if(ac.resume) ac.resume().catch(() => {}); }catch(e){ ac = null; }
+    let stream;
+    try{ stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: false, autoGainControl: true } }); }
+    catch(e){ if(ac) try{ ac.close(); }catch(x){} throw e; }
+    let an = null; const fb = new Float32Array(1024), lv = { peak: 0 };
+    if(ac) try{ const src = ac.createMediaStreamSource(stream); an = ac.createAnalyser(); an.fftSize = 1024; src.connect(an); }catch(e){ an = null; }
     const mime = this.mime(); let mr;
-    try{ mr = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined); }catch(e){ stream.getTracks().forEach(t => t.stop()); throw e; }
+    try{ mr = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined); }catch(e){ stream.getTracks().forEach(t => t.stop()); if(ac) try{ ac.close(); }catch(x){} throw e; }
     const chunks = []; mr.ondataavailable = e => { if(e.data && e.data.size) chunks.push(e.data); };
     const t0 = Date.now(); let keep = true;
-    const done = new Promise(res => mr.onstop = () => { stream.getTracks().forEach(t => t.stop()); clearInterval(tk); this.cur = null; res(keep && chunks.length ? new Blob(chunks, { type: mr.mimeType || mime || "audio/webm" }) : null); });
-    const tk = setInterval(() => { const s = (Date.now() - t0) / 1000; if(onTick) onTick(s); if(s >= maxSec && mr.state === "recording") mr.stop(); }, 200);
-    mr.start(250);
+    const done = new Promise(res => mr.onstop = () => {
+      stream.getTracks().forEach(t => t.stop()); clearInterval(tk); this.cur = null;
+      const metered = !!an && ac && ac.state === "running"; if(ac) try{ ac.close(); }catch(x){}
+      if(!(keep && chunks.length)) return res(null);
+      const b = new Blob(chunks, { type: mr.mimeType || mime || "audio/webm" }); b._peak = lv.peak; b._metered = metered; res(b); });
+    const tk = setInterval(() => {
+      let m = 0; if(an){ an.getFloatTimeDomainData(fb); for(let i = 0; i < fb.length; i++){ const v = Math.abs(fb[i]); if(v > m) m = v; } if(m > lv.peak) lv.peak = m; }
+      const s = (Date.now() - t0) / 1000; if(onTick) onTick(s, m); if(s >= maxSec && mr.state === "recording") mr.stop(); }, 100);
+    mr.start(); /* không chia nhỏ: Safari ghi mp4 theo từng mảnh sẽ giải mã ra im lặng */
     this.cur = { stop: (cancel) => { if(cancel) keep = false; if(mr.state === "recording") mr.stop(); }, done };
     return done;
   },
@@ -11385,13 +11397,15 @@ const PronRec = {
   cancel(){ if(this.cur) this.cur.stop(true); },
   /* cắt khoảng lặng đầu/cuối, chuẩn hoá âm lượng, đổi sang MP3 (nhẹ, máy nào cũng phát được) */
   async toMp3(blob){
+    if(blob._metered && blob._peak < 0.004) return { blob, silent: true };
     try{
       let ctx; try{ ctx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 }); }catch(e){ ctx = new (window.AudioContext || window.webkitAudioContext)(); }
       const buf = await ctx.decodeAudioData(await blob.arrayBuffer()); try{ ctx.close(); }catch(e){}
       const rate = buf.sampleRate, n = buf.length, pcm = new Float32Array(n), chs = buf.numberOfChannels;
       for(let c = 0; c < chs; c++){ const d = buf.getChannelData(c); for(let k = 0; k < n; k++) pcm[k] += d[k] / chs; }
       let peak = 0; for(let k = 0; k < n; k++) peak = Math.max(peak, Math.abs(pcm[k]));
-      if(peak < 0.003) return { blob, silent: true };
+      /* giải mã ra im lặng nhưng micro có tiếng (lỗi giải mã của trình duyệt) → giữ nguyên file gốc */
+      if(peak < 0.003) return blob._metered && blob._peak < 0.01 ? { blob, silent: true } : { blob };
       const th = Math.max(0.015, peak * 0.06), pad = Math.round(rate * 0.25);
       let a = 0, b = n - 1; while(a < n && Math.abs(pcm[a]) < th) a++; while(b > a && Math.abs(pcm[b]) < th) b--;
       const seg = pcm.subarray(Math.max(0, a - pad), Math.min(n, b + pad));
@@ -11505,12 +11519,12 @@ const Pron = {
       document.querySelectorAll(".pr-rec.rec").forEach(b => b.classList.remove("rec"));
       const lab = btn.querySelector("span"); btn.classList.add("rec"); lab.textContent = "Dừng (0s)";
       let blob;
-      try{ blob = await PronRec.start(x.sent ? 20 : 8, s => { lab.textContent = `Dừng (${Math.floor(s)}s)`; }); }
+      try{ blob = await PronRec.start(x.sent ? 20 : 8, (s, m) => { lab.textContent = `Dừng (${Math.floor(s)}s)`; btn.style.setProperty("--lv", Math.min(1, m * 3).toFixed(2)); }); }
       catch(e){ btn.classList.remove("rec"); lab.textContent = "Ghi âm"; return alert("Chưa ghi âm được: em cần cho phép trang dùng micro (bấm biểu tượng 🔒 cạnh thanh địa chỉ → Micro → Cho phép)."); }
       btn.classList.remove("rec"); lab.textContent = "Đang xử lý…";
       if(!blob){ this.render(); return; }
       const r = await PronRec.toMp3(blob);
-      if(r.silent){ this.render(); return alert("Bản ghi không có tiếng. Em kiểm tra micro rồi ghi lại nhé."); }
+      if(r.silent){ this.render(); return alert("Micro không thu được tiếng. Em kiểm tra: micro có bị tắt tiếng không, trình duyệt có đang dùng đúng micro không (biểu tượng 🔒/🎙 cạnh thanh địa chỉ), rồi ghi lại nhé."); }
       const loc = this.local[K] = this.local[K] || {};
       if(loc[k]) URL.revokeObjectURL(loc[k].url);
       loc[k] = { blob: r.blob, url: URL.createObjectURL(r.blob) };
@@ -11677,7 +11691,7 @@ const PronAdmin = {
         if(rb.classList.contains("rec")){ PronRec.stop(); return; }
         this.stopRec(); PronPlayer.stop();
         const lab = rb.querySelector("span"); rb.classList.add("rec"); lab.textContent = "Dừng (0s)"; this.rec = rb;
-        let blob; try{ blob = await PronRec.start(25, s => { lab.textContent = `Dừng (${Math.floor(s)}s)`; }); }
+        let blob; try{ blob = await PronRec.start(25, (s, m) => { lab.textContent = `Dừng (${Math.floor(s)}s)`; rb.style.setProperty("--lv", Math.min(1, m * 3).toFixed(2)); }); }
         catch(e){ rb.classList.remove("rec"); lab.textContent = "Ghi âm"; return alert("Chưa ghi âm được: cần cho phép trang dùng micro."); }
         rb.classList.remove("rec"); this.rec = null;
         if(!blob){ lab.textContent = "Ghi âm"; return; }

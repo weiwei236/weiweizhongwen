@@ -11,7 +11,7 @@
 .pr-py{font-size:17px;color:#2C6E52}.pr-vi{font-size:15px;color:var(--muted)}
 .pr-acts{display:flex;gap:6px;flex-wrap:wrap}
 .pr-acts .btn.on,.pa .btn.on{background:#E6F2EC;border-color:#2C6E52}
-.pr-rec.rec,.pa-rec.rec{background:#FDE8E8;border-color:#D64545;color:#B42318;animation:prPulse 1.1s infinite}
+.pr-rec.rec,.pa-rec.rec{background:linear-gradient(90deg,#F6B4B4 calc(var(--lv,0)*100%),#FDE8E8 0);border-color:#D64545;color:#B42318;animation:prPulse 1.1s infinite}
 @keyframes prPulse{50%{box-shadow:0 0 0 5px rgba(214,69,69,.15)}}
 .pr-st{display:flex;gap:6px;flex-wrap:wrap}.pr-st:empty{display:none}
 .pr-tag{font-size:12.5px;padding:2px 9px;border-radius:99px;background:var(--surface-2);color:var(--muted);border:1px solid var(--line)}
