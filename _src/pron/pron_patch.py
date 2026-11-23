@@ -27,4 +27,5 @@ rep('''[["hv", "Học viên"], ["read", "Bài đọc"], ["kt", "Kiểm tra"]]'''
 rep('''if(this.view === "read"){ RdAdmin.draft = null; RdAdmin.render(); } else if(this.view === "kt"){''', '''if(this.view === "read"){ RdAdmin.draft = null; RdAdmin.render(); } else if(this.view === "na"){ PronAdmin.subs = null; PronAdmin.refs = {}; PronAdmin.render(); } else if(this.view === "kt"){''')
 rep('''this.view = b.dataset.tv; this.view === "read" ? RdAdmin.render() :''', '''this.view = b.dataset.tv; PronAdmin.stopRec(); PronPlayer.stop(); this.view === "read" ? RdAdmin.render() : this.view === "na" ? PronAdmin.render() :''')
 rep('''    if(this.view === "read") return RdAdmin.render();\n    if(this.view === "kt") return KTA.render();''', '''    if(this.view === "read") return RdAdmin.render();\n    if(this.view === "na") return PronAdmin.render();\n    if(this.view === "kt") return KTA.render();''')
+rep("    const stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}});", "    const stream=await pickMic({echoCancellation:true,noiseSuppression:true});")
 open(SRC, "w", encoding="utf-8").write(s); print("ok")

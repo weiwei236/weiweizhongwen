@@ -1747,6 +1747,7 @@ body.has-mini{--stick:56px}
 .pa-prev{flex-basis:100%;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.pa-prev:empty{display:none}.pa-prev audio{height:36px;max-width:100%}
 .pa-tip{margin:0 0 6px}
 @media(max-width:640px){.pr-zh{font-size:26px}.pr-row{padding:10px}.pa-filter .inp{flex:1 1 40%}}
+.pr-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.pr-mic{font-size:13px;color:var(--muted);display:inline-flex;gap:6px;align-items:center}.pr-mic select{font:inherit;font-size:13px;max-width:240px;padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:inherit}
 /* PRON_CSS_END */
 </style>
 
@@ -5883,7 +5884,7 @@ async function getMic(){
   if(MIC && MIC.stream.getAudioTracks().some(t=>t.readyState==="live")){ if(MIC.ac.state==="suspended") await MIC.ac.resume(); return MIC; }
   if(MIC_PENDING) return MIC_PENDING;
   MIC_PENDING=(async()=>{
-    const stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}});
+    const stream=await pickMic({echoCancellation:true,noiseSuppression:true});
     const AC=window.AudioContext||window.webkitAudioContext, ac=new AC(), an=ac.createAnalyser(); an.fftSize=2048;
     ac.createMediaStreamSource(stream).connect(an);
     MIC={stream,ac,an}; store.set("ww_mic_ok",true); return MIC;
@@ -11368,6 +11369,32 @@ const PRON_STATIC = {"hsk1":{"1":{"w:你好":{"m":"audio/pron/h1_1_01m.mp3","f":
 /* ======================= LUYỆN NGỮ ÂM =======================
    Học viên: nghe audio mẫu của cô → ghi âm → nộp. Cô nghe & nhận xét trong khu giáo viên (tab “Ngữ âm”).
    Dữ liệu lưu ở Google Sheet/Drive của giáo viên qua Apps Script (pronRef, pronSubmit, pronMine, pronSubs, pronComment…). */
+/* chọn micro: tránh micro ảo (Teams, Zoom, Voicemod…) mà Chrome hay đặt làm mặc định – nó chỉ ra tín hiệu im lặng */
+const MIC_BAD = /virtual|teams|zoom|voicemod|blackhole|loopback|soundflower|capcut|aggregate|krisp|nvidia broadcast|聚集|多输出|虚拟/i;
+async function micList(){ try{ return (await navigator.mediaDevices.enumerateDevices()).filter(d => d.kind === "audioinput" && d.deviceId !== "communications"); }catch(e){ return []; } }
+function micSaved(){ try{ return localStorage.getItem("ww_mic") || ""; }catch(e){ return ""; } }
+async function pickMic(audio){
+  const saved = micSaved(), open = id => navigator.mediaDevices.getUserMedia({ audio: id ? Object.assign({}, audio, { deviceId: { exact: id } }) : audio });
+  let st = null;
+  if(saved) try{ st = await open(saved); return st; }catch(e){ st = null; }
+  st = await open("");
+  const lab = (st.getAudioTracks()[0] || {}).label || "";
+  if(MIC_BAD.test(lab)){
+    const list = await micList();
+    const good = list.find(d => /macbook|built-?in|内建|internal|内置/i.test(d.label) && !MIC_BAD.test(d.label)) || list.find(d => d.label && d.deviceId !== "default" && !MIC_BAD.test(d.label));
+    if(good) try{ const s2 = await open(good.deviceId); st.getTracks().forEach(t => t.stop()); return s2; }catch(e){}
+  }
+  return st;
+}
+/* ô chọn micro (đặt trong trang) */
+function micPicker(id){ return `<label class="pr-mic">🎙 Micro: <select id="${id}"><option value="">Tự động (tránh micro ảo)</option></select></label>`; }
+async function micBind(id){
+  const sel = document.getElementById(id); if(!sel) return;
+  const list = await micList(), cur = micSaved();
+  list.filter(d => d.deviceId !== "default").forEach((d, i) => { const o = document.createElement("option"); o.value = d.deviceId; o.textContent = (d.label || "Micro " + (i + 1)) + (MIC_BAD.test(d.label) ? " ⚠ ảo" : ""); sel.appendChild(o); });
+  if(cur && [...sel.options].some(o => o.value === cur)) sel.value = cur;
+  sel.onchange = () => { try{ sel.value ? localStorage.setItem("ww_mic", sel.value) : localStorage.removeItem("ww_mic"); }catch(e){} if(typeof MIC !== "undefined" && MIC && MIC.stream){ try{ MIC.stream.getTracks().forEach(t => t.stop()); }catch(e){} } };
+}
 const PronRec = {
   cur: null,
   mime(){ return ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg;codecs=opus"].find(m => window.MediaRecorder && MediaRecorder.isTypeSupported(m)) || ""; },
@@ -11379,7 +11406,7 @@ const PronRec = {
     /* đo âm lượng trực tiếp từ micro (tạo AudioContext ngay trong lúc bấm để iPhone không chặn) */
     let ac = null; try{ ac = new (window.AudioContext || window.webkitAudioContext)(); if(ac.resume) ac.resume().catch(() => {}); }catch(e){ ac = null; }
     let stream;
-    try{ stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: false, autoGainControl: true } }); }
+    try{ stream = await pickMic({ echoCancellation: true, noiseSuppression: false, autoGainControl: true }); }
     catch(e){ if(ac) try{ ac.close(); }catch(x){} throw e; }
     const dev = ((stream.getAudioTracks()[0] || {}).label || "").trim();
     let an = null; const fb = new Float32Array(1024), lv = { peak: 0 };
@@ -11506,7 +11533,7 @@ const Pron = {
     W.innerHTML = `<div class="pr">
       <div class="pr-head"><div><h2 class="han">语音练习 <small>Luyện ngữ âm – phát âm</small></h2>
         <p class="muted">Bấm <b>Giọng nam / Giọng nữ</b> để nghe mẫu → <b>Ghi âm</b> (bấm lần nữa để dừng) → <b>Nghe giọng em</b> để tự so sánh → <b>Nộp cho cô</b>. Cô sẽ nghe và nhận xét từng từ, từng câu.</p></div>
-        ${unsent && a ? `<button class="btn primary" id="prAll">Nộp tất cả (${unsent})</button>` : ""}</div>
+        <div class="pr-tools">${micPicker("prMic")}${unsent && a ? `<button class="btn primary" id="prAll">Nộp tất cả (${unsent})</button>` : ""}</div></div>
       ${!Track.on() ? `<div class="fm-note">Trang chưa nối với Google Sheet của giáo viên nên chưa nộp bài được. Em vẫn có thể tự ghi âm và nghe lại.</div>`
         : !a ? `<div class="fm-note">Em đang dùng bản học thử. <b>Đăng ký / đăng nhập</b> tài khoản để nộp bài ghi âm cho cô và xem cô nhận xét.</div>` : ""}
       ${newC ? `<div class="fm-note pr-note">💬 Cô vừa nhận xét ${newC} mục – xem các khung màu vàng bên dưới.</div>` : ""}
@@ -11516,6 +11543,7 @@ const Pron = {
     </div>`;
     W.querySelectorAll(".pr-row [data-a]").forEach(b => b.onclick = () => this.act(b.closest(".pr-row").dataset.k, b.dataset.a, b));
     const all = $("#prAll"); if(all) all.onclick = () => this.sendAll(all);
+    micBind("prMic");
   },
   item(k){ return this.items(this.lv, this.n).find(x => x.k === k); },
   /* nút nghe mẫu: giọng nam / giọng nữ (file có sẵn), giọng cô (cô ghi trong khu giáo viên), hoặc giọng máy */
@@ -11695,12 +11723,13 @@ const PronAdmin = {
         <div class="pa-bar"><div class="seg pa-seg" role="group"><button data-pt="subs" aria-pressed="false">Bài nộp của học viên</button><button data-pt="ref" aria-pressed="true">Audio mẫu của cô</button></div></div>
         <div class="pa-filter"><select class="inp" id="paRLv">${this.levels().map(lv => opt(lv, this.lvName(lv), this.lv)).join("")}</select>
           <select class="inp" id="paRN">${[1, 2, 3, 4, 5].map(n => opt(n, "Bài " + n + " – " + ((LEVELS[this.lv].lessons[n] || {}).zh || ""), this.n)).join("")}</select>
-          <span class="muted">Đã ghi <b>${have}/${items.length}</b> mục</span></div>
+          <span class="muted">Đã ghi <b>${have}/${items.length}</b> mục</span>${micPicker("paMic")}</div>
         <p class="muted pa-tip">Bấm <b>Ghi âm</b>, đọc từ/câu, bấm lần nữa để dừng → nghe thử → <b>Lưu</b>. Trang tự cắt khoảng lặng đầu/cuối và đổi sang MP3. Cũng có thể tải lên file có sẵn (mp3, m4a…).</p>
         <h3 class="pr-h">Từ mới</h3>${items.filter(x => !x.sent).map(row).join("")}
         <h3 class="pr-h">Câu chính</h3>${items.filter(x => x.sent).map(row).join("")}
       </div>`;
     this.msg = ""; Teacher.bindTop(); this.bindSeg();
+    micBind("paMic");
     $("#paRLv").onchange = e => { this.stopRec(); this.lv = e.target.value; this.renderRef(); };
     $("#paRN").onchange = e => { this.stopRec(); this.n = +e.target.value; this.renderRef(); };
     B.querySelectorAll(".pa-ref").forEach(el => {
