@@ -11377,6 +11377,7 @@ const PronRec = {
     let stream;
     try{ stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: false, autoGainControl: true } }); }
     catch(e){ if(ac) try{ ac.close(); }catch(x){} throw e; }
+    const dev = ((stream.getAudioTracks()[0] || {}).label || "").trim();
     let an = null; const fb = new Float32Array(1024), lv = { peak: 0 };
     if(ac) try{ const src = ac.createMediaStreamSource(stream); an = ac.createAnalyser(); an.fftSize = 1024; src.connect(an); }catch(e){ an = null; }
     const mime = this.mime(); let mr;
@@ -11387,7 +11388,7 @@ const PronRec = {
       stream.getTracks().forEach(t => t.stop()); clearInterval(tk); this.cur = null;
       const metered = !!an && ac && ac.state === "running"; if(ac) try{ ac.close(); }catch(x){}
       if(!(keep && chunks.length)) return res(null);
-      const b = new Blob(chunks, { type: mr.mimeType || mime || "audio/webm" }); b._peak = lv.peak; b._metered = metered; res(b); });
+      const b = new Blob(chunks, { type: mr.mimeType || mime || "audio/webm" }); b._peak = lv.peak; b._metered = metered; b._dev = dev; res(b); });
     const tk = setInterval(() => {
       let m = 0; if(an){ an.getFloatTimeDomainData(fb); for(let i = 0; i < fb.length; i++){ const v = Math.abs(fb[i]); if(v > m) m = v; } if(m > lv.peak) lv.peak = m; }
       const s = (Date.now() - t0) / 1000; if(onTick) onTick(s, m); if(s >= maxSec && mr.state === "recording") mr.stop(); }, 100);
@@ -11396,10 +11397,20 @@ const PronRec = {
     return done;
   },
   stop(){ if(this.cur) this.cur.stop(false); },
+  /* lời nhắc khi micro không thu được tiếng */
+  silentMsg(r, who = "em"){
+    const mac = /Mac/.test(navigator.platform || navigator.userAgent), win = /Win/.test(navigator.platform || "");
+    const dev = r.dev ? `\n\nMicro trình duyệt đang dùng: “${r.dev}”.` : "";
+    if(r.zero) return `Micro không thu được tiếng nào (tín hiệu bằng 0) – thường do máy tính đang chặn trình duyệt dùng micro.${dev}\n\n` +
+      (mac ? "Cách sửa trên Mac: ⌘ Apple → Cài đặt hệ thống → Quyền riêng tư & Bảo mật → Micro → bật cho Google Chrome (hoặc Safari). Sau đó THOÁT HẲN trình duyệt (⌘Q) rồi mở lại trang."
+        : win ? "Cách sửa trên Windows: Cài đặt → Quyền riêng tư & bảo mật → Micro → bật “Cho phép ứng dụng truy cập micro” và bật cho trình duyệt, rồi mở lại trình duyệt."
+        : "Hãy kiểm tra quyền micro của trình duyệt trong cài đặt máy, rồi mở lại trình duyệt.");
+    return `Micro thu được tiếng rất nhỏ, gần như im lặng.${dev}\n\nCó thể trình duyệt đang chọn nhầm micro (ví dụ tai nghe Bluetooth chưa kết nối hoặc micro ảo). Bấm biểu tượng 🎤 / 🔒 cạnh thanh địa chỉ → chọn đúng micro (micro tích hợp của máy), rồi ghi lại nhé.`;
+  },
   cancel(){ if(this.cur) this.cur.stop(true); },
   /* cắt khoảng lặng đầu/cuối, chuẩn hoá âm lượng, đổi sang MP3 (nhẹ, máy nào cũng phát được) */
   async toMp3(blob){
-    if(blob._metered && blob._peak < 0.004) return { blob, silent: true };
+    const quiet = blob._metered && blob._peak < 0.004, sil = { blob, silent: true, zero: blob._peak === 0, dev: blob._dev };
     try{
       let ctx; try{ ctx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 }); }catch(e){ ctx = new (window.AudioContext || window.webkitAudioContext)(); }
       const buf = await ctx.decodeAudioData(await blob.arrayBuffer()); try{ ctx.close(); }catch(e){}
@@ -11407,13 +11418,13 @@ const PronRec = {
       for(let c = 0; c < chs; c++){ const d = buf.getChannelData(c); for(let k = 0; k < n; k++) pcm[k] += d[k] / chs; }
       let peak = 0; for(let k = 0; k < n; k++) peak = Math.max(peak, Math.abs(pcm[k]));
       /* giải mã ra im lặng nhưng micro có tiếng (lỗi giải mã của trình duyệt) → giữ nguyên file gốc */
-      if(peak < 0.003) return blob._metered && blob._peak < 0.01 ? { blob, silent: true } : { blob };
+      if(peak < 0.003) return blob._metered && blob._peak < 0.01 ? sil : { blob };
       const th = Math.max(0.015, peak * 0.06), pad = Math.round(rate * 0.25);
       let a = 0, b = n - 1; while(a < n && Math.abs(pcm[a]) < th) a++; while(b > a && Math.abs(pcm[b]) < th) b--;
       const seg = pcm.subarray(Math.max(0, a - pad), Math.min(n, b + pad));
       const g = Math.min(4, 0.9 / peak); for(let k = 0; k < seg.length; k++) seg[k] *= g;
       return { blob: await KTAudio.mp3(seg, rate), dur: seg.length / rate };
-    }catch(e){ return { blob }; }
+    }catch(e){ return quiet ? sil : { blob }; }
   }
 };
 function pronB64(blob){ return new Promise(r => { const fr = new FileReader(); fr.onload = () => r(String(fr.result).split(",")[1] || ""); fr.onerror = () => r(""); fr.readAsDataURL(blob); }); }
@@ -11528,7 +11539,7 @@ const Pron = {
       btn.classList.remove("rec"); lab.textContent = "Đang xử lý…";
       if(!blob){ this.render(); return; }
       const r = await PronRec.toMp3(blob);
-      if(r.silent){ this.render(); return alert("Micro không thu được tiếng. Em kiểm tra: micro có bị tắt tiếng không, trình duyệt có đang dùng đúng micro không (biểu tượng 🔒/🎙 cạnh thanh địa chỉ), rồi ghi lại nhé."); }
+      if(r.silent){ this.render(); return alert(PronRec.silentMsg(r)); }
       const loc = this.local[K] = this.local[K] || {};
       if(loc[k]) URL.revokeObjectURL(loc[k].url);
       loc[k] = { blob: r.blob, url: URL.createObjectURL(r.blob) };
@@ -11702,7 +11713,7 @@ const PronAdmin = {
         rb.classList.remove("rec"); this.rec = null;
         if(!blob){ lab.textContent = "Ghi âm"; return; }
         lab.textContent = "Đang xử lý…"; const r = await PronRec.toMp3(blob); lab.textContent = "Ghi lại";
-        if(r.silent) return alert("Bản ghi không có tiếng, cô kiểm tra micro nhé.");
+        if(r.silent) return alert(PronRec.silentMsg(r, "cô"));
         show(r.blob, r.blob.type === "audio/mpeg" ? "mp3" : r.blob.type === "audio/wav" ? "wav" : "");
       };
       el.querySelector(".pa-up input").onchange = e => { const file = e.target.files[0]; if(!file) return;
