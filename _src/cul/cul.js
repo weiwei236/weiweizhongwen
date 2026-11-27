@@ -1,4 +1,6 @@
 /* ======================= VĂN HOÁ TRUNG QUỐC – game dẫn vào bài đọc ======================= */
+/* bật/tắt mục Văn hoá TQ trên trang chủ (true = hiện) */
+const CUL_ON = false;
 const CUL_GAMES = [
   { id: "chunjie",   zh: "过年啦！",     py: "Guònián la!",       vi: "Tết Nguyên đán – đón năm mới cùng gia đình", tag: "春节" },
   { id: "zhongqiu",  zh: "月亮上的嫦娥", py: "Yuèliang shang de Cháng'é", vi: "Tết Trung thu – câu chuyện Hằng Nga", tag: "中秋节" },

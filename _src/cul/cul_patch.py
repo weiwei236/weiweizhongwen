@@ -10,9 +10,9 @@ def rep(old, new):
     global s
     if new in s: return
     assert s.count(old) == 1, old[:80]; s = s.replace(old, new)
-rep('''        <button class="btn farm-btn" id="hiFarm">''', '''        <button class="btn cul-btn" id="hiCul">🏮 Văn hoá TQ</button>
+rep('''        <button class="btn farm-btn" id="hiFarm">''', '''        ${CUL_ON ? `<button class="btn cul-btn" id="hiCul">🏮 Văn hoá TQ</button>` : ""}
         <button class="btn farm-btn" id="hiFarm">''')
 rep('''  $("#hiFarm").onclick=()=>Farm.open();''', '''  $("#hiFarm").onclick=()=>Farm.open();
-  $("#hiCul").onclick=()=>Culture.open();''')
-rep('''<button class="btn farm-btn" data-mb="hiFarm">''', '''<button class="btn cul-btn" data-mb="hiCul">🏮<span> Văn hoá</span></button><button class="btn farm-btn" data-mb="hiFarm">''')
+  if($("#hiCul")) $("#hiCul").onclick=()=>Culture.open();''')
+rep('''<button class="btn farm-btn" data-mb="hiFarm">''', '''${CUL_ON?`<button class="btn cul-btn" data-mb="hiCul">🏮<span> Văn hoá</span></button>`:""}<button class="btn farm-btn" data-mb="hiFarm">''')
 open(SRC, "w", encoding="utf-8").write(s); print("ok")

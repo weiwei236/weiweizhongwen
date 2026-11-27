@@ -10291,13 +10291,13 @@ function renderHello(){
         <button class="btn bs-btn" id="hiBs"><span class="han">部</span> Bộ thủ</button></div></div>
       <div class="hi-row"><span class="hi-lb">Khám phá</span><div class="hi-btns">
         <button class="btn trip-btn" id="hiTrip"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>Khám phá TQ</button>
-        <button class="btn cul-btn" id="hiCul">🏮 Văn hoá TQ</button>
+        ${CUL_ON ? `<button class="btn cul-btn" id="hiCul">🏮 Văn hoá TQ</button>` : ""}
         <button class="btn farm-btn" id="hiFarm">${ICON_SPROUT}Trang trại · ${coinSVG()}<b class="coin-count">${Farm.coins()}</b></button>
         ${gt ? "" : `<button class="btn ch-btn" id="hiCh">👥 Nhân vật</button>`}</div></div>
     </div>`;
   $("#hiSrs").onclick=()=>SRS.open(); $("#hiBs").onclick=()=>Bushou.open(); if($("#hiCh")) $("#hiCh").onclick=()=>Chars.open();
   $("#hiFarm").onclick=()=>Farm.open();
-  $("#hiCul").onclick=()=>Culture.open();
+  if($("#hiCul")) $("#hiCul").onclick=()=>Culture.open();
   $("#hiTrip").onclick=()=>Trip.open();
   $("#hiGr").onclick=()=>Grammar.open();
   $("#hiKt").onclick=()=>KT.open();
@@ -10313,7 +10313,7 @@ function renderMini(p, gt, srsN){
   const M=$("#miniBar"); if(!M) return;
   M.innerHTML=`<div class="wrap mb-in"><button class="mb-me" id="mbTop" title="Lên đầu trang">${avatarSVG(p.avatar,{label:"Nhân vật"})}</button><b class="mb-name">${esc(p.name)}</b>
     <div class="mb-btns"><button class="btn srs-btn" data-mb="hiSrs">🔁<span> Ôn tập</span>${srsN?`<span class="n">${srsN}</span>`:""}</button><button class="btn gr-btn" data-mb="hiGr">${ICON.book}<span> Ngữ pháp</span></button><button class="btn kt-btn" data-mb="hiKt">${ICON.quiz}<span> Kiểm tra</span></button><button class="btn bs-btn" data-mb="hiBs"><span class="han">部</span><span> Bộ thủ</span></button>
-    <i class="mb-sep"></i><button class="btn trip-btn" data-mb="hiTrip">✈️<span> Khám phá</span></button><button class="btn cul-btn" data-mb="hiCul">🏮<span> Văn hoá</span></button><button class="btn farm-btn" data-mb="hiFarm">🌾<span> Trại</span> ${coinSVG()}<b class="coin-count">${Farm.coins()}</b></button>${gt?"":`<button class="btn ch-btn" data-mb="hiCh">👥<span> Nhân vật</span></button>`}</div>
+    <i class="mb-sep"></i><button class="btn trip-btn" data-mb="hiTrip">✈️<span> Khám phá</span></button>${CUL_ON?`<button class="btn cul-btn" data-mb="hiCul">🏮<span> Văn hoá</span></button>`:""}<button class="btn farm-btn" data-mb="hiFarm">🌾<span> Trại</span> ${coinSVG()}<b class="coin-count">${Farm.coins()}</b></button>${gt?"":`<button class="btn ch-btn" data-mb="hiCh">👥<span> Nhân vật</span></button>`}</div>
     <button class="btn set-btn" data-mb="setBtn" title="Cài đặt">⚙</button></div>`;
   M.querySelectorAll("[data-mb]").forEach(b=>b.onclick=e=>{ e.stopPropagation(); const t=$("#"+b.dataset.mb); if(t) t.click(); });
   $("#mbTop").onclick=()=>scrollTo({top:0,behavior:"smooth"});
@@ -11827,6 +11827,8 @@ const PronAdmin = {
 /* PRON_JS_END */
 /* CUL_JS_BEGIN */
 /* ======================= VĂN HOÁ TRUNG QUỐC – game dẫn vào bài đọc ======================= */
+/* bật/tắt mục Văn hoá TQ trên trang chủ (true = hiện) */
+const CUL_ON = false;
 const CUL_GAMES = [
   { id: "chunjie",   zh: "过年啦！",     py: "Guònián la!",       vi: "Tết Nguyên đán – đón năm mới cùng gia đình", tag: "春节" },
   { id: "zhongqiu",  zh: "月亮上的嫦娥", py: "Yuèliang shang de Cháng'é", vi: "Tết Trung thu – câu chuyện Hằng Nga", tag: "中秋节" },
