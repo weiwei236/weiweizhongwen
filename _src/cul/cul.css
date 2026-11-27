@@ -13,6 +13,6 @@
 .cul-bar{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#14141f;color:#fff}.cul-bar b{flex:1;font-size:17px}
 .cul-bar .btn{background:#262636;color:#fff;border-color:#3a3a4e;text-decoration:none}
 .cul-play iframe{flex:1;width:100%;border:0;background:#000}
-@media(max-width:640px){.cul-bar a{display:none}.cul-box{padding:14px}}
+@media(max-width:640px){.cul-box{padding:14px}}
 .cul-rot{display:none;text-align:center;color:#cfcfe0;font-size:13px;padding:6px}
 @media(max-width:640px) and (orientation:portrait){.cul-rot{display:block}}

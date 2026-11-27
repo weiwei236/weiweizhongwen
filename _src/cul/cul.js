@@ -29,12 +29,15 @@ const Culture = {
     if(typeof BGM !== "undefined"){ this.bgmHeld = BGM.held; BGM.held = true; try{ BGM.apply(.2); }catch(e){} }
     try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
     const P = document.createElement("div"); P.className = "cul-play"; P.id = "culPlay";
+    P.oncontextmenu = e => e.preventDefault();
     P.innerHTML = `<div class="cul-bar"><button class="btn sm" id="culBack">← Danh sách</button><b class="han">${g.zh}</b>
-      <a class="btn sm" href="games/${g.id}.html" target="_blank" rel="noopener">⛶ Mở toàn màn hình</a></div>
+      ${document.fullscreenEnabled || document.webkitFullscreenEnabled ? `<button class="btn sm" id="culFs">⛶ Toàn màn hình</button>` : ""}</div>
       <div class="cul-rot">📱↻ Xoay ngang điện thoại để chơi to hơn</div>
       <iframe src="games/${g.id}.html" title="${g.zh}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
     document.body.appendChild(P);
-    P.querySelector("#culBack").onclick = () => this.stop();
+    P.querySelector("#culBack").onclick = () => { if(document.fullscreenElement || document.webkitFullscreenElement){ try{ (document.exitFullscreen || document.webkitExitFullscreen).call(document); }catch(e){} } this.stop(); };
+    const fs = P.querySelector("#culFs"); if(fs) fs.onclick = () => { const on = document.fullscreenElement || document.webkitFullscreenElement;
+      try{ on ? (document.exitFullscreen || document.webkitExitFullscreen).call(document) : (P.requestFullscreen || P.webkitRequestFullscreen).call(P); }catch(e){} };
     try{ Track.log("culture_play", { game: id }, ""); }catch(e){}
   },
   stop(){
