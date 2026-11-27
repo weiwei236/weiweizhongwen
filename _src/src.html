@@ -1750,6 +1750,26 @@ body.has-mini{--stick:56px}
 .btn.loading{opacity:.7;cursor:progress}.btn.loading::after{content:'…';margin-left:2px}audio.pp-inline{height:36px;max-width:100%;margin-top:2px}
 .pa-play.ready{border-color:#2C6E52;color:#2C6E52}
 /* PRON_CSS_END */
+/* CUL_CSS_BEGIN */
+.cul-btn{background:#FFF1E6;border-color:#F2C6A0;color:#9A3412}
+.cul-modal{position:fixed;inset:0;z-index:900;background:rgba(20,24,22,.55);display:flex;align-items:center;justify-content:center;padding:16px}
+.cul-box{background:var(--surface,#fff);border-radius:18px;max-width:980px;width:100%;max-height:calc(100vh - 32px);overflow:auto;padding:18px 20px 22px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.cul-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}.cul-head h2{margin:0 0 4px;font-size:22px}.cul-head p{margin:0}
+.cul-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.cul-card{position:relative;display:grid;gap:3px;text-align:left;font:inherit;color:inherit;background:var(--surface,#fff);border:1px solid var(--line,#ddd);border-radius:14px;padding:0 0 12px;overflow:hidden;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.cul-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.cul-card img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;margin-bottom:6px;image-rendering:pixelated}
+.cul-card b{font-size:22px;padding:0 14px}.cul-card small{color:#2C6E52;padding:0 14px}.cul-card span{padding:0 14px;color:var(--muted,#666);font-size:14px}
+.cul-card i{font-style:normal;justify-self:start;margin:6px 14px 0;background:#C2410C;color:#fff;border-radius:99px;padding:4px 14px;font-weight:600;font-size:14px}
+.cul-card .cul-tag{position:absolute;top:10px;left:10px;background:rgba(194,65,12,.92);color:#fff;border-radius:99px;padding:2px 10px;font-size:13px}
+.cul-play{position:fixed;inset:0;z-index:950;background:#0b0b14;display:flex;flex-direction:column}
+.cul-bar{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#14141f;color:#fff}.cul-bar b{flex:1;font-size:17px}
+.cul-bar .btn{background:#262636;color:#fff;border-color:#3a3a4e;text-decoration:none}
+.cul-play iframe{flex:1;width:100%;border:0;background:#000}
+@media(max-width:640px){.cul-bar a{display:none}.cul-box{padding:14px}}
+.cul-rot{display:none;text-align:center;color:#cfcfe0;font-size:13px;padding:6px}
+@media(max-width:640px) and (orientation:portrait){.cul-rot{display:block}}
+/* CUL_CSS_END */
 </style>
 
 <section id="scrWelcome" class="screen welcome" hidden>
@@ -10271,11 +10291,13 @@ function renderHello(){
         <button class="btn bs-btn" id="hiBs"><span class="han">部</span> Bộ thủ</button></div></div>
       <div class="hi-row"><span class="hi-lb">Khám phá</span><div class="hi-btns">
         <button class="btn trip-btn" id="hiTrip"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>Khám phá TQ</button>
+        <button class="btn cul-btn" id="hiCul">🏮 Văn hoá TQ</button>
         <button class="btn farm-btn" id="hiFarm">${ICON_SPROUT}Trang trại · ${coinSVG()}<b class="coin-count">${Farm.coins()}</b></button>
         ${gt ? "" : `<button class="btn ch-btn" id="hiCh">👥 Nhân vật</button>`}</div></div>
     </div>`;
   $("#hiSrs").onclick=()=>SRS.open(); $("#hiBs").onclick=()=>Bushou.open(); if($("#hiCh")) $("#hiCh").onclick=()=>Chars.open();
   $("#hiFarm").onclick=()=>Farm.open();
+  $("#hiCul").onclick=()=>Culture.open();
   $("#hiTrip").onclick=()=>Trip.open();
   $("#hiGr").onclick=()=>Grammar.open();
   $("#hiKt").onclick=()=>KT.open();
@@ -10291,7 +10313,7 @@ function renderMini(p, gt, srsN){
   const M=$("#miniBar"); if(!M) return;
   M.innerHTML=`<div class="wrap mb-in"><button class="mb-me" id="mbTop" title="Lên đầu trang">${avatarSVG(p.avatar,{label:"Nhân vật"})}</button><b class="mb-name">${esc(p.name)}</b>
     <div class="mb-btns"><button class="btn srs-btn" data-mb="hiSrs">🔁<span> Ôn tập</span>${srsN?`<span class="n">${srsN}</span>`:""}</button><button class="btn gr-btn" data-mb="hiGr">${ICON.book}<span> Ngữ pháp</span></button><button class="btn kt-btn" data-mb="hiKt">${ICON.quiz}<span> Kiểm tra</span></button><button class="btn bs-btn" data-mb="hiBs"><span class="han">部</span><span> Bộ thủ</span></button>
-    <i class="mb-sep"></i><button class="btn trip-btn" data-mb="hiTrip">✈️<span> Khám phá</span></button><button class="btn farm-btn" data-mb="hiFarm">🌾<span> Trại</span> ${coinSVG()}<b class="coin-count">${Farm.coins()}</b></button>${gt?"":`<button class="btn ch-btn" data-mb="hiCh">👥<span> Nhân vật</span></button>`}</div>
+    <i class="mb-sep"></i><button class="btn trip-btn" data-mb="hiTrip">✈️<span> Khám phá</span></button><button class="btn cul-btn" data-mb="hiCul">🏮<span> Văn hoá</span></button><button class="btn farm-btn" data-mb="hiFarm">🌾<span> Trại</span> ${coinSVG()}<b class="coin-count">${Farm.coins()}</b></button>${gt?"":`<button class="btn ch-btn" data-mb="hiCh">👥<span> Nhân vật</span></button>`}</div>
     <button class="btn set-btn" data-mb="setBtn" title="Cài đặt">⚙</button></div>`;
   M.querySelectorAll("[data-mb]").forEach(b=>b.onclick=e=>{ e.stopPropagation(); const t=$("#"+b.dataset.mb); if(t) t.click(); });
   $("#mbTop").onclick=()=>scrollTo({top:0,behavior:"smooth"});
@@ -11803,6 +11825,54 @@ const PronAdmin = {
   stopRec(){ if(this.rec){ PronRec.cancel(); this.rec = null; } }
 };
 /* PRON_JS_END */
+/* CUL_JS_BEGIN */
+/* ======================= VĂN HOÁ TRUNG QUỐC – game dẫn vào bài đọc ======================= */
+const CUL_GAMES = [
+  { id: "chunjie",   zh: "过年啦！",     py: "Guònián la!",       vi: "Tết Nguyên đán – đón năm mới cùng gia đình", tag: "春节" },
+  { id: "zhongqiu",  zh: "月亮上的嫦娥", py: "Yuèliang shang de Cháng'é", vi: "Tết Trung thu – câu chuyện Hằng Nga", tag: "中秋节" },
+  { id: "shengxiao", zh: "十二生肖",     py: "Shí'èr shēngxiào",  vi: "12 con giáp – cuộc đua qua sông", tag: "生肖" }
+];
+const Culture = {
+  open(){
+    this.close();
+    const M = document.createElement("div"); M.className = "cul-modal"; M.id = "culModal";
+    M.innerHTML = `<div class="cul-box" role="dialog" aria-modal="true" aria-label="Văn hoá Trung Quốc">
+      <div class="cul-head"><div><h2><span class="han">中国文化</span> Văn hoá Trung Quốc</h2><p class="muted">Chơi game để tìm hiểu ngày lễ, phong tục của người Trung Quốc. Nhớ bật loa 🔊</p></div>
+        <button class="btn sm" id="culX" aria-label="Đóng">✕</button></div>
+      <div class="cul-grid">${CUL_GAMES.map(g => `<button class="cul-card" data-g="${g.id}">
+        <img src="games/${g.id}.webp" alt="" loading="lazy"><span class="cul-tag han">${g.tag}</span>
+        <b class="han">${g.zh}</b><small>${g.py}</small><span>${g.vi}</span><i>▶ Chơi</i></button>`).join("")}</div></div>`;
+    document.body.appendChild(M);
+    M.onclick = e => { if(e.target === M) this.close(); };
+    M.querySelector("#culX").onclick = () => this.close();
+    M.querySelectorAll("[data-g]").forEach(b => b.onclick = () => this.play(b.dataset.g));
+    this.esc = e => { if(e.key === "Escape"){ if(document.getElementById("culPlay")) this.stop(); else this.close(); } };
+    document.addEventListener("keydown", this.esc);
+    try{ Track.log("culture_open", {}, ""); }catch(e){}
+  },
+  close(){ this.stop(); const M = document.getElementById("culModal"); if(M) M.remove(); if(this.esc) document.removeEventListener("keydown", this.esc); },
+  play(id){
+    const g = CUL_GAMES.find(x => x.id === id); if(!g) return;
+    this.stop();
+    if(typeof BGM !== "undefined"){ this.bgmHeld = BGM.held; BGM.held = true; try{ BGM.apply(.2); }catch(e){} }
+    try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
+    const P = document.createElement("div"); P.className = "cul-play"; P.id = "culPlay";
+    P.innerHTML = `<div class="cul-bar"><button class="btn sm" id="culBack">← Danh sách</button><b class="han">${g.zh}</b>
+      <a class="btn sm" href="games/${g.id}.html" target="_blank" rel="noopener">⛶ Mở toàn màn hình</a></div>
+      <div class="cul-rot">📱↻ Xoay ngang điện thoại để chơi to hơn</div>
+      <iframe src="games/${g.id}.html" title="${g.zh}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+    document.body.appendChild(P);
+    P.querySelector("#culBack").onclick = () => this.stop();
+    try{ Track.log("culture_play", { game: id }, ""); }catch(e){}
+  },
+  stop(){
+    const P = document.getElementById("culPlay"); if(!P) return;
+    const f = P.querySelector("iframe"); if(f) f.src = "about:blank";
+    P.remove();
+    if(typeof BGM !== "undefined"){ BGM.held = !!this.bgmHeld; try{ BGM.apply(.4); }catch(e){} }
+  }
+};
+/* CUL_JS_END */
 const RdAdmin = {
   draft: null, msg: "",
   lessonOpts(){ const o = []; for(const [lv, L] of Object.entries(LEVELS)) for(const [n, les] of Object.entries(L.lessons)) o.push([lv, n, `${L.name} · Bài ${n} – ${les.zh}`]); return o; },
